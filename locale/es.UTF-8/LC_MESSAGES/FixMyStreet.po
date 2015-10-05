@@ -1511,6 +1511,10 @@ msgstr "¿Alguna vez informó de un problema a la Intendencia antes, o es tu pri
 msgid "Have you forgotten your password?"
 msgstr "¿Olvidaste tu contraseña?"
 
+#: templates/web/pormibarrio/auth/login_block.html:4
+msgid "Have you forgotten your password"
+msgstr "¿Olvidaste tu contraseña?"
+
 #: templates/web/barnet/footer.html:24 templates/web/bromley/footer.html:25
 #: templates/web/bromley/header.html:81 templates/web/default/footer.html:15
 #: templates/web/emptyhomes/header.html:33
@@ -5251,3 +5255,8 @@ msgstr[1] "Todavía <strong>no</strong> tenemos detalles para las Intendencias q
 
 #~ msgid "Start month:"
 #~ msgstr "Mes de inicio:"
+
+
+#: templates/web/pormibarriocr/report/update-form.html
+msgid "Assign category"
+msgstr "Asignar categoria"

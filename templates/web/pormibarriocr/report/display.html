@@ -1,4 +1,4 @@
-[% 
+[%
     PROCESS "report/photo-js.html";
     PROCESS "maps/${map.type}.html";
 
@@ -18,11 +18,11 @@
 <div class="c-report">
 	<div class="container-report">
 		<!--REPORT-->
-		<div class="report">
+		<div class="report visible-print-block" >
 			<div id="update-display" class="info-report scrolled-report">
                 [% INCLUDE 'report/_main.html' %]
                 [% TRY %][% INCLUDE 'report/_message_manager.html' %][% CATCH file %][% END %]
-                <div class="actions">
+                <div class="actions hidden-print">
                     <ul class="actions">
                         <li><button type="button" class="follow-report">[% loc('Get updates' ) %]</button></li>
                         [% IF c.user_exists AND c.cobrand.users_can_hide AND ( c.user.belongs_to_body( c.cobrand.council_id ) OR c.user.id == problem.user_id ) %]
@@ -78,10 +78,10 @@
                                    <div class="form-error">[% field_errors.message %]</div>
                                 [% END %]
                                 <button class="btn btn-sky btn-small btn-comentar" id="key-tool-report-abuse" type="submit">[% loc('Post') %]</button>
-                            </div>                                        
+                            </div>
                         </form>
                     </div>
-                </div><!--end actions -->   
+                </div><!--end actions -->
                 <div class="comments">
                     <h3>Comentarios</h3>
                 [% IF problem.is_fixed %]
@@ -89,7 +89,7 @@
                     <script>$('#new-report-link').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom; return false; });</script>
                 [% END %]
                     [% INCLUDE 'report/updates.html' %]
-                    <div class="comment-user comment">
+                    <div class="comment-user comment hidden-print">
                         [% INCLUDE 'report/update-form.html' %]
                     </div>
                 </div>
@@ -107,17 +107,17 @@
                         $('.status-report').append(statusList);
                     }
                 }
-                </script>		
+                </script>
 			</div><!--end update-display-->
             <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53e182280cb1c22a"></script>
 		</div><!--end report-->
-	</div><!--end container report-->   
+	</div><!--end container report-->
 </div><!--end c-report-->
 <script>
 	/*$('#update-display').slimScroll({ scrollTo: 100 });*/
 	[% IF scroll_to %]
-		$().ready(function() { 
-			$('#update-display').slimScroll({ scrollTo: $('[% scroll_to %]').offset().top }); 
+		$().ready(function() {
+			$('#update-display').slimScroll({ scrollTo: $('[% scroll_to %]').offset().top });
 		});
 	[% END %]
 </script>

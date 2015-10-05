@@ -39,7 +39,7 @@
             </div>
             <input class="btn btn-block btn-reportar" type="submit" id="submit_sign_in" name="submit_sign_in" value="[% loc('Access') %]">
             [% IF one_time_login %]
-            <a class="green send-password" href="#">[% loc('Have you forgotten your password?') %]</a>
+            <a class="green send-password" href="#">[% loc('Have you forgotten your password') %]</a>
             <div id="send-password" style="display: none">
                 <input type="email" class="[% IF field_errors.email %] error [% END %]" name="login_email" id="login_email" placeholder="Correo electrónico *">
                 [% IF field_errors.login_email  %]
@@ -66,11 +66,11 @@
             <input type="text" placeholder="Nombre y apellido" class="form-focus-trigger validName form-control [% IF field_errors.name %] error [% END %]" value="[% user.name | html %]" name="name" id="form_name" >
             [% IF field_errors.name  %]
                 <p class="error-m">[% field_errors.name %]</p>
-            [% END %]                        
+            [% END %]
             <input class="form-control" type="text" value="[% user.phone | html %]" name="phone" id="form_phone" placeholder="Teléfono (opcional)">
             [% IF field_errors.phone  %]
                 <p class="error-m">[% field_errors.phone %]</p>
-            [% END %]           
+            [% END %]
             <input name="password_register" id="password_register" type="password" placeholder="Contraseña" class="form-control [% IF field_errors.password %] error [% END %]">
             [% IF field_errors.password  %]
                 <p class="error-m">[% field_errors.password %]</p>
