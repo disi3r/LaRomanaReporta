@@ -1,1 +1,1 @@
-alter table problem add column created_date timestamp;
+alter table problem add column lastupdate_council timestamp;
