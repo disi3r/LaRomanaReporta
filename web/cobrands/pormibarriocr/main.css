@@ -94,7 +94,7 @@ a.profile-back {
 }
 
 body.intro .container{
-  background: url(images/bg/bg-intro.jpg) no-repeat scroll center top / cover rgba(0, 0, 0, 0);
+  background: url(images/bg/PMBCR-intro.jpg) no-repeat scroll center top / cover rgba(0, 0, 0, 0);
  }
 
 .content-horizontal{
@@ -820,26 +820,26 @@ h3.r-category-group-2{
 
 /*Comercio*/
 div.r-category-group-3 {
-	background:url(images/r-limpieza.png) no-repeat left top;	
+	background:url(images/r-comercios.png) no-repeat left top;	
 }
 h3.r-category-group-3 {
-	color: #a40301;	
+	color: #0082fb;	
 }
 
 /*Vandalismo*/
 div.r-category-group-4{
-	background:url(images/r-saneamiento.png) no-repeat left top;	
+	background:url(images/r-vandalismo.png) no-repeat left top;	
 }
 h3.r-category-group-4{
-	color: #c3c7c8;	
+	color: #575757;	
 }
 
 /*Urbanismo*/
 div.r-category-group-5{
-	background:url(images/r-basura.png) no-repeat left top;	
+	background:url(images/r-urbanismo.png) no-repeat left top;	
 }
 h3.r-category-group-5{
-	color:#f47026;
+	color:#ffbb00;
 }
 
 
@@ -1362,13 +1362,13 @@ div.c-form-report div.ir{
 	height:auto;	
 }
 
-.form-group select option{
+.form-group option{
 	padding:5px 10px;
 	background-color:#1e2e3d;
 	color:#758a9d	
 }
 
-.form-group select option:hover{
+.form-group option:hover{
 	background-color:#1e2e3d;
 }
 
@@ -2615,7 +2615,7 @@ input#getcounts{
 select.locateDetails{
 	display: none;
 }
-select.locate{
+.locate{
 	max-width: 48%;
 	float: left;
 	margin-top: 8px;

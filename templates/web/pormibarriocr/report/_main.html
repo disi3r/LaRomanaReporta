@@ -19,13 +19,3 @@
 		<span class="sign"><!--[% problem.meta_line(c) | html %]--></span>
 	</div>
 </div>
-<div class="status-report">
-    <h4>Estado del reporte</h4>
-    <span class="status-report-im">Su reclamo en la IM: 
-    	[% IF problem.can_display_external_id %] 
-    		<a target="_blank" href="http://www.montevideo.gub.uy/tramites/aplicacion/consulta-de-reclamos?numReclamo=[% problem.can_display_external_id | html %]" > [% problem.can_display_external_id | html %] </a>
-    	[% ELSE %]
-    		No hemos podido ingresar el reclamo aún
-    	[% END %]
-    </span>
-</div>
