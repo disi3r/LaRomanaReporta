@@ -11,30 +11,28 @@
   <title>PorMiBarrio</title>
   <link rel="shortcut icon" type="image/x-icon" href="/cobrands/pormibarrio/images/favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:url" content="[% c.cobrand.base_url %][% c.req.uri.path %]">
+  <meta property="og:title" content="PorMiBarrio [% title || '' %]">
+  <meta property="og:site_name" content="[% c.cobrand.site_title %]">
+  <meta property="og:description" content="Por Mi Barrio CR es una aplicación web creada por ACCESA y DATA que te permite hacer reportes sobre problemas en tu comunidad, comunicándoselo directamente a la Municipalidad.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="[% c.cobrand.base_url %]/cobrands/pormibarrio/images/pormibarrio.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="500">
+  <meta property="og:image:height" content="500">
 
-<<<<<<< HEAD
-        <meta property="og:url" content="[% c.cobrand.base_url %][% c.req.uri.path %]">
-        <meta property="og:title" content="PorMiBarrio [% title || '' %]">
-        <meta property="og:site_name" content="[% c.cobrand.site_title %]">
-        <meta property="og:description" content="Por Mi Barrio CR es una aplicación web creada por ACCESA y DATA que te permite hacer reportes sobre problemas en tu comunidad, comunicándoselo directamente a la Municipalidad.">
-        <meta property="og:type" content="website">
-        <meta property="og:image" content="[% c.cobrand.base_url %]/cobrands/pormibarrio/images/pormibarrio.png">
-        <meta property="og:image:type" content="image/png">
-        <meta property="og:image:width" content="500">
-        <meta property="og:image:height" content="500">
+  <!-- Schema.org markup for Google+ -->
+  <meta itemprop="name" content="Por Mi Barrio">
+  <meta itemprop="description" content="Por Mi Barrio CR es una aplicación web creada por ACCESA y DATA que te permite hacer reportes sobre problemas en tu comunidad, comunicándoselo directamente a la Municipalidad.">
+  <!--<meta itemprop="image" content="[% c.cobrand.base_url %]/cobrands/pormibarrio/images/pormibarrio.png">-->
 
-        <!-- Schema.org markup for Google+ -->
-        <meta itemprop="name" content="Por Mi Barrio">
-        <meta itemprop="description" content="Por Mi Barrio CR es una aplicación web creada por ACCESA y DATA que te permite hacer reportes sobre problemas en tu comunidad, comunicándoselo directamente a la Municipalidad.">
-        <!--<meta itemprop="image" content="[% c.cobrand.base_url %]/cobrands/pormibarrio/images/pormibarrio.png">-->
-
-        <!-- Twitter Card data -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:site" content="@accesaorg">
-        <meta name="twitter:title" content="Por Mi Barrio">
-        <meta name="twitter:description" content="Por Mi Barrio CR es una aplicación web creada por ACCESA y DATA que te permite hacer reportes sobre problemas en tu comunidad, comunicándoselo directamente a la Municipalidad.">
-        <meta name="twitter:creator" content="@accesaorg">
-        <!-- Twitter summary card with large image must be at least 280x150px -->
+  <!-- Twitter Card data -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@accesaorg">
+  <meta name="twitter:title" content="Por Mi Barrio">
+  <meta name="twitter:description" content="Por Mi Barrio CR es una aplicación web creada por ACCESA y DATA que te permite hacer reportes sobre problemas en tu comunidad, comunicándoselo directamente a la Municipalidad.">
+  <meta name="twitter:creator" content="@accesaorg">
+  <!-- Twitter summary card with large image must be at least 280x150px -->
 
   [% SET start = c.config.ADMIN_BASE_URL IF admin %]
 
@@ -140,9 +138,10 @@
     window.fbAsyncInit = function() {
       FB.init({
         [ % IF c.config.FACEBOOK_APP_ID % ]
-        appId: '[% c.config.FACEBOOK_APP_ID %]', [ % END % ]
+        appId: '[% c.config.FACEBOOK_APP_ID %]', 
+        [ % END % ]
         status: true,
-          xfbml: true
+        xfbml: true
       });
     };
 
@@ -160,8 +159,6 @@
 
 
   <header id="site-header" role="banner"></header>
-
-<<<<<<< HEAD
     <div class="container [% "$containerclass" | html IF containerclass %]">
         <!--TOP CONTAINER-->
         <div class="top-container">
@@ -240,155 +237,7 @@
                  [% END %]
             </div>
             <!--.end info user-->
-=======
-  [% pre_container_extra %]
-
-  <div class="container [% " $containerclass " | html IF containerclass %]">
-    <!--TOP CONTAINER-->
-    <div class="top-container hidden-print">
-      <!--BUSCAR CALLES-->
-      <div id="s-calles" class="s-calles">
-        <div class="form-group pull-left">
-          <select id="streetLocate" class="locate">
-            <option disabled selected>--BÚSCA UN LUGAR--</option>
-            <option value="1">BANCOS Y CAJEROS</option>
-            <option value="2">CENTROS EDUCATIVOS</option>
-            <option value="3">PLAZAS DE DEPORTES</option>
-          </select>
-          <select id="streetLocate-1" class="locate locateDetails">
-            <option value="1">MUTUAL ALAJUELA</option>
-            <option value="2">BANCO DE COSTA RICA</option>
-            <option value="3">BANCO POPULAR</option>
-            <option value="4">CAJEROS-B.N.</option>
-            <option value="5">CAJERO-DAVIVIENDA</option>
-            <option value="6">OFICINA-B.C.R</option>
-            <option value="7">COOPAVEGRA</option>
-          </select>
-          <select id="streetLocate-2" class="locate locateDetails">
-            <option value="8">UNIVERSIAD NACIONAL ESTATAL A DISTANCIA (U.N.E.D)</option>
-            <option value="9">ESCUELA SANTA MARIA GORETTI</option>
-            <option value="10">ESCUELA JACINTO AVILA ARAYA</option>
-            <option value="11">ESCUELA LOS PINOS</option>
-            <option value="12">CENTRO DE EDUCACION NUTRICIONAL LA GRANJA PALMARES</option>
-            <option value="13">ESCUELA ERMvalueA BLANCO GONZALEZ</option>
-            <option value="14">COLEGIO BILINGUE DE PALMARES</option>
-            <option value="15">UNIVERSIAD DE COSTA RICA</option>
-            <option value="16">ESCUELA MANUEL BERNARDO GOMEZ</option>
-            <option value="17">CENTRO INFANTIL ELIZA ALVAREZ VARGAS</option>
-            <option value="18">KINDER DE PALMARES</option>
-            <option value="19">ESCUELA DANIEL SOLORZANO MURILLO</option>
-            <option value="20">COLEGIO DR. RICARDO MORENO CAÑAS</option>
-            <option value="21">ESCUELA PABLO ALVARADO VARGAS</option>
-            <option value="22">ESCUELA DR. RICARDO MORENO CAÑAS</option>
-            <option value="23">COLEGIO SAN AGUSTIN</option>
-            <option value="24">ESCUELA PRESBITERO VENANCIO DE OÑA Y MARTINEZ</option>
-            <option value="25">ESCUELA JULIA FERNANDEZ RODRIGUEZ</option>
-            <option value="26">ESCUELA JOAQUIN L. SANCHO QUESADA</option>
-            <option value="27">ESCUELA LA UNION</option>
-            <option value="28">COLEGIO NOCTURNO DE PALMARES</option>
-            <option value="29">C.T.P. SANTOCRISTO DE ESQUIPULAS</option>
-            <option value="30">CENTRO INFANTIL BILINGUE ANGELS</option>
-          </select>
-          <select id="streetLocate-3" class="locate locateDetails">
-            <option value="31">PLAZA DEPORTES COLEGIO PALMARES</option>
-            <option value="32">PLAZA DEPORTES LA COCALECA</option>
-            <option value="33">PLAZA DEPORTES ZARAGOZA</option>
-            <option value="34">PLAZA DEPORTES DE RINCON</option>
-            <option value="35">PLAZA DEPORTES CALLE VARGAS</option>
-            <option value="36">PLAZA DEPORTES CALLE JIMENEZ</option>
-            <option value="37">PLAZA DEPORTES LA RECTA</option>
-            <option value="38">PLAZA DEPORTES BUENOS AIRES</option>
-            <option value="39">PLAZA DEPORTES SANTIAGO</option>
-            <option value="40">PLAZA DEPORTES CANDELARIA</option>
-            <option value="41">PLAZA DEPORTES LOS PINOS</option>
-            <option value="42">PLAZA DEPORTES ESQUIPULAS</option>
-            <option value="43">PLAZA DEPORTES LA GRANJA</option>
-            <option value="44">ESTADIO FUTBOL PALMARES</option>
-          </select>
-        </div>
-      </div>
-
-      <script type="text/javascript">
-        $("select.locateDetails").change(function() {
-          var strLocate = $(this).find("option:selected").text();
-          var valLocate = $(this).find("option:selected").val();
-          console.log("Locate selected  text  is-> " + strLocate);
-          console.log("Locate selected  value is-> " + valLocate);
-          //handle search based on located
-        });
-      </script>
-
-      <!--lista CALLES-->
-      <ul class="list-unstyled l-calles">
-      </ul>
-      <!--/lista CALLES-->
-      <div id="stats-menu">
-        <a href="/stats">
-          <svg class="icon icon-icono1" viewBox="-2 0 30 30">
-            <use xlink:href="#icon-stats"></use>
-          </svg>
-        </a>
-      </div>
-      <!--USER INFO-->
-      <div class="info-user" id="info-user">
-        <!-- Vista logueado -->
-        [% IF c.user_exists %]
-        <div class="dropdown user-log-on" style="display:block">
-          <a data-toggle="dropdown" class="user-name" href="#">
-            [% IF c.user.picture_url %]
-            <img class="img-circle" alt="" id="current_user_avatar">
-            <script>
-            $("#current_user_avatar").error(function() { $( this ).attr("src", "/cobrands/pormibarrio/images/no-profile-picture.jpg"); }).
-            attr( "src", "[% c.user.picture_url %]" );
-            $( document ).ajaxStart(function() {
-              console.log( "Triggered ajaxStart handler." );
-            });
-            $( document ).ajaxStop(function() {
-              console.log( "Triggered ajaxStop handler." );
-            });
-            </script>
-            [% ELSE %]
-            <img class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">
-            [% END %]
-            [% c.user.name | html %]
-          </a>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li>
-              <a class="user-profile" href="/my">
-                <svg class="icon icon-icono4" viewBox="0 0 24 24">
-                  <use xlink:href="#icon-icono4"></use>
-                </svg>
-                Mi perfil
-              </a>
-            </li>
-            <li>
-              <a class="user-sesion" href="/auth/sign_out">
-                <svg class="icon icon-icono2" viewBox="0 0 24 24">
-                  <use xlink:href="#icon-icono2"></use>
-                </svg>
-                Cerrar Sesión
-              </a>
-            </li>
-          </ul>
->>>>>>> a47b8a1e47424bf1c280009ec20a252f203ce284
-        </div>
-        <!-- /Vista logueado-->
-        [% ELSE %]
-        <!--Vista sin login-->
-        <div class="list-inline dropdown user-log-on">
-          <a class="user-name" href="#">
-            <img class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">Anonimo
-          </a>
-          <a class="green" href="/auth">Inicia sesión ó Registrate</a>
-        </div>
-        <!-- /Vista sin login-->
-        [% END %]
-      </div>
-      <!--.end info user-->
-    </div>
-
-
-
+          </div>
   <!--.end top container-->
   <!--FIRST LEVEL NAVIGATION-->
   <nav class="first-navigation">
@@ -463,11 +312,8 @@
         <li class="data">
           <a href="http://datauy.org" target="_blank"></a>
         </li>
-        <li class="my-society">
-          <a href="http://mysociety.org" target="_blank"></a>
-        </li>
-        <li class="avina">
-          <a href="http://www.avinaamericas.org/" target="_blank"></a>
+        <li class="accesa">
+          <a href="http://accesa.org" target="_blank"></a>
         </li>
       </ul>
     </div>

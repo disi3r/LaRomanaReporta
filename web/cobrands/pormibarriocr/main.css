@@ -94,7 +94,7 @@ a.profile-back {
 }
 
 body.intro .container{
-  background: url(images/bg/PMBCR-intro.jpg) no-repeat scroll center top / cover rgba(0, 0, 0, 0);
+  background: url(images/bg/bg-intro.jpg) no-repeat scroll center top / cover rgba(0, 0, 0, 0);
  }
 
 .content-horizontal{
@@ -176,17 +176,17 @@ div.c-intro p{
 
 div.steps{
 	margin-top: 6rem;
+	float: left;
 }
 
+div.step-img{
+	min-height: 68px;
+}
 div.step{
-	width:33.3333%;
+	width:25%;
 	float:left;
-	min-width:276px;
+	/*min-width:276px;*/
 	text-align:center
-}
-
-div.step-three{
-	float: right;
 }
 
 div.step h3{
@@ -196,7 +196,10 @@ div.step h3{
 	margin-top: 13px;}
 
 div.c-buttons-intro{
-	margin-top: 7rem;}
+	margin-top: 7rem;
+	float: left;
+	width: 100%;
+}
 
 .footer-intro {
   width: 100%;
@@ -206,6 +209,17 @@ div.c-buttons-intro{
   color:#fff;
   margin-top:60px;
   padding-bottom:20px
+}
+
+.footer-intro-shared{
+	width: 50%;
+	float: left;
+}
+div.footer-intro-shared label{
+	text-align: center;
+}
+div.footer-intro-shared img{
+	margin: 0 4% 8%;
 }
 
 a.know-more{
@@ -612,12 +626,8 @@ li.data a{
 	background:url(images/icon-data.png) no-repeat center 10px;
 }
 
-li.my-society a{
-	background:url(images/icon-my-society.png.png) no-repeat center 18px
-}
-
-li.avina a{
-	background:url(images/avina-americas6.png) no-repeat center 18px
+li.accesa a{
+	background:url(images/icon-accesa.png) no-repeat center 18px
 }
 
 /*SECOND NAVIGATION---------------------------------------------------*/
@@ -2261,7 +2271,7 @@ div.content-vertical{
 		padding-left:55px;
 	}
 
-	li.data a, li.my-society a, li.avina a{
+	li.data a, li.accesa a{
 		background-position:20px center;
 	}
 

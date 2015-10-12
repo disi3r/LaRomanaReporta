@@ -68,10 +68,6 @@ UNLESS not_page %]
 	            	<input type="text" placeholder="Nombre y apellido" class="form-focus-trigger validName form-control [% IF field_errors.name %] error [% END %]" value="[% c.user.name | html %]" name="name" id="form_name" >
 		            [% IF field_errors.name  %]
 		                <p class="error-m">[% field_errors.name %]</p>
-		            [% END %]                        
-		            <input type="text" placeholder="Cédula de Identidad: 0.000.000-0" class="form-control form-focus-trigger [% IF field_errors.identity_document %] error [% END %]" value="[% c.user.identity_document | html %]" name="identity_document" id="identity_document" >
-		            [% IF field_errors.identity_document  %]
-		                <p class="error-m">[% field_errors.identity_document %]</p>
 		            [% END %]
 		            <input class="form-control" type="text" value="[% c.user.phone | html %]" name="phone" id="form_phone" placeholder="Teléfono (opcional)">
 		            [% IF field_errors.phone  %]

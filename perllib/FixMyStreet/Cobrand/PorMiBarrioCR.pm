@@ -100,18 +100,74 @@ Response is {group_id => [<objects arranged by time>]}
 
 sub problem_rules {
 	return (
-		'6' => [
+		'1' => [
 			{
 				'max_time' => 10,
-				'action' => 'overdue'
+				'action' => 'problem-overdue'
 			},
 			{
 				'max_time' => 8,
-				'action' => 'alert'
+				'action' => 'problem-alert'
 			},
 			{
 				'max_time' => 6,
-				'action' => 'warning'
+				'action' => 'problem-warning'
+			}
+		],
+		'2' => [
+			{
+				'max_time' => 10,
+				'action' => 'problem-overdue'
+			},
+			{
+				'max_time' => 8,
+				'action' => 'problem-alert'
+			},
+			{
+				'max_time' => 6,
+				'action' => 'problem-warning'
+			}
+		],
+		'3' => [
+			{
+				'max_time' => 10,
+				'action' => 'problem-overdue'
+			},
+			{
+				'max_time' => 8,
+				'action' => 'problem-alert'
+			},
+			{
+				'max_time' => 6,
+				'action' => 'problem-warning'
+			}
+		],
+		'4' => [
+			{
+				'max_time' => 10,
+				'action' => 'problem-overdue'
+			},
+			{
+				'max_time' => 8,
+				'action' => 'problem-alert'
+			},
+			{
+				'max_time' => 6,
+				'action' => 'problem-warning'
+			}
+		],
+		'5' => [
+			{
+				'max_time' => 10,
+				'action' => 'problem-overdue'
+			},
+			{
+				'max_time' => 8,
+				'action' => 'problem-alert'
+			},
+			{
+				'max_time' => 6,
+				'action' => 'problem-warning'
 			}
 		]
 	);

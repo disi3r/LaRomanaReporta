@@ -3,27 +3,16 @@
 <script>
 function locate(){
     //Redirigimos en timeout
-    setTimeout(function(){location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=4'}, 10000);
+    setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=4'}, 10000);
     //Comenzamos goeposition
     if (geo_position_js.init()) {
-        console.log('Va a init');
         geo_position_js.getCurrentPosition(function(pos) {
-            console.log('Get current');
             var latitude = pos.coords.latitude;
             var longitude = pos.coords.longitude;
-            //Redirigimos si esta fuera de montevideo
-            if ( latitude < -35 || latitude > -34.6695163){
-                location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=4';
-            }
-            else if (longitude > -56.168270 || longitude < -56.4350581){
-                location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=4';
-            }
-            else {
-                location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=4';
-            }
+            location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=4';
         }, 
         function(err) {
-            location.href = '/around?latitude=-34.906557;longitude=-56.199769';
+            location.href = '/around?latitude=10.056;longitude=-84.433';
             /*console.log('Entra a err');
             if (err.code == 1) { // User said no
                 location.href = '/around?latitude=-34.906557;longitude=-56.199769';
@@ -80,23 +69,6 @@ function video(){
         $('.overlay').hide();
     })
 }
-function muni(){
-    var muni = $("#munisin").val();
-
-    switch(muni) {
-    case 'PALMARES':
-        window.location.href = "http://palmares.pormibarrio.cr";
-        break;
-    case 'CURRIDABAT':
-        window.location.href = "http://curridabat.pormibarrio.cr";
-        break;
-    case 'SAN JOSÉ':
-        window.location.href = "http://sanjose.pormibarrio.cr";
-        break;
-    default:
-        window.location.href = "http://pormibarrio.cr";
-    }
-}
 </script>
 [% END %]
 
@@ -104,47 +76,64 @@ function muni(){
     <div class="overlay-blue"></div>
         <!--MAIN CONTAINER-->
         <div class="c-intro">
-            <h1><img src="/cobrands/pormibarrio/images/logo-intro.png" alt="Por mi Barrio"></h1>
+            <h1><img src="/cobrands/pormibarriocr/images/logo-intro.png" alt="Por mi Barrio"></h1>
             <h2 class="responsive" data-compression="10" data-min="14" data-max="40">Mejorando la ciudad, contigo.</h2>
-            <p>Esta es una plataforma para hacer reclamos por roturas y problemas que veas en la ciudad junto a 
-            vecinos y vecinas, manteniéndote al tanto del proceso de reparación. Lo llevamos adelante desde DATA 
-            (una organización de la sociedad civil) usando la plataforma de servicios abiertos de la Intendencia 
-            de Montevideo y con el apoyo de la Defensoría del Vecino.</p>
-            <div id="choose-muni">
-                <p>Elije tu municipalidad</p>
-                <input  id="munisin" name="munis" list="munis" placeholder="Elije tu municipalidad"/>
-                <datalist id="munis">
-                    <option value="PALMARES">
-                    <option value="CURRIDABAT">
-                    <option value="SAN JOSÉ">
-                </datalist>
-                <a href="#" onclick="muni()" class="btn btn-green btn-intro">Ir a la muni</a>
+            <p>Esta es una página para hacer reportes de los problemas que encuentres en tu cantón. Vos hacés el reporte desde tu computadora o celular y nosotros te mantenemos al tanto del proceso de resolución. Lo llevamos adelante ACCESA en colaboración con DATA Uruguay  y en alianza con las Municipalidades.</p>
+            <div class="steps">
+                <div class="step step-one">
+                    <div class="step-img">
+                        <img src="/cobrands/pormibarriocr/images/intro-step-01.png" alt=""/>
+                    </div>
+                    <h3>1. Elige tu municipalidad 
+                        en la barra superior a la izquierda</h3>
+                </div>
+                <div class="step step-two">
+                    <div class="step-img">
+                        <img src="/cobrands/pormibarriocr/images/intro-step-02.png" alt=""/>
+                    </div>
+                    <h3>2. Reportá un problema en el mapa
+                     o sumate a uno ya reportado</h3>
+                </div>
+                <div class="step step-three">
+                    <div class="step-img">
+                        <img src="/cobrands/pormibarriocr/images/intro-step-03.png" alt=""/>
+                    </div>
+                    <h3>3. Por mi Barrio envía tu reporte 
+                        al funcionario/a correspondiente en la Municipalidad</h3>
+                </div>
+                <div class="step step-four">
+                    <div class="step-img">
+                        <img src="/cobrands/pormibarriocr/images/intro-step-04.png" alt=""/>
+                    </div>
+                    <h3>4. Te enviamos información 
+                        sobre el progreso del reporte, hasta su solución.</h3>
+                </div>
             </div>
             <div class="c-buttons-intro">
                 <a href="#" onclick="video()" class="btn btn-reportar btn-intro">Como funciona</a>
                 <a href="#" onclick="locate()" class="btn btn-green btn-intro">Comenzar ahora</a>
-            </div>
-            <div class="steps">
-                <div class="step step-one">
-                    <img src="/cobrands/pormibarrio/images/intro-step-01.png" alt=""/>
-                    <h3>1.Reportá un problema en el mapa o 
-                    sumate a uno ya creado.</h3>
-                </div>
-                <div class="step step-three">
-                    <img src="/cobrands/pormibarrio/images/intro-step-03.png" alt=""/>
-                    <h3>2. Te enviamos información
-                    sobre el progreso, hasta su solución.</h3>
-                </div>
             </div>
             <div class="clearfix"></div>
         </div>
         <!--/main container-->
 
         <!--FOOTER-->
-        <div class="footer-intro"> 
-            <img src="/cobrands/pormibarriocr/images/data.png" alt="DATA"/>
-            <img src="/cobrands/pormibarriocr/images/accesa110x93.png" alt="ACCESA"/>
-            <a href="/faq" class="know-more">Conoce más sobre PorMiBarrio</a>
+        <div class="footer-intro">
+            <div class="footer-intro-shared">
+                <label>Un proyecto de</label>
+                <img src="/cobrands/pormibarriocr/images/data.png" alt="DATA"/>
+                <img src="/cobrands/pormibarriocr/images/Accesa.png" alt="ACCESA"/>
+            </div>
+            <div class="footer-intro-shared">
+                <label>Con el apoyo de</label>
+                <img src="/cobrands/pormibarriocr/images/Avina.png" alt="DATA"/>
+                <img src="/cobrands/pormibarriocr/images/Hivos.png" alt="DATA"/>
+            </div>
+            <div class="full-wide">
+            <label>En colaboración con</label>
+            <img src="/cobrands/pormibarriocr/images/Palmares.png" alt="DATA"/>
+            <div>
+            <a href="/faq" class="know-more full-wide">Conoce más sobre PorMiBarrio</a>
         </div>
         
         <!--end footer-->

@@ -113,6 +113,7 @@ sub email_sign_in : Private {
     my $user;
     #Allow send email to login
     if ($c->req->param('login_email')){
+		$c->log->debug('Envia mail para login o cambiar mail');
     	$user = $c->model('DB::User')->find({ email => $good_email });
     	$c->log->debug(Dumper($user));
     	if (!defined $user){
@@ -121,6 +122,7 @@ sub email_sign_in : Private {
     	}
     }
     else{
+		$c->log->debug('Nuevo usuario');
 	    my $user_params = {};
 	    $user_params->{email} = $good_email if $good_email;
 	    $user_params->{name} = $c->req->param('name') if $c->req->param('name');
@@ -171,7 +173,12 @@ sub email_sign_in : Private {
       );
 
     $c->stash->{token} = $token_obj->token;
-    $c->send_email( 'login.txt', { to => $good_email } );
+	if ($c->req->param('login_email')){
+		$c->send_email( 'reset-email.txt', { to => $good_email } );
+	}
+	else {
+    	$c->send_email( 'login.txt', { to => $good_email } );
+	}
     $c->stash->{template} = 'auth/token.html';
 }
 
@@ -416,7 +423,13 @@ sub facebook_callback: Path('/auth/Facebook') : Args(0) {
 		# save this token in session
 		$c->session->{oauth}{token} =  $access_token;
 		
+		my $info2 = $fb->get('https://graph.facebook.com/me/permissions')->as_hash();
+		$c->log->debug(Dumper($info2));	
+
 		my $info = $fb->get('https://graph.facebook.com/me')->as_hash();
+
+		$c->log->debug('>>>>>>>>>>>>>>');
+		$c->log->debug(Dumper($info));		
 			
 		my $name = $info->{'name'};
 		my $email = $info->{'email'};
