@@ -378,9 +378,51 @@ $( document ).ready(function() {
 		geo_lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
 		fixmystreet.map.zoomTo(4);
 		fixmystreet.map.panTo(lonlat);
+		var pin_layer_style_map = new OpenLayers.StyleMap({
+        'default': new OpenLayers.Style({
+            graphicTitle: "${title}",
+            graphicOpacity: 1,
+            graphicZIndex: 11,
+            backgroundGraphicZIndex: 10,
+            graphicClass: "Id-${id}"
+        })
+    });
+    pin_layer_style_map.addUniqueValueRules('default', 'size', {
+        'normal': {
+            externalGraphic: "/i/pin-${colour}.png",
+            graphicWidth: 29,
+            graphicHeight: 34,
+            graphicXOffset: -15,
+            graphicYOffset: -29,
+            backgroundGraphic: "/i/pin-shadow.png",
+            backgroundWidth: 29,
+            backgroundHeight: 15,
+            backgroundXOffset: -7,
+            backgroundYOffset: -10
+        },
+        'big': {
+            externalGraphic: "/i/pin-${colour}-big.png",
+            graphicWidth: 67,
+            graphicHeight: 69,
+            graphicXOffset: -33,
+            graphicYOffset: -69,
+            backgroundGraphic: "/i/pin-shadow-big.png",
+            backgroundWidth: 88,
+            backgroundHeight: 40,
+            backgroundXOffset: -10,
+            backgroundYOffset: -35
+        }
+    });
+    var pin_layer_options = {
+        rendererOptions: {
+            yOrdering: true
+        },
+        styleMap: pin_layer_style_map
+    };
+    fixmystreet.locators = new OpenLayers.Layer.Vector("Locators", pin_layer_options);
 		/*fixmystreet.locators = new OpenLayers.Layer.Vector("Locator");*/
-		fixmystreet.locators = jQuery.extend({}, fixmystreet.markers);
-		/*fixmystreet.locators.refresh();*/
+		/*fixmystreet.locators = jQuery.extend({}, fixmystreet.markers);*/
+		fixmystreet.locators.refresh();
 		/*var locator = fms_markers_list( [ [ lonlat.lat, lonlat.lon, 'green', 'none' ] ], false );*/
 		var locator = new OpenLayers.Feature.Vector(geo_lonlat, {
             colour: 'locator',
