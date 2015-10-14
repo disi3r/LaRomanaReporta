@@ -11,17 +11,17 @@ var anchoCalles = anchoVentana - anchoUser - anchoButtons - 20;
 $("#stats-menu").css({right: anchoUser});
 var listaCalles =  [];
 $("#s-calles").width(anchoCalles);
-
+	
 //QUITAR BORDE AL ULTIMO BLOQUE DE COMENTARIO
 $('.leave-comment').prev().css('border', 'none');
 $('.leave-comment').prev('.imm-comment').css('borderBottom', '#ebebeb solid 1px');
 
-//SCROLL EN EL LISTADO DE REPORTES
-	var types = ['DOMMouseScroll', 'mousewheel', 'MozMousePixelScroll', 'wheel'];
-
-	var tr = $( "#top-reports").height();
-	$('.c-scroll').css({'height':(($(window).height())-tr)});
-
+//SCROLL EN EL LISTADO DE REPORTES		
+	var types = ['DOMMouseScroll', 'mousewheel', 'MozMousePixelScroll', 'wheel'];	
+		
+	var tr = $( "#top-reports").height();	
+	$('.c-scroll').css({'height':(($(window).height())-tr)});	
+	
 	$('div.scrolled').slimScroll({
 		position: 'right',
 		height: '80%',
@@ -77,7 +77,7 @@ $('.leave-comment').prev('.imm-comment').css('borderBottom', '#ebebeb solid 1px'
 		borderRadius:4,
 		opacity: 1,
 	});
-
+	
 
 //SCROLL AL INGRESAR UN REPORTE
 	$('div.scrolled-reportar').slimScroll({
@@ -105,7 +105,7 @@ function dashCheck(){
 		}
 	});
 }
-
+		
 $( document ).ready(function() {
 	//SCROLL EN EL REPORTE
 	height_val = '95%';
@@ -126,7 +126,7 @@ $( document ).ready(function() {
 		borderRadius:4,
 		opacity: 1,
 	});
-
+	
 	$('a.pregunta').click(function(){
 		var ref = this.href.split('#');
 		console.log(ref[1]);
@@ -138,14 +138,13 @@ $( document ).ready(function() {
 		var regCont = $('.bloque-registro .form-group').first();
 		$('#form_email').prependTo(regCont);
 		$('div.bloque-registro').slideDown();
-		$('div.bloque-sesion').slideUp();
+		$('div.bloque-sesion').slideUp();	
 	});
 	$('.registrate-back').click(function(e){
 		e.preventDefault();
-		var sesCont = $('.bloque-sesion .form-group')[1];
-		$('#form_email').prependTo(sesCont);
+		$('#form_email').insertBefore('#password_sign_in');
 		$('div.bloque-registro').slideUp();
-		$('div.bloque-sesion').slideDown();
+		$('div.bloque-sesion').slideDown();	
 	});
 	$('.report-back').click(function(e){
 		e.preventDefault();
@@ -168,7 +167,7 @@ $( document ).ready(function() {
 	  $( '.reportar-abuso-content' ).slideUp();
 	  $( '.reportar-hide-content' ).slideUp();
 	});
-
+	
 	$( ".reportar-abuso" ).click(function() {
 	  $( this ).toggleClass( "reportar-abuso-active" );
 	  $( '.follow-report' ).removeClass( "follow-report-active" );
@@ -199,13 +198,13 @@ $( document ).ready(function() {
 	$('.InputButton').bind("click" , function () {
         $('#InputFile').click();
     });
-
+	
 	$('.upload-img').bind("click" , function () {
         $('#InputFile').click();
     });
 
     //CHANGE PASSWORD
-	$( "#change-passwd-btn" ).unbind('click').click(function() {
+	$( "#change-passwd-btn" ).unbind('click').click(function(){
 	  $( this ).toggleClass( "reportar-abuso-active" );
 	  $( '#my-change-passwd' ).slideToggle();
 	});
@@ -215,11 +214,7 @@ $( document ).ready(function() {
         $('#my').hide();
         $('#user-profile').show();
     });
-    $('#edit-profile-cancel').click(function(e) {
-    	e.preventDefault();
-        document.location.href = '/my';
-    });
-
+    
     //FILTRO REPORTES EN PERFIL
     if ($('.content').hasClass('content-vertical')){
 		$('#user-reports').hide();
@@ -252,7 +247,7 @@ $( document ).ready(function() {
 	        $('#user-reports').show();
 	    }
     });
-
+    
     $( "#siguiendo" ).unbind('click').click(function() {
     	if ($('.content').hasClass('content-vertical')){
     		$( '#user-interactions' ).slideToggle();
@@ -311,6 +306,20 @@ $( document ).ready(function() {
 	    });
 	}
 	//SEARCH IN CR
+	$('option.muni').click(function(){
+		$('#muniSelect').change();
+	});
+	$('#muniSelect').on('change', function(){
+		var muni = $("#muniSelect").val();
+
+	    switch(muni) {
+	    case 'PALMARES':
+	        location.href = '/around?latitude=10.050;longitude=-84.433&zoom=4';
+	        break;
+	    default:
+	        window.location.href = "http://pormibarrio.cr";
+	    }
+	});
 	$('#streetLocate').on('change', function(){
 		$('.locateDetails').hide();
 		$( '#streetLocate-'+this.value ).show();
@@ -363,35 +372,25 @@ $( document ).ready(function() {
 			['10.05326851','-84.44717097'],
 			['10.05772645','-84.42974023']
 		];
-		try{
-			var lonlat = new OpenLayers.LonLat(locations[this.value][1], locations[this.value][0]);
-			lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
-			fixmystreet.map.zoomTo(4);
-			fixmystreet.map.panTo(lonlat);
-			setTimeout(function(){},2000);
-			fixmystreet.pins.push([
-				locations[this.value][0],
-				locations[this.value][1],
-				"green",
-				"0",
-				'"'+$(".locateDetails option[value='"+this.value+"']").text()+'"',
-				" ",
-				" ",
-				"Location",
-				" ",
-				" ",
-				"1",
-				"1",
-				"confirmed"
-			]);
-			var markers = fms_markers_list(fixmystreet.pins, true);
-			fixmystreet.markers.addFeatures(markers);
-			/*fixmystreet.pins.splice(-1,1);*/
-		}catch(err){
-			console.error("--> no esta open layers");
-			window.location.href = "/around?latitude="+locations[this.value][0]+";longitude="+locations[this.value][1]+"&zoom=3";
-		}
-
+		var lonlat = new OpenLayers.LonLat(locations[this.value][1], locations[this.value][0]);
+		var geo_lonlat = new OpenLayers.Geometry.Point(locations[this.value][1], locations[this.value][0]);
+		lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+		geo_lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+		fixmystreet.map.zoomTo(4);
+		fixmystreet.map.panTo(lonlat);
+		/*fixmystreet.locators = new OpenLayers.Layer.Vector("Locator");*/
+		fixmystreet.locators = jQuery.extend({}, fixmystreet.markers);
+		/*fixmystreet.locators.refresh();*/
+		/*var locator = fms_markers_list( [ [ lonlat.lat, lonlat.lon, 'green', 'none' ] ], false );*/
+		var locator = new OpenLayers.Feature.Vector(geo_lonlat, {
+            colour: 'locator',
+            size: 'normal',
+            id: 'locator',
+            title: '"'+$(".locateDetails option[value='"+this.value+"']").text()+'"',
+        });
+		fixmystreet.locators.addFeatures( [locator] );
+		fixmystreet.map.addLayer(fixmystreet.locators);
+		fixmystreet.locators.setVisibility(true);
 	});
 	//DASHBOARD
 	$('input.deadline').click(dashCheck);
@@ -468,6 +467,7 @@ function report(timeout, zoom){
 
 function report_list(timeout, zoom){
 	if (typeof fixmystreet != 'undefined'){
+		alert('PAGE: '+fixmystreet.page);
 		switch (fixmystreet.page) {
 			case 'around':
 				$('#side-form').hide();
@@ -477,27 +477,32 @@ function report_list(timeout, zoom){
 				window.history.back();
 				break;
 			default:
-				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=2';
+				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=2&list=1';
 		}
 	}
 	else {
-		geolocate(timeout, zoom);
+		alert('Geolocate TRUE');
+		geolocate(timeout, zoom, true);
 	}
 }
 
-function geolocate(timeout, zoom){
-	setTimeout(function(){location.href = '/around?latitude=10.050;longitude=-84.433&zoom=' + zoom}, timeout);
+function geolocate(timeout, zoom, list){
+	var list = '';
+	if (typeof list !== 'undefined'){
+    	list = '&list=1';
+    }
+	setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list}, timeout);
 	if (geo_position_js.init()) {
 	    console.log('Va a init');
 	    geo_position_js.getCurrentPosition(function(pos) {
 	        console.log('Get current');
 	        var latitude = pos.coords.latitude;
 	        var longitude = pos.coords.longitude;
-	        location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom;
-	    },
+	        location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
+	    }, 
 	    function(err) {
 	    	alert('No hemos podido geolocalizarlo');
-	    },
+	    }, 
 	    {
 	        enableHighAccuracy: true,
 	        timeout: 10000
@@ -522,27 +527,27 @@ $('.responsive').responsiveText();
 
 	function init() {
 
-
+	
 	//INGRESAR REPORTE
 	/*$('li.reportar a').click(function(){
 		$('.open-side').removeClass('open-side');
 		$('#add-report').addClass('open-side');
 	});
-
+	
 	//LISTADO DE REPORTES
 	$('li.reportes a').click(function(){
 		$('.open-side').removeClass('open-side');
 		$('#report-list').addClass('open-side');
 	});
-
+	
 	//VER PERFIL DE USUARIO
 	$('li.profile a').click(function(){
 		$('.open-side').removeClass('open-side');
 		$('#user-profile').addClass('open-side');
 	});
 	*/
-
-
+	
+	
 	//CONTRAER Y EXPANDIR BARRA AZUL
 	$(".first-navigation").hover(
 	  function () {
@@ -555,9 +560,9 @@ $('.responsive').responsiveText();
 		$('.s-calles').removeClass("s-calles-nav");
 		$('ul.l-calles').removeClass("l-calles-nav");
 	  }
-	);
-
-
+	);	
+	
+	
 	//MOVER EL DETALLE DE REPORTE AL HACER HOVER EN LA BARRA AZUL
 	$(".first-navigation").hover(
 	  function () {
@@ -648,7 +653,7 @@ if ( $(window).width() >= 780){
 //CATEGORIAS POR GRUPO
 function form_category_group_onchange() {
 	var group_id = $('#form_category_groups').val();
-
+	
 	if (group_id == '') {
 		$('#form_category').prop( "disabled", true );
         $('#form_category').empty();
