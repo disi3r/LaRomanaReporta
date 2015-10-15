@@ -9,6 +9,10 @@ use List::MoreUtils qw(any);
 use Encode;
 use FixMyStreet::Map;
 use Utils;
+use Geo::JSON::Point;
+use Geo::JSON::Feature;
+use Geo::JSON::FeatureCollection;
+use Data::Dumper;
 
 =head1 NAME
 
@@ -240,6 +244,71 @@ sub check_location_is_acceptable : Private {
     $c->stash->{area_check_action} = 'submit_problem';
     $c->stash->{remove_redundant_areas} = 1;
     return $c->forward('/council/load_and_check_areas');
+}
+
+=head2 /ajax
+
+Handle the ajax calls that the map makes when it is dragged. The info returned
+is used to update the pins on the map and the text descriptions on the side of
+the map. This is a new implementation with geoJson
+
+=cut
+
+sub ajax_geo : Path('/ajax_geo') {
+    my ( $self, $c ) = @_;
+
+    $c->res->content_type('application/json; charset=utf-8');
+
+    unless ( $c->req->param('bbox') ) {
+        $c->res->status(404);
+        $c->res->body('');
+        return;
+    }
+
+    # assume this is not cacheable - may need to be more fine-grained later
+    $c->res->header( 'Cache_Control' => 'max-age=0' );
+
+    # how far back should we go?
+    my $all_pins = $c->req->param('all_pins') ? 1 : undef;
+    my $interval = $all_pins ? undef : $c->cobrand->on_map_default_max_pin_age;
+
+    # Need to be the class that can handle it
+    FixMyStreet::Map::set_map_class( 'OSM' );
+
+    # extract the data from the map
+    my ( $pins, $on_map, $around_map, $dist ) =
+      FixMyStreet::Map::map_pins( $c, $interval );
+
+    #Iniciate features collection
+    my @fcollection;
+    foreach my $pin (@$pins) {
+        #Create point
+        my $pt = Geo::JSON::Point->new({
+            coordinates => [ @$pin[1], @$pin[0] ],
+        });
+        #Add properties
+        my %pt_prop = (
+            id => @$pin[3],
+            title => @$pin[4],
+            user => @$pin[6],
+            category => @$pin[7],
+            date => @$pin[9],
+            state => @$pin[12],
+        );
+        #Create feature
+        my $geo_pin = Geo::JSON::Feature->new({
+            geometry   => $pt,
+            properties => \%pt_prop,
+        });
+        #Append feature
+        push @fcollection, $geo_pin;
+    }
+    my $pt = Geo::JSON::FeatureCollection->new({
+        features => \@fcollection,
+    });
+    my $json = $pt->to_json;
+
+    $c->res->body($json);
 }
 
 =head2 /ajax
