@@ -10,6 +10,7 @@
 <label class="active" for="categoria">Categoría & subcategoría *</label>
 <p class="help-block">Si la categoría a la que quiere reportar no se encuentra, por favor no lo haga en otra. Con el tiempo iremos incorporando nuevas categorías.</p>
 <select name='category_groups' id='form_category_groups' onchange='form_category_group_onchange()'  class="required" required>
+		<option value="">-- Selecciona una categoría --</option>
 	[% FOREACH group IN category_groups_seen %]
 		[% group_name = group.1 %]
 		[% group_name_lc = group_name | lower %]
@@ -23,7 +24,7 @@
 <select name='category' id='form_category' [% ' disabled' IF not category %]  class="required" required>
 	[% FOREACH cat_op IN category_currently_loaded %]
 		[% cat_op_lc = cat_op | lower %]
-		<option value='[% cat_op | html %]' [% ' selected' IF report.category == cat_op || category == cat_op_lc %]>[% IF loop.first %][% cat_op %][% ELSE %][% cat_op | html %][% END %]</option>
+		<option value='[% cat_op | html %]' [% ' selected' IF report.category == cat_op || category == cat_op_lc %]>[% IF loop.first %][% cat_op %]lalalala[% ELSE %][% cat_op | html %][% END %]</option>
 	[% END %]
 </select>
 
