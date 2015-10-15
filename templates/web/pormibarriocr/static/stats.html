@@ -57,21 +57,21 @@
 		if (typeof group.name != 'undefined'){
 			//Create group structure
 			$("#graph-subcat").append($("<div>", {id: "group"+gid, class: "graph-group", style: "height: 300px;"}));
-			$("#group"+gid).append($("<div class='graph-totals-values' class='chart-group'><h2>"+group.name+"</h2><span>"+group.fixed+" finalizados</span><span>"+group.in_progress+" en progreso</span><span>"+group.confirmed+" ingresados</span></div>"));
+			$("#group"+gid).append($("<div class='graph-totals-values' class='chart-group'><h2>"+decodeURIComponent(escape(group.name))+"</h2><span>"+group.fixed+" finalizados</span><span>"+group.in_progress+" en progreso</span><span>"+group.confirmed+" ingresados</span></div>"));
 			$("#group"+gid).append($("<div>", {id: "chart-cat"+gid, class: "chart-group", style: "height: 300px; width: 60%;"}));
 			$("#group"+gid).append($("<div>", {id: "chart-totals"+gid, class: "chart-group", style: "height: 300px; width: 100%;"}));
 			$("#group"+gid).append($("<div>", {id: "chart-evolution"+gid, class: "chart-group", style: "height: 300px; width: 100%;"}));
 			var data = [];
 			//Append option
-			$("#subcat-select").append($("<option>", {value: gid, text: group.name}));
+			$("#subcat-select").append($("<option>", {value: gid, text: decodeURIComponent(escape(group.name))}));
 			
 			//Create chart
-			data.push('Desglose '+group.name);
-			data.push('Total de reportes enviados a la IM en '+group.name);
+			data.push('Desglose '+decodeURIComponent(escape(group.name)));
+			data.push('Total de reportes enviados a la Municipalidad en '+decodeURIComponent(escape(group.name)));
 			data.push("#chart-cat"+gid);
-			data.push('Totales en '+group.name);
+			data.push('Totales en '+decodeURIComponent(escape(group.name)));
 			data.push("#chart-totals"+gid);
-			data.push('Evolucion en '+group.name);
+			data.push('Evolucion en '+decodeURIComponent(escape(group.name)));
 			data.push("#chart-evolution"+gid);
 			create_charts(group, data);
 
@@ -130,7 +130,7 @@
 		var groups_evol_confirmed = [];
 
 		var confirmed_title = 'Confirmados por categoría';
-		var confirmed_subtitle = 'Total de reportes enviados a la IM por categoría';
+		var confirmed_subtitle = 'Total de reportes enviados a la Municipalidad';
 		var confirmed_div = '#graph-totals';
 		var totals_title = 'Totales por categoría';
 		var totals_div = '#graph-total-cat';
@@ -148,8 +148,8 @@
 		}
 		$.each(groups, function(gid,group){
 			if( $.isPlainObject(group) ){
-				groups_totals.push([group.name,group.total]);
-				groups_names.push(group.name);
+				groups_totals.push([decodeURIComponent(escape(group.name)),group.total]);
+				groups_names.push(decodeURIComponent(escape(group.name)));
 				groups_fixed.push(group.fixed);
 				groups_in_progress.push(group.in_progress);
 				groups_confirmed.push(group.confirmed);
@@ -159,7 +159,7 @@
 					groups_evol_confirmed = group.evolution.confirmed;
 				}
 				else{
-					groups_evol_totals.push({name: group.name, data: group.evolution});
+					groups_evol_totals.push({name: decodeURIComponent(escape(group.name)), data: group.evolution});
 				}
 			}
 		});
