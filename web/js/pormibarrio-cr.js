@@ -419,10 +419,9 @@ $( document ).ready(function() {
         },
         styleMap: pin_layer_style_map
     };
-    fixmystreet.locators = new OpenLayers.Layer.Vector("Locators", pin_layer_options);
 		/*fixmystreet.locators = new OpenLayers.Layer.Vector("Locator");*/
-		/*fixmystreet.locators = jQuery.extend({}, fixmystreet.markers);*/
-		fixmystreet.locators.refresh();
+		fixmystreet.locators = jQuery.extend({}, fixmystreet.markers);
+		/*fixmystreet.locators.refresh();*/
 		/*var locator = fms_markers_list( [ [ lonlat.lat, lonlat.lon, 'green', 'none' ] ], false );*/
 		var locator = new OpenLayers.Feature.Vector(geo_lonlat, {
             colour: 'locator',
@@ -509,7 +508,6 @@ function report(timeout, zoom){
 
 function report_list(timeout, zoom){
 	if (typeof fixmystreet != 'undefined'){
-		alert('PAGE: '+fixmystreet.page);
 		switch (fixmystreet.page) {
 			case 'around':
 				$('#side-form').hide();
@@ -523,14 +521,13 @@ function report_list(timeout, zoom){
 		}
 	}
 	else {
-		alert('Geolocate TRUE');
 		geolocate(timeout, zoom, true);
 	}
 }
 
 function geolocate(timeout, zoom, list){
 	var list = '';
-	if (typeof list !== 'undefined'){
+	if (list){
     	list = '&list=1';
     }
 	setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list}, timeout);
@@ -704,7 +701,7 @@ function form_category_group_onchange() {
 		$('#form_category').empty();
 
 		var options = '';
-		options += '<option value="">-- Selecciona una categoría --</option>';
+		options += '<option value="">-- Selecciona una subcategoría --</option>';
 
 		for (var i = 0; i < category_groups[group_id].length; i++) {
 			options += '<option value="' + category_groups[group_id][i] + '">' + category_groups[group_id][i] + '</option>';

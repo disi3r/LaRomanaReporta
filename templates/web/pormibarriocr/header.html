@@ -137,9 +137,9 @@
   <script>
     window.fbAsyncInit = function() {
       FB.init({
-        [ % IF c.config.FACEBOOK_APP_ID % ]
+        [% IF c.config.FACEBOOK_APP_ID %]
         appId: '[% c.config.FACEBOOK_APP_ID %]', 
-        [ % END % ]
+        [% END %]
         status: true,
         xfbml: true
       });
