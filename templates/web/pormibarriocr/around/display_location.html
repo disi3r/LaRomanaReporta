@@ -76,31 +76,36 @@
 
 
 
+    [% IF list %]
+        <div id="side">
+    [% ELSE %]
+        <div id="side" style="display:none">
+    [% END %]
 
-    <div id="side">
+            [% IF allow_creation %]
+                [% TRY %][% INCLUDE 'around/extra_text.html' %][% CATCH file %][% END %]
+            [% END %]
+
+            [% INCLUDE 'around/_updates.html' %]
+
+            <section class="full-width">
+                [% INCLUDE "around/tabbed_lists.html" %]
+            </section>
+        </div>
 
         [% IF allow_creation %]
-            [% TRY %][% INCLUDE 'around/extra_text.html' %][% CATCH file %][% END %]
+        [% IF list %]
+            <div id="side-form" style="display:none">
+        [% ELSE %]
+            <div id="side-form">
         [% END %]
-
-      [% IF c.cobrand.moniker != 'emptyhomes' %]
-        [% INCLUDE 'around/_updates.html' %]
-
-        <section class="full-width">
-            [% INCLUDE "around/tabbed_lists.html" %]
-        </section>
-      [% END %]
-    </div>
-
-    [% IF allow_creation %]
-    <div style="display:none" id="side-form">
-    [% INCLUDE "report/new/fill_in_details_form.html"
-        js = 1,
-        report.used_map = 1
-        report.name = c.user.name
-    %]
-    </div>
-    [% END %]
+        [% INCLUDE "report/new/fill_in_details_form.html"
+            js = 1,
+            report.used_map = 1
+            report.name = c.user.name
+        %]
+        </div>
+        [% END %]
 
 [% IF allow_creation %]
 </form>

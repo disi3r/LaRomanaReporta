@@ -67,6 +67,7 @@ sub around_index : Path : Args(0) {
         return $c->res->redirect($new_uri);
     }
 
+    $c->stash->{list} = 1 if $c->req->param('list');
     # Show the nearby reports
     $c->detach('display_location');
 }
