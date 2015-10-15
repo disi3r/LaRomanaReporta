@@ -147,7 +147,7 @@ sub stats : Global : Args(0) {
                     $problem_by_group->{$contact->{group_id}}{name} = utf8::encode($contact_group->{group_name});
                     $problem_by_group->{$contact->{group_id}}{total} = 0;
                     $problem_by_group->{$contact->{group_id}}{fixed} = 0;
-                    $problem_by_group->{$contact->{group_id}}{in_progress} = 0utf8::encode(
+                    $problem_by_group->{$contact->{group_id}}{in_progress} = 0;
                     $problem_by_group->{$contact->{group_id}}{confirmed} = 0;
                     $problem_by_group->{$contact->{group_id}}{evolution} = [0];
                 }
