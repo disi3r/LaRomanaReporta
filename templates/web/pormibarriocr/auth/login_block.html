@@ -4,23 +4,7 @@
             <h2>Accede a tu cuenta</h2>
             <p>[% summary || loc("Login or signup to help impoving our city") %]</p>
         </div>
-        <div class="form-group">
-            [% IF c.config.FACEBOOK_APP_ID || c.config.TWITTER_KEY %]
-            <div class="checkbox-group">
-                <input type="checkbox" id="not_update_photo" name="not_update_photo"></input>
-                <label class="inline">[% loc('Do not replace my image with social image') %]</label>
-            </div>
-            <div class="social-buttons">
-                [% IF c.config.FACEBOOK_APP_ID %]
-                    <button name="facebook_sign_in" id="facebook_sign_in" value="facebook_sign_in" class="btn btn-block btn-social btn-facebook">Accede con Facebook</button>
-                [% END %]
-                [% IF c.config.TWITTER_KEY %]
-                    <button name="twitter_sign_in" id="twitter_sign_in" value="twitter_sign_in" class="btn btn-block btn-social btn-twitter">Accede con Twitter</button>
-                [% END %]
-            </div>
-            [% END %]
-        </div>
-        <p>...ó ingresa los datos si ya tienes cuenta:</p>
+        <p>Ingresa tus datos si ya tienes cuenta:</p>
         [% IF sign_in_error  %]
             <p class="error-m">[% loc('Email or password incorrect. Maybe you want to <a class="green registrate" href="#">register</a>?') %]</p>
         [% END %]
@@ -48,10 +32,30 @@
                 <button class="btn btn-block btn-green" type="submit" id="new_password_mail" name="email_sign_in" value='1'>Envíame instrucciones</button>
             </div>
             [% END %]
+        </div>
+        <div class="form-group">
+            [% IF c.config.FACEBOOK_APP_ID || c.config.TWITTER_KEY %]
+            <div class="social-buttons">
+                [% IF c.config.FACEBOOK_APP_ID %]
+                    <button name="facebook_sign_in" id="facebook_sign_in" value="facebook_sign_in" class="btn btn-block btn-social btn-facebook">Accede con Facebook</button>
+                [% END %]
+                [% IF c.config.TWITTER_KEY %]
+                    <button name="twitter_sign_in" id="twitter_sign_in" value="twitter_sign_in" class="btn btn-block btn-social btn-twitter">Accede con Twitter</button>
+                [% END %]
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="not_update_photo" name="not_update_photo"></input>
+                <label class="inline">[% loc('Do not replace my image with social image') %]</label>
+            </div>
             <p class="no-account">
                 ¿No utilizas redes sociales? No hay problema!<br>
                 <a class="green registrate" href="#">Regístrate aquí con tu mail</a>
             </p>
+            [% ELSE %]
+            <p class="no-account">
+                <a class="green registrate" href="#">Regístrate aquí con tu mail</a>
+            </p>
+            [% END %]
         </div>
     </div> <!-- bloque-sesion -->
     <div class="bloque-registro">

@@ -16,6 +16,12 @@ UNLESS not_page %]
 	    	<form method="post" action="[% c.uri_for( '/my/edit' ) %]" id="form_profile_form" name="profileForm" class="validate"[% IF c.cobrand.allow_photo_upload %] enctype="multipart/form-data"[% END %]>
 	    		<input name="redirect" type="hidden" value="/my">
 		    	<button type="submit" id="edit-profile-cancel" class="btn btn-sky btn-small btn-comentar btn-profile">[% loc('Back') %]</button>
+		    	<script>
+                    $('#edit-profile-cancel').click(function(event){
+                        event.preventDefault();
+                        window.location.href = '/my';
+                    });
+                </script>
 		        <button type="submit" id="edit-profile-save" class="btn btn-sky btn-small btn-comentar btn-profile">[% loc('Save') %]</button>
 	        	<div class="img-profile">
 	        	[% IF c.cobrand.allow_photo_upload %]
@@ -108,4 +114,4 @@ UNLESS not_page %]
 	    <!--/edit-profile-->
 	</div>
 </div>
-
+[% INCLUDE 'footer.html' %]
