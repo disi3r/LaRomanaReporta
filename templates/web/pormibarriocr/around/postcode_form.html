@@ -1,60 +1,215 @@
+<script type="text/javascript">
+function PlaceOfReference(){
+    this.placesOfReference = [
+            {
+                "category":"BANCOS Y CAJEROS",
+                "places":
+                        [
+
+                            {"nombre":"MUTUAL ALAJUELA",
+                            "latitude":'10.0547748408',
+                            "longitude":'-84.4326878713'},
+
+                            {"nombre":"BANCO DE COSTA RICA",
+                            "latitude":'10.0602591944',
+                            "longitude":'-84.4392100165'},
+
+                            {"nombre":"BANCO POPULAR",
+                            "latitude":'10.0543073533',
+                            "longitude":'-84.434734945'},
+
+                            {"nombre":"CAJEROS-B.N.",
+                            "latitude":'10.0556119978',
+                            "longitude":'-84.4322925711'},
+
+                            {"nombre":"CAJERO-DAVIVIENDA",
+                            "latitude":'10.0553956707',
+                            "longitude":'-84.432489101'},
+
+                            {"nombre":"OFICINA-B.C.R",
+                            "latitude":'10.0535388035',
+                            "longitude":'-84.4329284694'},
+
+                            {"nombre":"COOPAVEGRA",
+                            "latitude":'10.0556972306',
+                            "longitude":'-84.4349308297'},
+                        ]
+            },
+
+            {
+                "category":"CENTROS EDUCATIVOS",
+                "places":
+                        [
+                            {"nombre":"UNIVERSIDAD NACIONAL ESTATAL A DISTANCIA (U.N.E.D)",
+                            "latitude":'10.0612707426',
+                            "longitude":'-84.4364895418'},
+
+                            {"nombre":"ESCUELA SANTA MARIA GORETTI",
+                            "latitude":'10.0598097661',
+                            "longitude":'-84.4366706012'},
+
+                            {"nombre":"ESCUELA JACINTO AVILA ARAYA",
+                            "latitude":'10.0325048124',
+                            "longitude":'-84.4245958878'},
+
+                            {"nombre":"ESCUELA LOS PINOS",
+                            "latitude":'10.0258227162',
+                            "longitude":'-84.4320896955'},
+
+                            {"nombre":"CENTRO DE EDUCACION NUTRICIONAL LA GRANJA PALMARES",
+                            "latitude":'10.0535854126',
+                            "longitude":'-84.4435428629'},
+
+                            {"nombre":"ESCUELA ERMIDA BLANCO GONZALEZ",
+                            "latitude":'10.053079023',
+                            "longitude":'-84.443288174'},
+
+                            {"nombre":"COLEGIO BILINGUE DE PALMARES",
+                            "latitude":'10.0538900292',
+                            "longitude":'-84.4347443851'},
+
+                            {"nombre":"UNIVERSIDAD DE COSTA RICA",
+                            "latitude":'10.0585652514',
+                            "longitude":'-84.4311110695'},
+
+                            "nombre":"ESCUELA MANUEL BERNARDO GOMEZ",
+                            "latitude":'10.0582314504',
+                            "longitude":'-84.4316453588'},
+
+                            {"nombre":"CENTRO INFANTIL ELIZA ALVAREZ VARGAS",
+                            "latitude":'10.0532160108',
+                            "longitude":'-84.4317745273'},
+
+                            {"nombre":"KINDER DE PALMARES",
+                            "latitude":'10.0569450061',
+                            "longitude":'-84.4328925255'},
+
+                            {"nombre":"ESCUELA DANIEL SOLORZANO MURILLO",
+                            "latitude":'10.0442982469',
+                            "longitude":'-84.4199076147'},
+
+                            {"nombre":"COLEGIO DR. RICARDO MORENO CAÑAS",
+                            "latitude":'10.0373216296',
+                            "longitude":'-84.4398962447'},
+
+                            {"nombre":"ESCUELA PABLO ALVARADO VARGAS",
+                            "latitude":'10.0343602765',
+                            "longitude":'-84.4510103181'},
+
+                            {"nombre":"ESCUELA DR. RICARDO MORENO CAÑAS",
+                            "latitude":'10.0411116766',
+                            "longitude":'-84.4347174038'},
+
+                            {"nombre":"COLEGIO SAN AGUSTIN",
+                            "latitude":'10.0618741632',
+                            "longitude":'-84.4372168668'},
+
+                            {"nombre":"ESCUELA PRESBITERO VENANCIO DE OÑA Y MARTINEZ",
+                            "latitude":'10.0229690788',
+                            "longitude":'-84.444534598'},
+
+                            {"nombre":"ESCUELA JULIA FERNANDEZ RODRIGUEZ",
+                            "latitude":'10.0569933619',
+                            "longitude":'-84.4221406473'},
+
+                            {"nombre":"ESCUELA JOAQUIN L. SANCHO QUESADA",
+                            "latitude":'10.0700081142',
+                            "longitude":'-84.4360851411'},
+
+                            {"nombre":"COLEGIO SAN AGUSTIN",
+                            "latitude":'10.0618741632',
+                            "longitude":'-84.4372168668'},
+
+                            {"nombre":"COLEGIO SAN AGUSTIN",
+                            "latitude":'10.0618741632',
+                            "longitude":'-84.4372168668'},
+
+                            {"nombre":"COLEGIO SAN AGUSTIN",
+                            "latitude":'10.0618741632',
+                            "longitude":'-84.4372168668'},
+
+                            {"nombre":"COLEGIO SAN AGUSTIN",
+                            "latitude":'10.0618741632',
+                            "longitude":'-84.4372168668'}
+                        ]
+            },
+
+            {
+                "category":"PLAZAS DE DEPORTES",
+                "places":
+                        [
+                            {"nombre":"MUTUAL ALAJUELA",
+                            "latitude":'10.0560155294',
+                            "longitude":'-84.4339677846'},
+
+                            {"nombre":"BANCO DE COSTA RICA",
+                            "latitude":'10.0547748408',
+                            "longitude":'-84.4326878713'},
+
+                            {"nombre":"BANCO POPULAR",
+                            "latitude":'10.0602591944',
+                            "longitude":'-84.4392100165'},
+
+                            {"nombre":"CAJEROS-B.N.",
+                            "latitude":'10.0543073533',
+                            "longitude":'-84.434734945'},
+
+                            {"nombre":"CAJERO-DAVIVIENDA",
+                            "latitude":'10.0556119978',
+                            "longitude":'-84.4322925711'},
+
+                            {"nombre":"OFICINA-B.C.R",
+                            "latitude":'10.0553956707',
+                            "longitude":'-84.432489101'},
+
+                            {"nombre":"COOPAVEGRA",
+                            "latitude":'10.0535388035',
+                            "longitude":'-84.4329284694'},
+                        ]
+            }
+    ];
+    this.getLongitude = getLongitude;
+    this.getLatitude = getLatitude;
+    this.printSelects = printSelects;
+    this.getName = getName;
+
+    function printSelects(){
+        var categoriesSelectId = "#streetLocate";
+        var divContainerId = "#s-calles-selects";
+        for (var i=0; i < this.placesOfReference.length; i++){
+            var option = "<option value ='" + (i+1) + "'>" + this.placesOfReference[i].category + "</option>";
+            $(categoriesSelectId).append(option);
+            var createdSelect = "<select id='streetLocate-"+(i+1)+"' class='locate locateDetails'>";
+            for(var z=0; z < this.placesOfReference[i].places.length; z++){
+                var option = "<option value='"+z+"'>"+this.placesOfReference[i].places[z].nombre+"</option>"
+                createdSelect = createdSelect + option;  
+            }
+            createdSelect = createdSelect + "</select>";
+            $(divContainerId).append(createdSelect);
+        }
+    }
+
+    function getLatitude(categoryPosition,placePosition){
+        var latitude = this.placesOfReference[categoryPosition].places[placePosition].latitude;
+        return latitude;
+    }
+
+    function getLongitude(categoryPosition,placePosition){
+        var longitude = this.placesOfReference[categoryPosition].places[placePosition].longitude;
+        return longitude;
+    }
+
+    function getName(categoryPosition,placePosition){
+        var longitude = this.placesOfReference[categoryPosition].places[placePosition].nombre;
+        return longitude;
+    }
+}
+</script>
+
 <div id="s-calles" class="s-calles">
-    <div class="form-group pull-left">
+    <div id="s-calles-selects" class="form-group pull-left">
         <select id="streetLocate" class="locate">
             <option disabled selected>--BÚSCA UN LUGAR--</option>
-            <option value="1">BANCOS Y CAJEROS</option>
-            <option value="2">CENTROS EDUCATIVOS</option>
-            <option value="3">PLAZAS DE DEPORTES</option>
-        </select>
-        <select id="streetLocate-1" class="locate locateDetails">
-            <option value="1">MUTUAL ALAJUELA</option>
-            <option value="2">BANCO DE COSTA RICA</option>
-            <option value="3">BANCO POPULAR</option>
-            <option value="4">CAJEROS-B.N.</option>
-            <option value="5">CAJERO-DAVIVIENDA</option>
-            <option value="6">OFICINA-B.C.R</option>
-            <option value="7">COOPAVEGRA</option>
-        </select>
-        <select id="streetLocate-2" class="locate locateDetails">
-            <option value="8">UNIVERSIDAD NACIONAL ESTATAL A DISTANCIA (U.N.E.D)</option>
-            <option value="9">ESCUELA SANTA MARIA GORETTI</option>
-            <option value="10">ESCUELA JACINTO AVILA ARAYA</option>
-            <option value="11">ESCUELA LOS PINOS</option>
-            <option value="12">CENTRO DE EDUCACION NUTRICIONAL LA GRANJA PALMARES</option>
-            <option value="13">ESCUELA ERMIDA BLANCO GONZALEZ</option>
-            <option value="14">COLEGIO BILINGUE DE PALMARES</option>
-            <option value="15">UNIVERSIDAD DE COSTA RICA</option>
-            <option value="16">ESCUELA MANUEL BERNARDO GOMEZ</option>
-            <option value="17">CENTRO INFANTIL ELIZA ALVAREZ VARGAS</option>
-            <option value="18">KINDER DE PALMARES</option>
-            <option value="19">ESCUELA DANIEL SOLORZANO MURILLO</option>
-            <option value="20">COLEGIO DR. RICARDO MORENO CAÑAS</option>
-            <option value="21">ESCUELA PABLO ALVARADO VARGAS</option>
-            <option value="22">ESCUELA DR. RICARDO MORENO CAÑAS</option>
-            <option value="23">COLEGIO SAN AGUSTIN</option>
-            <option value="24">ESCUELA PRESBITERO VENANCIO DE OÑA Y MARTINEZ</option>
-            <option value="25">ESCUELA JULIA FERNANDEZ RODRIGUEZ</option>
-            <option value="26">ESCUELA JOAQUIN L. SANCHO QUESADA</option>
-            <option value="27">ESCUELA LA UNION</option>
-            <option value="28">COLEGIO NOCTURNO DE PALMARES</option>
-            <option value="29">C.T.P. SANTOCRISTO DE ESQUIPULAS</option>
-            <option value="30">CENTRO INFANTIL BILINGUE ANGELS</option>
-        </select>
-        <select id="streetLocate-3" class="locate locateDetails">
-            <option value="31">PLAZA DEPORTES COLEGIO PALMARES</option>
-            <option value="32">PLAZA DEPORTES LA COCALECA</option>
-            <option value="33">PLAZA DEPORTES ZARAGOZA</option>
-            <option value="34">PLAZA DEPORTES DE RINCON</option>
-            <option value="35">PLAZA DEPORTES CALLE VARGAS</option>
-            <option value="36">PLAZA DEPORTES CALLE JIMENEZ</option>
-            <option value="37">PLAZA DEPORTES LA RECTA</option>
-            <option value="38">PLAZA DEPORTES BUENOS AIRES</option>
-            <option value="39">PLAZA DEPORTES SANTIAGO</option>
-            <option value="40">PLAZA DEPORTES CANDELARIA</option>
-            <option value="41">PLAZA DEPORTES LOS PINOS</option>
-            <option value="42">PLAZA DEPORTES ESQUIPULAS</option>
-            <option value="43">PLAZA DEPORTES LA GRANJA</option>
-            <option value="44">ESTADIO FUTBOL PALMARES</option>
         </select>
     </div>
 </div>
@@ -63,3 +218,8 @@
 <ul class="list-unstyled l-calles">
 </ul>
 <!--/lista CALLES-->
+
+<script type="text/javascript">
+    var placesOfReference = new PlaceOfReference();
+    placesOfReference.printSelects();
+</script>

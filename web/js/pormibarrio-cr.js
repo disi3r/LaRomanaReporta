@@ -4,6 +4,8 @@
  */
 
 //WIDTH SEARCH
+var locatorGeoLonLat = null;
+var locatorName = null;
 var anchoVentana = $( window ).width();
 var anchoUser = $("#info-user").width();
 var anchoButtons = $("#stats-menu").width();
@@ -325,113 +327,38 @@ $( document ).ready(function() {
 		$( '#streetLocate-'+this.value ).show();
 	});
 	$('.locateDetails').on('change', function(){
-		var locations = [
-			['10.0560155294','-84.4339677846'],
-			['10.0547748408','-84.4326878713'],
-			['10.0602591944','-84.4392100165'],
-			['10.0543073533','-84.434734945'],
-			['10.0556119978','-84.4322925711'],
-			['10.0553956707','-84.432489101'],
-			['10.0535388035','-84.4329284694'],
-			['10.0556972306','-84.4349308297'],
-			['10.0612707426','-84.4364895418'],
-			['10.0598097661','-84.4366706012'],
-			['10.0325048124','-84.4245958878'],
-			['10.0258227162','-84.4320896955'],
-			['10.0535854126','-84.4435428629'],
-			['10.053079023','-84.443288174'],
-			['10.0538900292','-84.4347443851'],
-			['10.0585652514','-84.4311110695'],
-			['10.0582314504','-84.4316453588'],
-			['10.0532160108','-84.4317745273'],
-			['10.0569450061','-84.4328925255'],
-			['10.0442982469','-84.4199076147'],
-			['10.0373216296','-84.4398962447'],
-			['10.0343602765','-84.4510103181'],
-			['10.0411116766','-84.4347174038'],
-			['10.0618741632','-84.4372168668'],
-			['10.0229690788','-84.444534598'],
-			['10.0569933619','-84.4221406473'],
-			['10.0700081142','-84.4360851411'],
-			['10.0459881358','-84.4411666384'],
-			['10.053799178','-84.4352148745'],
-			['10.0558243068','-84.4217127913'],
-			['10.0595325147','-84.4360625402'],
-			['10.05287198','-84.43594409'],
-			['10.04402294','-84.42028842'],
-			['10.04108136','-84.42811078'],
-			['10.0388026','-84.44155231'],
-			['10.04559696','-84.43961968'],
-			['10.03609527','-84.4531033'],
-			['10.05937156','-84.44071618'],
-			['10.06844398','-84.43508841'],
-			['10.02698959','-84.44257076'],
-			['10.0286264','-84.41349127'],
-			['10.02618873','-84.43208491'],
-			['10.05986349','-84.42498068'],
-			['10.05326851','-84.44717097'],
-			['10.05772645','-84.42974023']
-		];
-		var lonlat = new OpenLayers.LonLat(locations[this.value][1], locations[this.value][0]);
-		var geo_lonlat = new OpenLayers.Geometry.Point(locations[this.value][1], locations[this.value][0]);
+		var cat = $("#streetLocate").val() - 1;
+		var placeOfReference = new PlaceOfReference();
+		var lon = placeOfReference.getLongitude(cat,this.value);
+		var lat = placeOfReference.getLatitude(cat,this.value);
+		var lonlat = new OpenLayers.LonLat(lon, lat);
+		var geo_lonlat = new OpenLayers.Geometry.Point(lon,lat);
 		lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
 		geo_lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
-		fixmystreet.map.zoomTo(4);
-		fixmystreet.map.panTo(lonlat);
-		var pin_layer_style_map = new OpenLayers.StyleMap({
-        'default': new OpenLayers.Style({
-            graphicTitle: "${title}",
-            graphicOpacity: 1,
-            graphicZIndex: 11,
-            backgroundGraphicZIndex: 10,
-            graphicClass: "Id-${id}"
-        })
-    });
-    pin_layer_style_map.addUniqueValueRules('default', 'size', {
-        'normal': {
-            externalGraphic: "/i/pin-${colour}.png",
-            graphicWidth: 29,
-            graphicHeight: 34,
-            graphicXOffset: -15,
-            graphicYOffset: -29,
-            backgroundGraphic: "/i/pin-shadow.png",
-            backgroundWidth: 29,
-            backgroundHeight: 15,
-            backgroundXOffset: -7,
-            backgroundYOffset: -10
-        },
-        'big': {
-            externalGraphic: "/i/pin-${colour}-big.png",
-            graphicWidth: 67,
-            graphicHeight: 69,
-            graphicXOffset: -33,
-            graphicYOffset: -69,
-            backgroundGraphic: "/i/pin-shadow-big.png",
-            backgroundWidth: 88,
-            backgroundHeight: 40,
-            backgroundXOffset: -10,
-            backgroundYOffset: -35
-        }
-    });
-    var pin_layer_options = {
-        rendererOptions: {
-            yOrdering: true
-        },
-        styleMap: pin_layer_style_map
-    };
-		/*fixmystreet.locators = new OpenLayers.Layer.Vector("Locator");*/
-		fixmystreet.locators = jQuery.extend({}, fixmystreet.markers);
-		/*fixmystreet.locators.refresh();*/
-		/*var locator = fms_markers_list( [ [ lonlat.lat, lonlat.lon, 'green', 'none' ] ], false );*/
-		var locator = new OpenLayers.Feature.Vector(geo_lonlat, {
+        locatorGeoLonLat = geo_lonlat;
+        locatorName = placeOfReference.getName(cat,this.value);
+        var placeOfReferenceLocator = new OpenLayers.Feature.Vector(geo_lonlat, {
             colour: 'locator',
             size: 'normal',
             id: 'locator',
-            title: '"'+$(".locateDetails option[value='"+this.value+"']").text()+'"',
+            title: locatorName,
+            user: 'UserMarker',
+            category: 'locator',
+            category_id : 'locator',
+            date : null,
+            hasPhoto : 0,
+            hasComments : 0
         });
-		fixmystreet.locators.addFeatures( [locator] );
-		fixmystreet.map.addLayer(fixmystreet.locators);
-		fixmystreet.locators.setVisibility(true);
+        fixmystreet.map.zoomTo(4);
+		fixmystreet.map.panTo(lonlat);
+		fixmystreet.markers.addFeatures( [placeOfReferenceLocator] );
+		/*if(fixmystreet.map.layers.length>1){
+			//fixmystreet.map.removeLayer(fixmystreet.map.layers[fixmystreet.map.layers.length-1]);
+			  fixmystreet.map.layers.pop()
+		}*/
+		//fixmystreet.map.addLayer(fixmystreet.locators);
+		//fixmystreet.locators.setVisibility(true);
+		//fixmystreet.locators.refresh();
 	});
 	//DASHBOARD
 	$('input.deadline').click(dashCheck);
@@ -508,6 +435,7 @@ function report(timeout, zoom){
 
 function report_list(timeout, zoom){
 	if (typeof fixmystreet != 'undefined'){
+		alert('PAGE: '+fixmystreet.page);
 		switch (fixmystreet.page) {
 			case 'around':
 				$('#side-form').hide();
@@ -521,13 +449,14 @@ function report_list(timeout, zoom){
 		}
 	}
 	else {
+		alert('Geolocate TRUE');
 		geolocate(timeout, zoom, true);
 	}
 }
 
 function geolocate(timeout, zoom, list){
 	var list = '';
-	if (list){
+	if (typeof list !== 'undefined'){
     	list = '&list=1';
     }
 	setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list}, timeout);
@@ -701,7 +630,7 @@ function form_category_group_onchange() {
 		$('#form_category').empty();
 
 		var options = '';
-		options += '<option value="">-- Selecciona una subcategoría --</option>';
+		options += '<option value="">-- Selecciona una categoría --</option>';
 
 		for (var i = 0; i < category_groups[group_id].length; i++) {
 			options += '<option value="' + category_groups[group_id][i] + '">' + category_groups[group_id][i] + '</option>';

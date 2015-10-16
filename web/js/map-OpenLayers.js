@@ -95,6 +95,22 @@ function fms_markers_list(pins, transform) {
         });
         markers.push( marker );
     }
+    if(locatorGeoLonLat!=null){
+        //alert(locatorName);
+        var placeOfReferenceLocator = new OpenLayers.Feature.Vector(locatorGeoLonLat, {
+            colour: 'locator',
+            size: 'normal',
+            id: 'locator',
+            title: locatorName,
+            user: 'UserMarker',
+            category: 'locator',
+            category_id : 'locator',
+            date : null,
+            hasPhoto : 0,
+            hasComments : 0
+        });
+        //markers.push( placeOfReferenceLocator );
+    }
     return markers;
 }
 
