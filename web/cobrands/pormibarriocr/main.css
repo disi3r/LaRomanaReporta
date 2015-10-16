@@ -219,9 +219,12 @@ div.footer-intro-shared label{
 	text-align: center;
 }
 div.footer-intro-shared img{
-	margin: 0 4% 8%;
+	margin: 10px 4% 8%;
 }
 
+div.footer-intro-munis img{
+	margin: 10px 5% 0;
+}
 a.know-more{
 	display:block;
 	margin:23px 0 4px 0;
@@ -1350,8 +1353,8 @@ div.c-form-report div.ir{
 }
 
 .form-group{
-	/*margin-bottom:30px;*/
-	/*border-bottom: #223241 solid 1px;*/
+	margin-bottom:20px;
+	border-bottom: #223241 solid 1px;
 	position: relative;
 }
 
@@ -1602,9 +1605,9 @@ div.login div.ir{
 }
 
 *.no-account{
-	margin-top:20px;
+	margin-bottom:20px;
 	padding:15px 0;
-	border-top:#223241 solid 1px;
+	border-bottom:#223241 solid 1px;
 	text-align:center;
 }
 

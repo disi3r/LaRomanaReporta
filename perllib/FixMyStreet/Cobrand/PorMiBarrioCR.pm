@@ -92,6 +92,34 @@ sub problems_clause {
                 ]}};
 }
 
+#DEADLINES
+sub deadlines { 1 }
+
+my %public_holidays = map { $_ => 1 } (
+    '1-1', '4-2', '4-3', '4-11', '5-1', '6-25', '8-15', '9-15','12-25',
+);
+
+sub is_public_holiday {
+    my $dt = shift;
+    return $public_holidays{$dt->mon().'-'.$dt->day()};
+}
+
+sub is_weekend {
+    my $dt = shift;
+    return $dt->dow > 5;
+}
+
+sub to_working_days_date{
+	my ( $dt, $days ) = @_;
+    while ( $days > 0 ) {
+        $dt->subtract ( days => 1 );
+        next if is_public_holiday($dt) or is_weekend($dt);
+        $days--;
+    }
+    return $dt;
+
+}
+
 =head2 problem_rules
 
 Response is {group_id => [<objects arranged by time>]}
@@ -172,5 +200,7 @@ sub problem_rules {
 		]
 	);
 }
+
+sub admin_show_creation_graph { 0 }
 
 1;
