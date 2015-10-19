@@ -6,7 +6,7 @@
 [% BLOCK meta_line %]
 
     [% IF update.anonymous || update.name == '' %]
-        [% tprintf( loc( 'Posted anonymously at %s' ), update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) -%]
+        [% tprintf( loc( 'Posted anonymously at %s' ), update.confirmed.strftime('el día %d/%m/%Y a las %H:%M') ) -%]
     [%- ELSIF update.user.from_body;
         user_name = update.user.name | html;
         body = update.user.body;
