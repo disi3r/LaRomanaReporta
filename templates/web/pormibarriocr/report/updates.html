@@ -6,14 +6,14 @@
 [% BLOCK meta_line %]
 
     [% IF update.anonymous || update.name == '' %]
-        [% tprintf( loc( 'Posted anonymously %s ' ), update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) -%]
+        [% tprintf( loc( 'Posted anonymously at %s' ), update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) -%]
     [%- ELSIF update.user.from_body;
         user_name = update.user.name | html;
         body = update.user.body;
         %]
-        [% tprintf( loc( 'Posted by %s (<strong>%s</strong>) %s ' ), user_name, body, update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) -%]
+        [% tprintf( loc( 'Posted by %s (<strong>%s</strong>) %s' ), user_name, body, update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) -%]
     [%- ELSE %]
-        [% tprintf( loc( 'Posted by %s at %s ' ), update.name, update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) | html -%]
+        [% tprintf( loc( 'Posted by %s at %s' ), update.name, update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) | html -%]
     [%- END -%]
 
     [%- update_state = '' %]

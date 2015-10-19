@@ -3,7 +3,7 @@
 [% END %]
      <div class="comment comment-[% update.name %]">
 		<div class="user-avatar">
-			[% IF update.users.picture_url %]	
+			[% IF update.users.picture_url && !update.anonymous and update.name != ''%]	
 				<img alt="" class="user_avatar_[% update.users.id %]"></div>
 				<script>
 					$(".user_avatar_[% update.users.id %]").error(function() { $(this).attr("src", "/cobrands/pormibarrio/images/no-profile-picture.jpg"); }).
@@ -13,7 +13,11 @@
 				<img alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg"></div>
 			[% END %]
 		<div class="user-info">
-			<h4>[% update.users.name %]</h4>
+			[% IF update.anonymous || update.name == '' %]
+
+			[%- ELSE %]
+				<h4>[% update.users.name %]</h4>
+			[%- END %]
 			<span class="time-report">[% INCLUDE meta_line %]</span>
 		</div>
 		<div class="user-comment comment">
