@@ -285,7 +285,7 @@ $( document ).ready(function() {
 	    	if (!$("#terms_agree").checked){
 	    		e.preventDefault();
 	    		$('.terms-agree-error').remove();
-                $('.terms_agree').after('<p class="error-m terms-agree-error">Debe aceptar los términos y condiciones</p>');
+                $(this).after('<p class="error-m terms-agree-error">Debe aceptar los términos y condiciones</p>');
 	    	}
 		});
 	}
@@ -498,11 +498,13 @@ function report_list(timeout, zoom){
 }
 
 function geolocate(timeout, zoom, list){
-	var list = '';
+	var list = '&list=0';
 	if (typeof list != 'undefined'){
     	list = '&list=1';
     }
 	setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list}, 2500);
+	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
+    $('.overlay').show();0
 	if (geo_position_js.init()) {
 	    console.log('Va a init');
 	    geo_position_js.getCurrentPosition(function(pos) {
@@ -512,13 +514,15 @@ function geolocate(timeout, zoom, list){
 	        location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
 	    }, 
 	    function(err) {
-	    	alert('No hemos podido geolocalizarlo');
+	    	$('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.');
+	    	$('#loader_throbber').append('<br/>Cargando Municipalidad de Palmares por defecto.');
 	    }, 
 	    {
 	        enableHighAccuracy: true,
 	        timeout: 2500
 	    });
 	}
+	//$('#loader_throbber').css("display","none");
 }
 
 //RESPONSIVE TEXT
