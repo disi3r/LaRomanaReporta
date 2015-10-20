@@ -27,7 +27,7 @@ msgstr " y "
 #: templates/web/default/tokens/confirm_problem.html:14
 #: templates/web/default/tokens/confirm_problem.html:17
 msgid " and <strong>we will now send it to the council</strong>"
-msgstr " y <strong>ahora lo enviaremos a la Intendencia </ strong>"
+msgstr " y <strong>ahora lo enviaremos a la Municipalidad </ strong>"
 
 #: templates/web/default/report/new/councils_text_all.html:11
 #: templates/web/default/report/new/councils_text_all.html:18
@@ -52,7 +52,7 @@ msgstr "%d alertas confirmadas, %d sin confirmar"
 #: templates/web/default/admin/index.html:27
 #: templates/web/zurich/admin/index.html:6
 msgid "%d council contacts &ndash; %d confirmed, %d unconfirmed"
-msgstr "%d contactos en Intendencia &ndash; %d confirmados, %d sin confirmar"
+msgstr "%d contactos en Municipalidad &ndash; %d confirmados, %d sin confirmar"
 
 #: templates/web/default/admin/edit-league.html:12
 msgid "%d edits by %s"
@@ -158,7 +158,7 @@ msgstr "(como vandalismo, basura ilegal, pavimentación o alumbrado roto)"
 #: templates/web/pormibarrio/report/_item.html:15
 #: templates/web/pormibarriocr/report/_item.html:15
 msgid "(not sent to council)"
-msgstr "(sin enviar a la Intendencia)"
+msgstr "(sin enviar a la Municipalidad)"
 
 #: templates/web/default/report/new/fill_in_details_form.html:217
 #: templates/web/emptyhomes/report/new/fill_in_details_form.html:140
@@ -265,7 +265,7 @@ msgstr ""
 " se ha hecho un gran progreso e informó lo que han hecho en el website\n"
 ". Aún así las propiedades puede permanecer vacío durante muchos meses si el propietario es\n"
 " unwilling o la propiedad se encuentra en muy mal estado. Si no ha pasado nada o\n"
-" Si no está satisfecho con el progreso que la Intendencia está haciendo, ahora es el derecho \n"
+" Si no está satisfecho con el progreso que la Municipalidad está haciendo, ahora es el derecho \n"
 " Time decirlo. Creemos que es una buena idea ponerse en contacto con otras personas que\n"
 " may ser capaces de ayudar o presionar al Consejo para su asesoramiento sobre cómo hacer\n"
 " Este y otra información útil por favor vaya </p>\n"
@@ -379,7 +379,7 @@ msgid ""
 "          to which problem reports can be sent. You can add one or more contacts (for different\n"
 "          categories of problem) to each body."
 msgstr ""
-"Agrega un <strong>organismo</strong> por cada organismo administrativo, como una intendencia o empresa pública\n"
+"Agrega un <strong>organismo</strong> por cada organismo administrativo, como una Municipalidad o empresa pública\n"
 "          a la que los reportes pueden enviarse. Podés agregar uno o más contactos (para distintas\n"
 "          categorías de problemas) a cada organismo."
 
@@ -547,7 +547,7 @@ msgstr "¿Eres programador?"
 #: templates/web/fixmystreet/footer.html:21
 #: templates/web/stevenage/footer.html:21
 msgid "Are you from a council?"
-msgstr "¿Pertenece a la Intendencia?"
+msgstr "¿Pertenece a la Municipalidad?"
 
 #: templates/web/default/admin/body-form.html:69
 #: templates/web/zurich/admin/body-form.html:24
@@ -798,7 +798,7 @@ msgstr "Cerrada"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:774
 msgid "Closed by council"
-msgstr "Cerrado por la Intendencia"
+msgstr "Cerrado por la Municipalidad"
 
 #: templates/web/default/my/my.html:32 templates/web/fixmystreet/my/my.html:36
 msgid "Closed reports"
@@ -950,17 +950,17 @@ msgstr "No se pudo buscar ubicación"
 
 #: templates/web/default/admin/list_updates.html:9
 msgid "Council"
-msgstr "Intendencia"
+msgstr "Municipalidad"
 
 #: templates/web/default/admin/body.html:1
 #: templates/web/default/admin/body_edit.html:1
 #: templates/web/zurich/admin/body.html:1
 msgid "Council contacts for %s"
-msgstr "Contactos de la Intendencia para %s"
+msgstr "Contactos de la Municipalidad para %s"
 
 #: templates/web/default/admin/stats.html:84
 msgid "Council:"
-msgstr "Intendencia:"
+msgstr "Municipalidad:"
 
 #: templates/web/default/admin/stats.html:12
 #: templates/web/default/admin/stats.html:32
@@ -1410,7 +1410,7 @@ msgid ""
 "within a certain distance of a particular location."
 msgstr ""
 "Por Mi Barrio dispone de varias fuentes RSS y alertas por email de los problemas locales, incluyendo\n"
-"alertas para todos los problemas dentro de un barrio o Intendencia concreta, o para todos los problemas \n"
+"alertas para todos los problemas dentro de un barrio o Municipalidad concreta, o para todos los problemas \n"
 "alrededor de una distancia determinada o zona en particular."
 
 #: templates/web/default/alert/_list.html:71
@@ -1426,7 +1426,7 @@ msgid ""
 "for the county council."
 msgstr ""
 "FixMyStreet envía problemas de diferentes categorías\n"
-" al departamento adecuado en la Intendencia, por lo cual los problemas dentro de los límites de un determinado departamento\n"
+" al departamento adecuado en la Municipalidad, por lo cual los problemas dentro de los límites de un determinado departamento\n"
 " pueden no responden a los problemas enviados. Por ejemplo, un reporte de graffiti\n"
 " se enviará a la Concejalía de Distritos, por lo que aparecerá tanto en el distrito de alertas\n"
 " council, pero sólo aparecerán en la carpeta \"Dentro del límite\" alerta \n"
@@ -1463,7 +1463,7 @@ msgstr "Arreglado"
 #: templates/web/default/admin/report_edit.html:35
 #: templates/web/default/admin/report_edit.html:43
 msgid "Fixed - Council"
-msgstr "Arreglado - Intendencia"
+msgstr "Arreglado - Municipalidad"
 
 #: templates/web/default/admin/report_edit.html:35
 #: templates/web/default/admin/report_edit.html:42
@@ -1635,7 +1635,7 @@ msgstr "¿Ha sido corregido este problema?"
 #: templates/web/pormibarrio/questionnaire/index.html:68
 #: templates/web/pormibarriocr/questionnaire/index.html:68
 msgid "Have you ever reported a problem to a council before, or is this your first time?"
-msgstr "¿Alguna vez informó de un problema a la Intendencia antes, o es tu primera vez?"
+msgstr "¿Alguna vez informó de un problema a la Municipalidad antes, o es tu primera vez?"
 
 #: templates/web/pormibarriocr/auth/login_block.html:46
 msgid "Have you forgotten your password"
@@ -1795,11 +1795,11 @@ msgstr "Si no, tu comentario no se publicará."
 #: templates/web/default/report/new/councils_text_none.html:8
 #: templates/web/default/report/new/councils_text_none.html:9
 msgid "If you submit a problem here the subject and details of the problem will be public, but the problem will <strong>not</strong> be reported to the council."
-msgstr "Si envía un problema, el título y detalles serán públicos pero el problema <strong>no</ strong> se informará a la Intendencia."
+msgstr "Si envía un problema, el título y detalles serán públicos pero el problema <strong>no</ strong> se informará a la Municipalidad."
 
 #: templates/web/emptyhomes/report/new/councils_text_none.html:9
 msgid "If you submit a report here it will be left on the site, but not reported to the council &ndash; please still leave your report, so that we can show to the council the activity in their area."
-msgstr "Si envía un reporte aquí, se quedará en el sitio pero no se informará a la Intendencia - por favor siga dejando su reporte de manera que podamos mostrar a la Intendencia la actividad en su área."
+msgstr "Si envía un reporte aquí, se quedará en el sitio pero no se informará a la Municipalidad - por favor siga dejando su reporte de manera que podamos mostrar a la Municipalidad la actividad en su área."
 
 #: templates/web/default/auth/token.html:22
 #: templates/web/default/email_sent.html:9
@@ -1817,7 +1817,7 @@ msgid ""
 "your experience of getting the problem fixed?"
 msgstr ""
 "Si desea dejar un comentario público en el problema, por favor ingrese aquí\n"
-"(tenga en cuenta que no se enviará a la Intendencia). Por ejemplo, ¿cómo fue su experiencia\n"
+"(tenga en cuenta que no se enviará a la Municipalidad). Por ejemplo, ¿cómo fue su experiencia\n"
 "su de que su problema fuera solucionado?"
 
 #: templates/web/default/admin/body.html:120
@@ -1976,7 +1976,7 @@ msgstr "Investigando"
 #: templates/web/emptyhomes/tokens/confirm_problem.html:12
 #: templates/web/emptyhomes/tokens/confirm_problem.html:14
 msgid "It is worth noting however that the process can sometimes be slow, especially if the property is in very poor repair or the owner is unwilling to act. In most cases it can take six months or more before you can expect to see anything change and sometimes there may be considerable barries to a property being brought back into use. This doesn&rsquo;t mean the council isn&rsquo;t doing anything. We encourage councils to update the website so you can see what is happening. It may be a long process, but you reporting your concerns about this property to the council is a valuable first step."
-msgstr "Cabe señalar sin embargo que el proceso puede ser lento, especialmente si la propiedad está en muy mal estado o el propietario no está dispuesto a actuar. En la mayoría de los casos puede tomar seis meses o más antes de que usted pueda ver cualquier cambio y a veces puede haber una propiedad comprada de nuevo para ser usada. Esto no significa que la Intendencia no esté haciendo nada. Animamos a las intendencias a actualizar la web para que pueda ver lo que está sucediendo. Puede ser un proceso largo, pero notificar sus preocupaciones sobre esta propiedad al Intendencia es un primer paso valioso."
+msgstr "Cabe señalar sin embargo que el proceso puede ser lento, especialmente si la propiedad está en muy mal estado o el propietario no está dispuesto a actuar. En la mayoría de los casos puede tomar seis meses o más antes de que usted pueda ver cualquier cambio y a veces puede haber una propiedad comprada de nuevo para ser usada. Esto no significa que la Municipalidad no esté haciendo nada. Animamos a las Municipalidads a actualizar la web para que pueda ver lo que está sucediendo. Puede ser un proceso largo, pero notificar sus preocupaciones sobre esta propiedad a la Municipalidad es un primer paso valioso."
 
 #: templates/web/bromley/report/display.html:168
 #: templates/web/bromley/report/new/fill_in_details_form.html:209
@@ -2084,14 +2084,14 @@ msgstr "Regístrate o ingresa para ayudar a mejorar tu ciudad"
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:170
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:171
 msgid "Login to your account to be able to send the report to your local government"
-msgstr "Logueate a tu cuenta para poder enviar reportes a la IM"
+msgstr "Logueate a tu cuenta para poder enviar reportes a la Municipalidads"
 
 #: templates/web/pormibarrio/report/update-form.html:93
 #: templates/web/pormibarrio/report/update-form.html:94
 #: templates/web/pormibarriocr/report/update-form.html:93
 #: templates/web/pormibarriocr/report/update-form.html:94
 msgid "Login to your account to be able to send your update to your local government"
-msgstr "Logueate a tu cuenta para poder enviar tu comentario a la IM"
+msgstr "Logueate a tu cuenta para poder enviar tu comentario a la Municipalidad"
 
 #: templates/web/default/js/translation_strings.html:43
 #: templates/web/oxfordshire/js/translation_strings.html:37
@@ -2339,11 +2339,11 @@ msgstr "Sin organismo"
 
 #: templates/web/default/admin/stats.html:85
 msgid "No council"
-msgstr "Sin Intendencia"
+msgstr "Sin Municipalidad"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:364
 msgid "No council selected"
-msgstr "Ningúna Intendencia seleccionada"
+msgstr "Ningúna Municipalidad seleccionada"
 
 #: templates/web/default/admin/edit-league.html:17
 msgid "No edits have yet been made."
@@ -2440,7 +2440,7 @@ msgstr "No se notificó antes"
 
 #: templates/web/default/report/_main.html:10
 msgid "Not reported to council"
-msgstr "Sin comunicar a la Intendencia"
+msgstr "Sin comunicar a la Municipalidad"
 
 #: templates/web/default/admin/body.html:59
 #: templates/web/default/admin/body_edit.html:87
@@ -2580,7 +2580,7 @@ msgstr "O problemas notificados a:"
 #: templates/web/pormibarrio/alert/_list.html:36
 #: templates/web/pormibarriocr/alert/_list.html:36
 msgid "Or you can subscribe to an alert based upon what ward or council you&rsquo;re in:"
-msgstr "O puede suscribirse a una alerta basada en el barrio o Intendencia en la que estás:"
+msgstr "O puede suscribirse a una alerta basada en el barrio o Municipalidad en la que estás:"
 
 #: perllib/FixMyStreet/App/Controller/Report/New.pm:1231
 #: perllib/FixMyStreet/App/Controller/Report/New.pm:717
@@ -2807,7 +2807,7 @@ msgid ""
 "please <a href=\"/\">go to the front page</a> and follow the instructions."
 msgstr ""
 "Por favor <strong>no</strong> notifique de problemas a través de este formulario, los mensajes van a\n"
-"el equipo de Por Mi Barrio, no a la Intendencia. Para notificar un problema,\n"
+"el equipo de Por Mi Barrio, no a la Municipalidad. Para notificar un problema,\n"
 "por favor <a href=\"/\">vaya a la página principal </a> y siga las instrucciones."
 
 #: templates/web/default/report/new/notes.html:7
@@ -2943,7 +2943,7 @@ msgstr "Por favor, indica tu nombre."
 #: templates/web/seesomething/js/translation_strings.html:4
 #, fuzzy
 msgid "Please enter your full name, councils need this information – if you do not wish your name to be shown on the site, untick the box below"
-msgstr "Por favor escriba su nombre completo, la Intendencia necesita esta información - si usted no desea que su nombre aparecerá en la página, desactive la casilla de abajo"
+msgstr "Por favor escriba su nombre completo, la Municipalidad necesita esta información - si usted no desea que su nombre aparecerá en la página, desactive la casilla de abajo"
 
 #: perllib/FixMyStreet/App/Controller/Contact.pm:95
 #: perllib/FixMyStreet/DB/Result/Comment.pm:132
@@ -3029,7 +3029,7 @@ msgid ""
 "the problem (e.g. on a wall), what it is, how long it has been there, a description (and a\n"
 "photo of the problem if you have one), etc."
 msgstr ""
-"Por favor, rellene los datos del siguiente problema. La intendencia no podrá\n"
+"Por favor, rellene los datos del siguiente problema. la Municipalidad no podrá\n"
 "ayudar a menos que deje todos los detalles que pueda, por favor describa la ubicación exacta del\n"
 "problema (por ejemplo, sobre una pared), lo que es, cuánto tiempo ha estado allí, una descripción (y una \n"
 "foto del problema, si tuviera una), etc."
@@ -3058,11 +3058,11 @@ msgstr "Por favor, indique si desea otro cuestionario"
 #: templates/web/pormibarrio/report/updates-sidebar-notes.html:3
 #: templates/web/pormibarriocr/report/updates-sidebar-notes.html:3
 msgid "Please note that updates are not sent to the council."
-msgstr "Tenga en cuenta que los comentarios no se envían a la Intendencia."
+msgstr "Tenga en cuenta que los comentarios no se envían a la Municipalidad."
 
 #: templates/web/default/report/update-form.html:7
 msgid "Please note that updates are not sent to the council. If you leave your name it will be public. Your information will only be used in accordance with our <a href=\"/faq#privacy\">privacy policy</a>"
-msgstr "Tenga en cuenta que los comentarios no se envían a la Intendencia. Si usted deja su nombre será público. Su información sólo será usada de acuerdo con nuestra <a href=\"/faq#privacy\">política de privacidad</ a>"
+msgstr "Tenga en cuenta que los comentarios no se envían a la Municipalidad. Si usted deja su nombre será público. Su información sólo será usada de acuerdo con nuestra <a href=\"/faq#privacy\">política de privacidad</ a>"
 
 #: templates/web/barnet/report/updates-sidebar-notes.html:1
 msgid "Please note that updates are not sent to the relevant department. If you leave your name it will be public. Your information will only be used in accordance with our <a href=\"/faq#privacy\">privacy policy</a>"
@@ -3096,7 +3096,7 @@ msgstr "Proporcione un texto así como una foto"
 #: perllib/FixMyStreet/App/Controller/Questionnaire.pm:116
 #: perllib/FixMyStreet/App/Controller/Questionnaire.pm:239
 msgid "Please say whether you've ever reported a problem to your council before"
-msgstr "Por favor, diga si alguna vez ha notificado de un problema a la Intendencia con anterioridad"
+msgstr "Por favor, diga si alguna vez ha notificado de un problema a la Municipalidad con anterioridad"
 
 #: perllib/FixMyStreet/App/Controller/Alert.pm:80
 msgid "Please select the feed you want"
@@ -3201,7 +3201,7 @@ msgstr "Problema %s confirmado"
 
 #: templates/web/default/admin/timeline.html:26
 msgid "Problem %s sent to council %s"
-msgstr "Problema %s enviados a la Intendencia %s"
+msgstr "Problema %s enviados a la Municipalidad %s"
 
 #: templates/web/default/admin/index.html:36
 #: templates/web/zurich/admin/index.html:9
@@ -4126,7 +4126,7 @@ msgstr "Gracias - puede <a href=\"%s\">ver su problema actualizado</a> en el sit
 #: templates/web/emptyhomes/tokens/confirm_problem.html:6
 #: templates/web/emptyhomes/tokens/confirm_problem.html:8
 msgid "Thank you for reporting an empty property on ReportEmptyHomes.com. We have emailed the lead officer for empty homes in the council responsible with details, and asked them to do whatever they can to get the empty property back into use as soon as possible."
-msgstr "Gracias por informarnos de una propiedad vacía en ReportEmptyHomes.com. Hemos escrito a la oficina principal de viviendas vacías en la Intendencia, responsable por los detalles, y les pedimos que hicieran todo lo posible para volver a poner la propiedad vacía en uso lo antes posible."
+msgstr "Gracias por informarnos de una propiedad vacía en ReportEmptyHomes.com. Hemos escrito a la oficina principal de viviendas vacías en la Municipalidad, responsable por los detalles, y les pedimos que hicieran todo lo posible para volver a poner la propiedad vacía en uso lo antes posible."
 
 #: templates/web/emptyhomes/tokens/confirm_problem.html:30
 #: templates/web/emptyhomes/tokens/confirm_problem.html:31
@@ -4137,7 +4137,7 @@ msgid ""
 "as possible will be covered."
 msgstr ""
 "Gracias por notificarnos sobre este inmueble vacío en ReportEmptyHomes.com.\n"
-"Por el momento el reporte no puede ser enviado a la Intendencia para este área. Estamos\n"
+"Por el momento el reporte no puede ser enviado a la Municipalidad para esta área. Estamos\n"
 " trabajando con la Intendecia para poder cubrir tantas areas\n"
 " como nos sea posible."
 
@@ -4162,7 +4162,7 @@ msgstr "Gracias por tus comentarios. ¡Nos pondremos en contacto con usted tan p
 
 #: templates/web/default/questionnaire/creator_fixed.html:9
 msgid "Thanks, glad to hear it's been fixed! Could we just ask if you have ever reported a problem to a council before?"
-msgstr "Gracias, me alegro de oír que fue arreglado! ¿Podríamos preguntar si alguna vez ha notificado de un problema a la Intendencia con anterioridad?"
+msgstr "Gracias, me alegro de oír que fue arreglado! ¿Podríamos preguntar si alguna vez ha notificado de un problema a la Municipalidad con anterioridad?"
 
 #: perllib/FixMyStreet/App/Controller/Photo.pm:190
 msgid "That image doesn't appear to have uploaded correctly (%s), please try again."
@@ -4170,7 +4170,7 @@ msgstr "Esa imagen no parece que haya cargado correctamente (%s), por favor int�
 
 #: perllib/FixMyStreet/App/Controller/Council.pm:90
 msgid "That location does not appear to be covered by a council; perhaps it is offshore or outside the country. Please try again."
-msgstr "Esa localización no parece estar cubierta por la Intendencia, tal vez esté en alta mar o fuera del país. Por favor, inténtelo de nuevo."
+msgstr "Esa localización no parece estar cubierta por la Municipalidad, tal vez esté en alta mar o fuera del país. Por favor, inténtelo de nuevo."
 
 #: perllib/FixMyStreet/App/Controller/Location.pm:123
 msgid "That location does not appear to be in the UK; please try again."
@@ -4243,7 +4243,7 @@ msgid ""
 "The body's <strong>name</strong> identifies the body (for example, <em>Borsetshire District Council</em>)\n"
 "          and may be displayed publically."
 msgstr ""
-"El <strong>nombre</strong> del organismo lo identifica (por ejemplo, <em>Intendencia de Montevideo</em>)\n"
+"El <strong>nombre</strong> del organismo lo identifica (por ejemplo, <em>Municipalidad de Palmares</em>)\n"
 "          y se puede mostrar públicamente."
 
 #: templates/web/default/auth/token.html:19
@@ -4259,7 +4259,7 @@ msgstr "El email de confirmación <strong>puede</strong> tardar unos minutos en 
 #: templates/web/pormibarriocr/report/new/fill_in_details_text.html:1
 #: templates/web/pormibarriocr/report/new/fill_in_details_text.html:3
 msgid "The council won&rsquo;t be able to help unless you leave as much detail as you can. Please describe the exact location of the problem (e.g. on a wall), what it is, how long it has been there, a description (and a photo of the problem if you have one), etc."
-msgstr "La intendencia no podrá ayudar a menos que dejes tanto detalle como puedas. Por favor escribe la ubicación exacta del problema (ej. en la pared), qué es, hace cuánto que está, una descripción (y una foto si tenés), etc."
+msgstr "la Municipalidad no podrá ayudar a menos que dejes tanto detalle como puedas. Por favor escribe la ubicación exacta del problema (ej. en la pared), qué es, hace cuánto que está, una descripción (y una foto si tenés), etc."
 
 #: templates/web/fixmystreet/questionnaire/index.html:43
 #: templates/web/pormibarrio/questionnaire/index.html:43
@@ -4495,7 +4495,7 @@ msgstr "Este es un resumen de todos los reportes del sitio."
 #: templates/web/fiksgatami/nn/reports/index.html:4
 #: templates/web/fiksgatami/reports/index.html:4
 msgid "This is a summary of all reports on this site; select a particular council to see the reports sent there."
-msgstr "Este es un resumen de todas los reportes sobre este sitio, seleccione una Intendencia especial para ver los informes enviados allí."
+msgstr "Este es un resumen de todas los reportes sobre este sitio, seleccione un Municipalidad especial para ver los informes enviados allí."
 
 #: templates/web/default/auth/token.html:9
 msgid "This may be because the link is too old or already used, or the address was not copied correctly."
@@ -4812,7 +4812,7 @@ msgstr "Visualizando un problema"
 #: templates/web/pormibarrio/reports/body.html:16
 #: templates/web/pormibarriocr/reports/body.html:16
 msgid "Wards of this council"
-msgstr "Barrios de esta Intendencia"
+msgstr "Barrios de este Municipalidad"
 
 #: templates/web/pormibarrio/dashboard/deadlines.html:47
 #: templates/web/pormibarrio/dashboard/deadlines.html:48
@@ -4862,7 +4862,7 @@ msgstr "Somos conscientes de este problema podría ser responsabilidad de %s , s
 
 #: templates/web/default/index-steps.html:31
 msgid "We send it to the council on your behalf"
-msgstr "Se lo enviamos a la Intendencia en su nombre"
+msgstr "Se lo enviamos a la Municipalidad en su nombre"
 
 #: templates/web/bromley/report/new/fill_in_details_form.html:217
 #: templates/web/default/report/new/notes.html:5
@@ -4906,7 +4906,7 @@ msgstr "En las búsquedas de solicitudes, es también posible buscar por agency_
 #: templates/web/fixmystreet/footer.html:22
 #: templates/web/stevenage/footer.html:22
 msgid "Would you like better integration with FixMyStreet? <a href=\"http://www.mysociety.org/for-councils/fixmystreet/\">Find out about FixMyStreet for councils</a>."
-msgstr "¿Le gustaría una mejor integración con Por Mi Barrio? <a href=\"http://www.mysociety.org/for-councils/fixmystreet/\">Conozca sobre FixMyStreet para Intendencias</a>."
+msgstr "¿Le gustaría una mejor integración con Por Mi Barrio? <a href=\"http://www.mysociety.org/for-councils/fixmystreet/\">Conozca sobre FixMyStreet para Municipalidads</a>."
 
 #: templates/web/fixmystreet/footer.html:18
 #: templates/web/stevenage/footer.html:18
@@ -5103,7 +5103,7 @@ msgstr "Ahora hacé click en el correo que te enviamos."
 
 #: templates/web/default/admin/index.html:7
 msgid "You need to <a href=\"%s\">add some bodies</a> (such as councils or departments) before any reports can be sent."
-msgstr "Precisás <a href=\"%s\">añadir organismos</a> (como una intendencia o departamento) antes de enviar reportes."
+msgstr "Precisás <a href=\"%s\">añadir organismos</a> (como un Municipalidad o departamento) antes de enviar reportes."
 
 #: templates/web/default/admin/bodies.html:9
 msgid ""
@@ -5111,7 +5111,7 @@ msgid ""
 "    the categories of problems they can handle (such as potholes or streetlights) and the\n"
 "    contacts (such as an email address) to which reports are sent."
 msgstr ""
-"Precisás agregar organismos (como intendencias o departamentos) para luego añadir\n"
+"Precisás agregar organismos (como Municipalidads o departamentos) para luego añadir\n"
 "    las categorías de problemas que manejan (como pozos o lumnarias) y los\n"
 "    contactos (como el correo) al que se envían los reportes."
 
@@ -5331,11 +5331,11 @@ msgstr "(cerrado)"
 #: templates/web/pormibarriocr/reports/body.html:6
 #: templates/web/pormibarriocr/reports/body.html:7
 msgid "council"
-msgstr "Intendencia"
+msgstr "Municipalidad"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:679
 msgid "council ref:&nbsp;%s"
-msgstr "intendencia ref:&nbsp;%s"
+msgstr "Municipalidad ref:&nbsp;%s"
 
 #: templates/web/default/admin/report_edit.html:28
 #: templates/web/zurich/admin/report_edit-sdm.html:43
@@ -5421,7 +5421,7 @@ msgstr "marcado como investigando"
 #: templates/web/pormibarrio/report/updates.html:43
 #: templates/web/pormibarriocr/report/updates.html:43
 msgid "marked as not the council's responsibility"
-msgstr "marcado como no es responsabilidad de la intendencia"
+msgstr "marcado como no es responsabilidad dla Municipalidad"
 
 #: templates/web/default/report/updates.html:43
 #: templates/web/pormibarrio/report/updates.html:31
@@ -5513,7 +5513,7 @@ msgstr "Salir"
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:16
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:19
 msgid "the local council"
-msgstr "la Intendencia local"
+msgstr "la Municipalidad local"
 
 #: templates/web/default/report/_main.html:6
 #: templates/web/zurich/report/_main.html:5
@@ -5536,7 +5536,7 @@ msgstr "mapa utilizado"
 
 #: templates/web/default/admin/update_edit.html:35
 msgid "user is from same council as problem - %d"
-msgstr "El usuario es de la misma Intendencia que el problema - %d"
+msgstr "El usuario es del mismo Municipalidad que el problema - %d"
 
 #: templates/web/default/admin/update_edit.html:38
 msgid "user is problem owner"
@@ -5555,8 +5555,8 @@ msgstr "barrio"
 #, perl-format
 msgid "We do <strong>not</strong> yet have details for the other council that covers this location."
 msgid_plural "We do <strong>not</strong> yet have details for the other councils that cover this location."
-msgstr[0] "Todavía <strong>no</strong> tenemos detalles para la Intendencia que cubre esta zona."
-msgstr[1] "Todavía <strong>no</strong> tenemos detalles para las Intendencias que cubre esta zona."
+msgstr[0] "Todavía <strong>no</strong> tenemos detalles para la Municipalidad que cubre esta zona."
+msgstr[1] "Todavía <strong>no</strong> tenemos detalles para las Municipalidads que cubren esta zona."
 
 #: templates/web/default/front/stats.html:17
 #, perl-format
@@ -5576,8 +5576,8 @@ msgstr[1] "%d días"
 #, perl-format
 msgid "We do not yet have details for the council that covers this location."
 msgid_plural "We do not yet have details for the councils that cover this location."
-msgstr[0] "Todavía no tenemos detalles para la Intendencia que cubre esta zona."
-msgstr[1] "Todavía no tenemos detalles para las Intendencias que cubren esta zona."
+msgstr[0] "Todavía no tenemos detalles para la Municipalidad que cubre esta zona."
+msgstr[1] "Todavía no tenemos detalles para las Municipalidads que cubren esta zona."
 
 #: templates/web/default/front/stats.html:12
 #, perl-format
