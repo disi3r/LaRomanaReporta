@@ -410,7 +410,6 @@ a.user-name:hover img.img-circle{
 	background-color:rgba(19,30,41,0.96);
 	border:none;
 	right:-20px;
-	top:137%;
 	border-radius:0;
 	-webkit-border-bottom-left-radius: 4px;
 	-moz-border-radius-bottomleft: 4px;
@@ -554,10 +553,6 @@ li.reportar{
 li.stats{
 	display:none;
 }
-
-/*li.reportar a{
-	border-left: solid 3px #ff8c8c;
-}*/
 
 li.reportes a{
 	/*border-bottom:#2c3e50 solid 1px;*/
@@ -951,6 +946,11 @@ a.btn-print-report{
 a.btn-print-report:hover{
 	background:rgba(0,0,0,0.5);
 	text-decoration:none
+}
+
+a.btn-close-report.deadlines{
+	position: relative;
+	float: right;
 }
 
 div.report .img-top{
@@ -1351,9 +1351,12 @@ div.c-form-report div.ir{
 }
 
 .form-group{
+	position: relative;
+}
+
+.bloque-sesion .form-group{
 	margin-bottom:20px;
 	border-bottom: #223241 solid 1px;
-	position: relative;
 }
 
 .mas-padding{
@@ -2661,36 +2664,92 @@ tr.problem-warning{
 }
 
 .dash-filter{
-	width: 30%;
+	width: 25%;
 	float: left;
+	margin: 20px;
 }
 .deadlines-filter{
 	width: 100%;
 	float: left;
+	text-align: center;
+	margin-bottom: 20px;
+}
+.deadlines-filter input{
+	margin: 4px 5px 0px 30px;
 }
 
+/*PRINT*/
 #print-header{
-	visibility: hidden;
+visibility: hidden;
 }
 
 @media print {
 
   #print-header{
-	visibility: visible;
+visibility: visible;
   }
   
   #display_problem_print {
-  	visibility: hidden;
+  visibility: hidden;
   }
   #display_problem_close {
-  	visibility: hidden;
+  visibility: hidden;
   }
 
   #comment-login{
-  	display:none;
-  	visibility: hidden;
+  display:none;
+  visibility: hidden;
   }
   #comments-on-report{
-  	visibility: visible;
+  visibility: visible;
   } 
+}
+
+/* tables */
+table.tablesorter {
+	font-family:arial;
+	background-color: #CDCDCD;
+	margin:10px 0pt 15px;
+	font-size: 8pt;
+	width: 100%;
+	text-align: left;
+	float: left;
+}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+	background-color: #e6EEEE;
+	border: 1px solid #FFF;
+	font-size: 8pt;
+	padding: 4px;
+}
+table.tablesorter thead tr .header {
+	background: url(images/bg/bg.gif) no-repeat right center;
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+table.tablesorter tbody td {
+	color: #000;
+	padding: 4px;
+	vertical-align: top;
+	font-size: 1.125em;
+	line-height: 1.44444em;
+}
+
+table.tablesorter tbody td a{
+	color: #58BEF7;
+	outline: medium none;
+	text-decoration: none;
+	outline-offset: -2px;
+}
+table.tablesorter tbody tr.odd td {
+	background-color:#F0F0F6;
+}
+table.tablesorter thead tr .headerSortUp {
+	background: url(images/bg/asc.gif) no-repeat right center;
+}
+table.tablesorter thead tr .headerSortDown {
+	background: url(images/bg/desc.gif) no-repeat right center;
+}
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+background-color: #8dbdd8;
 }
