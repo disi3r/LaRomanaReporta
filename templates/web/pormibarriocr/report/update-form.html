@@ -76,8 +76,8 @@
 			[% END %]
 		</div>
 		<textarea rows=4 name="update" id="form_update" placeholder="Escriba aquí su comentario *" class="[% IF field_errors.update %] error [% END %] required">[% update.text | html %]</textarea>
-		<div class="checkbox">
-			<input type="checkbox" id="terms-agree" value="">
+		<div class="checkbox terms_agree">
+			<input type="checkbox" id="terms_agree" value="">
             <label class="inline">[% loc('Agreed') %]<a href="/privacy"> [% loc('Terms & Conditions') %]</a></label>
 		</div>
 		<!--Sign In-->

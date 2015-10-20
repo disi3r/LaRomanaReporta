@@ -5,7 +5,7 @@
 			<h3 class="r-category-group-[% problem.category_group(c) %]">[% problem.category | html %]</h3>
 			<p>[% problem.title | html %] </p>
 			<ul class="details">
-				<li>[% problem.confirmed.strftime('%d/%m/%Y %H:%M') %]</li>
+				<li>[% problem.confirmed.strftime('%Y-%m-%d %H:%M') %]</li>
 				[%- IF dist %], <li>[% dist %]km[% END %]</li>
 				[%- IF include_lastupdate AND problem.confirmed != problem.lastupdate AND problem.whensent != problem.lastupdate %],
 					<li>[% tprintf(loc('last updated %s'), prettify_dt( problem.lastupdate, 1 ) ) %]</li>
