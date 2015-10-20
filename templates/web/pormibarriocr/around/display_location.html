@@ -112,3 +112,14 @@
 [% END %]
 
 [% INCLUDE 'footer.html' %]
+<script type="text/javascript">
+    $.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
+    }
+    if($.urlParam('list')==null || $.urlParam('list')!=1){
+        set_active_nav_button('report-button');
+    }else{
+        set_active_nav_button('report-all-button');
+    }
+</script>

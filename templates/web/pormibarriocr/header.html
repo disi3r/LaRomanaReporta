@@ -263,28 +263,28 @@
     <div class="navbar-collapse collapse">
       <ul>
         <li class="home">
-          <a href="/">
+          <a id="home-button" href="/">
             <span></span>
           </a>
         </li>
-        <li class="reportar">
-          <a href="javascript:void(0);" onclick="report(10000, 4)">
+        <li class="reportar" onmouseover="set_mouse_in_button($(this));" onmouseout="set_mouse_out_button($(this));">
+          <a id="report-button" href="javascript:void(0);" onclick="report(10000, 4)">
             <svg class="icon icon-icono8" viewBox="0 0 24 24">
               <use xlink:href="#icon-icono8"></use>
             </svg>
             <span>Reportar</span>
           </a>
         </li>
-        <li class="reportes">
-          <a href="javascript:void(0);" onclick="report_list(10000, 2)">
+        <li class="reportes" onmouseover="set_mouse_in_button($(this));" onmouseout="set_mouse_out_button($(this));">
+          <a id="report-all-button" href="javascript:void(0);" onclick="report_list(10000, 2)">
             <svg class="icon icon-icono1" viewBox="0 0 24 24">
               <use xlink:href="#icon-icono1"></use>
             </svg>
             <span>Reportes</span>
           </a>
         </li>
-        <li class="doc-info">
-          <a href="/faq">
+        <li class="doc-info" onmouseover="set_mouse_in_button($(this));" onmouseout="set_mouse_out_button($(this));">
+          <a id="faq-button" onclick="go_faq()" href="/faq">
             <svg class="icon icon-icono3" viewBox="0 0 24 24">
               <use xlink:href="#icon-icono3"></use>
             </svg>

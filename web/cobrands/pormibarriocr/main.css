@@ -555,11 +555,9 @@ li.stats{
 	display:none;
 }
 
-li.reportar a{
-	/* background:#fc4349 url(../images/icon-report.png) no-repeat 20px center; */
-	background:#fc4349;
+/*li.reportar a{
 	border-left: solid 3px #ff8c8c;
-}
+}*/
 
 li.reportes a{
 	/*border-bottom:#2c3e50 solid 1px;*/
@@ -567,7 +565,7 @@ li.reportes a{
 	/* background:url(../images/icon-reportes.png) no-repeat 20px center; */
 }
 
-li.reportes a:hover, li.help a:hover, li.doc-info a:hover{
+li.reportar a:hover, li.reportes a:hover, li.help a:hover, li.doc-info a:hover{
 	background-color:#131e29;
 	border-left: solid 3px #495f73;
 }
@@ -2669,4 +2667,30 @@ tr.problem-warning{
 .deadlines-filter{
 	width: 100%;
 	float: left;
+}
+
+#print-header{
+	visibility: hidden;
+}
+
+@media print {
+
+  #print-header{
+	visibility: visible;
+  }
+  
+  #display_problem_print {
+  	visibility: hidden;
+  }
+  #display_problem_close {
+  	visibility: hidden;
+  }
+
+  #comment-login{
+  	display:none;
+  	visibility: hidden;
+  }
+  #comments-on-report{
+  	visibility: visible;
+  } 
 }

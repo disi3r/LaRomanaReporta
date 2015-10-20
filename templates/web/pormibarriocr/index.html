@@ -3,7 +3,7 @@
 <script>
 function locate(){
     //Redirigimos en timeout
-    setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=4'}, 10000);
+    setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=4'}, 2500);
     //Comenzamos goeposition
     if (geo_position_js.init()) {
         geo_position_js.getCurrentPosition(function(pos) {
@@ -32,7 +32,7 @@ function locate(){
         }, 
         {
             enableHighAccuracy: true,
-            timeout: 10000
+            timeout: 2500
         });
     }
 }
