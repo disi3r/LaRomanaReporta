@@ -168,6 +168,7 @@
                 </div>
             </div>
             [% INCLUDE auth/login_block.html 
+                one_time_login = 1
                 summary = loc("Login to your account to be able to send the report to your local government")
                 sign_in_button = '<button class="btn btn-block btn-green" type="submit" id="submit_register" name="submit_register">Regístrate y publica</button>'
             %]
