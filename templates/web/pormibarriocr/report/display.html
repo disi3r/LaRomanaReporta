@@ -140,8 +140,10 @@ function printReportDetail(){
     $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/bootstrap.min.css?1444680842", type: "text/css" }));
     $head.append($("<link/>",{ rel: "stylesheet", href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic", type: "text/css" }));
     $head.append($("<link/>",{ rel: "stylesheet", href: "/js/OpenLayers-2.13.1/theme/default/style.css", type: "text/css" }));
-
-    pri.print();
+    $('#ifmcontentstoprint').ready(function() {
+        setTimeout(function(){pri.print();}, 250);
+    });
+    
 }
 </script>
 
