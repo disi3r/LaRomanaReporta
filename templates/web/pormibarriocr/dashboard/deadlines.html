@@ -14,15 +14,13 @@
 	    </div>
 	    <div class="dash-filter">
 	        <label for="category_group">[% loc('Group') %]</label>
-	        <select id="category_group" class="bloq-select" name="category_group"><option value=''>All</option>
+	        <select id="category_group" class="bloq-select" name="category_group"><option value=''>[% loc('All') %]</option>
 	            [% FOR cg IN category_groups_seen %]
-	            	[% IF NOT loop.first %]
 	                	<option value="[% cg.0 %]"[% ' selected' IF cg.0 == category_group %]>[% cg.1 %]</option>
-	                [% END %]
 	            [% END %]
 	        </select>
 	        <label for="category">[% loc('Category') %]</label>
-	        <select id="category" class="bloq-select" name="category"><option value=''>All</option>
+	        <select id="category" class="bloq-select" name="category"><option value=''>[% loc('All') %]</option>
 	            [% FOR cat_op IN category_options %]
 	            	[% IF NOT loop.first %]
 	                	<option value='[% cat_op | html %]'[% ' selected' IF category == cat_op %]>[% cat_op | html %]</option>
@@ -33,7 +31,7 @@
 	    <div class="dash-filter">
 			<label for="state">[% loc('State') %]</label>
 			<select name="state">
-				<option value=''>All</option>
+				<option value=''>[% loc('All') %]</option>
 		            [% FOREACH stateElem IN [ ['confirmed', loc('Open')], ['investigating',
 		            loc('Investigating')], ['action scheduled', loc('Planned')], ['in progress',
 		            loc('In Progress')], ['closed', loc('Closed')], ['fixed', loc('Fixed')] ] %]
@@ -46,7 +44,7 @@
 			<label for="deadline">Deadline:</label>
 	            [% FOREACH deadlineElem IN [ ['problem-overdue', loc('Overdue')], ['problem-alert',
 	            loc('Alert')], ['problem-warning', loc('Warning')], ['noDeadLine', loc('No Dead Line')] ] %]
-	            <input type="checkbox" name="deadline" class="deadline" [% 'checked ' IF deadline.defined(deadlineElem.0) %] value="[% deadlineElem.0 %]">[% deadlineElem.1 %]</input>
+	            <input type="checkbox" name="deadline" class="deadline" checked value="[% deadlineElem.0 %]">[% deadlineElem.1 %]</input>
 	            [% END %]
 	            <!-- if( $element ~~ @list ){ ... } -->
 	    </div>
@@ -54,10 +52,10 @@
 	</div>
 </form>
 
-<table class="table" width="100%" id="reports">
+<table class="tablesorter table" width="100%" id="reports">
 	<thead>
         <tr>
-            <td>Titulo</td><td>Grupo</td><td>Categoria</td><td>Creado</td><td>Ultima actualizacion</td><td>Estado</td>
+            <th>Titulo</th><th>Grupo</th><th>Categoria</th><th>Creado</th><th>Ultima actualizacion</th><th>Estado</th>
         </tr>
     </thead>
     [% INCLUDE problemsb %]
@@ -89,19 +87,31 @@
 
     });
 </script>
-
+<script type="text/javascript" src="[% version('/js/jquery.tablesorter.min.js') %]"></script>
+<script>
+	$(document).ready(function() 
+	    {
+	    	$('.time').each(function(){
+	    		$(this).html($(this).html().split(" ")[0]);
+	    	});
+	        $("#reports").tablesorter( {sortList: [[3,1], [4,0]]} ); 
+	    } 
+	);
+</script>
 </script>
 [% INCLUDE 'footer.html' %]
 
 [% BLOCK problemsb %]
+	<tbody>
 	[% FOR p IN problems %]
 		<tr class="dash-problem [% p.deadline %]">
 			<td><a href="/report/[% p.id %]">[% p.title | html %]</a></td>
 			<td>[% p.group | html %]</td>
 			<td>[% p.category | html %]</td>
-			<td>[% p.created | html %]</td>
-			<td>[% p.lastupdate_council | html %]</td>
+			<td class="time">[% p.created IF p.created %]</td>
+			<td class="time">[% p.lastupdate_council IF p.lastupdate_council %]</td>
 			<td>[% p.state | html %]</td>
 		</tr>
 	[% END %]
+	</tbody>
 [% END %]
