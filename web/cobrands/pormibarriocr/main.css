@@ -560,7 +560,12 @@ li.reportes a{
 	/* background:url(../images/icon-reportes.png) no-repeat 20px center; */
 }
 
-li.reportar a:hover, li.reportes a:hover, li.help a:hover, li.doc-info a:hover{
+/*li.reportar a:hover, li.reportes a:hover, li.help a:hover, li.doc-info a:hover{
+	background-color:#131e29;
+	border-left: solid 3px #495f73;
+}*/
+
+li.help a:hover{
 	background-color:#131e29;
 	border-left: solid 3px #495f73;
 }
