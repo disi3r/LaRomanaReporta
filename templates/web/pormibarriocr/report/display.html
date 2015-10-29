@@ -88,7 +88,7 @@
                 <div id="comments-on-report" class="comments">
                     <h3>Comentarios</h3>
                 [% IF problem.is_fixed %]
-                    <p class="status-report-im">El municipio no recibirá comentarios ya que el problema se encuentra finalizado. Puedes hacer un nuevo reclamo haciendo click <a href="" id="new-report-link">aquí</a>.</p>
+                    <p class="status-report-im">La Municipalidad no recibirá comentarios ya que el problema se encuentra finalizado. Podés hacer un nuevo reclamo haciendo click <a href="" id="new-report-link">aquí</a>.</p>
                     <script>$('#new-report-link').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom; return false; });</script>
                 [% END %]
                     [% INCLUDE 'report/updates.html' %]
@@ -141,7 +141,7 @@ function printReportDetail(){
     $head.append($("<link/>",{ rel: "stylesheet", href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic", type: "text/css" }));
     $head.append($("<link/>",{ rel: "stylesheet", href: "/js/OpenLayers-2.13.1/theme/default/style.css", type: "text/css" }));
     $('#ifmcontentstoprint').ready(function() {
-        setTimeout(function(){pri.print();}, 250);
+        setTimeout(function(){pri.print();}, 400);
     });
     
 }

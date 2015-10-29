@@ -19,7 +19,7 @@
 <div class="filters">
     <p>
         <label for="category">Categoría:</label>
-        <select name="category"><option value=''>[% loc('All') %]</option>
+        <select name="category"><option value=''>Todas/Todos</option>
             [% FOR cat_op IN category_options %]
                 <option value='[% cat_op | html %]'[% ' selected' IF category == cat_op %]>[% cat_op | html %]</option>
             [% END %]
@@ -27,7 +27,7 @@
     </p>
 
     <p>
-        <input type="submit" value="Look up">
+        <input type="submit" value="Buscar">
     </p>
 
     <br clear="all" />
@@ -45,9 +45,9 @@
 
     [%
     rows = {
-        '0' => [ "total", "Reportes recividos" ]
-        '1' => [ "fixed - council", "Marcados arreglados por la Municipalidad" ]
-        '2' => [ "fixed_user", "Marcados arreglados por los usuarios" ]
+        '0' => [ "total", "Total de reportes recibidos" ]
+        '1' => [ "fixed - council", "Reportes marcados como "Arreglado" por la Municipalidad" ]
+        '2' => [ "fixed_user", "Reportes marcados como "Arreglado" por los usuarios" ]
     };
     FOR row IN rows %]
     <tr id="[% row.value.0.replace('[^\w]+', '_' ) %]">
@@ -60,7 +60,7 @@
     [% END %]
 
     <tr class='subtotal' id="total_fixed">
-        <th scope="row">Total marcados solucionados</th>
+        <th scope="row">Total de reportes marcados como "Arreglado"</th>
         <td>[% problems.wtd.${"fixed - council"} + problems.wtd.fixed_user %]</td>
         <td>[% problems.week.${"fixed - council"} + problems.week.fixed_user %]</td>
         <td>[% problems.weeks.${"fixed - council"} + problems.weeks.fixed_user %]</td>
@@ -86,7 +86,7 @@
     [% END %]
 
     <tr class='subtotal' id="marked">
-        <th scope="row">Total marcados</th>
+        <th scope="row">Total de reportes marcados en algún Estado de Respuesta (no incluye los marcados como "Arreglado")</th>
         <td>[% problems.wtd.${"in progress"} + problems.wtd.${"action scheduled"} +
             problems.wtd.investigating + problems.wtd.closed %]</td>
         <td>[% problems.week.${"in progress"} + problems.week.${"action scheduled"} +
@@ -98,7 +98,7 @@
     </tr>
 
     <tr id="avg_fixed">
-        <th scope="row">Promedio de tiempo en que la Municipalidad marca como arreglado (días)</th>
+        <th scope="row">Promedio de tiempo que tarda la Municipalidad para marcar como "Arreglado" un reporte</th>
         <td>[% problems.wtd.time_to_fix %]</td>
         <td>[% problems.week.time_to_fix %]</td>
         <td>[% problems.weeks.time_to_fix %]</td>
@@ -106,7 +106,7 @@
     </tr>
 
     <tr id="avg_marked">
-        <th scope="row">Promedio de tiempo en que la Municipalidad realiza una acción (días)</th>
+        <th scope="row">Promedio de tiempo que tarda la Municipalidad para marcar el reporte en un Estado de Respuesta (no incluye la opción de "Arreglado")</th>
         <td>[% problems.wtd.time_to_mark %]</td>
         <td>[% problems.week.time_to_mark %]</td>
         <td>[% problems.weeks.time_to_mark %]</td>
@@ -123,10 +123,10 @@
 
 </table>
 
-<h2>[% loc('Reports') %]</h2>
+<h2>Reportes</h2>
 
                 </select>
-<p>[% loc('Report state') %]: <select name="state">
+<p>Estados de respuesta: <select name="state">
 <option value=''>[% loc('All') %]</option>
                 [% FOREACH state IN [ ['investigating',
                     loc('Investigating')], ['action scheduled', loc('Action Scheduled')],
@@ -136,7 +136,7 @@
                     <option [% 'selected ' IF state.0 == q_state %] value="[% state.0 %]">[% state.1 %]</option>
                 [% END %]
 </select>
-<input type="submit" value="[% loc('Look up') %]">
+<input type="submit" value="Buscar">
 
 <table width="100%" id="reports">
     <tr>

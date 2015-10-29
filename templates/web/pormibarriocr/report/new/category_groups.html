@@ -7,8 +7,8 @@
 	[% END %]
 </script>
 
-<label class="active" for="categoria">Categoría & subcategoría *</label>
-<p class="help-block">Si la categoría a la que quiere reportar no se encuentra, por favor no lo haga en otra. Con el tiempo iremos incorporando nuevas categorías. Puede sugerirnos nuevas en la sección de AYUDA <svg class="icon icon-icono3" viewBox="-2 0 30 30"><use xlink:href="#icon-lifeguard"></use></svg> en el menú de la barra a la izquierda.</p>
+<label class="active" for="categoria">Categoría y subcategoría *</label>
+<p class="help-block">Si no encontrás la categoría adecuada para lo que querés reportar, por favor no escojás otra. Tené en cuenta que con el tiempo iremos incorporando nuevas categorías. Cualquier duda o sugerencia podés compartirla en la sección de Ayuda <svg class="icon icon-icono3" viewBox="-2 0 30 30"><use xlink:href="#icon-lifeguard"></use></svg> en el menú de la barra a la izquierda.</p>
 <select name='category_groups' id='form_category_groups' onchange='form_category_group_onchange()'  class="required" required>
 		<option value="">-- Selecciona una categoría --</option>
 	[% FOREACH group IN category_groups_seen %]

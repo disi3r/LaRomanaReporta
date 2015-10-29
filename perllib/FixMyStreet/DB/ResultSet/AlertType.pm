@@ -81,11 +81,14 @@ sub email_alerts ($) {
 
             # create problem status message for the templates
             if ( FixMyStreet::DB::Result::Problem::fixed_states()->{$row->{state}} ) {
-                $data{state_message} = _("Este reporte está actualmente marcado como arreglado.");
+                #$data{state_message} = _("Este reporte ha sido marcado como arreglado.");
+                $data{state_message} = $row->{state};
             } elsif ( FixMyStreet::DB::Result::Problem::closed_states()->{$row->{state}} ) {
-                $data{state_message} = _("Este reporte está marcado como cerrado.");
+                #$data{state_message} = _("Este reporte ha sido marcado como cerrado.");
+                $data{state_message} = $row->{state};
             } else {
-                $data{state_message} = _("Este reporte está marcado como abierto.");
+                #$data{state_message} = _("Este reporte ha sido marcado como abierto.");
+                $data{state_message} = $row->{state};
             }
 
             my $url = $cobrand->base_url( $row->{alert_cobrand_data} );
