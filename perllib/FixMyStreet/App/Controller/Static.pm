@@ -144,14 +144,14 @@ sub stats : Global : Args(0) {
         for my $contact_group (@contacts_group){
             if ( exists $contact->{group_id} and $contact->{group_id} eq $contact_group->{group_id} ){
                 unless (exists $problem_by_group->{$contact->{group_id}}) {
-                    $problem_by_group->{$contact->{group_id}}{name} = utf8::encode($contact_group->{group_name});
+                    $problem_by_group->{$contact->{group_id}}{name} = $contact_group->{group_name};
                     $problem_by_group->{$contact->{group_id}}{total} = 0;
                     $problem_by_group->{$contact->{group_id}}{fixed} = 0;
                     $problem_by_group->{$contact->{group_id}}{in_progress} = 0;
                     $problem_by_group->{$contact->{group_id}}{confirmed} = 0;
                     $problem_by_group->{$contact->{group_id}}{evolution} = [0];
                 }
-                $problem_by_group->{$contact->{group_id}}{$contact->{category}}{name} = utf8::encode($contact->{category});
+                $problem_by_group->{$contact->{group_id}}{$contact->{category}}{name} = $contact->{category};
                 $problem_by_group->{$contact->{group_id}}{$contact->{category}}{total} = 0;
                 $problem_by_group->{$contact->{group_id}}{$contact->{category}}{fixed} = 0;
                 $problem_by_group->{$contact->{group_id}}{$contact->{category}}{in_progress} = 0;

@@ -197,6 +197,20 @@ sub problem_rules {
 				'max_time' => 6,
 				'action' => 'problem-warning'
 			}
+		],
+		'6' => [
+			{
+				'max_time' => 10,
+				'action' => 'problem-overdue'
+			},
+			{
+				'max_time' => 8,
+				'action' => 'problem-alert'
+			},
+			{
+				'max_time' => 6,
+				'action' => 'problem-warning'
+			}
 		]
 	);
 }
