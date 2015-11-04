@@ -166,6 +166,7 @@ sub open_states {
         'in progress'      => 1,
         'planned'          => 1,
         'action scheduled' => 1,
+        'clarify' => 1,
     };
 
     return wantarray ? keys %{$states} : $states;
@@ -238,6 +239,7 @@ my $visible_states = {
     'duplicate'                   => 1,
     'closed'                      => 1,
     'internal referral'           => 1,
+    'clarify'                     => 1,
 };
 sub visible_states {
     return wantarray ? keys %{$visible_states} : $visible_states;
@@ -274,6 +276,7 @@ sub all_states {
         'duplicate'                   => 1,
         'closed'                      => 1,
         'internal referral'           => 1,
+        'clarify'                     => 1,
     };
 
     return wantarray ? keys %{$states} : $states;
@@ -299,6 +302,7 @@ sub council_states {
         'not responsible'             => 1,
         'duplicate'                   => 1,
         'internal referral'           => 1,
+        'clarify'                     => 1,
     };
 
     return wantarray ? keys %{$states} : $states;
