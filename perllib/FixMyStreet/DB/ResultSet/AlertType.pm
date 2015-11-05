@@ -81,14 +81,53 @@ sub email_alerts ($) {
 
             # create problem status message for the templates
             if ( FixMyStreet::DB::Result::Problem::fixed_states()->{$row->{state}} ) {
+                if(chomp($row->{state}) eq "fixed"){
+                    $data{state_message} = "arreglado";
+                }
+                if(chomp($row->{state}) eq "fixed - user"){
+                    $data{state_message} = "arreglado - usuario";
+                }
+                if(chomp($row->{state}) eq "fixed - council"){
+                    $data{state_message} = "arreglado - municipalidad";
+                }
                 #$data{state_message} = _("Este reporte ha sido marcado como arreglado.");
-                $data{state_message} = $row->{state};
+                #$data{state_message} = $row->{state};
             } elsif ( FixMyStreet::DB::Result::Problem::closed_states()->{$row->{state}} ) {
+                if(chomp($row->{state}) eq "closed"){
+                    $data{state_message} = "cerrado";
+                }
+                if(chomp($row->{state}) eq "unable to fix"){
+                    $data{state_message} = "no se puede arreglar";
+                }
+                if(chomp($row->{state}) eq "not responsible"){
+                    $data{state_message} = "no responsable";
+                }
+                if(chomp($row->{state}) eq "duplicate"){
+                    $data{state_message} = "duplicado";
+                }
+                if(chomp($row->{state}) eq "internal referral"){
+                    $data{state_message} = "referencia interna";
+                }
                 #$data{state_message} = _("Este reporte ha sido marcado como cerrado.");
-                $data{state_message} = $row->{state};
+                #$data{state_message} = $row->{state};
             } else {
+                if(chomp($row->{state}) eq "confirmed"){
+                    $data{state_message} = "abierto";
+                }
+                if(chomp($row->{state}) eq "investigating"){
+                    $data{state_message} = "investigando";
+                }
+                if(chomp($row->{state}) eq "in progress"){
+                    $data{state_message} = "en progreso";
+                }
+                if(chomp($row->{state}) eq "planned"){
+                    $data{state_message} = "planificado";
+                }
+                if(chomp($row->{state}) eq "action scheduled"){
+                    $data{state_message} = "acción agendada";
+                }
                 #$data{state_message} = _("Este reporte ha sido marcado como abierto.");
-                $data{state_message} = $row->{state};
+                #$data{state_message} = $row->{state};
             }
 
             my $url = $cobrand->base_url( $row->{alert_cobrand_data} );

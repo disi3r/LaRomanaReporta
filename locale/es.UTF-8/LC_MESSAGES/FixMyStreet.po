@@ -744,7 +744,7 @@ msgstr "Buscar reportes"
 #: templates/web/default/admin/stats.html:65
 #: templates/web/default/admin/stats.html:71
 msgid "Click here or enter as dd/mm/yyyy"
-msgstr "Click aquí o ingresá como dd/mm/aaaa"
+msgstr "Introduzca la fecha con el formato año-mes-día"
 
 #: templates/web/pormibarrio/dashboard/deadlines.html:13
 #: templates/web/pormibarrio/dashboard/deadlines.html:9
@@ -754,9 +754,8 @@ msgstr "Click aquí o ingresá como dd/mm/aaaa"
 #: templates/web/pormibarriocr/dashboard/deadlines.html:9
 #: templates/web/pormibarriocr/static/stats.html:12
 #: templates/web/pormibarriocr/static/stats.html:8
-#, fuzzy
 msgid "Click here or enter as yyyy-mm-dd"
-msgstr "Click aquí o ingresá como dd/mm/aaaa"
+msgstr "Introduzca la fecha con el formato año-mes-día"
 
 #: templates/web/default/js/translation_strings.html:47
 #: templates/web/fixmystreet/around/_report_banner.html:2
@@ -840,9 +839,8 @@ msgstr "Comentarios"
 
 #: templates/web/pormibarrio/my/my.html:82
 #: templates/web/pormibarriocr/my/my.html:82
-#, fuzzy
 msgid "Completed"
-msgstr "Finalizado"
+msgstr "Completado"
 
 #: templates/web/default/admin/config_page.html:1
 msgid "Configuration"
@@ -1621,7 +1619,7 @@ msgstr "Líneas de color gris son las Concejalías que ya no existen."
 #: templates/web/pormibarrio/dashboard/deadlines.html:16
 #: templates/web/pormibarriocr/dashboard/deadlines.html:16
 msgid "Group"
-msgstr ""
+msgstr "Grupo"
 
 #: templates/web/default/questionnaire/index.html:61
 #: templates/web/fixmystreet/questionnaire/index.html:55
@@ -1805,7 +1803,7 @@ msgstr "Si envía un reporte aquí, se quedará en el sitio pero no se informar�
 #: templates/web/default/email_sent.html:9
 #: templates/web/pormibarriocr/email_sent.html:9
 msgid "If you use web-based email or have 'junk mail' filters, you may wish to check your bulk/spam mail folders: sometimes, our messages are marked that way."
-msgstr "Si utiliza correo electrónico web o tiene filtros anti-spam es recomendable que compruebe carpetas de spam: a veces, los mensajes se marcan así."
+msgstr "Si utilizás correo electrónico web o tenés filtros anti-spam es recomendable que revises las carpetas de spam: a veces, los mensajes llegan ahí."
 
 #: templates/web/default/questionnaire/index.html:86
 #: templates/web/fixmystreet/questionnaire/index.html:77
@@ -2077,21 +2075,21 @@ msgstr "Busque el problema en un mapa de la zona"
 #: templates/web/pormibarrio/auth/login_block.html:5
 #: templates/web/pormibarriocr/auth/login_block.html:5
 msgid "Login or signup to help impoving our city"
-msgstr "Regístrate o ingresa para ayudar a mejorar tu ciudad"
+msgstr "Registráte o ingresá para ayudar a mejorar tu cantón"
 
 #: templates/web/pormibarrio/report/new/fill_in_details_form.html:163
 #: templates/web/pormibarrio/report/new/fill_in_details_form.html:164
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:170
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:171
 msgid "Login to your account to be able to send the report to your local government"
-msgstr "Logueate a tu cuenta para poder enviar reportes a la Municipalidads"
+msgstr "Ingresá a tu cuenta para poder enviar tu comentario a la Municipalidad"
 
 #: templates/web/pormibarrio/report/update-form.html:93
 #: templates/web/pormibarrio/report/update-form.html:94
 #: templates/web/pormibarriocr/report/update-form.html:93
 #: templates/web/pormibarriocr/report/update-form.html:94
 msgid "Login to your account to be able to send your update to your local government"
-msgstr "Logueate a tu cuenta para poder enviar tu comentario a la Municipalidad"
+msgstr "Ingresá a tu cuenta para poder enviar tu comentario a la Municipalidad"
 
 #: templates/web/default/js/translation_strings.html:43
 #: templates/web/oxfordshire/js/translation_strings.html:37
@@ -2748,7 +2746,7 @@ msgstr "Por favor, comprueba la contraseña e inténtalo de nuevo."
 
 #: templates/web/default/auth/token.html:14
 msgid "Please check your email"
-msgstr "Por favor, consulte su email"
+msgstr "Por favor, consultá tu email."
 
 #: templates/web/default/auth/general.html:14
 #: templates/web/default/auth/general.html:8
@@ -2828,7 +2826,7 @@ msgstr "Por favor no poner información personal en esta sección."
 #: templates/web/pormibarrio/js/translation_strings.html:3
 #: templates/web/pormibarriocr/js/translation_strings.html:3
 msgid "Please enter a message"
-msgstr "Por favor, rellene un mensaje."
+msgstr "Por favor, rellená un mensaje."
 
 #: templates/web/default/auth/change_password.html:12
 #: templates/web/default/auth/change_password.html:15
@@ -3008,7 +3006,7 @@ msgstr ""
 #: templates/web/pormibarriocr/report/new/fill_in_details_text.html:1
 #: templates/web/pormibarriocr/report/new/fill_in_details_text.html:8
 msgid "Please fill in details of the problem below."
-msgstr "Por favor, rellene los datos del siguiente problema."
+msgstr "Por favor, rellená los datos del siguiente problema."
 
 #: templates/web/fixmybarangay/report/new/fill_in_details_text.html:1
 #: templates/web/fixmybarangay/report/new/fill_in_details_text.html:3
@@ -3029,7 +3027,7 @@ msgid ""
 "the problem (e.g. on a wall), what it is, how long it has been there, a description (and a\n"
 "photo of the problem if you have one), etc."
 msgstr ""
-"Por favor, rellene los datos del siguiente problema. la Municipalidad no podrá\n"
+"Por favor, rellená los datos del siguiente problema. la Municipalidad no podrá\n"
 "ayudar a menos que deje todos los detalles que pueda, por favor describa la ubicación exacta del\n"
 "problema (por ejemplo, sobre una pared), lo que es, cuánto tiempo ha estado allí, una descripción (y una \n"
 "foto del problema, si tuviera una), etc."
@@ -3040,7 +3038,7 @@ msgstr ""
 #: templates/web/seesomething/report/new/fill_in_details_form.html:20
 #: templates/web/zurich/report/new/fill_in_details_form.html:46
 msgid "Please fill in details of the problem."
-msgstr "Por favor, rellene los datos del problema."
+msgstr "Por favor, rellená los datos del problema."
 
 #: templates/web/bromley/report/new/fill_in_details_form.html:28
 #: templates/web/default/report/new/fill_in_details_form.html:27
@@ -3210,7 +3208,7 @@ msgstr "Desglose de problemas según estado"
 
 #: perllib/FixMyStreet/App/Controller/Admin.pm:958
 msgid "Problem marked as open."
-msgstr "Problema marcado como abierto."
+msgstr "Este reporte ha sido marcado como abierto."
 
 #: templates/web/default/admin/questionnaire.html:21
 msgid "Problem state change based on survey results"
@@ -3587,7 +3585,7 @@ msgstr "Notificado con anterioridad"
 #: templates/web/pormibarrio/contact/index.html:60
 #: templates/web/pormibarriocr/contact/index.html:60
 msgid "Reported by %s at %s"
-msgstr "Notificado por %s en %s"
+msgstr "Notificado por %s a las %s"
 
 #: templates/web/zurich/report/_main.html:2
 msgid "Reported in the %s category"
@@ -3595,23 +3593,23 @@ msgstr "Reportado en la categoría %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:570
 msgid "Reported in the %s category anonymously at %s"
-msgstr "Notificado anonimamente en la categoría %s en %s"
+msgstr "Notificado anonimamente en la categoría %s a las %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:592
 msgid "Reported in the %s category by %s at %s"
-msgstr "Notificado en la categoría %s por %s en %s"
+msgstr "Notificado en la categoría %s por %s a las %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:566
 msgid "Reported via %s anonymously at %s"
-msgstr "Notificado por %s de forma anónima en %s"
+msgstr "Notificado por %s de forma anónima a las %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:588
 msgid "Reported via %s by %s at %s"
-msgstr "Notificado por %s por %s en %s"
+msgstr "Notificado por %s por %s a las %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:562
 msgid "Reported via %s in the %s category anonymously at %s"
-msgstr "Notificado anonimamente por %s en la categoría %s en %s"
+msgstr "Notificado anonimamente por %s en la categoría %s a las %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:582
 msgid "Reported via %s in the %s category by %s at %s"
@@ -3757,7 +3755,7 @@ msgstr "Elegir un área"
 #: templates/web/pormibarrio/alert/_list.html:10
 #: templates/web/pormibarriocr/alert/_list.html:10
 msgid "Select which type of alert you'd like and click the button for an RSS feed, or enter your email address to subscribe to an email alert."
-msgstr "Seleccione el tipo de alerta que desea y haga clic en el botón correspondiente a un feed RSS o introduzca su dirección de e-mail para suscribirse a alerta por correo electrónico."
+msgstr "Seleccione el tipo de alerta que desea y haga clic en el botón correspondiente a un feed RSS o introduzca su dirección de correo electrónico para suscribirse a alerta por correo electrónico."
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:694
 msgid "Sent to %s %s later"
@@ -4250,7 +4248,7 @@ msgstr ""
 #: templates/web/default/email_sent.html:6
 #: templates/web/pormibarriocr/email_sent.html:6
 msgid "The confirmation email <strong>may</strong> take a few minutes to arrive &mdash; <em>please</em> be patient."
-msgstr "El email de confirmación <strong>puede</strong> tardar unos minutos en llegar - <em>por favor</em>, se paciente."
+msgstr "El email de confirmación <strong>puede</strong> tardar unos minutos en llegar - <em>por favor</em>, sé paciente."
 
 #: templates/web/fixmystreet/report/new/fill_in_details_text.html:1
 #: templates/web/fixmystreet/report/new/fill_in_details_text.html:3
@@ -4368,7 +4366,7 @@ msgstr "La alerta más sencilla es nuestra alerta geográfica:"
 #: templates/web/pormibarrio/report/new/fill_in_details_form.html:22
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:22
 msgid "The subject and details of the problem will be public, plus your name if you give us permission."
-msgstr "El título y detalles del problema serán públicos, además de su nombre, si nos da su permiso."
+msgstr "El título y detalles del problema serán públicos, al igual que tu nombre, si nos das tu permiso."
 
 #: templates/web/pormibarrio/my/my.html:29
 #: templates/web/pormibarriocr/my/my.html:29
@@ -4404,7 +4402,7 @@ msgstr "Hubo un problema mostrando esta página. Por favor, inténtelo de nuevo 
 #: templates/web/seesomething/auth/general.html:24
 #: templates/web/zurich/auth/general.html:28
 msgid "There was a problem with your email/password combination. If you cannot remember your password, or do not have one, please fill in the &lsquo;sign in by email&rsquo; section of the form."
-msgstr "Hubo un problema con su email/contraseña. Si no recuerda, o no tiene, contraseña por favor rellene la sección 'registrarse con email' del formulario."
+msgstr "Hubo un problema con su email/contraseña. Si no recuerda, o no tiene contraseña por favor rellená la sección 'registrarse con email' del formulario."
 
 #: perllib/FixMyStreet/App/Controller/Alert.pm:355
 msgid "There was a problem with your email/password combination. Please try again."
@@ -4539,15 +4537,15 @@ msgstr "Este reporte espera moderación."
 
 #: perllib/FixMyStreet/DB/ResultSet/AlertType.pm:86
 msgid "This report is currently marked as closed."
-msgstr "Este reporte está marcado como cerrado."
+msgstr "Este reporte ha sido marcado como cerrado."
 
 #: perllib/FixMyStreet/DB/ResultSet/AlertType.pm:84
 msgid "This report is currently marked as fixed."
-msgstr "Este reporte está actualmente marcado como arreglado."
+msgstr "Este reporte ha sido marcado como arreglado."
 
 #: perllib/FixMyStreet/DB/ResultSet/AlertType.pm:88
 msgid "This report is currently marked as open."
-msgstr "Este reporte está marcado como abierto."
+msgstr "Este reporte ha sido marcado como abierto."
 
 #: perllib/FixMyStreet/DB/ResultSet/Problem.pm:325
 msgid "This report was submitted anonymously"
@@ -5146,7 +5144,7 @@ msgstr "Se ha asociado su cuenta de Twitter. Ahora puedes loguearte usando dicha
 #: templates/web/pormibarriocr/my/my.html:23
 #, fuzzy
 msgid "Your changes have been saved"
-msgstr "Sus cambios se han guardado."
+msgstr "Los cambios se han guardado."
 
 #: perllib/FixMyStreet/App/Controller/My.pm:191
 msgid "Your document is not valid"
@@ -5513,7 +5511,7 @@ msgstr "Salir"
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:16
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:19
 msgid "the local council"
-msgstr "la Municipalidad local"
+msgstr "la Municipalidad"
 
 #: templates/web/default/report/_main.html:6
 #: templates/web/zurich/report/_main.html:5

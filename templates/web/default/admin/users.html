@@ -19,6 +19,7 @@
         <th>[% loc('Flagged') %]</th>
       [% END %]
         <th>*</th>
+        <th>Contraseña</th>
     </tr>
 [%- FOREACH user IN users %]
     <tr>
@@ -28,7 +29,21 @@
       [% IF c.cobrand.moniker != 'zurich' %]
         <td>[% user.flagged == 2 ? loc('(Email in abuse table)') : user.flagged ? loc('Yes') : '&nbsp;' %]</td>
       [% END %]
-        <td>[% IF user.id %]<a href="[% c.uri_for( 'user_edit', user.id ) %]">[% loc('Edit') %]</a>[% END %]</td>
+        <td>[% IF user.id %]<a href="[% c.uri_for( 'user_edit', user.id ) %]">[% loc('Edit') %]
+        </a>[% END %]</td>
+        <td>        
+            <form action="../auth" method="POST">
+                <input type="hidden" value="/my" name="r"/>
+                <input type="hidden" value="" name="form_email"/>
+                <input type="hidden" value="" name="password_sign_in"/>
+                <input type="hidden" value="[% user.email %]" name="login_email"/>
+                <input type="hidden" value="1" name="email_sign_in"/>
+                <input type="hidden" value="" name="name"/>
+                <input type="hidden" value="" name="phone"/>
+                <input type="hidden" value="" name="password_register"/>
+                <input type="submit" value="Restablecer contraseña"/>
+            </form>
+        </td>
     </tr>
 [%- END -%]
 </table>
