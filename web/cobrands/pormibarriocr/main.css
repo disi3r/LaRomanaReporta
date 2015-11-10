@@ -853,6 +853,14 @@ h3.r-category-group-5{
 	color:#ffbb00;
 }
 
+/*Emergencias*/
+div.r-category-group-6{
+	background:url(images/r-emergencias.png) no-repeat left top;	
+}
+h3.r-category-group-6{
+	color:#9b59b6;
+}
+
 
 /*MAP-------------------------------------------------------------------------------*/
 div.map{
