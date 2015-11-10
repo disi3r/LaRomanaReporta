@@ -497,9 +497,9 @@ function report_list(timeout, zoom){
 	}
 }
 
-function geolocate(timeout, zoom, list){
+function geolocate(timeout, zoom, is_list){
 	var list = '&list=0';
-	if (typeof list != 'undefined'){
+	if (typeof is_list != 'undefined'){
     	list = '&list=1';
     }
 	setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list}, 2500);
