@@ -37,5 +37,5 @@ ALTER TABLE problem DROP CONSTRAINT problem_state_check;
         or problem_state = 'not responsible'
         or problem_state = 'duplicate'
         or problem_state = 'internal referral'
-        or state = 'clarify'
+        or problem_state = 'clarify'
     );

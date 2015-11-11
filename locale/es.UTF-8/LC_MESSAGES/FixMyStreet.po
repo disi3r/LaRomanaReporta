@@ -5414,6 +5414,10 @@ msgstr "marcado como en progreso"
 msgid "marked as investigating"
 msgstr "marcado como investigando"
 
+#: templates/web/pormibarriocr/report/updates.html:49
+msgid "marked as clarify"
+msgstr "marcado como clarificar reporte"
+
 #: templates/web/default/report/updates.html:55
 #: templates/web/pormibarrio/report/updates.html:43
 #: templates/web/pormibarriocr/report/updates.html:43

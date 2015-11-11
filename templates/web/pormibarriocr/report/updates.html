@@ -45,6 +45,8 @@
             [%- update_state = loc( 'marked as a duplicate report' ) %]
         [%- ELSIF state == 'internal referral' %]
             [%- update_state = loc( 'marked as an internal referral' ) %]
+        [%- ELSIF state == 'clarify' %]
+            [%- update_state = loc( 'marked as clarify' ) %]
         [%- END %]
     [%- END %]
     [%- ", " _ update_state IF update_state != global.last_state %]
