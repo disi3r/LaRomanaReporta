@@ -48,7 +48,7 @@
 					loc('Investigating')], ['action scheduled', loc('Action Scheduled')],
 					['in progress', loc('In Progress')], ['duplicate', loc('Duplicate')],
 					['not responsible', loc('Not Responsible')],['clarify', loc('Clarify Report')],
-					['fixed', loc('Fixed')], ['hidden', loc('Hidden')] ] %]
+					['fixed', loc('Fixed')] ] %]
 					<option [% 'selected ' IF state.0 == problem.state %] value="[% state.0 %]">[% state.1 %]</option>
 					[% END %]
 				</select>
