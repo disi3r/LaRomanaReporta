@@ -737,9 +737,8 @@ msgstr ""
 
 #: templates/web/pormibarriocr/report/update-form.html:47
 #: templates/web/pormibarriocr/report/update-form.html:50
-#, fuzzy
 msgid "Clarify Report"
-msgstr "Buscar reportes"
+msgstr "Clarificar reporte"
 
 #: templates/web/default/admin/stats.html:65
 #: templates/web/default/admin/stats.html:71
