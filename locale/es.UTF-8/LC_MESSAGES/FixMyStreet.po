@@ -2788,9 +2788,8 @@ msgstr "Por favor elegir categoría de incidente"
 
 #: templates/web/pormibarrio/auth/social_signup.html:7
 #: templates/web/pormibarriocr/auth/social_signup.html:7
-#, fuzzy
 msgid "Please confirm your personal information"
-msgstr "Por favor no poner información personal en esta sección."
+msgstr "Por favor verifique su información personal"
 
 #: templates/web/bromley/report/new/fill_in_details_form.html:64
 #, fuzzy
