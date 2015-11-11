@@ -12,17 +12,21 @@ por favor visite el siguiente link:
 
 <?=$values['has_photo']?>----------
 
-Name: <?=$values['name']?>
+Nombre: <?=$values['name']?>
 
-Email: <?=$values['email']?>
+Correo electrónico: <?=$values['email']?>
 
-<?=$values['phone_line']?><?=$values['category_line']?>Subject: <?=$values['title']?>
+Teléfono: <?=$values['phone_line']?>
 
-Details: <?=$values['detail']?>
+<?=$values['category_line']?>
 
-<?=$values['easting_northing']?>Latitude: <?=$values['latitude']?>
+Asunto: <?=$values['title']?>
 
-Longitude: <?=$values['longitude']?>
+Detalles: <?=$values['detail']?>
+
+<?=$values['easting_northing']?>Latitud: <?=$values['latitude']?>
+
+Longitud: <?=$values['longitude']?>
 
 <?=$values['closest_address']?>----------
 

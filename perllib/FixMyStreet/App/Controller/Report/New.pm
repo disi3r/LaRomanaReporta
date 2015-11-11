@@ -629,7 +629,7 @@ sub setup_categories_and_bodies : Private {
 		$groups_items{$_->group_id} = [];
 		$groups_items_encoded{$_->group_id} = [];
 	}
-	
+
 	$groups_items{-2} = [];
 	$groups_items_encoded{-2} = [];
 
@@ -706,8 +706,8 @@ sub setup_categories_and_bodies : Private {
 		        push (@{$groups_items_encoded{$contact->group_id}}, encode_entities($contact->category, "ñóéáúí"));
 			} else {
 				push (@{$groups_items{-2}}, $contact->category);
-		        push (@{$groups_items_encoded{-2}}, encode_entities($contact->category, "ñóéáúí"));	
-		        
+		        push (@{$groups_items_encoded{-2}}, encode_entities($contact->category, "ñóéáúí"));
+
 		        $category_in_group{$contact->category} = -2 unless $category_in_group{$contact->category};
 			}
         }
@@ -718,7 +718,7 @@ sub setup_categories_and_bodies : Private {
             push @category_options, _('Other') if $seen{_('Other')};
         }
     }
-    
+
     if ( scalar @{$groups_items{-2}} > 0 ) {
     	push (@array_groups_seen, [ -2, _('Other') ]);
     }
@@ -813,8 +813,8 @@ sub process_user : Private {
     if ( $c->user_exists ) {
         my $user = $c->user->obj;
         $user->name( Utils::trim_text( $params{name} ) ) if $params{name};
-        $user->phone( Utils::trim_text( $params{phone} ) );
-        $user->identity_document( Utils::trim_text( $params{identity_document} ) );
+        $user->phone( Utils::trim_text( $params{phone} ) ) if $params{phone};
+        $user->identity_document( Utils::trim_text( $params{identity_document} ) ) if $params{identity_document};
         $user->title( $user_title ) if $user_title;
         $report->user( $user );
         $report->name( $user->name );
@@ -1113,7 +1113,7 @@ sub save_user_and_report : Private {
         }
         $report->confirm();
     } elsif ( !$report->user->in_storage) {
-        if ( $c->stash->{is_social_user} ) {		
+        if ( $c->stash->{is_social_user} ) {
             my $token_data = {
                 postcode => $report->postcode,
                 latitude => $report->latitude,
