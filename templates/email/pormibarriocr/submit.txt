@@ -36,5 +36,5 @@ Si responde este mail se le responderá al usuario que hizo el reporte.
 
 Este mensaje fue entergado por la plataforma Por Mi Barrio CR.
 <?=$values['category_footer']?>, si tiene algún inconveniente por favor comuníquese con nosotros:
-ACCESA: contacto@accesa.org
+ACCESA: pormibarrio@accesa.org
 Contacto técnico: DATA, contacto@datauy.org
