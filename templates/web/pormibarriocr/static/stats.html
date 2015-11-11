@@ -5,11 +5,11 @@
 	<form method="post" action="stats" enctype="application/x-www-form-urlencoded" accept-charset="utf-8">
 		<div class="stats-form stats-form-first">
 			<label for="start_date">[% loc('Start Date:') %]</label>
-		    <input type="text" placeholder="Introduzca la fecha con el formato año-mes-día" name="start_date" id="stats-start-date"
-		      value="[% start_date ? start_date.strftime( '%Y-%m-%d') : '' | html %]" />
+		    <input type="text" placeholder="Introduzca la fecha con el formato día/mes/año" name="start_date" id="stats-start-date"
+		      value="[% start_date ? start_date.strftime( '%d/%m/%Y') : 'el comienzo' | html %]" />
 
 		    <label for="end_date">[% loc('End Date:') %]</label>
-		    <input type="text" placeholder="Introduzca la fecha con el formato año-mes-día" name="end_date" id="stats-end-date" size="5" value="[% end_date ? end_date.strftime( '%Y-%m-%d') : '' | html %]" />
+		    <input type="text" placeholder="Introduzca la fecha con el formato día/mes/año" name="end_date" id="stats-end-date" size="5" value="[% end_date ? end_date.strftime( '%d/%m/%Y') : '' | html %]" />
 		    
 		    <input class="btn-stats" type="submit" name="getcounts"  size="30" id="getcounts" value="Ingresar" />
 		</div>
@@ -34,7 +34,7 @@
 <link rel="stylesheet" href="[% start %][% version('/js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css') %]">
 
 <div id="download-data"></div>
-<h3 style="margin-top: 4%; text-align: center;">Visualizando desde [% start_date_solo %] al [% end_date_solo %]</h3>
+<h3 style="margin-top: 4%; text-align: center;">Visualizando desde [% start_date ? start_date.strftime( '%d/%m/%Y') : '' | html %] al [% end_date ? end_date.strftime( '%d/%m/%Y') : '' | html %]</h3>
 <div id="graphs" style="height: 400px">
 	<div class="graph-totals-values" class="chart-group"></div>
 	<div id="graph-totals" style="height: 300px; width: 60%;" class="chart-group"></div>

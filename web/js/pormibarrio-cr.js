@@ -294,7 +294,7 @@ $( document ).ready(function() {
 		$( "#stats-start-date" ).datepicker({
 	      defaultDate: "-1w",
 	      changeMonth: true,
-	      dateFormat: 'yy-mm-dd' ,
+	      dateFormat: 'dd/mm/yy' ,
 	      // This sets the other fields minDate to our date
 	      onClose: function( selectedDate ) {
 	        $( "#stats-end-date" ).datepicker( "option", "minDate", selectedDate );
@@ -303,7 +303,7 @@ $( document ).ready(function() {
 	    $( "#stats-end-date" ).datepicker({
 	     /// defaultDate: "+1w",
 	      changeMonth: true,
-	      dateFormat: 'yy-mm-dd' ,
+	      dateFormat: 'dd/mm/yy' ,
 	      onClose: function( selectedDate ) {
 	        $( "#stats-start-date" ).datepicker( "option", "maxDate", selectedDate );
 	      }
