@@ -25,7 +25,7 @@
 						[% IF field_errors.email  %]
 							<p class="error-m">[% field_errors.email %]</p>
 						[% END %]
-						<input type="text" name="phone" value="[% user.phone | html %]" placeholder="[% loc('phone') %] *" class="[% IF field_errors.phone  %]error[% END %]">
+						<input type="text" name="phone" value="[% user.phone | html %]" placeholder="Teléfono *" class="[% IF field_errors.phone  %]error[% END %]">
 						[% IF field_errors.phone  %]
 							<p class="error-m">[% field_errors.phone %]</p>
 						[% END %]
