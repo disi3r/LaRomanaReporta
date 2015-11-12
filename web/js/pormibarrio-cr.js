@@ -13,17 +13,17 @@ var anchoCalles = anchoVentana - anchoUser - anchoButtons - 20;
 $("#stats-menu").css({right: anchoUser});
 var listaCalles =  [];
 $("#s-calles").width(anchoCalles);
-	
+
 //QUITAR BORDE AL ULTIMO BLOQUE DE COMENTARIO
 $('.leave-comment').prev().css('border', 'none');
 $('.leave-comment').prev('.imm-comment').css('borderBottom', '#ebebeb solid 1px');
 
-//SCROLL EN EL LISTADO DE REPORTES		
-	var types = ['DOMMouseScroll', 'mousewheel', 'MozMousePixelScroll', 'wheel'];	
-		
-	var tr = $( "#top-reports").height();	
-	$('.c-scroll').css({'height':(($(window).height())-tr)});	
-	
+//SCROLL EN EL LISTADO DE REPORTES
+	var types = ['DOMMouseScroll', 'mousewheel', 'MozMousePixelScroll', 'wheel'];
+
+	var tr = $( "#top-reports").height();
+	$('.c-scroll').css({'height':(($(window).height())-tr)});
+
 	$('div.scrolled').slimScroll({
 		position: 'right',
 		height: '80%',
@@ -79,7 +79,7 @@ $('.leave-comment').prev('.imm-comment').css('borderBottom', '#ebebeb solid 1px'
 		borderRadius:4,
 		opacity: 1,
 	});
-	
+
 
 //SCROLL AL INGRESAR UN REPORTE
 	$('div.scrolled-reportar').slimScroll({
@@ -107,7 +107,7 @@ function dashCheck(){
 		}
 	});
 }
-		
+
 $( document ).ready(function() {
 	//SCROLL EN EL REPORTE
 	height_val = '95%';
@@ -128,7 +128,7 @@ $( document ).ready(function() {
 		borderRadius:4,
 		opacity: 1,
 	});
-	
+
 	$('a.pregunta').click(function(){
 		var ref = this.href.split('#');
 		console.log(ref[1]);
@@ -140,13 +140,13 @@ $( document ).ready(function() {
 		var regCont = $('.bloque-registro .form-group').first();
 		$('#form_email').prependTo(regCont);
 		$('div.bloque-registro').slideDown();
-		$('div.bloque-sesion').slideUp();	
+		$('div.bloque-sesion').slideUp();
 	});
 	$('.registrate-back').click(function(e){
 		e.preventDefault();
 		$('#form_email').insertBefore('#password_sign_in');
 		$('div.bloque-registro').slideUp();
-		$('div.bloque-sesion').slideDown();	
+		$('div.bloque-sesion').slideDown();
 	});
 	$('.report-back').click(function(e){
 		e.preventDefault();
@@ -169,7 +169,7 @@ $( document ).ready(function() {
 	  $( '.reportar-abuso-content' ).slideUp();
 	  $( '.reportar-hide-content' ).slideUp();
 	});
-	
+
 	$( ".reportar-abuso" ).click(function() {
 	  $( this ).toggleClass( "reportar-abuso-active" );
 	  $( '.follow-report' ).removeClass( "follow-report-active" );
@@ -200,7 +200,7 @@ $( document ).ready(function() {
 	$('.InputButton').bind("click" , function () {
         $('#InputFile').click();
     });
-	
+
 	$('.upload-img').bind("click" , function () {
         $('#InputFile').click();
     });
@@ -216,7 +216,7 @@ $( document ).ready(function() {
         $('#my').hide();
         $('#user-profile').show();
     });
-    
+
     //FILTRO REPORTES EN PERFIL
     if ($('.content').hasClass('content-vertical')){
 		$('#user-reports').hide();
@@ -249,7 +249,7 @@ $( document ).ready(function() {
 	        $('#user-reports').show();
 	    }
     });
-    
+
     $( "#siguiendo" ).unbind('click').click(function() {
     	if ($('.content').hasClass('content-vertical')){
     		$( '#user-interactions' ).slideToggle();
@@ -512,11 +512,11 @@ function geolocate(timeout, zoom, is_list){
 	        var latitude = pos.coords.latitude;
 	        var longitude = pos.coords.longitude;
 	        location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
-	    }, 
+	    },
 	    function(err) {
 	    	$('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.');
 	    	$('#loader_throbber').append('<br/>Cargando Municipalidad de Palmares por defecto.');
-	    }, 
+	    },
 	    {
 	        enableHighAccuracy: true,
 	        timeout: 2500
@@ -542,27 +542,27 @@ $('.responsive').responsiveText();
 
 	function init() {
 
-	
+
 	//INGRESAR REPORTE
 	/*$('li.reportar a').click(function(){
 		$('.open-side').removeClass('open-side');
 		$('#add-report').addClass('open-side');
 	});
-	
+
 	//LISTADO DE REPORTES
 	$('li.reportes a').click(function(){
 		$('.open-side').removeClass('open-side');
 		$('#report-list').addClass('open-side');
 	});
-	
+
 	//VER PERFIL DE USUARIO
 	$('li.profile a').click(function(){
 		$('.open-side').removeClass('open-side');
 		$('#user-profile').addClass('open-side');
 	});
 	*/
-	
-	
+
+
 	//CONTRAER Y EXPANDIR BARRA AZUL
 	$(".first-navigation").hover(
 	  function () {
@@ -575,9 +575,9 @@ $('.responsive').responsiveText();
 		$('.s-calles').removeClass("s-calles-nav");
 		$('ul.l-calles').removeClass("l-calles-nav");
 	  }
-	);	
-	
-	
+	);
+
+
 	//MOVER EL DETALLE DE REPORTE AL HACER HOVER EN LA BARRA AZUL
 	$(".first-navigation").hover(
 	  function () {
@@ -668,7 +668,7 @@ if ( $(window).width() >= 780){
 //CATEGORIAS POR GRUPO
 function form_category_group_onchange() {
 	var group_id = $('#form_category_groups').val();
-	
+
 	if (group_id == '') {
 		$('#form_category').prop( "disabled", true );
         $('#form_category').empty();
@@ -677,7 +677,7 @@ function form_category_group_onchange() {
 		$('#form_category').empty();
 
 		var options = '';
-		options += '<option value="">-- Selecciona una categoría --</option>';
+		options += '<option value="">-- Selecciona una subcategoría --</option>';
 
 		for (var i = 0; i < category_groups[group_id].length; i++) {
 			options += '<option value="' + category_groups[group_id][i] + '">' + category_groups[group_id][i] + '</option>';
