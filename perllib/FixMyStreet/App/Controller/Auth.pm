@@ -60,7 +60,7 @@ sub sign_in : Private {
 
     $email        ||= $c->req->param('email')            || '';
     $email        ||= $c->req->param('form_email')       || '';
-    
+
     my $password    = $c->req->param('password_sign_in') || '';
     my $remember_me = $c->req->param('remember_me')      || 0;
 
@@ -145,7 +145,7 @@ sub email_sign_in : Private {
 		        $c->stash->{field_errors}{identity_document} = _('Please enter a valid ID');
 		        return;
 			}
-		} 
+		}
 		else {
         	$c->stash->{field_errors}{identity_document} = _('Please enter your ID');
         	return;
@@ -180,6 +180,10 @@ sub email_sign_in : Private {
     	$c->send_email( 'login.txt', { to => $good_email } );
 	}
     $c->stash->{template} = 'auth/token.html';
+    #Redirect to my
+				my $uri = $c->uri_for( '/my', { mf1 => 1 } );
+			    $c->res->redirect( $uri );
+			    $c->detach;
 }
 
 =head2 social_signup
@@ -200,8 +204,8 @@ sub social_signup : Path('/auth/social_signup') : Args(0) {
 	my $facebook_id = $c->req->param('facebook_id') if $c->req->param('facebook_id');
 	my $twitter_id = $c->req->param('twitter_id') if $c->req->param('twitter_id');
 	my $picture_url = $c->req->param('picture_url') if $c->req->param('picture_url');
-	
-	my $new_user = $c->model('DB::User')->new({ 
+
+	my $new_user = $c->model('DB::User')->new({
 		name => $name,
 		email => $email,
 		identity_document => $identity_document,
@@ -212,8 +216,8 @@ sub social_signup : Path('/auth/social_signup') : Args(0) {
 	});
 
 	$c->stash->{user} = $new_user;
-		
-	$c->stash->{field_errors} ||= {};	
+
+	$c->stash->{field_errors} ||= {};
 	my %field_errors = $c->cobrand->user_check_for_errors( $c );
 
 	#Added identity document, to be validated only if $c->cobrand->validate_document is set
@@ -233,10 +237,10 @@ sub social_signup : Path('/auth/social_signup') : Args(0) {
 
 	if ( !scalar keys %field_errors ) {
 		my $user = $c->model('DB::User')->find_or_create({ email => $new_user->email });
-		
+
 		if ( $user ) {
 			my $token_data = {
-				id => $user->id, 
+				id => $user->id,
 				facebook_id => $new_user->facebook_id,
 				twitter_id => $new_user->twitter_id,
 				name => $new_user->name,
@@ -259,7 +263,7 @@ sub social_signup : Path('/auth/social_signup') : Args(0) {
 					detach_args => $c->session->{oauth}{detach_args},
 				}
 			} );
-		
+
 			$c->stash->{token} = $token_social_sign_up->token;
 			$c->send_email( 'login.txt', { to => $new_user->email } );
 			$c->stash->{template} = 'auth/token.html';
@@ -306,7 +310,7 @@ sub token : Path('/M') : Args(1) {
 
 		# send the user to their page
 		$c->detach( 'redirect_on_signin', [ $data->{r} ] );
-    
+
 	} else {
 		# retrieve the social token or return
 		my $token_obj = $url_token
@@ -319,9 +323,9 @@ sub token : Path('/M') : Args(1) {
 			$c->stash->{token_not_found} = 1;
 			return;
 		}
-			
+
 		my $data = $token_obj->data;
-		
+
 		my $user = $c->model('DB::User')->find_or_create( { email => $data->{email} } );
 		$user->name( $data->{name} );
 		$user->facebook_id( $data->{facebook_id} ) if $data->{facebook_id};
@@ -331,7 +335,7 @@ sub token : Path('/M') : Args(1) {
 		$user->phone( $data->{phone} ) if $data->{phone};
 		$user->picture_url( $data->{picture_url} );
 		$user->update;
-			
+
 		$c->authenticate( { email => $data->{email} }, 'no_password' );
 		$c->set_session_cookie_expire(0);
 
@@ -354,35 +358,35 @@ Starts the Facebook authentication sequence.
 
 sub facebook_sign_in : Private {
 	my( $self, $c ) = @_;
-	
+
 	my $params = $c->req->parameters;
-    
+
     my $facebook_app_id = mySociety::Config::get('FACEBOOK_APP_ID', undef);
     my $facebook_app_secret = mySociety::Config::get('FACEBOOK_APP_SECRET', undef);
     my $facebook_callback_url = $c->uri_for('/auth/Facebook');
-    
+
 	my $fb = Net::Facebook::Oauth2->new(
 		application_id => $facebook_app_id,  ##get this from your facebook developers platform
 		application_secret => $facebook_app_secret, ##get this from your facebook developers platform
 		callback => $facebook_callback_url,  ##Callback URL, facebook will redirect users after authintication
 	);
-	
+
 	##there is no verifier code passed so let's create authorization URL and redirect to it
 	my $url = $fb->get_authorization_url(
 		scope => ['email'], ###pass scope/Extended Permissions params as an array telling facebook how you want to use this access
 		display => 'page' ## how to display authorization page, other options popup "to display as popup window" and wab "for mobile apps"
 	);
-	
+
 	my %oauth;
 	$oauth{'return_url'} = $c->req->param('r');
 	$oauth{'detach_to'} = $c->stash->{detach_to};
 	$oauth{'detach_args'} = $c->stash->{detach_args};
-	#Sync accounts 
+	#Sync accounts
 	$oauth{'facebook_link'} = $c->req->param('facebook_link') if ( $c->req->param('facebook_link') );
 
 	###save this token in session
 	$c->session->{oauth} = \%oauth;
-	
+
 	$c->res->redirect($url);
 }
 
@@ -394,7 +398,7 @@ Handles the Facebook callback request and completes the authentication sequence.
 
 sub facebook_callback: Path('/auth/Facebook') : Args(0) {
 	my( $self, $c ) = @_;
-	
+
 	my $params = $c->req->parameters;
 
 	if ( $params->{error_code} ) {
@@ -405,32 +409,32 @@ sub facebook_callback: Path('/auth/Facebook') : Args(0) {
 
 		$c->stash->{message} = 'No es posible iniciar la sesi&oacute;n en Facebook. Por favor vuelva a intetarlo m&aacute;s tarde.';
 		$c->stash->{template} = 'errors/generic.html';
-	} 
+	}
 	else {
 		my $facebook_app_id = mySociety::Config::get('FACEBOOK_APP_ID', undef);
 		my $facebook_app_secret = mySociety::Config::get('FACEBOOK_APP_SECRET', undef);
 		my $facebook_callback_url = $c->uri_for('/auth/Facebook');
-	    
+
 		my $fb = Net::Facebook::Oauth2->new(
 			application_id => $facebook_app_id,  ##get this from your facebook developers platform
 			application_secret => $facebook_app_secret, ##get this from your facebook developers platform
 			callback => $facebook_callback_url,  ##Callback URL, facebook will redirect users after authintication
 		);
-		
-		# you need to pass the verifier code to get access_token	
+
+		# you need to pass the verifier code to get access_token
 		my $access_token = $fb->get_access_token( code => $params->{code} );
-		
+
 		# save this token in session
 		$c->session->{oauth}{token} =  $access_token;
-		
+
 		my $info2 = $fb->get('https://graph.facebook.com/me/permissions')->as_hash();
-		$c->log->debug(Dumper($info2));	
+		$c->log->debug(Dumper($info2));
 
 		my $info = $fb->get('https://graph.facebook.com/me')->as_hash();
 
 		$c->log->debug('>>>>>>>>>>>>>>');
-		$c->log->debug(Dumper($info));		
-			
+		$c->log->debug(Dumper($info));
+
 		my $name = $info->{'name'};
 		my $email = $info->{'email'};
 		my $uid = $info->{'id'};
@@ -451,18 +455,18 @@ sub facebook_callback: Path('/auth/Facebook') : Args(0) {
 			    $c->res->redirect( $uri );
 			    $c->detach;
 			}
-			else{	
+			else{
 				$c->log->debug('FB CALLBACK NUEVO');
-				my $new_user = $c->model('DB::User')->new({ 
+				my $new_user = $c->model('DB::User')->new({
 					name => $name,
 					email => $email,
 					facebook_id => $uid,
 					picture_url => 'http://graph.facebook.com/'.$uid.'/picture?type=square',
 				});
-				$c->stash->{user} = $new_user;		
+				$c->stash->{user} = $new_user;
 				$c->stash->{template} = 'auth/social_signup.html';
 			}
-		} 
+		}
 		else {
 			$c->log->debug('FB CALLBACK USER');
 			if( $c->session->{oauth}{facebook_link} and $c->user ){
@@ -502,12 +506,12 @@ sub twitter_sign_in : Private {
     my $twitter_key = mySociety::Config::get('TWITTER_KEY', undef);
     my $twitter_secret = mySociety::Config::get('TWITTER_SECRET', undef);
     my $twitter_callback_url = $c->uri_for('/auth/Twitter');
-	
+
 	my %consumer_tokens = (
 		consumer_key    => $twitter_key,
 		consumer_secret => $twitter_secret,
 	);
-	
+
 	my $twitter = Net::Twitter::Lite::WithAPIv1_1->new(ssl => 1, %consumer_tokens);
     my $url = $twitter->get_authorization_url(callback => $twitter_callback_url);
 
@@ -517,7 +521,7 @@ sub twitter_sign_in : Private {
 	$oauth{'detach_args'} = $c->stash->{detach_args};
 	$oauth{'token'} = $twitter->request_token;
 	$oauth{'token_secret'} = $twitter->request_token_secret;
-	#Sync accounts 
+	#Sync accounts
 	$oauth{'twitter_link'} = $c->req->param('twitter_link') if ($c->req->param('twitter_link'));
 
 	###save this token in session
@@ -543,19 +547,19 @@ sub twitter_callback: Path('/auth/Twitter') : Args(0) {
 		consumer_key    => $twitter_key,
 		consumer_secret => $twitter_secret,
 	);
-	
+
 	my $oauth = $c->session->{oauth};
-	
+
 	my $twitter = Net::Twitter::Lite::WithAPIv1_1->new(ssl => 1, %consumer_tokens);
 	$twitter->request_token($oauth->{token});
 	$twitter->request_token_secret($oauth->{token_secret});
-	
+
 	my($access_token, $access_token_secret, $uid, $name) =
 		$twitter->request_access_token(verifier => $verifier);
-   
+
 	my $twitter_user = $twitter->show_user($uid);
 	my $user = $c->model('DB::User')->find( { twitter_id => $uid } );
-	
+
 	if (!$user) {
 		if( $oauth->{twitter_link} and $c->user ){
 			#Actualizamos la foto en caso que se quiera
@@ -570,16 +574,16 @@ sub twitter_callback: Path('/auth/Twitter') : Args(0) {
 		    $c->detach;
 		}
 		else{
-			my $new_user = $c->model('DB::User')->new({ 
+			my $new_user = $c->model('DB::User')->new({
 				name => $name,
 				twitter_id => $uid,
 				picture_url => $twitter_user->{profile_image_url},
 			});
-			
+
 			$c->stash->{user} = $new_user;
 			$c->stash->{template} = 'auth/social_signup.html';
 		}
-	} 
+	}
 	else {
 		if( $oauth->{twitter_link} and $c->user ){
 			my $uri = $c->uri_for( '/my', { mt2 => 1 } );
@@ -614,12 +618,12 @@ Used after signing in to take the person back to where they were.
 sub redirect_on_signin : Private {
     my ( $self, $c, $redirect ) = @_;
     $redirect = 'my' unless $redirect;
-    
+
     if ( $c->cobrand->moniker eq 'zurich' ) {
         $redirect = 'my' if $redirect eq 'admin';
         $redirect = 'admin' if $c->user->from_body;
     }
-    
+
     $c->res->redirect( $c->uri_for( "/$redirect" ) );
 }
 
@@ -632,7 +636,8 @@ Used when trying to view a page that requires sign in when you're not.
 sub redirect : Private {
     my ( $self, $c ) = @_;
 
-    my $uri = $c->uri_for( '/auth', { r => $c->req->path } );
+    #my $uri = $c->uri_for( '/auth', { r => $c->req->path } );
+    my $uri = $c->uri_for( '/my' );
     $c->res->redirect( $uri );
     $c->detach;
 

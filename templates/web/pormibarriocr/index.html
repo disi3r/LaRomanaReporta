@@ -10,15 +10,15 @@ function locate(){
             var latitude = pos.coords.latitude;
             var longitude = pos.coords.longitude;
             location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=4';
-        }, 
+        },
         function(err) {
             location.href = '/around?latitude=10.056;longitude=-84.433';
             /*console.log('Entra a err');
             if (err.code == 1) { // User said no
                 location.href = '/around?latitude=-34.906557;longitude=-56.199769';
-            } 
-            else { 
-                
+            }
+            else {
+
                 if (err.code == 1) { // User said no
                     $link.html(translation_strings.geolocation_declined);
                 } else if (err.code == 2) { // No position
@@ -29,7 +29,7 @@ function locate(){
                     $link.html(translation_strings.geolocation_unknown);
                 }
             }*/
-        }, 
+        },
         {
             enableHighAccuracy: true,
             timeout: 2500
@@ -50,7 +50,7 @@ setTimeout(
         overlayDiv.innerHTML = '<h3>Necesitas más tiempo para leer las instrucciones?</h3><p>En caso de ya estar seguro has click en la barra superior del navegador para localizarte. Si no estás en Montevideo pero quieres ver la plataforma has click en AL MAPA el cual te dirigirá a la Plaza independencia, de lo contrario has click en CERRAR, para segiur leyendo la página actual.</p>';
         geoOverlay.appendChild(overlayDiv);
 
-        var overlayClose=document.createElement("BUTTON");  
+        var overlayClose=document.createElement("BUTTON");
         overlayClose.id = 'overlay-close';
         overlayClose.onclick = function(){location.reload();};
         overlayClose.innerHTML = 'Cerrar';
@@ -97,20 +97,20 @@ function video(){
                     <div class="step-img">
                         <img src="/cobrands/pormibarriocr/images/intro-step-03.png" alt=""/>
                     </div>
-                    <h3>3. Por mi Barrio envía tu reporte 
+                    <h3>3. Por mi Barrio envía tu reporte
                         al funcionario/a correspondiente en la Municipalidad</h3>
                 </div>
                 <div class="step step-four">
                     <div class="step-img">
                         <img src="/cobrands/pormibarriocr/images/intro-step-04.png" alt=""/>
                     </div>
-                    <h3>4. Te enviamos información 
+                    <h3>4. Te enviamos información
                         sobre el progreso del reporte, hasta su solución.</h3>
                 </div>
             </div>
             <div class="c-buttons-intro">
                 <a href="#" onclick="video()" class="btn btn-reportar btn-intro">Como funciona</a>
-                <a href="#" onclick="locate()" class="btn btn-green btn-intro">Comenzar ahora</a>
+                <a href="#" onclick="report(2500, 4)" class="btn btn-green btn-intro">Comenzar ahora</a>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -134,7 +134,7 @@ function video(){
             <div>
             <a href="/faq" class="know-more full-wide">Conocé más sobre PorMiBarrio</a>
         </div>
-        
+
         <!--end footer-->
 
     [% IF error %]

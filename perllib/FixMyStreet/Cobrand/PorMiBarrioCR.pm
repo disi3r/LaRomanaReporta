@@ -131,7 +131,7 @@ sub problem_rules {
 		'1' => [
 			{
 				'max_time' => 10,
-				'action' => 'problem-overdue'
+				'action' => 'comptroller_overdue'
 			},
 			{
 				'max_time' => 8,
@@ -145,7 +145,7 @@ sub problem_rules {
 		'2' => [
 			{
 				'max_time' => 10,
-				'action' => 'problem-overdue'
+				'action' => 'comptroller_overdue'
 			},
 			{
 				'max_time' => 8,
@@ -159,7 +159,7 @@ sub problem_rules {
 		'3' => [
 			{
 				'max_time' => 10,
-				'action' => 'problem-overdue'
+				'action' => 'comptroller_overdue'
 			},
 			{
 				'max_time' => 8,
@@ -173,7 +173,7 @@ sub problem_rules {
 		'4' => [
 			{
 				'max_time' => 10,
-				'action' => 'problem-overdue'
+				'action' => 'comptroller_overdue'
 			},
 			{
 				'max_time' => 8,
@@ -187,7 +187,7 @@ sub problem_rules {
 		'5' => [
 			{
 				'max_time' => 10,
-				'action' => 'problem-overdue'
+				'action' => 'comptroller_overdue'
 			},
 			{
 				'max_time' => 8,
@@ -201,7 +201,7 @@ sub problem_rules {
 		'6' => [
 			{
 				'max_time' => 10,
-				'action' => 'problem-overdue'
+				'action' => 'comptroller_overdue'
 			},
 			{
 				'max_time' => 8,

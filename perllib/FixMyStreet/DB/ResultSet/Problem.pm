@@ -13,6 +13,7 @@ use mySociety::MaPit;
 
 use FixMyStreet::App;
 use FixMyStreet::SendReport;
+use Data::Dumper;
 
 my $site_key;
 
@@ -521,6 +522,36 @@ sub debug_print {
     my $id = shift || '';
     $id = "report $id: " if $id;
     print "[] $id$msg\n";
+}
+
+sub alert_deadlines {
+    #Get problems to alert
+    my $states = [ 'investigating', 'confirmed', 'in progress', 'planned', 'action scheduled' ];
+    my $problems = FixMyStreet::App->model("DB::Problem")->search( {
+        state => $states,
+        bodies_str => { '!=', undef },
+    } );
+    #Check for each if deadline is passed (next version make it configurable)
+    while (my $problem = $problems->next) {
+        if ( $problem->deadline eq 'comptroller_overdue' ){
+            #Check alert haven't been added
+            #Create alert (body attribute user_id?)
+            #my $body = $problem->bodies_str;
+            #$body = FixMyStreet::App->model("DB::Body")->find($body);
+            my $options;
+            $options->{alert_type}  = $problem->deadline;
+            $options->{parameter}   = $problem->id;
+            $options->{parameter2}  = $problem->user->id;
+            $options->{user_id}     = 1;
+            $options->{confirmed}   = 1;
+            $options->{cobrand}     = $problem->cobrand;
+            $options->{cobrand_data} = '';
+            $options->{lang}        = $problem->lang;
+
+            my $alert = FixMyStreet::App->model('DB::Alert')->new($options);
+            $alert->insert();
+        }
+    }
 }
 
 1;

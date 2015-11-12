@@ -122,7 +122,7 @@ sub edit : Path('edit'){
         $c->user->facebook_id(undef) if $c->req->params->{'facebook_unlink'};
         $c->user->twitter_id(undef) if $c->req->params->{'twitter_unlink'};
         $c->user->update();
-        $c->stash->{messages} = _('Your changes have been saved');
+        $c->stash->{messages} = _('Los cambios han sido guardados');
         return;
     }
     #Link accounts
@@ -170,14 +170,14 @@ sub edit : Path('edit'){
         my $user = $c->model('DB::User')->find({ email => $c->req->params->{email} });
         if ( !$user ) {
             $c->user->email( $c->req->params->{email} );
-        } 
+        }
         else {
             $c->stash->{field_errors}{email} = _('Email is already in use.');
             return;
         }
     }
     #Process photo
-    $c->forward('/photo/process_photo'); 
+    $c->forward('/photo/process_photo');
     if ( my $fileid = $c->stash->{upload_fileid} ) {
         $c->user->picture_url( '/upload/'.$fileid.'.jpeg' );
     }
@@ -199,7 +199,7 @@ sub edit : Path('edit'){
     if ( $c->req->params->{phone} ){
         $c->user->phone( $c->req->params->{phone} );
     }
-    
+
     $c->stash->{user} = $c->user;
     $c->stash->{field_errors} ||= {};
     my %field_errors = $c->cobrand->user_check_for_errors( $c );
@@ -211,7 +211,7 @@ sub edit : Path('edit'){
     #Update user
     $c->user->modified(\'ms_current_timestamp()');
     $c->user->update();
-    $c->stash->{messages} = _('Your changes have been saved');
+    $c->stash->{messages} = _('Los cambios han sido guardados');
     return;
 }
 

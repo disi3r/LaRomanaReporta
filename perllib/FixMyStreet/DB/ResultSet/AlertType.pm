@@ -18,7 +18,10 @@ use RABX;
 sub email_alerts ($) {
     my ( $rs ) = @_;
 
-    my $q = $rs->search( { ref => { -not_like => '%local_problems%' } } );
+    my $q = $rs->search( { '-AND' => [ 
+        ref => {'-not_like', '%local_problems%' },
+        ref => {'-not_like', '%comptroller_overdue%' },
+        ] } );
     while (my $alert_type = $q->next) {
         my $ref = $alert_type->ref;
         my $head_table = $alert_type->head_table;
@@ -40,9 +43,11 @@ sub email_alerts ($) {
             from alert, $item_table";
         }
         $query .= "
-            where alert_type='$ref' and whendisabled is null and $item_table.confirmed >= whensubscribed
+            where alert_type='$ref' 
+            and whendisabled is null 
+            and $item_table.confirmed >= whensubscribed
             and $item_table.confirmed >= ms_current_timestamp() - '7 days'::interval
-             and (select whenqueued from alert_sent where alert_sent.alert_id = alert.id and alert_sent.parameter::integer = $item_table.id) is null
+            and (select whenqueued from alert_sent where alert_sent.alert_id = alert.id and alert_sent.parameter::integer = $item_table.id) is null
             and $item_table.user_id <> alert.user_id
             and " . $alert_type->item_where . "
             and alert.confirmed = 1
@@ -59,8 +64,8 @@ sub email_alerts ($) {
 
             my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($row->{alert_cobrand})->new();
 
-            # Cobranded and non-cobranded messages can share a database. In this case, the conf file
-            # should specify a vhost to send the reports for each cobrand, so that they don't get sent
+            # Cobranded and non-cobranded messages can share a database. In this case, the conf file 
+            # should specify a vhost to send the reports for each cobrand, so that they don't get sent 
             # more than once if there are multiple vhosts running off the same database. The email_host
             # call checks if this is the host that sends mail for this cobrand.
             next unless $cobrand->email_host;
@@ -78,53 +83,53 @@ sub email_alerts ($) {
                 _send_aggregated_alert_email(%data);
                 %data = ( template => $alert_type->template, data => '' );
             }
-            $data{state_message} = $row->{state};
+
             # create problem status message for the templates
             if ( FixMyStreet::DB::Result::Problem::fixed_states()->{$row->{state}} ) {
-                if(($row->{state}) eq 'fixed'){
-                    $data{state_message} = 'arreglado';
+                if(chomp($row->{state}) eq "fixed"){
+                    $data{state_message} = "arreglado";
                 }
-                if(($row->{state}) eq 'fixed - user'){
-                    $data{state_message} = 'arreglado - usuario';
+                if(chomp($row->{state}) eq "fixed - user"){
+                    $data{state_message} = "arreglado - usuario";
                 }
-                if(($row->{state}) eq 'fixed - council'){
-                    $data{state_message} = 'arreglado - municipalidad';
+                if(chomp($row->{state}) eq "fixed - council"){
+                    $data{state_message} = "arreglado - municipalidad";
                 }
                 #$data{state_message} = _("Este reporte ha sido marcado como arreglado.");
                 #$data{state_message} = $row->{state};
             } elsif ( FixMyStreet::DB::Result::Problem::closed_states()->{$row->{state}} ) {
-                if(($row->{state}) eq 'closed'){
-                    $data{state_message} = 'cerrado';
+                if(chomp($row->{state}) eq "closed"){
+                    $data{state_message} = "cerrado";
                 }
-                if(($row->{state}) eq 'unable to fix'){
-                    $data{state_message} = 'no se puede arreglar';
+                if(chomp($row->{state}) eq "unable to fix"){
+                    $data{state_message} = "no se puede arreglar";
                 }
-                if(($row->{state}) eq 'not responsible'){
-                    $data{state_message} = 'no responsable';
+                if(chomp($row->{state}) eq "not responsible"){
+                    $data{state_message} = "no responsable";
                 }
-                if(($row->{state}) eq 'duplicate'){
-                    $data{state_message} = 'duplicado';
+                if(chomp($row->{state}) eq "duplicate"){
+                    $data{state_message} = "duplicado";
                 }
-                if(($row->{state}) eq 'internal referral'){
-                    $data{state_message} = 'referencia interna';
+                if(chomp($row->{state}) eq "internal referral"){
+                    $data{state_message} = "referencia interna";
                 }
                 #$data{state_message} = _("Este reporte ha sido marcado como cerrado.");
                 #$data{state_message} = $row->{state};
             } else {
-                if(($row->{state}) eq 'confirmed'){
-                    $data{state_message} = 'abierto';
+                if(chomp($row->{state}) eq "confirmed"){
+                    $data{state_message} = "abierto";
                 }
-                if(($row->{state}) eq 'investigating'){
-                    $data{state_message} = 'investigando';
+                if(chomp($row->{state}) eq "investigating"){
+                    $data{state_message} = "investigando";
                 }
-                if(($row->{state}) eq 'in progress'){
-                    $data{state_message} = 'en progreso';
+                if(chomp($row->{state}) eq "in progress"){
+                    $data{state_message} = "en progreso";
                 }
-                if(($row->{state}) eq 'planned'){
-                    $data{state_message} = 'planificado';
+                if(chomp($row->{state}) eq "planned"){
+                    $data{state_message} = "planificado";
                 }
-                if(($row->{state}) eq 'action scheduled'){
-                    $data{state_message} = 'acción agendada';
+                if(chomp($row->{state}) eq "action scheduled"){
+                    $data{state_message} = "acción agendada";
                 }
                 #$data{state_message} = _("Este reporte ha sido marcado como abierto.");
                 #$data{state_message} = $row->{state};
@@ -239,6 +244,51 @@ sub email_alerts ($) {
         }
         _send_aggregated_alert_email(%data) if $data{data};
     }
+}
+
+sub send_comptroller_alerts($) {
+    my ( $rs ) = @_;
+
+    my $query = FixMyStreet::App->model('DB::Alert')->search( {
+        alert_type   => 'comptroller_overdue',
+        whendisabled => undef,
+        confirmed    => 1
+    }, {
+        order_by     => 'id'
+    } );
+    my $template = $rs->find( { ref => 'comptroller_overdue' } )->template;
+    while (my $alert = $query->next) {
+        my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($alert->cobrand)->new();
+        next unless $cobrand->email_host;
+        next if $alert->is_from_abuser;
+
+        my %data = ( 
+            template => $template, 
+            data => '', 
+            alert_id => $alert->id, 
+            alert_email => $alert->user->email, 
+            lang => $alert->lang, 
+            cobrand => $alert->cobrand, 
+            cobrand_data => $alert->cobrand_data 
+        );
+        my $q = "select id, title, category from problem where id = ?
+            and (select whenqueued from alert_sent where alert_sent.alert_id = ? and 
+                alert_sent.parameter::integer = problem.id) is null";
+        $q = dbh()->prepare($q);
+        $q->execute($alert->parameter, $alert->id);
+        while (my $row = $q->fetchrow_hashref) {
+            FixMyStreet::App->model('DB::AlertSent')->create( {
+                alert_id  => $alert->id,
+                parameter => $row->{id},
+            } );
+            
+            my $url = mySociety::Config::get('BASE_URL');
+            $data{data} .= "$row->{category}". $url . "/report/" . $row->{id} . " - $row->{title}\n\n";
+            $data{comment} = 'ESto es un test';
+        }
+        _send_aggregated_alert_email(%data) if $data{data};
+    }
+
 }
 
 sub _send_aggregated_alert_email(%) {

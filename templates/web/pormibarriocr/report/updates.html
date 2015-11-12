@@ -13,7 +13,7 @@
         %]
         [% tprintf( loc( 'Posted by %s (<strong>%s</strong>) %s' ), user_name, body, update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) -%]
     [%- ELSE %]
-        [% tprintf( loc( 'Posted by %s at %s' ), update.name, update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) | html -%]
+        [% tprintf( loc( 'Publicado por %s %s' ), update.name, update.confirmed.strftime('el %d/%m/%Y a las %H:%M') ) | html -%]
     [%- END -%]
 
     [%- update_state = '' %]
@@ -45,6 +45,8 @@
             [%- update_state = loc( 'marked as a duplicate report' ) %]
         [%- ELSIF state == 'internal referral' %]
             [%- update_state = loc( 'marked as an internal referral' ) %]
+        [%- ELSIF state == 'clarify' %]
+            [%- update_state = loc( 'marked as clarify' ) %]
         [%- END %]
     [%- END %]
     [%- ", " _ update_state IF update_state != global.last_state %]

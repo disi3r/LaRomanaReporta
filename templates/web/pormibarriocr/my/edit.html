@@ -26,12 +26,12 @@ UNLESS not_page %]
 	        	<div class="img-profile">
 	        	[% IF c.cobrand.allow_photo_upload %]
 		        	[% IF c.user.picture_url %]
-		                <img src="[% c.user.picture_url %]" class="img-circle" alt="[% c.user.name %]">
+		                <img src="[% c.user.picture_url %]" style="min-height: 100px; min-width: 100px;" class="img-circle" alt="[% c.user.name %]">
 		            </div>
 		            <div class="edit-img">
 		            	<button type="button" class="btn btn-small btn-comentar btn-reemplazar InputButton">Reemplazar Imagen</button>
 		                <input type="file" id="InputFile" name="photo">
-		            	<button id="profile-image-delete"type="button" class="btn btn-small btn-comentar btn-borrar">Borrar</button> 
+		            	<button id="profile-image-delete"type="button" class="btn btn-small btn-comentar btn-borrar">Borrar</button>
 		            	<input id="image_delete" name="image_delete" type="hidden" value="0">
 		        	</div>
 		            [% ELSE %]
@@ -46,7 +46,7 @@ UNLESS not_page %]
 			        	</div>
 	   					[% END %]
    					[% END %]
-	            [% END %]                  
+	            [% END %]
 	            <div class="edit-profile">
 	            	<button type="button" id="change-passwd-btn">[% loc('Change Password') %]</button>
 	            	<div id="my-change-passwd" >
@@ -58,7 +58,7 @@ UNLESS not_page %]
 					            mismatch => loc('The passwords do not match'),
 					            other    => loc('Please check the passwords and try again'),
 					        };
-					        
+
 					        loc_password_error = errors.$password_error || errors.other; %]
 					    	<div class="form-error">[% loc_password_error %]</div>
 					    [% END %]
@@ -85,7 +85,7 @@ UNLESS not_page %]
 			            	<input type="checkbox" id="not_update_photo" name="not_update_photo"></input>
 			            	<label class="inline">[% loc('Do not replace my image with social image') %]</label>
 			            </div>
-	            		[% IF c.config.FACEBOOK_APP_ID %]      
+	            		[% IF c.config.FACEBOOK_APP_ID %]
 			                [% IF c.user.facebook_id %]
 			                	<button name="facebook_unlink" value="facebook_unlink" class="btn btn-block btn-social btn-facebook">Desvincular de <strong>Facebook</strong></button>
 			                [% ELSE %]
@@ -101,7 +101,7 @@ UNLESS not_page %]
 			            [% END %]
 			         </div>
 		            [% END %]
-	            </div>                                        
+	            </div>
 	        </form>
 	        <script>
 	        $(document).ready(function () {
