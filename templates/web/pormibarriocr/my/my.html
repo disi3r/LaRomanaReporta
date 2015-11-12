@@ -45,7 +45,7 @@
                 <a id="profile-edit" class="btn btn-sky btn-small btn-comentar btn-editar">Editar</a>
                 <div class="img-profile">
                     [% IF c.user.picture_url %]
-                        <img src="[% c.user.picture_url %]" class="img-circle" alt="[% c.user.name %]">
+                        <img src="[% c.user.picture_url %]" style="min-width: 100px; min-height: 100px;" class="img-circle" alt="[% c.user.name %]">
                     [% ELSE %]
                         <img class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">
                     [% END %]
