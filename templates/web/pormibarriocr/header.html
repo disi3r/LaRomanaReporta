@@ -138,7 +138,7 @@
     window.fbAsyncInit = function() {
       FB.init({
         [% IF c.config.FACEBOOK_APP_ID %]
-        appId: '[% c.config.FACEBOOK_APP_ID %]', 
+        appId: '[% c.config.FACEBOOK_APP_ID %]',
         [% END %]
         status: true,
         xfbml: true
@@ -186,13 +186,14 @@
             <div class="info-user" id="info-user">
                 <!-- Vista logueado -->
                 [% IF c.user_exists %]
-                <div class="dropdown user-log-on" style="display:block">
-                    <a data-toggle="dropdown" class="user-name" href="#">
+                <div id="dropdown-user-menu" class="dropdown user-log-on" style="display:block">
+                    <a id="data-toggle-link" data-toggle="dropdown" class="user-name" href="#">
                         [% IF c.user.picture_url %]
                             <img class="img-circle" alt="" id="current_user_avatar">
                             <script>
                                 $("#current_user_avatar").error(function() { $( this ).attr("src", "/cobrands/pormibarrio/images/no-profile-picture.jpg"); }).
                                     attr( "src", "[% c.user.picture_url %]" );
+                                    console.log( "Error ajax." );
                                 $( document ).ajaxStart(function() {
                                   console.log( "Triggered ajaxStart handler." );
                                 });
@@ -238,6 +239,9 @@
                  [% ELSE %]
                  <!--Vista sin login-->
                     <div class="list-inline dropdown user-log-on">
+                        <a class="user-name" href="#" style="display:none;">
+                          <img class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">Anonimo
+                        </a>
                         <a class="green" href="/auth">Inicia sesión ó Registrate</a>
                     </div>
                 <!-- /Vista sin login-->
