@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+
+# send-alerts:
+# Email alerts for FixMyStreet
+#
+# Copyright (c) 2007 UK Citizens Online Democracy. All rights reserved.
+# Email: matthew@mysociety.org. WWW: http://www.mysociety.org
+
+use strict;
+use warnings;
+require 5.8.0;
+
+use CGI; # XXX
+use CronFns;
+
+use mySociety::Config;
+use FixMyStreet::App;
+
+my $site = CronFns::site(mySociety::Config::get('BASE_URL'));
+CronFns::language($site);
+
+FixMyStreet::App->model('DB::AlertType')->send_comptroller_alerts();
