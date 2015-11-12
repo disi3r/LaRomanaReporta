@@ -2666,7 +2666,7 @@ select.locateDetails{
 }
 
 /*DASHBOARD*/
-tr.problem-overdue{
+tr.comptroller_overdue{
 	background-color: red;
 }
 tr.problem-alert{
@@ -2749,7 +2749,7 @@ table.tablesorter tbody td {
 }
 
 table.tablesorter tbody td a{
-	color: #58BEF7;
+	color: #383F3A;
 	outline: medium none;
 	text-decoration: none;
 	outline-offset: -2px;
