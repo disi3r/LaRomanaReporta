@@ -54,8 +54,8 @@
                         </form>
                     </div>
                     <div class="reportar-hide-content user-info">
-                        <form method="post" action="/report/delete/[% problem.id %]" id="remove-from-site-form">
-                            <button type="submit" id="key-tool-hide" class="btn btn-sky btn-small btn-comentar" value="Remove from site">[% loc('Confirm') %]</button>
+                        <form id="hide-form" method="post" action="/report/delete/[% problem.id %]" id="remove-from-site-form">
+                            <button onclick="confirmHide();" type="submit" id="key-tool-hide" class="btn btn-sky btn-small btn-comentar" value="Remove from site">[% loc('Confirm') %]</button>
                         </form>
                     </div>
                     <div style="" class="reportar-abuso-content user-info">
@@ -132,7 +132,7 @@ function printReportDetail(){
     pri.document.write(content.innerHTML);
     pri.document.close();
     pri.focus();
-    var $head = $("#ifmcontentstoprint").contents().find("head");                
+    var $head = $("#ifmcontentstoprint").contents().find("head");
     $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/base.css?1444680842", type: "text/css" }));
     $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/layout.css?1444680842", type: "text/css" }));
     $head.append($("<link/>",{ rel: "stylesheet", href: "/js/fancybox/jquery.fancybox-1.3.4.css?1444680842", type: "text/css" }));
@@ -143,7 +143,16 @@ function printReportDetail(){
     $('#ifmcontentstoprint').ready(function() {
         setTimeout(function(){pri.print();}, 400);
     });
-    
+
+}
+
+function confirmHide(e){
+  var result = window.confirm('¿Está seguro de que desea ocultar su reporte? Este no aparecerá más en la página si es ocultado.');
+  if (result == false) {
+    //e.preventDefault();
+    return false;
+  }
+  $("#hide-form").submit();
 }
 </script>
 
