@@ -160,8 +160,6 @@ sub stats : Global : Args(0) {
         }
     }
 
-    my $one_day = DateTime::Duration->new( days => 1 );
-
     my %select = (
             state => [ FixMyStreet::DB::Result::Problem->visible_states() ],
             select => [ 
@@ -174,7 +172,7 @@ sub stats : Global : Args(0) {
         {
             -AND => [
                 'confirmed' => { '>=', $start_date },
-                'confirmed' => { '<=', $end_date + $one_day },
+                'confirmed' => { '<=', $end_date },
                 'state'     => { '!=', 'hidden' }
             ],
         },
