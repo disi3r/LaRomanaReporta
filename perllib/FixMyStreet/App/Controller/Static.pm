@@ -64,7 +64,7 @@ sub iphone : Global : Args(0) {
 sub stats : Global : Args(0) {
     my ( $self, $c ) = @_;
 
-    my ( $start_date, $end_date, @errors );
+    my ( $end_date, @errors );
     my $parser = DateTime::Format::Strptime->new( pattern => '%d/%m/%Y' );
     my $now_start = DateTime->now(formatter => $parser);
     my $now = DateTime->now(formatter => $parser);

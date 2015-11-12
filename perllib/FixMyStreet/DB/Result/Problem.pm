@@ -633,10 +633,10 @@ sub body {
 }
 
 sub category_group {
-	my ( $problem, $c ) = @_;
+	my $problem = shift;
 	
 	if ( $problem->category ) {
-		my $contact = $c->model('DB::Contact')->find({ category => $problem->category, deleted => 0 });
+		my $contact = FixMyStreet::App->model('DB::Contact')->find({ category => $problem->category, deleted => 0 });
 		
 		if ( $contact ) {
 			if ( $contact->group_id ) {
@@ -824,6 +824,39 @@ sub as_hashref {
     };
 }
 
+sub deadline {
+  my $problem = shift;
+  #Get deadlines
+  my $problem_group = $problem->category_group;
+  my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($problem->cobrand)->new();
+  my %deadlines = $cobrand->problem_rules();
+  my $deadline;
+
+  if (!$problem->is_fixed){
+  if ( exists $deadlines{$problem_group} ){
+    foreach my $deadline_actions (@{ $deadlines{$problem_group} }){
+      if ($problem->lastupdate_council) {
+        if ( DateTime->now->subtract( days => $deadline_actions->{max_time} )->epoch >= $problem->lastupdate_council->epoch ){
+          $deadline = $deadline_actions->{action};
+          last;
+        }
+      }
+      else{
+        if ($problem->confirmed){
+          if ( DateTime->now->subtract( days => $deadline_actions->{max_time} )->epoch >= $problem->confirmed->epoch ){
+            $deadline = $deadline_actions->{action};
+            last;
+          }
+        }
+      }
+    }
+  }
+}
+  if (!length $deadline){
+      $deadline = 'noDeadLine';
+  }
+  return $deadline;
+}
 # we need the inline_constructor bit as we don't inherit from Moose
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 

@@ -115,40 +115,13 @@ sub problems : Path : Args(0) {
     };
 
     my @problems = $c->cobrand->problems->search( $params );
-    #Get deadlines
-    my %deadlines = $c->cobrand->problem_rules();
+    
     my @problems_arr;
     #Take out sensitive data
     foreach my $problem (@problems) {
-        my $problem_group = $problem->category_group($c);
+        my $problem_group = $problem->category_group;
         if ( ($c->stash->{category_group} && $c->stash->{category_group} eq $problem_group) || !$c->stash->{category_group} ){
-            my $deadline;
-            if (!$problem->is_fixed){
-                if ( exists $deadlines{$problem_group} ){
-                    $c->log->debug('ENTRA A GRUPO DEAD');
-                    foreach my $deadline_actions (@{ $deadlines{$problem_group} }){
-                        if ($problem->lastupdate_council) {
-                            $c->log->debug('ENTRA A GRUPO DEAD IF');
-                            if ( DateTime->now->subtract( days => $deadline_actions->{max_time} )->epoch >= $problem->lastupdate_council->epoch ){
-                                $deadline = $deadline_actions->{action};
-                                last;
-                            }
-                        }
-                        else{
-                            if ($problem->confirmed){
-                                $c->log->debug('ENTRA A GRUPO DEAD ELSE');
-                                if ( DateTime->now->subtract( days => $deadline_actions->{max_time} )->epoch >= $problem->confirmed->epoch ){
-                                    $deadline = $deadline_actions->{action};
-                                    last;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (!length $deadline){
-                $deadline = 'noDeadLine';
-            }
+            my $deadline = $problem->deadline($problem_group);
             push @problems_arr, {$problem->get_columns};
             $problems_arr[$#problems_arr]->{deadline} = $deadline;
             $problems_arr[$#problems_arr]->{group} = $problem_group;
