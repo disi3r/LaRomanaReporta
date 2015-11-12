@@ -157,16 +157,16 @@ function confirmHide(e){
 
 function ConfirmDialog(message){
     $('<div></div>').appendTo('body')
-                    .html('<div><h6>'+message+'?</h6></div>')
+                    .html('<div><h6>'+message+'</h6></div>')
                     .dialog({
                         modal: true, title: 'Ocultar reporte', zIndex: 10000, autoOpen: true,
                         width: '300px', resizable: false,
                         buttons: {
-                            Yes: function () {
+                            Si: function () {
                                 $("#hide-form").submit();
                                 $(this).dialog("close");
                             },
-                            No: function () {                              
+                            No: function () {
                                 $(this).dialog("close");
                             }
                         },
