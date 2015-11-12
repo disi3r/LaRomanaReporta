@@ -94,3 +94,11 @@
         $('div.bloque-sesion').slideUp();
     </script>
 [% END %]
+<script type="text/javascript">
+  $(document).keypress(function(e) {
+    if(e.which == 13) {
+        e.preventDefault();
+        $("#submit_sign_in").click();
+    }
+  });
+</script>
