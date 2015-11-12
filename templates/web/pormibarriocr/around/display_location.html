@@ -7,7 +7,7 @@
         = pc
         ? c.uri_for( "/rss/pc", pc )
         : c.uri_for( "/rss/l/$short_latitude,$short_longitude" );
-            
+
     email_url = c.uri_for(
         '/alert/list',
         {
@@ -115,7 +115,12 @@
 <script type="text/javascript">
     $.urlParam = function(name){
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-        return results[1] || 0;
+        try {
+          return results[1] || 0;
+        }
+        catch(err) {
+          return null;
+        }
     }
     if($.urlParam('list')==null || $.urlParam('list')!=1){
         set_active_nav_button('report-button');

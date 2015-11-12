@@ -196,7 +196,6 @@
                             <script>
                                 $("#current_user_avatar").error(function() { $( this ).attr("src", "/cobrands/pormibarrio/images/no-profile-picture.jpg"); }).
                                     attr( "src", "[% c.user.picture_url %]" );
-                                    console.log( "Error ajax." );
                                 $( document ).ajaxStart(function() {
                                   console.log( "Triggered ajaxStart handler." );
                                 });

@@ -32,9 +32,13 @@
 <script type="text/javascript">
     $.urlParam = function(name){
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-        return results[1] || 0;
+        try {
+          return results[1] || 0;
+        }
+        catch(err) {
+          return null;
+        }
     }
-    alert($.urlParam('list'));
     if($.urlParam('list')==1){
         set_active_nav_button('report-all-button');
     }else{
