@@ -55,7 +55,7 @@
                     </div>
                     <div class="reportar-hide-content user-info">
                         <form id="hide-form" method="post" action="/report/delete/[% problem.id %]" id="remove-from-site-form">
-                            <button onclick="confirmHide();" type="submit" id="key-tool-hide" class="btn btn-sky btn-small btn-comentar" value="Remove from site">[% loc('Confirm') %]</button>
+                            <button onclick="ConfirmDialog('¿Está seguro de que desea ocultar su reporte? Este no aparecerá más en la página si es ocultado.');" type="submit" id="key-tool-hide" class="btn btn-sky btn-small btn-comentar" value="Remove from site">[% loc('Confirm') %]</button>
                         </form>
                     </div>
                     <div style="" class="reportar-abuso-content user-info">
@@ -154,6 +154,28 @@ function confirmHide(e){
   }
   $("#hide-form").submit();
 }
+
+function ConfirmDialog(message){
+    $('<div></div>').appendTo('body')
+                    .html('<div><h6>'+message+'?</h6></div>')
+                    .dialog({
+                        modal: true, title: 'Ocultar reporte', zIndex: 10000, autoOpen: true,
+                        width: '300px', resizable: false,
+                        buttons: {
+                            Yes: function () {
+                                $("#hide-form").submit();
+                                $(this).dialog("close");
+                            },
+                            No: function () {                              
+                                $(this).dialog("close");
+                            }
+                        },
+                        close: function (event, ui) {
+                            return false;
+                            $(this).remove();
+                        }
+                    });
+    };
 </script>
 
 [% INCLUDE 'footer.html' %]
