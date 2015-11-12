@@ -533,7 +533,7 @@ meta data about the report.
 
 sub has_comments {
   my $self = shift;
-  
+
   my $c = $self->comments->search( { problem_id => $self->id } );
   if ( $c->first ) {
     return 1;
@@ -546,7 +546,8 @@ sub has_comments {
 sub meta_line {
     my ( $problem, $c ) = @_;
 
-    my $date_time = Utils::prettify_dt( $problem->confirmed );
+    #my $date_time = Utils::prettify_dt( $problem->confirmed );
+    my $date_time = $problem->confirmed->strftime('%d/%m/%Y a las %H:%M');
     my $meta = '';
 
     # FIXME Should be in cobrand
@@ -634,17 +635,17 @@ sub body {
 
 sub category_group {
 	my ( $problem, $c ) = @_;
-	
+
 	if ( $problem->category ) {
 		my $contact = $c->model('DB::Contact')->find({ category => $problem->category, deleted => 0 });
-		
+
 		if ( $contact ) {
 			if ( $contact->group_id ) {
 				return $contact->group_id;
 			}
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -664,7 +665,7 @@ sub can_display_external_id {
 
 # TODO Some/much of this could be moved to the template
 
-# either: 
+# either:
 #   "sent to council 3 mins later"
 #   "[Council name] ref: XYZ"
 # or
@@ -687,7 +688,7 @@ sub processed_summary_string {
     }
     if ($duration_clause and $external_ref_clause) {
         return "$duration_clause, $external_ref_clause"
-    } else { 
+    } else {
         return $duration_clause || $external_ref_clause
     }
 }

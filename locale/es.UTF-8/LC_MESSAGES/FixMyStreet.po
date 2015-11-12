@@ -3596,19 +3596,19 @@ msgstr "Notificado anonimamente en la categoría %s a las %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:592
 msgid "Reported in the %s category by %s at %s"
-msgstr "Notificado en la categoría %s por %s a las %s"
+msgstr "Notificado en la categoría %s por %s el %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:566
 msgid "Reported via %s anonymously at %s"
-msgstr "Notificado por %s de forma anónima a las %s"
+msgstr "Notificado por %s de forma anónima el %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:588
 msgid "Reported via %s by %s at %s"
-msgstr "Notificado por %s por %s a las %s"
+msgstr "Notificado por %s por %s el %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:562
 msgid "Reported via %s in the %s category anonymously at %s"
-msgstr "Notificado anonimamente por %s en la categoría %s a las %s"
+msgstr "Notificado anonimamente por %s en la categoría %s el %s"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:582
 msgid "Reported via %s in the %s category by %s at %s"
