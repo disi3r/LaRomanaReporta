@@ -180,10 +180,6 @@ sub email_sign_in : Private {
     	$c->send_email( 'login.txt', { to => $good_email } );
 	}
     $c->stash->{template} = 'auth/token.html';
-    #Redirect to my
-				my $uri = $c->uri_for( '/my', { mf1 => 1 } );
-			    $c->res->redirect( $uri );
-			    $c->detach;
 }
 
 =head2 social_signup
@@ -636,8 +632,7 @@ Used when trying to view a page that requires sign in when you're not.
 sub redirect : Private {
     my ( $self, $c ) = @_;
 
-    #my $uri = $c->uri_for( '/auth', { r => $c->req->path } );
-    my $uri = $c->uri_for( '/my' );
+    my $uri = $c->uri_for( '/auth', { r => $c->req->path } );
     $c->res->redirect( $uri );
     $c->detach;
 
