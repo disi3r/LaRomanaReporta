@@ -51,10 +51,10 @@ Returns the colour of pin to be used for a particular report
 sub pin_colour {
     my ( $self, $p, $context, $c, $categories ) = @_;
     #return 'green' if time() - $p->confirmed->epoch < 7 * 24 * 60 * 60;
-    
+
     if ( $context eq 'around' || $context eq 'reports' || $context eq 'my') {
 		my $category_name = $p->category;
-		
+
 		if ( $categories && $categories->{$category_name}) {
 			my $pin = 'group-'.$categories->{$category_name};
 			if ($p->is_fixed){
@@ -214,7 +214,7 @@ sub problem_rules {
 		]
 	);
 }
-
+sub report_sent_confirmation_email { 1; }
 sub admin_show_creation_graph { 0 }
 
 1;

@@ -4,6 +4,13 @@ Hola,
 
 Tu reporte sobre "<?=$values['title']?>" fue enviado a <?=$values['bodies_name']?>.
 
+Podés ver los detalles del reporte acá:
+<?=$values['problem_url']?>
+
+Recordá que si hacés clic en el enlace que lleva a tu reporte, tenés la opción de
+imprimirlo o guardarlo en PDF con el botón IMPRIMIR ubicado en la esquina superior
+derecha de la ventana donde estás viendo tu reporte.
+
 Gracias,
 
 <?=$values['signature']?>
