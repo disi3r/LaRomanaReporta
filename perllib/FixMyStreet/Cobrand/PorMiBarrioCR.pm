@@ -110,7 +110,7 @@ sub is_weekend {
 }
 
 sub to_working_days_date{
-	my ( $dt, $days ) = @_;
+	my ( $self, $dt, $days ) = @_;
     while ( $days > 0 ) {
         $dt->subtract ( days => 1 );
         next if is_public_holiday($dt) or is_weekend($dt);
@@ -131,85 +131,91 @@ sub problem_rules {
 		'1' => [
 			{
 				'max_time' => 10,
-				'action' => 'comptroller_overdue'
+				'class' => 'comptroller_overdue',
+				'action' => 'email'
 			},
 			{
 				'max_time' => 8,
-				'action' => 'problem-alert'
+				'class' => 'problem-alert'
 			},
 			{
 				'max_time' => 6,
-				'action' => 'problem-warning'
+				'class' => 'problem-warning'
 			}
 		],
 		'2' => [
 			{
 				'max_time' => 10,
-				'action' => 'comptroller_overdue'
+				'class' => 'comptroller_overdue',
+				'action' => 'email'
 			},
 			{
 				'max_time' => 8,
-				'action' => 'problem-alert'
+				'class' => 'problem-alert'
 			},
 			{
 				'max_time' => 6,
-				'action' => 'problem-warning'
+				'class' => 'problem-warning'
 			}
 		],
 		'3' => [
 			{
 				'max_time' => 10,
-				'action' => 'comptroller_overdue'
+				'class' => 'comptroller_overdue',
+				'action' => 'email'
 			},
 			{
 				'max_time' => 8,
-				'action' => 'problem-alert'
+				'class' => 'problem-alert'
 			},
 			{
 				'max_time' => 6,
-				'action' => 'problem-warning'
+				'class' => 'problem-warning'
 			}
 		],
 		'4' => [
 			{
 				'max_time' => 10,
-				'action' => 'comptroller_overdue'
+				'class' => 'comptroller_overdue',
+				'action' => 'email'
 			},
 			{
 				'max_time' => 8,
-				'action' => 'problem-alert'
+				'class' => 'problem-alert'
 			},
 			{
 				'max_time' => 6,
-				'action' => 'problem-warning'
+				'class' => 'problem-warning'
 			}
 		],
 		'5' => [
 			{
 				'max_time' => 10,
-				'action' => 'comptroller_overdue'
+				'class' => 'comptroller_overdue',
+				'action' => 'email'
 			},
 			{
 				'max_time' => 8,
-				'action' => 'problem-alert'
+				'class' => 'problem-alert'
 			},
 			{
 				'max_time' => 6,
-				'action' => 'problem-warning'
+				'class' => 'problem-warning'
 			}
 		],
 		'6' => [
 			{
 				'max_time' => 10,
-				'action' => 'comptroller_overdue'
+				'class' => 'comptroller_overdue',
+				'action' => 'email'
 			},
 			{
 				'max_time' => 8,
-				'action' => 'problem-alert'
+				'class' => 'problem-alert'
 			},
 			{
 				'max_time' => 6,
-				'action' => 'problem-warning'
+				'class' => 'problem-warning'
 			}
 		]
 	);

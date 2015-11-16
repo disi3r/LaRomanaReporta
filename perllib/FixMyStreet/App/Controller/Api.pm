@@ -121,9 +121,8 @@ sub problems : Path : Args(0) {
     foreach my $problem (@problems) {
         my $problem_group = $problem->category_group;
         if ( ($c->stash->{category_group} && $c->stash->{category_group} eq $problem_group) || !$c->stash->{category_group} ){
-            my $deadline = $problem->deadline($problem_group);
             push @problems_arr, {$problem->get_columns};
-            $problems_arr[$#problems_arr]->{deadline} = $deadline;
+            $problems_arr[$#problems_arr]->{deadline} = $problem->deadline->{class};
             $problems_arr[$#problems_arr]->{group} = $problem_group;
         }
     }

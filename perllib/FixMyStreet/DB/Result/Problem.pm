@@ -826,36 +826,41 @@ sub as_hashref {
 
 sub deadline {
   my $problem = shift;
+
+  my $parser = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
+  my $now = DateTime->now(formatter => $parser);
   #Get deadlines
   my $problem_group = $problem->category_group;
   my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($problem->cobrand)->new();
-  my %deadlines = $cobrand->problem_rules();
-  my $deadline;
+  if ($cobrand->deadlines){
+    my %deadlines = $cobrand->problem_rules();
+    my $deadline = { 'class' => 'noDeadLine' };
 
-  if (!$problem->is_fixed){
-  if ( exists $deadlines{$problem_group} ){
-    foreach my $deadline_actions (@{ $deadlines{$problem_group} }){
-      if ($problem->lastupdate_council) {
-        if ( DateTime->now->subtract( days => $deadline_actions->{max_time} )->epoch >= $problem->lastupdate_council->epoch ){
-          $deadline = $deadline_actions->{action};
-          last;
-        }
-      }
-      else{
-        if ($problem->confirmed){
-          if ( DateTime->now->subtract( days => $deadline_actions->{max_time} )->epoch >= $problem->confirmed->epoch ){
-            $deadline = $deadline_actions->{action};
-            last;
+    if ( !$problem->is_fixed and $problem->is_open ){
+      if ( exists $deadlines{$problem_group} ){
+        foreach my $deadline_actions (@{ $deadlines{$problem_group} }){
+          #Deadline is now - maxtime - nonwork
+          my $deadline_date = $cobrand->to_working_days_date($now, $deadline_actions->{max_time});
+          if ($problem->lastupdate_council) {
+            if ( $deadline_date->epoch >= $problem->lastupdate_council->epoch ){
+              $deadline = $deadline_actions;
+              last;
+            }
+          }
+          else{
+            if ($problem->confirmed){
+              if ( $deadline_date->epoch >= $problem->confirmed->epoch ){
+                $deadline = $deadline_actions;
+                last;
+              }
+            }
           }
         }
       }
     }
+    return $deadline;
   }
-}
-  if (!length $deadline){
-      $deadline = 'noDeadLine';
-  }
-  return $deadline;
+  return 0;
 }
 # we need the inline_constructor bit as we don't inherit from Moose
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
