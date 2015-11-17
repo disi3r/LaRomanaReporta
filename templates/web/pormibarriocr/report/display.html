@@ -21,7 +21,27 @@
 		<div class="report visible-print-block" >
 			<div id="update-display" class="info-report scrolled-report">
                 <div id="print-header">
-                    ACA VA EL HEADER
+                    <table align="center" style="width: 100%; height: 180px; margin: 0 auto 0 auto;">
+                        <tbody>
+                          <tr>
+                            <td align="center" style="vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/escudoPalmares.png"></td>
+                            <td align="center" style="vertical-align: center; horizontal-align: center;">
+                              <div id="report-print-header-title">
+                                <br/><br/>
+                                Comprobante de reporte<br/>
+                                Reporte Nº [% problem.id | html %]<br/>
+                                Fecha:
+                              </div>
+                            </td>
+                            <td align="center" style="vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/LogoPMBazulFondoBlanco.png"></td>
+                          </tr>
+                          <tr>
+                            <td align="center" style="vertical-align: center; horizontal-align: center;">Municipalidad de Palmares <br/> www.munipalmares.go.cr</td>
+                            <td></td>
+                            <td align="center" style="vertical-align: center; horizontal-align: center;">www.pormibarrio.cr</td>
+                          </tr>
+                        </tbody>
+                    </table>
                 </div>
                 [% INCLUDE 'report/_main.html' %]
                 [% TRY %][% INCLUDE 'report/_message_manager.html' %][% CATCH file %][% END %]
@@ -126,6 +146,11 @@
 </script>
 <script>
 function printReportDetail(){
+    var fullDate = new Date();
+    var twoDigitMonth = fullDate.getMonth()+"";if(twoDigitMonth.length==1)	twoDigitMonth="0" +twoDigitMonth;
+    var twoDigitDate = fullDate.getDate()+"";if(twoDigitDate.length==1)	twoDigitDate="0" +twoDigitDate;
+    var currentDate = twoDigitDate + "/" + twoDigitMonth + "/" + fullDate.getFullYear() + " " + fullDate.getHours() + ":" + fullDate.getMinutes();
+    $("#report-print-header-title").append(currentDate);
     var content = document.getElementById("update-display");
     var pri = document.getElementById("ifmcontentstoprint").contentWindow;
     pri.document.open();
