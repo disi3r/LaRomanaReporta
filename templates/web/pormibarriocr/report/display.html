@@ -30,7 +30,7 @@
                                 <br/><br/>
                                 Comprobante de reporte<br/>
                                 Reporte Nº [% problem.id | html %]<br/>
-                                Fecha:
+                                Fecha: <span id="today"></span>
                               </div>
                             </td>
                             <td align="center" style="vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/LogoPMBazulFondoBlanco.png"></td>
@@ -150,7 +150,8 @@ function printReportDetail(){
     var twoDigitMonth = fullDate.getMonth()+"";if(twoDigitMonth.length==1)	twoDigitMonth="0" +twoDigitMonth;
     var twoDigitDate = fullDate.getDate()+"";if(twoDigitDate.length==1)	twoDigitDate="0" +twoDigitDate;
     var currentDate = twoDigitDate + "/" + twoDigitMonth + "/" + fullDate.getFullYear() + " " + fullDate.getHours() + ":" + fullDate.getMinutes();
-    $("#report-print-header-title").append(currentDate);
+    $("#today").empty();
+    $("#today").append(currentDate);
     var content = document.getElementById("update-display");
     var pri = document.getElementById("ifmcontentstoprint").contentWindow;
     pri.document.open();
