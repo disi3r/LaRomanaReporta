@@ -223,4 +223,6 @@ sub problem_rules {
 sub report_sent_confirmation_email { 1; }
 sub admin_show_creation_graph { 0 }
 
+sub skip_update_check { 1 }
+
 1;
