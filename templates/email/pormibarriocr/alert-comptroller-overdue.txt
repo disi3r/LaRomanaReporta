@@ -1,0 +1,9 @@
+Subject: Reporte Atrasado - '<?=$values['title']?>'
+
+El siguiente reporte seencuentra atrasado:
+
+	<?=$values['title']?>, en la categoría: <?=$values['category']?>
+	
+	<?=$values['problem_url']?>
+
+<?=$values['signature']?>

@@ -425,12 +425,13 @@ sub update_contacts : Private {
 sub body_params : Private {
     my ( $self, $c ) = @_;
 
-    my @fields = qw/name endpoint jurisdiction api_key send_method send_comments suppress_alerts send_extended_statuses comment_user_id can_be_devolved parent deleted/;
+    my @fields = qw/name endpoint jurisdiction api_key send_method send_comments suppress_alerts send_extended_statuses comment_user_id comptroller_user_id can_be_devolved parent deleted/;
     my %defaults = map { $_ => '' } @fields;
     %defaults = ( %defaults,
         send_comments => 0,
         suppress_alerts => 0,
         comment_user_id => undef,
+        comptroller_user_id => undef,
         send_extended_statuses => 0,
         can_be_devolved => 0,
         parent => undef,
