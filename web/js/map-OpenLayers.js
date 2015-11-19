@@ -95,7 +95,7 @@ function fms_markers_list(pins, transform) {
         });
         markers.push( marker );
     }
-    if(locatorGeoLonLat!=null){
+    if(typeof locatorGeoLonLat != 'undefined'){
         //alert(locatorName);
         var placeOfReferenceLocator = new OpenLayers.Feature.Vector(locatorGeoLonLat, {
             colour: 'locator',
