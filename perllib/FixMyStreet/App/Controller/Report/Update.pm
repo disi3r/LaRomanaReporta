@@ -161,7 +161,9 @@ sub process_user : Private {
         my $user = $c->user->obj;
         $update->user( $user );
         $update->name( $user->name );
-        $c->stash->{field_errors}->{name} = _('You have successfully signed in; please check and confirm your details are accurate:');
+        if ( !$c->cobrand->skip_update_check ) {
+            $c->stash->{field_errors}->{name} = _('You have successfully signed in; please check and confirm your details are accurate:');
+        }
         return 1;
     }
 
