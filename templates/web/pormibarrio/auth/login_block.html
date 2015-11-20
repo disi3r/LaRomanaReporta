@@ -50,7 +50,7 @@
             [% END %]
             <p class="no-account">
                 ¿No utilizas redes sociales? No hay problema!<br>
-                <a class="green registrate" href="#">Regístrate aquí con tu mail</a>
+                <a class="green registrate" href="#">Regístrate aquí con tu correo electrónico</a>
             </p>
         </div>
     </div> <!-- bloque-sesion -->
@@ -66,7 +66,7 @@
             <input type="text" placeholder="Nombre y apellido" class="form-focus-trigger validName form-control [% IF field_errors.name %] error [% END %]" value="[% user.name | html %]" name="name" id="form_name" >
             [% IF field_errors.name  %]
                 <p class="error-m">[% field_errors.name %]</p>
-            [% END %]                        
+            [% END %]
             <input type="text" placeholder="Cédula de Identidad: 0.000.000-0" class="form-control form-focus-trigger [% IF field_errors.identity_document %] error [% END %]" value="[% user.identity_document | html %]" name="identity_document" id="identity_document" >
             [% IF field_errors.identity_document  %]
                 <p class="error-m">[% field_errors.identity_document %]</p>
@@ -74,7 +74,7 @@
             <input class="form-control" type="text" value="[% user.phone | html %]" name="phone" id="form_phone" placeholder="Teléfono (opcional)">
             [% IF field_errors.phone  %]
                 <p class="error-m">[% field_errors.phone %]</p>
-            [% END %]           
+            [% END %]
             <input name="password_register" id="password_register" type="password" placeholder="Contraseña" class="form-control [% IF field_errors.password %] error [% END %]">
             [% IF field_errors.password  %]
                 <p class="error-m">[% field_errors.password %]</p>

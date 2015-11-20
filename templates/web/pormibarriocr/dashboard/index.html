@@ -48,8 +48,8 @@
 	    [%
 	    rows = {
 	        '0' => [ "total", "Total de reportes recibidos" ]
-	        '1' => [ "fixed - council", "Reportes marcados como "Arreglado" por la Municipalidad" ]
-	        '2' => [ "fixed_user", "Reportes marcados como "Arreglado" por los usuarios" ]
+	        '1' => [ "fixed - council", "Reportes marcados como 'Arreglado' por la Municipalidad" ]
+	        '2' => [ "fixed_user", "Reportes marcados como 'Arreglado' por los usuarios" ]
 	    };
 	    FOR row IN rows %]
 	    <tr id="[% row.value.0.replace('[^\w]+', '_' ) %]">
@@ -130,7 +130,7 @@
 
                 </select>
 <p>Estados de respuesta: <select name="state">
-<option value=''>[% loc('All') %]</option>
+<option value=''>Todas/Todos</option>
                 [% FOREACH state IN [ ['investigating',
                     loc('Investigating')], ['action scheduled', loc('Action Scheduled')],
                     ['in progress', loc('In Progress')], ['duplicate', loc('Duplicate')],

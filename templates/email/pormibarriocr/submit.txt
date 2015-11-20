@@ -20,9 +20,9 @@ Teléfono: <?=$values['phone_line']?>
 
 <?=$values['category_line']?>
 
-Asunto: <?=$values['title']?>
+Título del reporte: <?=$values['title']?>
 
-Detalles: <?=$values['detail']?>
+Descripción del reporte: <?=$values['detail']?>
 
 <?=$values['easting_northing']?>Latitud: <?=$values['latitude']?>
 
@@ -30,7 +30,7 @@ Longitud: <?=$values['longitude']?>
 
 <?=$values['closest_address']?>----------
 
-Si responde este mail se le responderá al usuario que hizo el reporte.
+Si responde este correo electrónico se le responderá al usuario que hizo el reporte.
 
 <?=$values['signature']?>
 

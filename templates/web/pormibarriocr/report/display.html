@@ -149,7 +149,15 @@ function printReportDetail(){
     var fullDate = new Date();
     var twoDigitMonth = fullDate.getMonth()+"";if(twoDigitMonth.length==1)	twoDigitMonth="0" +twoDigitMonth;
     var twoDigitDate = fullDate.getDate()+"";if(twoDigitDate.length==1)	twoDigitDate="0" +twoDigitDate;
-    var currentDate = twoDigitDate + "/" + twoDigitMonth + "/" + fullDate.getFullYear() + " " + fullDate.getHours() + ":" + fullDate.getMinutes();
+    var hour = fullDate.getHours();
+    if (hour < 10){
+      hour = "0" + hour;
+    }
+    var minute = fullDate.getMinutes();
+    if (minute < 10){
+      minute = "0" + minute;
+    }
+    var currentDate = twoDigitDate + "/" + twoDigitMonth + "/" + fullDate.getFullYear() + " " + hour + ":" + minute;
     $("#today").empty();
     $("#today").append(currentDate);
     var content = document.getElementById("update-display");

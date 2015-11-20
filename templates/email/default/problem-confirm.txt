@@ -11,7 +11,7 @@ Si no puedes hacer click en el link debajo, copialo y pegalo en tu navegador.
 Título del problema reportado:
 [% report.title %]
 
-Detalles:
+Descripción del reporte:
 [% report.detail %]
 
 [% INCLUDE 'signature.txt' %]

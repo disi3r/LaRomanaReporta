@@ -413,15 +413,13 @@ msgstr "Añadido %s"
 msgid "Address"
 msgstr "%d direcciones"
 
-#: templates/web/pormibarrio/my/edit.html:60
 #: templates/web/pormibarriocr/my/edit.html:66
-#, fuzzy
-msgid "Again"
-msgstr "Otra vez:"
+sgid "Again"
+msgstr "Repetir contraseña"
 
 #: templates/web/default/auth/change_password.html:29
 msgid "Again:"
-msgstr "Otra vez:"
+msgstr "Repetir contraseña"
 
 #: templates/web/pormibarrio/report/new/fill_in_details_form.html:141
 #: templates/web/pormibarrio/report/new/fill_in_details_form.html:156
@@ -2620,9 +2618,7 @@ msgstr "Padre"
 msgid "Partial"
 msgstr "Parcial"
 
-#: templates/web/pormibarrio/my/edit.html:59
 #: templates/web/pormibarriocr/my/edit.html:65
-#, fuzzy
 msgid "Password"
 msgstr "Contraseña:"
 
@@ -5268,7 +5264,7 @@ msgstr "Su contraseña"
 #: templates/web/pormibarriocr/my/my.html:38
 #: templates/web/pormibarriocr/my/my.html:54
 msgid "Your password has been changed"
-msgstr "Su contraseña ha cambiado."
+msgstr "Los cambios se han guardado."
 
 #: templates/web/bromley/report/new/fill_in_details_form.html:137
 #: templates/web/bromley/report/new/fill_in_details_form.html:184
