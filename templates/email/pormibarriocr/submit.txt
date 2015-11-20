@@ -8,7 +8,7 @@ Un usuario de Por Mi Barrio ha ingresado un problema que requiere su atención.
 <?=$values['fuzzy']?>, o para hacer una actualización del reporte,
 por favor visite el siguiente link:
 
-    <?=$values['url']?>
+   <?=$values['email_base_url']?>/auth?r=/report/<?=$values['problem_id']?>
 
 <?=$values['has_photo']?>----------
 

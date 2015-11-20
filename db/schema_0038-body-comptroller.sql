@@ -1,0 +1,1 @@
+ALTER TABLE body ADD COLUMN comptroller_user_id integer REFERENCES users (id);
