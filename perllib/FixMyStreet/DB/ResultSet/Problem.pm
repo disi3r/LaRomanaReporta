@@ -285,6 +285,8 @@ sub send_reports {
         my %h = map { $_ => $row->$_ } qw/id title detail name category latitude longitude used_map/;
         map { $h{$_} = $row->user->$_ || '' } qw/email phone/;
         $h{problem_url} = mySociety::Config::get('BASE_URL') . "/report/" . $row->id;
+        $h{email_base_url} = $email_base_url;
+        $h{problem_id} = $row->id;
         $h{confirmed} = DateTime::Format::Pg->format_datetime( $row->confirmed->truncate (to => 'second' ) )
             if $row->confirmed;
 
@@ -292,7 +294,7 @@ sub send_reports {
         $h{url} = $email_base_url . $row->url;
         $h{admin_url} = $rs->get_admin_url($cobrand, $row);
         #$h{phone_line} = $h{phone} ? _('Phone:') . " $h{phone}\n\n" : '';
-        $h{phone_line} = $row->user->phone;
+        $h{phone_line} = $row->user->phone ? $row->user->phone : '';
         if ($row->photo) {
             $h{has_photo} = _("This web page also contains a photo of the problem, provided by the user.") . "\n\n";
             $h{image_url} = $email_base_url . '/photo/' . $row->id . '.full.jpeg';

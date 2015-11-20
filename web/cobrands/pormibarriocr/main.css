@@ -2693,7 +2693,8 @@ tr.problem-warning{
 
 /*PRINT*/
 #print-header{
-visibility: hidden;
+	visibility: hidden;
+	height: 0;
 }
 
 @media print {
