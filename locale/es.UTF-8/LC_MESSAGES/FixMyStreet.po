@@ -414,7 +414,7 @@ msgid "Address"
 msgstr "%d direcciones"
 
 #: templates/web/pormibarriocr/my/edit.html:66
-sgid "Again"
+msgid "Again"
 msgstr "Repetir contraseña"
 
 #: templates/web/default/auth/change_password.html:29
