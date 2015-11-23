@@ -2585,7 +2585,7 @@ msgstr "Nuestro código es open source y <a href=\"http://github.com/mysociety/f
 #: templates/web/pormibarrio/dashboard/deadlines.html:47
 #: templates/web/pormibarriocr/dashboard/deadlines.html:45
 msgid "Overdue"
-msgstr "Atrasado"
+msgstr "Retrasado"
 
 #: templates/web/pormibarrio/dashboard/deadlines.html:47
 #: templates/web/pormibarriocr/dashboard/deadlines.html:45
@@ -2600,7 +2600,7 @@ msgstr "Advertencia"
 #: templates/web/pormibarrio/dashboard/deadlines.html:47
 #: templates/web/pormibarriocr/dashboard/deadlines.html:45
 msgid "No Dead Line"
-msgstr "Sin expirar"
+msgstr "Sin fecha límite"
 
 #: templates/web/default/admin/list_updates.html:8
 msgid "Owner"

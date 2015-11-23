@@ -29,7 +29,7 @@
 	        </select>
 	    </div>
 	    <div class="dash-filter">
-			<label for="state">[% loc('State') %]</label>
+			<label for="state">Estado de respuesta</label>
 			<select name="state">
 				<option value=''>Todos</option>
 		            [% FOREACH stateElem IN [ ['confirmed', loc('Open')], ['investigating',
@@ -41,7 +41,7 @@
 	        <input type="submit" value="Buscar">
 	    </div>
 		<div class="deadlines-filter">
-			<label for="deadline">Deadline:</label>
+			<label for="deadline">Fecha límite (8 días hábiles):</label>
 	            [% FOREACH deadlineElem IN [ ['problem-overdue', loc('Overdue')], ['problem-alert', loc('Alert')], ['problem-warning', loc('Warning')], ['noDeadLine', loc('No Dead Line')] ] %]
 	            <input type="checkbox" name="deadline" class="deadline" checked value="[% deadlineElem.0 %]">[% deadlineElem.1 %]</input>
 	            [% END %]
@@ -54,7 +54,7 @@
 <table class="tablesorter table" width="100%" id="reports">
 	<thead>
         <tr>
-            <th>Titulo</th><th>Grupo</th><th>Categoria</th><th>Creado</th><th>Ultima actualizacion</th><th>Estado</th>
+            <th>Título</th><th>Grupo</th><th>Categoría</th><th>Creado</th><th>Última actualización</th><th>Estado de respuesta</th>
         </tr>
     </thead>
     [% INCLUDE problemsb %]
