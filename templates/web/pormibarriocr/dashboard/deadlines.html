@@ -32,11 +32,9 @@
 			<label for="state">[% loc('State') %]</label>
 			<select name="state">
 				<option value=''>[% loc('All') %]</option>
-		            [% FOREACH stateElem IN [ ['investigating',
-					loc('Investigating')], ['action scheduled', loc('Action Scheduled')],
-					['in progress', loc('In Progress')], ['duplicate', loc('Duplicate')],
-					['not responsible', loc('Not Responsible')],['clarify', loc('Clarify Report')],
-					['fixed', loc('Fixed')] ] %]
+		            [% FOREACH stateElem IN [ ['confirmed', loc('Open')], ['investigating',
+		            loc('Investigating')], ['action scheduled', loc('Planned')], ['in progress',
+		            loc('In Progress')], ['closed', loc('Closed')], ['fixed', loc('Fixed')] ] %]
 		            <option [% 'selected ' IF stateElem.0 == state %] value="[% stateElem.0 %]">[% stateElem.1 %]</option>
 		            [% END %]
 	        </select>
@@ -112,7 +110,7 @@
 			<td>[% p.category | html %]</td>
 			<td class="time">[% p.created IF p.created %]</td>
 			<td class="time">[% p.lastupdate_council IF p.lastupdate_council %]</td>
-			<td>[% p.state | html %]</td>
+			<td>[% p.state_name | html %]</td>
 		</tr>
 	[% END %]
 	</tbody>

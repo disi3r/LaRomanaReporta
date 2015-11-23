@@ -124,6 +124,7 @@ sub problems : Path : Args(0) {
             push @problems_arr, {$problem->get_columns};
             $problems_arr[$#problems_arr]->{deadline} = $problem->deadline->{class};
             $problems_arr[$#problems_arr]->{group} = $problem_group;
+            $problems_arr[$#problems_arr]->{state_name} = $problem->as_hashref($c)->{state_t};
         }
     }
     return \@problems_arr;
