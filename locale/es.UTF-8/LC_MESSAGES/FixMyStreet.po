@@ -789,8 +789,9 @@ msgstr "Hacé click en el mapa para notificar un problema"
 #: templates/web/zurich/admin/report_edit.html:98
 #: templates/web/zurich/admin/stats.html:31
 #: templates/web/zurich/report/banner.html:13
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
 msgid "Closed"
-msgstr "Cerrada"
+msgstr "Cerrado"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:774
 msgid "Closed by council"
@@ -1452,6 +1453,7 @@ msgstr ""
 #: templates/web/pormibarriocr/report/banner.html:12
 #: templates/web/pormibarriocr/report/update-form.html:47
 #: templates/web/pormibarriocr/report/update-form.html:51
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
 msgid "Fixed"
 msgstr "Arreglado"
 
@@ -2934,7 +2936,6 @@ msgstr "Por favor, indica tu nombre."
 #: templates/web/pormibarrio/js/translation_strings.html:8
 #: templates/web/pormibarriocr/js/translation_strings.html:8
 #: templates/web/seesomething/js/translation_strings.html:4
-#, fuzzy
 msgid "Please enter your full name, councils need this information – if you do not wish your name to be shown on the site, untick the box below"
 msgstr "Por favor escriba su nombre completo, la Municipalidad necesita esta información - si usted no desea que su nombre aparecerá en la página, desactive la casilla de abajo"
 
@@ -5520,6 +5521,55 @@ msgstr "no se muestra pin porque el usuario no usó el mapa"
 #: perllib/FixMyStreet/DB/ResultSet/Problem.pm:372
 msgid "this type of local problem"
 msgstr "este tipo de problema local"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "clarify"
+msgstr "clarificar reporte"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "fixed - council"
+msgstr "arreglado - municipalidad"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "fixed - user"
+msgstr "arreglado - usuario"
+
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "unable to fix"
+msgstr "no se puede arreglar"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "not responsible"
+msgstr "no responsable"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "duplicate"
+msgstr "duplicado"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "internal referral"
+msgstr "referencia interna"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "action scheduled"
+msgstr "acción agendada"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "planned"
+msgstr "planificado"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "in progress"
+msgstr "en progreso"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "investigating"
+msgstr "investigando"
+
+#: perllib/FixMyStreet/DB/Result/Problem.pm:817
+msgid "confirmed"
+msgstr "abierto"
 
 #: perllib/Utils.pm:235
 msgid "today"

@@ -18,7 +18,7 @@ use RABX;
 sub email_alerts ($) {
     my ( $rs ) = @_;
 
-    my $q = $rs->search( { '-AND' => [ 
+    my $q = $rs->search( { '-AND' => [
         ref => {'-not_like', '%local_problems%' },
         ref => {'-not_like', '%comptroller_overdue%' },
         ] } );
@@ -43,8 +43,8 @@ sub email_alerts ($) {
             from alert, $item_table";
         }
         $query .= "
-            where alert_type='$ref' 
-            and whendisabled is null 
+            where alert_type='$ref'
+            and whendisabled is null
             and $item_table.confirmed >= whensubscribed
             and $item_table.confirmed >= ms_current_timestamp() - '7 days'::interval
             and (select whenqueued from alert_sent where alert_sent.alert_id = alert.id and alert_sent.parameter::integer = $item_table.id) is null
@@ -64,8 +64,8 @@ sub email_alerts ($) {
 
             my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($row->{alert_cobrand})->new();
 
-            # Cobranded and non-cobranded messages can share a database. In this case, the conf file 
-            # should specify a vhost to send the reports for each cobrand, so that they don't get sent 
+            # Cobranded and non-cobranded messages can share a database. In this case, the conf file
+            # should specify a vhost to send the reports for each cobrand, so that they don't get sent
             # more than once if there are multiple vhosts running off the same database. The email_host
             # call checks if this is the host that sends mail for this cobrand.
             next unless $cobrand->email_host;
@@ -130,6 +130,9 @@ sub email_alerts ($) {
                 }
                 if($row->{state} eq "action scheduled"){
                     $data{state_message} = "acción agendada";
+                }
+                if($row->{state} eq "clarify"){
+                    $data{state_message} = "clarificar reporte";
                 }
                 #$data{state_message} = _("Este reporte ha sido marcado como abierto.");
                 #$data{state_message} = $row->{state};
@@ -267,17 +270,17 @@ sub send_comptroller_alerts() {
         print "\nCOBRAND: \n";
         print $alert->cobrand;
         print "\nDATA: \n";
-        my %data = ( 
-            template => $template, 
-            data => '', 
-            alert_id => $alert->id, 
-            alert_email => $alert->user->email, 
-            lang => $alert->lang, 
-            cobrand => $alert->cobrand, 
-            cobrand_data => $alert->cobrand_data 
+        my %data = (
+            template => $template,
+            data => '',
+            alert_id => $alert->id,
+            alert_email => $alert->user->email,
+            lang => $alert->lang,
+            cobrand => $alert->cobrand,
+            cobrand_data => $alert->cobrand_data
         );
         my $q = "select id, title, category from problem where id = ?
-            and (select whenqueued from alert_sent where alert_sent.alert_id = ? and 
+            and (select whenqueued from alert_sent where alert_sent.alert_id = ? and
                 alert_sent.parameter::integer = problem.id) is null";
         $q = dbh()->prepare($q);
         $q->execute($alert->parameter, $alert->id);
@@ -286,7 +289,7 @@ sub send_comptroller_alerts() {
                 alert_id  => $alert->id,
                 parameter => $row->{id},
             } );
-            
+
             my $url = mySociety::Config::get('BASE_URL');
             $data{category} = $row->{category};
             $data{title} = $row->{title};

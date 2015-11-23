@@ -1,14 +1,12 @@
 Subject: Reestablecer contraseña de tu cuenta en Por Mi Barrio
 
-Para reestablecer la contraseña debe seguir los siguientes pasos:
+Para reestablecer la contraseña debés seguir los siguientes pasos:
 
+1. Has click en el siguiente enlace: [% c.uri_for_action( 'auth/token', token ) %]
 
-  1. Accese al link: [% c.uri_for_action( 'auth/token', token ) %] 
+2. Escogé la opción Editar.
 
-  2. Escoja la opción Editar. 
-
-  3. Seleccione la opción cambiar contraseña.
+3. Seleccioná la opción cambiar contraseña.
 
 
 [% INCLUDE 'signature.txt' %]
-

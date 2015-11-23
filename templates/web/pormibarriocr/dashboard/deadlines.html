@@ -6,21 +6,21 @@
 	<div class="filters">
 		<div class="dash-filter">
 			<label for="start_date">[% loc('Start Date:') %]</label>
-			<input type="text" placeholder="Introduzca la fecha con el formato año-mes-día" name="start_date" id="stats-start-date"
+			<input type="text" placeholder="Introduzca la fecha con el formato día/mes/año" name="start_date" id="stats-start-date"
 			  value="[% start_date ? start_date : '' | html %]" />
 
 			<label for="end_date">[% loc('End Date:') %]</label>
-			<input type="text" placeholder="Introduzca la fecha con el formato año-mes-día" name="end_date" id="stats-end-date" size="5" value="[% end_date ? end_date : '' | html %]" />
+			<input type="text" placeholder="Introduzca la fecha con el formato día/mes/año" name="end_date" id="stats-end-date" size="5" value="[% end_date ? end_date : '' | html %]" />
 	    </div>
 	    <div class="dash-filter">
 	        <label for="category_group">[% loc('Group') %]</label>
-	        <select id="category_group" class="bloq-select" name="category_group"><option value=''>[% loc('All') %]</option>
+	        <select id="category_group" class="bloq-select" name="category_group"><option value=''>Todos</option>
 	            [% FOR cg IN category_groups_seen %]
 	                	<option value="[% cg.0 %]"[% ' selected' IF cg.0 == category_group %]>[% cg.1 %]</option>
 	            [% END %]
 	        </select>
 	        <label for="category">[% loc('Category') %]</label>
-	        <select id="category" class="bloq-select" name="category"><option value=''>[% loc('All') %]</option>
+	        <select id="category" class="bloq-select" name="category"><option value=''>Todas</option>
 	            [% FOR cat_op IN category_options %]
 	            	[% IF NOT loop.first %]
 	                	<option value='[% cat_op | html %]'[% ' selected' IF category == cat_op %]>[% cat_op | html %]</option>
@@ -31,7 +31,7 @@
 	    <div class="dash-filter">
 			<label for="state">[% loc('State') %]</label>
 			<select name="state">
-				<option value=''>[% loc('All') %]</option>
+				<option value=''>Todos</option>
 		            [% FOREACH stateElem IN [ ['confirmed', loc('Open')], ['investigating',
 		            loc('Investigating')], ['action scheduled', loc('Planned')], ['in progress',
 		            loc('In Progress')], ['closed', loc('Closed')], ['fixed', loc('Fixed')] ] %]
@@ -89,13 +89,13 @@
 </script>
 <script type="text/javascript" src="[% version('/js/jquery.tablesorter.min.js') %]"></script>
 <script>
-	$(document).ready(function() 
+	$(document).ready(function()
 	    {
 	    	$('.time').each(function(){
 	    		$(this).html($(this).html().split(" ")[0]);
 	    	});
-	        $("#reports").tablesorter( {sortList: [[3,1], [4,0]]} ); 
-	    } 
+	        $("#reports").tablesorter( {sortList: [[3,1], [4,0]]} );
+	    }
 	);
 </script>
 </script>
