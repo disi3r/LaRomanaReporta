@@ -430,13 +430,6 @@ msgstr "Repetir contraseña"
 msgid "Agreed"
 msgstr "Acepto"
 
-#: templates/web/pormibarrio/dashboard/deadlines.html:47
-#: templates/web/pormibarrio/dashboard/deadlines.html:48
-#: templates/web/pormibarriocr/dashboard/deadlines.html:47
-#: templates/web/pormibarriocr/dashboard/deadlines.html:48
-msgid "Alert"
-msgstr ""
-
 #: templates/web/default/admin/timeline.html:35
 msgid "Alert %d created for %s, type %s, parameters %s / %s"
 msgstr "Alerta %d creada por %s , tipo %s , los parámetros %s / %s"
@@ -2323,13 +2316,6 @@ msgstr "Siguiente"
 msgid "No"
 msgstr "No"
 
-#: templates/web/pormibarrio/dashboard/deadlines.html:47
-#: templates/web/pormibarrio/dashboard/deadlines.html:48
-#: templates/web/pormibarriocr/dashboard/deadlines.html:47
-#: templates/web/pormibarriocr/dashboard/deadlines.html:48
-msgid "No Dead Line"
-msgstr ""
-
 #: templates/web/default/admin/user-form.html:33
 msgid "No body"
 msgstr "Sin organismo"
@@ -2597,9 +2583,24 @@ msgid "Our code is open source and <a href=\"http://github.com/mysociety/fixmyst
 msgstr "Nuestro código es open source y <a href=\"http://github.com/mysociety/fixmystreet\"> está disponible en GitHub </a>."
 
 #: templates/web/pormibarrio/dashboard/deadlines.html:47
-#: templates/web/pormibarriocr/dashboard/deadlines.html:47
+#: templates/web/pormibarriocr/dashboard/deadlines.html:45
 msgid "Overdue"
-msgstr ""
+msgstr "Atrasado"
+
+#: templates/web/pormibarrio/dashboard/deadlines.html:47
+#: templates/web/pormibarriocr/dashboard/deadlines.html:45
+msgid "Alert"
+msgstr "Alerta"
+
+#: templates/web/pormibarrio/dashboard/deadlines.html:47
+#: templates/web/pormibarriocr/dashboard/deadlines.html:45
+msgid "Warning"
+msgstr "Advertencia"
+
+#: templates/web/pormibarrio/dashboard/deadlines.html:47
+#: templates/web/pormibarriocr/dashboard/deadlines.html:45
+msgid "No Dead Line"
+msgstr "Sin expirar"
 
 #: templates/web/default/admin/list_updates.html:8
 msgid "Owner"
@@ -4807,13 +4808,6 @@ msgstr "Visualizando un problema"
 #: templates/web/pormibarriocr/reports/body.html:16
 msgid "Wards of this council"
 msgstr "Barrios de este Municipalidad"
-
-#: templates/web/pormibarrio/dashboard/deadlines.html:47
-#: templates/web/pormibarrio/dashboard/deadlines.html:48
-#: templates/web/pormibarriocr/dashboard/deadlines.html:47
-#: templates/web/pormibarriocr/dashboard/deadlines.html:48
-msgid "Warning"
-msgstr ""
 
 #: templates/web/default/alert/choose.html:6
 #: templates/web/default/around/around_index.html:13

@@ -42,8 +42,7 @@
 	    </div>
 		<div class="deadlines-filter">
 			<label for="deadline">Deadline:</label>
-	            [% FOREACH deadlineElem IN [ ['problem-overdue', loc('Overdue')], ['problem-alert',
-	            loc('Alert')], ['problem-warning', loc('Warning')], ['noDeadLine', loc('No Dead Line')] ] %]
+	            [% FOREACH deadlineElem IN [ ['problem-overdue', loc('Overdue')], ['problem-alert', loc('Alert')], ['problem-warning', loc('Warning')], ['noDeadLine', loc('No Dead Line')] ] %]
 	            <input type="checkbox" name="deadline" class="deadline" checked value="[% deadlineElem.0 %]">[% deadlineElem.1 %]</input>
 	            [% END %]
 	            <!-- if( $element ~~ @list ){ ... } -->
