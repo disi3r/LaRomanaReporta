@@ -2705,6 +2705,14 @@ tr.problem-warning{
 	height: 200px;
   }
 
+  #report_photo_link{
+  	display: none;
+  }
+
+  #report_photo{
+  	margin-left: 30px;
+  }
+
   #display_problem_print {
   	visibility: hidden;
   }

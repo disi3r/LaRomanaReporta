@@ -167,6 +167,7 @@ function printReportDetail(){
     pri.document.write(content.innerHTML);
     pri.document.close();
     pri.focus();
+    var $photo = $("#report_photo_img").clone();
     var $head = $("#ifmcontentstoprint").contents().find("head");
     $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/base.css?1444680842", type: "text/css" }));
     $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/layout.css?1444680842", type: "text/css" }));
@@ -175,19 +176,11 @@ function printReportDetail(){
     $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/bootstrap.min.css?1444680842", type: "text/css" }));
     $head.append($("<link/>",{ rel: "stylesheet", href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic", type: "text/css" }));
     $head.append($("<link/>",{ rel: "stylesheet", href: "/js/OpenLayers-2.13.1/theme/default/style.css", type: "text/css" }));
+    $("#ifmcontentstoprint").contents().find("#report_photo").append($photo);
     $('#ifmcontentstoprint').ready(function() {
-        setTimeout(function(){pri.print();}, 400);
+        setTimeout(function(){pri.print();}, 1000);
     });
 
-}
-
-function confirmHide(e){
-  var result = window.confirm('¿Está seguro de que desea ocultar su reporte? Este no aparecerá más en la página si es ocultado.');
-  if (result == false) {
-    //e.preventDefault();
-    return false;
-  }
-  $("#hide-form").submit();
 }
 
 function ConfirmDialog(message){

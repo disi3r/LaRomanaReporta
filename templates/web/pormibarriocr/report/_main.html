@@ -1,7 +1,9 @@
 [% IF c.cobrand.allow_photo_display(problem) && problem.photo %]
-    [% IF problem.get_photo_params.url_full %]<a href="[% problem.get_photo_params.url_full %]">[% END %]
-		<img alt="Photo of this report" [% IF problem.get_photo_params.height %]height="[% problem.get_photo_params.height %]" width="[% problem.get_photo_params.width %]"[% END %] src="[% problem.get_photo_params.url_full %]" class="img-top">
-    [%- IF problem.get_photo_params.url_full %]<!--<span>zoom</span>--></a>[% END %]
+	<div id="report_photo">
+	    [% IF problem.get_photo_params.url_full %]<a id="report_photo_link" href="[% problem.get_photo_params.url_full %]">[% END %]
+			<img id="report_photo_img" alt="Photo of this report" [% IF problem.get_photo_params.height %]height="[% problem.get_photo_params.height %]" width="[% problem.get_photo_params.width %]"[% END %] src="[% problem.get_photo_params.url_full %]" class="img-top">
+	    [%- IF problem.get_photo_params.url_full %]<!--<span>zoom</span>--></a>[% END %]
+	</div>
 [% END %]
 <div class="info-report">
 	<!--Intro Report-->
