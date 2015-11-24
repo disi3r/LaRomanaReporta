@@ -1,7 +1,0 @@
-Subject: Reporte Atrasado - '<?=$values['comment']?>'
-
-El siguiente reporte seencuentra atrasado
-
-<?=$values['data']?>
-
-<?=$values['signature']?>

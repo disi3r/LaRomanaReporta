@@ -1,9 +1,0 @@
-Subject: Tu cuenta en Por Mi Barrio
-
-Por favor hacé click en el enlace para confirmar tu dirección de correo.
-Con eso podés ver y gestionar tus reportes más fácilmente.
-
-[% c.uri_for_action( 'auth/token', token ) %]
-
-[% INCLUDE 'signature.txt' %]
-

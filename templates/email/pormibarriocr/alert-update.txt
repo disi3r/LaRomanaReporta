@@ -1,6 +1,10 @@
 Subject: Actualizaciones en el reporte - '<?=$values['title']?>'
 
-Este reporte ha sido marcado como <?=$values['state_message']?>.
+El estado del reporte es <?=$values['state_message']?>.
+
+Se ha añadido un nuevo comentario:
+
+<?=$values['data']?>
 
 Para ver o responder, seguí el siguiente enlace:
     <?=$values['problem_url']?>
