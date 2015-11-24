@@ -21,11 +21,11 @@
 		<div class="report visible-print-block" >
 			<div id="update-display" class="info-report scrolled-report">
                 <div id="print-header">
-                    <table align="center" style="width: 100%; height: 180px; margin: 0 auto 0 auto;">
+                    <table align="center" style="width: 95%; height: 180px; margin: 0 auto 0 auto;">
                         <tbody>
                           <tr>
-                            <td align="center" style="vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/escudoPalmares.png"></td>
-                            <td align="center" style="vertical-align: center; horizontal-align: center;">
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/escudoPalmares.png"></td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;">
                               <div id="report-print-header-title">
                                 <br/><br/>
                                 Comprobante de reporte<br/>
@@ -33,15 +33,16 @@
                                 Fecha: <span id="today"></span>
                               </div>
                             </td>
-                            <td align="center" style="vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/LogoPMBazulFondoBlanco.png"></td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/LogoPMBazulFondoBlanco.png"></td>
                           </tr>
                           <tr>
-                            <td align="center" style="vertical-align: center; horizontal-align: center;">Municipalidad de Palmares <br/> www.munipalmares.go.cr</td>
-                            <td></td>
-                            <td align="center" style="vertical-align: center; horizontal-align: center;">www.pormibarrio.cr</td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;">Municipalidad de Palmares <br/> www.munipalmares.go.cr</td>
+                            <td style="width: 33%;"></td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;">www.pormibarrio.cr</td>
                           </tr>
                         </tbody>
                     </table>
+                    <br/>
                 </div>
                 [% INCLUDE 'report/_main.html' %]
                 [% TRY %][% INCLUDE 'report/_message_manager.html' %][% CATCH file %][% END %]
