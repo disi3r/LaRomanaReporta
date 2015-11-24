@@ -86,7 +86,7 @@ sub email_alerts ($) {
             }
 
             # create problem status message for the templates
-            $data{state_message} = _( $row->{state} );
+            $data{state_message} = _("".$row->{state});
             my $url = $cobrand->base_url( $row->{alert_cobrand_data} );
             if ( $hashref_restriction && $hashref_restriction->{bodies_str} && $row->{bodies_str} ne $hashref_restriction->{bodies_str} ) {
                 $url = mySociety::Config::get('BASE_URL');
