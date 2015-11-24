@@ -93,6 +93,7 @@ sub update_problem : Private {
             action => 'new_category last_sent: '.$problem->whensent,
             object_id => $problem->id,
         } );
+        $problem->state('confirmed');
         $problem->whensent(undef);
     }
 
