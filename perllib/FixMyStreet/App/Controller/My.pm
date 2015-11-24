@@ -56,6 +56,8 @@ sub my : Path : Args(0) {
             colour    => $c->cobrand->pin_colour( $problem, 'my', $c, \%categories ),
             id        => $problem->id,
             title     => $problem->title,
+            category  => $problem->category,
+            user      => $problem->name,
         };
         my $state = $problem->is_fixed ? 'fixed' : $problem->state eq 'in progress' ? 'in_progress' : 'confirmed';
 
