@@ -178,7 +178,7 @@ function printReportDetail(){
     $head.append($("<link/>",{ rel: "stylesheet", href: "/js/OpenLayers-2.13.1/theme/default/style.css", type: "text/css" }));
     $("#ifmcontentstoprint").contents().find("#report_photo").append($photo);
     $('#ifmcontentstoprint').ready(function() {
-        setTimeout(function(){pri.print();}, 1000);
+        setTimeout(function(){pri.print();}, 650);
     });
 
 }
