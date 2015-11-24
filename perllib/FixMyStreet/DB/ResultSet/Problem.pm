@@ -541,29 +541,26 @@ sub alert_deadlines {
             my @bodies = split(/,/, $problem->bodies_str);
             my $bodies_req = FixMyStreet::App->model("DB::Body")->search({ id => \@bodies });
             while (my $body = $bodies_req->next) {
-                my @comptroller = split(/,/, $body->comptroller_user_id);
-                foreach (@comptroller) {
-                    #Check alert haven't been added, LOGICA (check how to do for multiple or single email)
-                    my $alert_options = {
-                        user_id    => $_,
-                        alert_type => $problem->deadline->{class},
-                        parameter  => $problem->id,
-                    };
-                    my $alert = FixMyStreet::App->model('DB::Alert')->find($alert_options);
-                    unless ($alert) {
-                        my $options;
-                        $options->{alert_type}  = $problem->deadline->{class};
-                        $options->{parameter}   = $problem->id;
-                        $options->{parameter2}  = $problem->user->id;
-                        $options->{user_id}     = $_;
-                        $options->{confirmed}   = 1;
-                        $options->{cobrand}     = $problem->cobrand;
-                        $options->{cobrand_data} = '';
-                        $options->{lang}        = $problem->lang;
+                #Check alert haven't been added, LOGICA (check how to do for multiple or single email)
+                my $alert_options = {
+                    user_id    => $body->comptroller_user_id,
+                    alert_type => $problem->deadline->{class},
+                    parameter  => $problem->id,
+                };
+                my $alert = FixMyStreet::App->model('DB::Alert')->find($alert_options);
+                unless ($alert) {
+                    my $options;
+                    $options->{alert_type}  = $problem->deadline->{class};
+                    $options->{parameter}   = $problem->id;
+                    $options->{parameter2}  = $problem->user->id;
+                    $options->{user_id}     = $body->comptroller_user_id;
+                    $options->{confirmed}   = 1;
+                    $options->{cobrand}     = $problem->cobrand;
+                    $options->{cobrand_data} = '';
+                    $options->{lang}        = $problem->lang;
 
-                        $alert = FixMyStreet::App->model('DB::Alert')->new($options);
-                        $alert->insert();
-                    }
+                    $alert = FixMyStreet::App->model('DB::Alert')->new($options);
+                    $alert->insert();
                 }
             }
         }

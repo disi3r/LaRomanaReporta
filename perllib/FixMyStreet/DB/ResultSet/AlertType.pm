@@ -11,6 +11,7 @@ use mySociety::Locale;
 use mySociety::MaPit;
 use IO::String;
 use RABX;
+use Data::Dumper;
 
 # Child must have confirmed, id, email, state(!) columns
 # If parent/child, child table must also have name and text
@@ -18,7 +19,7 @@ use RABX;
 sub email_alerts ($) {
     my ( $rs ) = @_;
 
-    my $q = $rs->search( { '-AND' => [
+    my $q = $rs->search( { '-AND' => [ 
         ref => {'-not_like', '%local_problems%' },
         ref => {'-not_like', '%comptroller_overdue%' },
         ] } );
@@ -43,8 +44,8 @@ sub email_alerts ($) {
             from alert, $item_table";
         }
         $query .= "
-            where alert_type='$ref'
-            and whendisabled is null
+            where alert_type='$ref' 
+            and whendisabled is null 
             and $item_table.confirmed >= whensubscribed
             and $item_table.confirmed >= ms_current_timestamp() - '7 days'::interval
             and (select whenqueued from alert_sent where alert_sent.alert_id = alert.id and alert_sent.parameter::integer = $item_table.id) is null
@@ -64,8 +65,8 @@ sub email_alerts ($) {
 
             my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($row->{alert_cobrand})->new();
 
-            # Cobranded and non-cobranded messages can share a database. In this case, the conf file
-            # should specify a vhost to send the reports for each cobrand, so that they don't get sent
+            # Cobranded and non-cobranded messages can share a database. In this case, the conf file 
+            # should specify a vhost to send the reports for each cobrand, so that they don't get sent 
             # more than once if there are multiple vhosts running off the same database. The email_host
             # call checks if this is the host that sends mail for this cobrand.
             next unless $cobrand->email_host;
@@ -260,42 +261,81 @@ sub send_comptroller_alerts() {
         order_by     => 'id'
     } );
     my $template = $rs->find( { ref => $alert_class } )->template;
-    print "\nTEMPLATE: \n";
-    print $template;
+    my %agregated_alerts;
+    my %data;
     while (my $alert = $query->next) {
         my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($alert->cobrand)->new();
         next unless $cobrand->email_host;
         next if $alert->is_from_abuser;
 
-        print "\nCOBRAND: \n";
-        print $alert->cobrand;
-        print "\nDATA: \n";
-        my %data = (
-            template => $template,
-            data => '',
-            alert_id => $alert->id,
-            alert_email => $alert->user->email,
-            lang => $alert->lang,
-            cobrand => $alert->cobrand,
-            cobrand_data => $alert->cobrand_data
+        %data = ( 
+            template => $template, 
+            data => '', 
+            alert_id => $alert->id, 
+            alert_email => $alert->user->email, 
+            lang => $alert->lang, 
+            cobrand => $alert->cobrand, 
+            cobrand_data => $alert->cobrand_data 
         );
-        my $q = "select id, title, category from problem where id = ?
-            and (select whenqueued from alert_sent where alert_sent.alert_id = ? and
-                alert_sent.parameter::integer = problem.id) is null";
-        $q = dbh()->prepare($q);
-        $q->execute($alert->parameter, $alert->id);
-        while (my $row = $q->fetchrow_hashref) {
+        my $q;
+        if ($cobrand->send_comptroller_repeat){
+            $q = "select id, title, category from problem where id = ?";
+            $q = dbh()->prepare($q);
+            $q->execute($alert->parameter);
+        }
+        else {
+            $q = "select id, title, category from problem where id = ?
+                and (select whenqueued from alert_sent where alert_sent.alert_id = ?
+                 and alert_sent.parameter::integer = problem.id limit 1) is null";
+            $q = dbh()->prepare($q);
+            $q->execute($alert->parameter, $alert->id);
+        }
+        my $row = $q->fetchrow_hashref;
+        if ($row) {
             FixMyStreet::App->model('DB::AlertSent')->create( {
                 alert_id  => $alert->id,
                 parameter => $row->{id},
             } );
-
             my $url = mySociety::Config::get('BASE_URL');
-            $data{category} = $row->{category};
-            $data{title} = $row->{title};
-            $data{problem_url} = $url . "/report/" . $row->{id};
-            print "\nSEND MAIL: $row->{title}\n";
-            _send_aggregated_alert_email(%data)
+            if ($cobrand->send_comptroller_agregate){
+                my $problem_string = $row->{id}.",".$row->{title}.",".$row->{category}.",".$url . "/report/" . $row->{id};
+                if (exists $agregated_alerts{$alert->user->id}){
+                    push @{$agregated_alerts{$alert->user->id}{lines}}, $problem_string;
+                }
+                else {
+                    #First alert set parameters
+                    $agregated_alerts{$alert->user->id} = { %data };
+                    $agregated_alerts{$alert->user->id}{lines} = [ $problem_string ];
+                }
+            }
+            else {
+                $data{summary} .= "";
+                $data{category} = $row->{category};
+                $data{title} = $row->{title};
+                $data{problem_url} = $url . "/report/" . $row->{id};
+                print "\nSEND MAIL: $row->{title}\n";
+                _send_aggregated_alert_email(%data);
+            }
+        }
+    }
+    #If we have alerts to be agregated
+    if (%agregated_alerts){
+        for my $aa_key ( keys %agregated_alerts ){
+            my %aa_obj = %{$agregated_alerts{$aa_key}};
+            $data{summary} = '';
+            foreach ( @{$aa_obj{lines}} ){
+                $data{summary} .= $_;
+                $data{summary} .= "\n\n------\n\n";
+            }
+            $data{title} = _("Summary of reports");
+            $data{problem_url} = '';
+            $data{category} = _("several categories");
+            $data{cobrand} = $aa_obj{cobrand};
+            $data{alert_email} = $aa_obj{alert_email};
+            $data{lang} = $aa_obj{lang};
+            $data{cobrand_data} = $aa_obj{cobrand_data};
+            print "\nSEND AGREGATED MAIL: $data{summary}\n";
+            _send_aggregated_alert_email(%data);
         }
     }
 }
