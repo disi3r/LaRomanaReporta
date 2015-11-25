@@ -1,33 +1,162 @@
-<!--
-<div id="front-main">
-    <div id="front-main-container">
-        [% IF c.cobrand.moniker == 'fixmybarangay' %]
-            <h1>View local problems</h1>
-            <h2>(potholes or street lighting)</h2>
-        [% ELSE %]
-            [% INCLUDE 'around/intro.html' %]
-        [% END %]
+<script>
+function searchLocationAjax(event, obj){
+    //Letters, Caps and nums
+    if ( (event.which > 64 && event.which < 91) || (event.which > 96 && event.which < 123) || (event.which > 47 && event.which < 58)) {
+        if ( obj.value.length > 2 ){
+            var items = "";
+            var get = 0;
+            $('ul.l-calles').empty();
+            if (obj.id == 'esquina'){
+                if (!isNaN(obj.value)){
+                    items += "<li id='" + obj.value + "' class='pick-street' onclick='streetLocate(this)' >" + obj.value + "</li>";
+                    $('ul.l-calles').empty();
+                    $(items).appendTo("ul.l-calles");
+                }
+                else {
+                    if ( ( listaCalles[1] != undefined ) && ( listaCalles[1].length > 1 ) && ( listaCalles[1][0] == obj.value.substring(0, listaCalles[1][0].length) ) ){
+                        //quitamos el primer termino y vemos el length
+                        listaCalles[1].shift();
+                        $.each( listaCalles[1], function( addr_key, addr_obj ) {
+                            if ( addr_obj.address.indexOf( obj.value.toUpperCase() ) >= 0){
+                                items += "<li id='" + addr_obj.lat + "' class='pick-street' onclick='streetLocate(this)' >" + addr_obj.address + "</li>";
+                            }
+                            else{
+                                listaCalles[0].splice(addr_key, 1);
+                            }
+                        });
+                        //agregamoe el término al comienzo
+                        listaCalles[1].splice(0, 0, obj.value);
+                        $('ul.l-calles').empty();
+                        $(items).appendTo("ul.l-calles");
+                    }
+                    else {
+                        var code = $('input#main-street-code');
+                        if ( !code.val() ){
+                            items = "<li class='pick-street-error'>Debe ingresar una calle primero</li>";
+                            $('ul.l-calles').empty();
+                            $(items).appendTo("ul.l-calles");
+                        }
+                        else{
+                            $('#esquina').css("background", "url(/cobrands/pormibarrio/images/Loading.gif) 25px 18px no-repeat");
+                            $.getJSON( "/ajax/geocode?term="+code.val()+','+obj.value, function( data ) {
+                                //vaciamos el array
+                                listaCalles[1] = [];
+                                listaCalles[1][0] = obj.value;
+                                $.each( data.locations, function( key, obj ) {
+                                    items += "<li id='" + obj.lat + "' class='pick-street' onclick='streetLocate(this)' >" + obj.address + "</li>";
+                                    listaCalles[1].push(obj);
+                                });
+                                $('ul.l-calles').empty();
+                                $(items).appendTo("ul.l-calles");
+                                $('#esquina').css("background", "url(/cobrands/pormibarrio/images/icon-search.png) 25px 18px no-repeat");
+                            });
+                        }
+                    }
+                }
+            }
+            else {
+                if ( ( listaCalles[0] != undefined ) && ( listaCalles[0].length > 1 ) && (listaCalles[0][0] == obj.value.substring(0, listaCalles[0][0].length) ) ){
+                    //quitamos el primer termino
+                    newList = [listaCalles[0].shift()];
+                    $.each( listaCalles[0], function( addr_key, addr_obj ) {
+                        if (  addr_obj != undefined && addr_obj.address.indexOf( obj.value.toUpperCase() ) >= 0){
+                            items += "<li id='" + addr_obj.lat + "' class='pick-street' onclick='assignStreetValue(this)' >" + addr_obj.address + "</li>";
+                            newList.push(addr_obj);
+                        }
+                    });
+                    //agregamos la nueva lista
+                    listaCalles[0] = newList;
+                    $('ul.l-calles').empty();
+                    $(items).appendTo("ul.l-calles");
+                }
+                else {
+                    $('#calle').css("background", "url(/cobrands/pormibarrio/images/Loading.gif) 25px 18px no-repeat");
+                    $.getJSON( "/ajax/geocode?term="+obj.value, function( data ) {
+                        listaCalles[0] = [];
+                        listaCalles[0][0] = obj.value;
+                        $.each( data.locations, function( key, obj ) {
+                            items += "<li id='" + obj.lat + "' class='pick-street' onclick='assignStreetValue(this)' >" + obj.address + "</li>";
+                            listaCalles[0].push(obj);
+                        });
+                        $('ul.l-calles').empty();
+                        $(items).appendTo("ul.l-calles");
+                        $('#calle').css("background", "url(/cobrands/pormibarrio/images/icon-search.png) 25px 18px no-repeat");
+                    });
+                }
+            }
+        }
+    }
+}
 
-        [%
-            question = c.cobrand.enter_postcode_text || loc('Enter a nearby street name and area');
-        %]
+function assignStreetValue(obj){
+    $('input#calle').val($(obj).text());
+    $('input#main-street-code').val(obj.id);
+    $('ul.l-calles').empty();
+}
 
-        [% IF c.cobrand.moniker == 'fixmybarangay' %]
-            [% INCLUDE '_barangay_buttons.html' %]
-        [% ELSE %]
-        <form action="[% c.uri_for('/around') %]" method="get" name="postcodeForm" id="postcodeForm">
-            <label for="pc">[% question %]:</label>
-            <div>
-                <input type="text" name="pc" value="[% pc | html %]" id="pc" size="10" maxlength="200" placeholder="[% tprintf(loc('e.g. ‘%s’ or ‘%s’'), c.cobrand.example_places) %]">
-                <input type="submit" value="[% loc('Go') %]" id="sub">
-            </div>
+function streetLocate(obj){
+    $('input#esquina').val($(obj).text());
+    $('input#second-street-code').val(obj.id);
+    $('ul.l-calles').empty();
+    if ( isNaN(obj.innerHTML) ){
+        var url = "/ajax/geocode?term="+ $('input#main-street-code').val() +','+obj.id+',corner';
+    }
+    else {
+        var url = "/ajax/geocode?term="+ $('input#main-street-code').val() +','+obj.id+',door';
+    }
+    streetLocateSubmit(url);
+}
+function streetLocateSubmit(url){
+    if ( $('input#main-street-code').val() && $('input#second-street-code').val() ){
+        if (url == 'none')
+            url = "/ajax/geocode?term="+ $('input#main-street-code').val() +','+$('input#second-street-code').val()+', final';
+        if (typeof fixmystreet != "undefined"){
+            setTimeout(function(){fixmystreet.map.zoomTo(2)},500);
+            $.getJSON( url, function( data ) {
+                var latlon = utm2LatLong(data.latitude, data.longitude, '21H');
+                var lonlat = new OpenLayers.LonLat(latlon[1], latlon[0]);
+                lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+                fixmystreet.map.panTo(lonlat);
+                setTimeout(function(){fixmystreet.map.zoomTo(3)},500);
+            });
+        }
+        else{
+            $.getJSON( url, function( data ) {
+                var latlon = utm2LatLong(data.latitude, data.longitude, '21H');
+                console.log(latlon);
+                window.location.href = "/around?latitude="+latlon[0]+";longitude="+latlon[1]+"&zoom=3";
+            });
+        }
 
-            [% IF partial_token %]
-                <input type="hidden" name="partial" value="[% partial_token.token %]">
-            [% END %]
-
-        </form>
-        [% END %]
-    </div>
+    }
+    else {
+        $('ul.l-calles').empty();
+        if ( !$('input#main-street-code').val() ){
+            $('input#calle').addClass('street-error');
+            items = "<li class='pick-street-error'>Debe ingresar una calle primero</li>";
+            $(items).appendTo("ul.l-calles");
+        }
+        if ( !$('input#second-street-code').val() ){
+            $('input#esquina').addClass('street-error');
+            items = "<li class='pick-street-error'>Debe ingresar una una esquina o número</li>";
+            $(items).appendTo("ul.l-calles");
+        }
+    }
+}
+</script>
+<div id="s-calles" class="s-calles">
+    <form role="form" class="form-inline">
+        <div class="form-group pull-left">
+            <input class="" placeholder="Calle" id="calle" onkeyup="searchLocationAjax(event, this)"/>
+            <input class="" placeholder="Esquina/numero" id="esquina" onkeyup="searchLocationAjax(event, this)"/>
+            <input type="hidden" id="main-street-code" />
+            <input type="hidden" id="second-street-code" />
+        </div>
+        <div class="btn btn-search" onclick="streetLocateSubmit()" >Buscar</div>
+    </form>
 </div>
--->
+
+<!--lista CALLES-->
+<ul class="list-unstyled l-calles">
+</ul>
+<!--/lista CALLES-->

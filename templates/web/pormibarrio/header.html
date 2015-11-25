@@ -167,22 +167,7 @@
         <!--TOP CONTAINER-->
         <div class="top-container">
             <!--BUSCAR CALLES-->
-            <div id="s-calles" class="s-calles">
-                <form role="form" class="form-inline">
-                    <div class="form-group pull-left">
-                        <input class="" placeholder="Calle" id="calle" onkeyup="searchLocationAjax(event, this)"/>
-                        <input class="" placeholder="Esquina/numero" id="esquina" onkeyup="searchLocationAjax(event, this)"/>
-                        <input type="hidden" id="main-street-code" />
-                        <input type="hidden" id="second-street-code" />
-                    </div>
-                    <div class="btn btn-search" onclick="streetLocateSubmit()" >Buscar</div>
-                </form>
-            </div>
-            
-            <!--lista CALLES-->
-            <ul class="list-unstyled l-calles">
-            </ul>
-            <!--/lista CALLES-->
+            [% INCLUDE 'around/postcode_form.html' %]
             <div id="stats-menu">
                 <a href="/stats">
                     <svg class="icon icon-icono1" viewBox="-2 0 30 30">
