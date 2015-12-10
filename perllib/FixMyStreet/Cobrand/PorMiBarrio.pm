@@ -227,29 +227,42 @@ sub geocode_postcode {
     return $response;
 }
 
-=head2 problem_rules
+#DEADLINES
+sub deadlines { 0 }
 
-Response is {group_id => [<objects arranged by time>]}
+my %public_holidays = map { $_ => 1 } (
+    '1-1', '1-6', '2-8', '2-9', '3-24', '3-25', '4-18', '5-1','5-16', '6-19', '7-18', '8-25', '10-10','11-2', '12-25'
+);
 
-=cut
-
-sub problem_rules {
-	return (
-		'6' => [
-			{
-				'max_time' => 10,
-				'action' => 'overdue'
-			},
-			{
-				'max_time' => 8,
-				'action' => 'alert'
-			},
-			{
-				'max_time' => 6,
-				'action' => 'warning'
-			}
-		]
-	);
+sub is_public_holiday {
+    my $dt = shift;
+    return $public_holidays{$dt->mon().'-'.$dt->day()};
 }
+
+sub is_weekend {
+    my $dt = shift;
+    return $dt->dow > 5;
+}
+
+sub to_working_days_date{
+	my ( $self, $dt, $days ) = @_;
+    while ( $days > 0 ) {
+        $dt->subtract ( days => 1 );
+        next if is_public_holiday($dt) or is_weekend($dt);
+        $days--;
+    }
+    return $dt;
+
+}
+
+sub report_sent_confirmation_email { 1 }
+sub admin_show_creation_graph { 0 }
+
+sub skip_update_check { 1 }
+
+sub send_comptroller_agregate { 0 }
+
+sub send_comptroller_repeat { 0 }
+
 
 1;

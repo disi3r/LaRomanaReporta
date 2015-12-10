@@ -872,5 +872,28 @@ sub updates_as_hashref {
     return {};
 }
 
-1;
+=head2 to_working_days_date
 
+Returns int number of days between
+
+=cut
+sub to_working_days_date{
+    my ( $self, $dt, $days ) = @_;
+    while ( $days > 0 ) {
+        $dt->subtract ( days => 1 );
+        $days--;
+    }
+    return $dt;
+
+}
+
+#DEADLINES
+sub deadlines { 0 }
+
+sub skip_update_check { 0 }
+
+sub send_comptroller_agregate { 0 }
+
+sub send_comptroller_repeat { 0 }
+
+1;

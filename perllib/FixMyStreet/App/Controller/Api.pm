@@ -119,12 +119,11 @@ sub problems : Path : Args(0) {
     my @problems_arr;
     #Take out sensitive data
     foreach my $problem (@problems) {
-        my $problem_group = $problem->category_group;
-        if ( ($c->stash->{category_group} && $c->stash->{category_group} eq $problem_group) || !$c->stash->{category_group} ){
-            push @problems_arr, {$problem->get_columns};
+        push @problems_arr, {$problem->get_columns};
+        $problems_arr[$#problems_arr]->{state_name} = $problem->as_hashref($c)->{state_t};
+        if ( $problem->deadline and ( ($c->stash->{category_group} && $c->stash->{category_group} eq $problem->category_group) || !$c->stash->{category_group} ) ){
             $problems_arr[$#problems_arr]->{deadline} = $problem->deadline->{class};
-            $problems_arr[$#problems_arr]->{group} = $problem_group;
-            $problems_arr[$#problems_arr]->{state_name} = $problem->as_hashref($c)->{state_t};
+            $problems_arr[$#problems_arr]->{group} = $problem->category_group;
         }
     }
     return \@problems_arr;
