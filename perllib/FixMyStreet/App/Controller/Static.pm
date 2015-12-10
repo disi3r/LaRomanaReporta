@@ -68,44 +68,48 @@ sub stats : Global : Args(0) {
     my $formatter = DateTime::Format::Strptime->new( pattern => '%d/%m/%Y' );
     my $parser = DateTime::Format::Strptime->new( pattern => '%m-%d-%Y' );
     my $now = DateTime->now(formatter => $formatter);
-    my $start_date = DateTime->new( year => 2015, month => 8, day => 01 );
+    my $now_start = DateTime->now(formatter => $formatter);
+    #Start date mandatory
+    my $start_date = $formatter->parse_datetime( $c->req->param('start_date') );
+    $c->log->debug($end_date.'<--END TIME 0 START-->'.$start_date);
+    if ( !$c->req->param('start_date') ) {
+        if ( $c->req->param('end_date') ){
+            push @errors, _('Invalid start date');
+            $c->stash->{errors} = \@errors;
+            return 1;
+        }
+        else {
+            return 1;
+        }
+    }
 
     if ( $c->req->param('last_week') ){
         $end_date = $now;
-        $start_date = $now->subtract(days => 7);
+        $start_date = $now_start->subtract(days => 7);
     }
     elsif ( $c->req->param('last_month') ){
         $end_date = $now;
-        $start_date = $now->subtract(months => 1);
+        $start_date = $now_start->subtract(months => 1);
     }
     elsif ( $c->req->param('last_six_months') ){
         $end_date = $now;
-        $start_date = $now->subtract(months => 6);
+        $start_date = $now_start->subtract(months => 6);
     }
     elsif ( $c->req->param('all') ){
         $end_date = $now;
     }
     else{
-        if (!$c->req->param('end_date')){
+        if ( !$c->req->param('end_date') ){
             $end_date = $now;
         }
         else{
             $end_date = $formatter->parse_datetime( $c->req->param('end_date') ) ;
         }
-
-        if ($c->req->param('start_date')){
-            $start_date = $formatter->parse_datetime( $c->req->param('start_date') );
-        }
     }
     $c->log->debug($end_date.'<--END TIME START-->'.$start_date);
-    push @errors, _('Invalid start date') unless defined $start_date;
-    push @errors, _('Invalid end date') unless defined $end_date;
 
-    $c->stash->{errors} = \@errors;
     $c->stash->{start_date} = $start_date;
     $c->stash->{end_date} = $end_date;
-
-    return 1 if @errors;
 
     #Cache Groups if not in memcached
 
