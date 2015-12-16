@@ -275,14 +275,14 @@ $( document ).ready(function() {
     if ( $("#terms_agree").length ){
     	//Terms and conditions
 	    $("button").click(function(e) {
-	    	if (!$("#terms_agree").attr("checked")){
+	    	if ( !($("#terms_agree").val() || $("#terms_agree").attr("checked")) ){
 	    		e.preventDefault();
 	    		$('.terms-agree-error').remove();
                 $('.terms_agree').after('<p class="error-m terms-agree-error">Debe aceptar los términos y condiciones</p>');
 	    	}
 		});
 		$('input[type="submit"]').click(function(e) {
-	    	if (!$("#terms_agree").attr("checked")){
+	    	if ( !($("#terms_agree").val() || $("#terms_agree").attr("checked")) ){
 	    		e.preventDefault();
 	    		$('.terms-agree-error').remove();
                 $(this).after('<p class="error-m terms-agree-error">Debe aceptar los términos y condiciones</p>');
@@ -309,59 +309,7 @@ $( document ).ready(function() {
 	      }
 	    });
 	}
-	//SEARCH IN CR
-	$('option.muni').click(function(){
-		$('#muniSelect').change();
-	});
-	$('#muniSelect').on('change', function(){
-		var muni = $("#muniSelect").val();
-
-	    switch(muni) {
-	    case 'PALMARES':
-	        location.href = '/around?latitude=10.050;longitude=-84.433&zoom=4';
-	        break;
-	    default:
-	        window.location.href = "http://pormibarrio.cr";
-	    }
-	});
-	$('#streetLocate').on('change', function(){
-		$('.locateDetails').hide();
-		$( '#streetLocate-'+this.value ).show();
-	});
-	$('.locateDetails').on('change', function(){
-		var cat = $("#streetLocate").val() - 1;
-		var placeOfReference = new PlaceOfReference();
-		var lon = placeOfReference.getLongitude(cat,this.value);
-		var lat = placeOfReference.getLatitude(cat,this.value);
-		var lonlat = new OpenLayers.LonLat(lon, lat);
-		var geo_lonlat = new OpenLayers.Geometry.Point(lon,lat);
-		lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
-		geo_lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
-        locatorGeoLonLat = geo_lonlat;
-        locatorName = placeOfReference.getName(cat,this.value);
-        var placeOfReferenceLocator = new OpenLayers.Feature.Vector(geo_lonlat, {
-            colour: 'locator',
-            size: 'normal',
-            id: 'locator',
-            title: locatorName,
-            user: 'UserMarker',
-            category: 'locator',
-            category_id : 'locator',
-            date : null,
-            hasPhoto : 0,
-            hasComments : 0
-        });
-        fixmystreet.map.zoomTo(4);
-		fixmystreet.map.panTo(lonlat);
-		fixmystreet.markers.addFeatures( [placeOfReferenceLocator] );
-		/*if(fixmystreet.map.layers.length>1){
-			//fixmystreet.map.removeLayer(fixmystreet.map.layers[fixmystreet.map.layers.length-1]);
-			  fixmystreet.map.layers.pop()
-		}*/
-		//fixmystreet.map.addLayer(fixmystreet.locators);
-		//fixmystreet.locators.setVisibility(true);
-		//fixmystreet.locators.refresh();
-	});
+	
 	//DASHBOARD
 	$('input.deadline').click(dashCheck);
 	var dead_filter = $('input.deadline');

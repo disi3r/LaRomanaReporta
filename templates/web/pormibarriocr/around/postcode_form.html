@@ -1,5 +1,17 @@
+<div id="s-calles" class="s-calles">
+    <div id="s-calles-selects" class="form-group pull-left">
+    </div>
+</div>
+
+<!--lista CALLES-->
+<ul class="list-unstyled l-calles">
+</ul>
+<!--/lista CALLES-->
+
 <script type="text/javascript">
-function PlaceOfReference(){
+$( document ).ready(function() {
+    //<OBJECT>//
+    function PlaceOfReference(){
     this.placesOfReference = [
             {
                 "category":"BANCOS Y CAJEROS",
@@ -199,59 +211,102 @@ function PlaceOfReference(){
                             "longitude":'-84.42974023'},                            
                         ]
             }
-    ];
-    this.getLongitude = getLongitude;
-    this.getLatitude = getLatitude;
-    this.printSelects = printSelects;
-    this.getName = getName;
+        ];
+        this.getLongitude = getLongitude;
+        this.getLatitude = getLatitude;
+        this.printSelects = printSelects;
+        this.getName = getName;
 
-    function printSelects(){
-        var categoriesSelectId = "#streetLocate";
-        var divContainerId = "#s-calles-selects";
-        for (var i=0; i < this.placesOfReference.length; i++){
-            var option = "<option value ='" + (i+1) + "'>" + this.placesOfReference[i].category + "</option>";
-            $(categoriesSelectId).append(option);
-            var createdSelect = "<select id='streetLocate-"+(i+1)+"' class='locate locateDetails'>";
-            for(var z=0; z < this.placesOfReference[i].places.length; z++){
-                var option = "<option value='"+z+"'>"+this.placesOfReference[i].places[z].nombre+"</option>"
-                createdSelect = createdSelect + option;  
+        function printSelects(){
+            var divContainerId = "#s-calles-selects";
+            if ( typeof fixmystreet != 'undefined' && fixmystreet.map ){
+                $(divContainerId).append('<select id="streetLocate" class="locate"></select>');
+                var categoriesSelectId = "#streetLocate";
+                $(categoriesSelectId).append('<option disabled selected>--BÚSCA UN LUGAR--</option>');
+                for (var i=0; i < this.placesOfReference.length; i++){
+                    var option = "<option value ='" + (i+1) + "'>" + this.placesOfReference[i].category + "</option>";
+                    $(categoriesSelectId).append(option);
+                    var createdSelect = "<select id='streetLocate-"+(i+1)+"' class='locate locateDetails'>";
+                    for(var z=0; z < this.placesOfReference[i].places.length; z++){
+                        var option = "<option value='"+z+"'>"+this.placesOfReference[i].places[z].nombre+"</option>"
+                        createdSelect = createdSelect + option;  
+                    }
+                    createdSelect = createdSelect + "</select>";
+                    $(divContainerId).append(createdSelect);
+                }
             }
-            createdSelect = createdSelect + "</select>";
-            $(divContainerId).append(createdSelect);
+            else{
+                var categoriesSelectId = "#muniSelect";
+                $(divContainerId).append('<select id="muniSelect" class="locate"></select>');
+                $(categoriesSelectId).append('<option disabled selected>Elegí tu Municipalidad</option>');
+                $(categoriesSelectId).append('<option value="PALMARES" class="muni">PALMARES</option>');
+            }
+        }
+
+        function getLatitude(categoryPosition,placePosition){
+            var latitude = this.placesOfReference[categoryPosition].places[placePosition].latitude;
+            return latitude;
+        }
+
+        function getLongitude(categoryPosition,placePosition){
+            var longitude = this.placesOfReference[categoryPosition].places[placePosition].longitude;
+            return longitude;
+        }
+
+        function getName(categoryPosition,placePosition){
+            var longitude = this.placesOfReference[categoryPosition].places[placePosition].nombre;
+            return longitude;
         }
     }
-
-    function getLatitude(categoryPosition,placePosition){
-        var latitude = this.placesOfReference[categoryPosition].places[placePosition].latitude;
-        return latitude;
-    }
-
-    function getLongitude(categoryPosition,placePosition){
-        var longitude = this.placesOfReference[categoryPosition].places[placePosition].longitude;
-        return longitude;
-    }
-
-    function getName(categoryPosition,placePosition){
-        var longitude = this.placesOfReference[categoryPosition].places[placePosition].nombre;
-        return longitude;
-    }
-}
-</script>
-
-<div id="s-calles" class="s-calles">
-    <div id="s-calles-selects" class="form-group pull-left">
-        <select id="streetLocate" class="locate">
-            <option disabled selected>--BÚSCA UN LUGAR--</option>
-        </select>
-    </div>
-</div>
-
-<!--lista CALLES-->
-<ul class="list-unstyled l-calles">
-</ul>
-<!--/lista CALLES-->
-
-<script type="text/javascript">
+    //</OBJECT>//
+    //FUNCTIONS//
     var placesOfReference = new PlaceOfReference();
     placesOfReference.printSelects();
+    //SEARCH IN CR
+    $('option.muni').click(function(){
+        $('#muniSelect').change();
+    });
+    $('#muniSelect').on('change', function(){
+        var muni = $("#muniSelect").val();
+
+        switch(muni) {
+        case 'PALMARES':
+            location.href = '/around?latitude=10.050;longitude=-84.433&zoom=4';
+            break;
+        default:
+            window.location.href = "http://pormibarrio.cr";
+        }
+    });
+    $('#streetLocate').on('change', function(){
+        $('.locateDetails').hide();
+        $( '#streetLocate-'+this.value ).show();
+    });
+    $('.locateDetails').on('change', function(){
+        var cat = $("#streetLocate").val() - 1;
+        var placeOfReference = new PlaceOfReference();
+        var lon = placeOfReference.getLongitude(cat,this.value);
+        var lat = placeOfReference.getLatitude(cat,this.value);
+        var lonlat = new OpenLayers.LonLat(lon, lat);
+        var geo_lonlat = new OpenLayers.Geometry.Point(lon,lat);
+        lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+        geo_lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+        locatorGeoLonLat = geo_lonlat;
+        locatorName = placeOfReference.getName(cat,this.value);
+        var placeOfReferenceLocator = new OpenLayers.Feature.Vector(geo_lonlat, {
+            colour: 'locator',
+            size: 'normal',
+            id: 'locator',
+            title: locatorName,
+            user: 'UserMarker',
+            category: 'locator',
+            category_id : 'locator',
+            date : null,
+            hasPhoto : 0,
+            hasComments : 0
+        });
+        fixmystreet.map.zoomTo(4);
+        fixmystreet.map.panTo(lonlat);
+        fixmystreet.markers.addFeatures( [placeOfReferenceLocator] );
+    });
+});
 </script>
