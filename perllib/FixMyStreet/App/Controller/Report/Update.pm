@@ -85,7 +85,7 @@ sub update_problem : Private {
         $problem->interest_count( \'interest_count + 1' );
     }
     #Update category, resend and log
-    if ($update->new_category){
+    if ($update->new_category and !($update->new_category eq $problem->category) ){
         $problem->category($update->new_category);
         $c->model('DB::AdminLog')->create( {
             admin_user => $c->user->email,
