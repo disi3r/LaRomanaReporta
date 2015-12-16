@@ -89,8 +89,25 @@ a.profile-back {
 
 .content-vertical a.report-back,
 .content-vertical a.reports-back,
-.content-vertical a.profile-back {
+.content-vertical a.profile-back,
+.content-vertical div.mobile-legend {
 	display: block;
+}
+
+div.mobile-legend {
+	display: none;
+	position: absolute;
+	bottom: 0;
+	background-color: gray;
+	width: 100%;
+	text-align: center;
+	opacity: 0.8;
+	color: black;
+	height: 22px;
+}
+
+.content-vertical #side-form {
+	display: none;
 }
 
 body.intro .container{
