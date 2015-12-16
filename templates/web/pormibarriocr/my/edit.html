@@ -26,7 +26,7 @@ UNLESS not_page %]
 	        	<div class="img-profile">
 	        	[% IF c.cobrand.allow_photo_upload %]
 		        	[% IF c.user.picture_url %]
-		                <img src="[% c.user.picture_url %]" style="min-height: 100px; min-width: 100px;" class="img-circle" alt="[% c.user.name %]">
+		                <img id="user-image" src="[% c.user.picture_url %]" style="min-height: 100px; min-width: 100px;" class="img-circle" alt="[% c.user.name %]">
 		            </div>
 		            <div class="edit-img">
 		            	<button type="button" class="btn btn-small btn-comentar btn-reemplazar InputButton">Reemplazar Imagen</button>
@@ -36,9 +36,9 @@ UNLESS not_page %]
 		        	</div>
 		            [% ELSE %]
 			            [% IF upload_fileid %]
-		   					<img class="img-circle" src="/photo/[% upload_fileid %].temp.jpeg" alt="">
+		   					<img id="user-image" class="img-circle" src="/photo/[% upload_fileid %].temp.jpeg" alt="">
 		   				[% ELSE %]
-		   					<img class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">
+		   					<img id="user-image" class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">
 		   				</div>
 		   				<div class="edit-img">
 			            	<button type="button" class="btn btn-small btn-comentar btn-reemplazar upload-img">Añadir foto</button>
@@ -108,6 +108,15 @@ UNLESS not_page %]
 	        	$('#profile-image-delete').click(function(){
 	        		$('#image_delete').val('1');
 	        	});
+	        	$("#InputFile").change(function(){
+				    if (this.files && this.files[0]) {
+				        var reader = new FileReader();
+				        reader.onload = function (e) {
+				            $('#user-image').attr('src', e.target.result);
+				        }
+				        reader.readAsDataURL(this.files[0]);
+				    }
+				});
 			});
 	        </script>
 	    </div>
