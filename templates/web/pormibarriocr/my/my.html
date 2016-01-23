@@ -167,20 +167,4 @@
 [% BLOCK problem %]
     [% INCLUDE 'report/_item.html', problem = p, no_fixed =1 %]
 [% END %]
-
-<script type="text/javascript">
-    $("#data-toggle-link").click(function (e) {
-          var old_css_class = $("#dropdown-user-menu").attr('class');
-          var new_css_class ="";
-          if (old_css_class=="dropdown user-log-on"){
-            new_css_class = "dropdown user-log-on open";
-          }else{
-            new_css_class = "dropdown user-log-on";
-          }
-          $("#dropdown-user-menu").removeClass();
-          $("#dropdown-user-menu").addClass( new_css_class );
-    });
-function user_menu_click(){
-
-}
 </script>

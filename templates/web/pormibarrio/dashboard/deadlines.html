@@ -6,23 +6,21 @@
 	<div class="filters">
 		<div class="dash-filter">
 			<label for="start_date">[% loc('Start Date:') %]</label>
-			<input type="text" placeholder="[% loc('Click here or enter as yyyy-mm-dd') %]" name="start_date" id="stats-start-date"
+			<input type="text" placeholder="Introduzca la fecha con el formato día/mes/año" name="start_date" id="stats-start-date"
 			  value="[% start_date ? start_date : '' | html %]" />
 
 			<label for="end_date">[% loc('End Date:') %]</label>
-			<input type="text" placeholder="[% loc('Click here or enter as yyyy-mm-dd') %]" name="end_date" id="stats-end-date" size="5" value="[% end_date ? end_date : '' | html %]" />
+			<input type="text" placeholder="Introduzca la fecha con el formato día/mes/año" name="end_date" id="stats-end-date" size="5" value="[% end_date ? end_date : '' | html %]" />
 	    </div>
 	    <div class="dash-filter">
 	        <label for="category_group">[% loc('Group') %]</label>
-	        <select name="category_group"><option value=''>All</option>
+	        <select id="category_group" class="bloq-select" name="category_group"><option value=''>Todos</option>
 	            [% FOR cg IN category_groups_seen %]
-	            	[% IF NOT loop.first %]
 	                	<option value="[% cg.0 %]"[% ' selected' IF cg.0 == category_group %]>[% cg.1 %]</option>
-	                [% END %]
 	            [% END %]
 	        </select>
 	        <label for="category">[% loc('Category') %]</label>
-	        <select name="category"><option value=''>All</option>
+	        <select id="category" class="bloq-select" name="category"><option value=''>Todas</option>
 	            [% FOR cat_op IN category_options %]
 	            	[% IF NOT loop.first %]
 	                	<option value='[% cat_op | html %]'[% ' selected' IF category == cat_op %]>[% cat_op | html %]</option>
@@ -31,9 +29,9 @@
 	        </select>
 	    </div>
 	    <div class="dash-filter">
-			<label for="state">[% loc('State') %]</label>
+			<label for="state">Estado de respuesta</label>
 			<select name="state">
-				<option value=''>All</option>
+				<option value=''>Todos</option>
 		            [% FOREACH stateElem IN [ ['confirmed', loc('Open')], ['investigating',
 		            loc('Investigating')], ['action scheduled', loc('Planned')], ['in progress',
 		            loc('In Progress')], ['closed', loc('Closed')], ['fixed', loc('Fixed')] ] %]
@@ -43,9 +41,9 @@
 	        <input type="submit" value="Buscar">
 	    </div>
 		<div class="deadlines-filter">
-			<label for="deadline">Deadline:</label>
-	            [% FOREACH deadlineElem IN [ ['overdue', loc('Overdue')], ['alert', loc('Alert')], ['warning', loc('Warning')], ['noDeadLine', loc('No Dead Line')] ] %]
-	            <input type="checkbox" name="deadline" class="deadline" [% 'checked ' IF deadline.defined(deadlineElem.0) %] value="[% deadlineElem.0 %]">[% deadlineElem.1 %]</input>
+			<label for="deadline">Fecha límite (8 días hábiles):</label>
+	            [% FOREACH deadlineElem IN [ ['problem-overdue', loc('Overdue')], ['problem-alert', loc('Alert')], ['problem-warning', loc('Warning')], ['noDeadLine', loc('No Dead Line')] ] %]
+	            <input type="checkbox" name="deadline" class="deadline" checked value="[% deadlineElem.0 %]">[% deadlineElem.1 %]</input>
 	            [% END %]
 	            <!-- if( $element ~~ @list ){ ... } -->
 	    </div>
@@ -53,10 +51,10 @@
 	</div>
 </form>
 
-<table class="table" width="100%" id="reports">
+<table class="tablesorter table" width="100%" id="reports">
 	<thead>
         <tr>
-            <td>Titulo</td><td>Grupo</td><td>Categoria</td><td>Creado</td><td>Ultima actualizacion</td><td>Estado</td>
+            <th>Título</th><th>Grupo</th><th>Categoría</th><th>Creado</th><th>Última actualización</th><th>Estado de respuesta</th>
         </tr>
     </thead>
     [% INCLUDE problemsb %]
@@ -67,17 +65,52 @@
 <script src="[% start %][% version('/js/jquery-ui/js/jquery-ui-1.10.3.custom.min.js') %]" charset="utf-8"></script>
 <link rel="stylesheet" href="[% start %][% version('/js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css') %]">
 
+<script type="text/javascript">
+    $(".bloq-select").on('change', function(){
+        var selectedId = $(this).attr("id");
+        if ($(this).val()!="") {
+            //bloqueo el resto $(this).attr('id')
+            $(".bloq-select").each(function( index ) {
+              if(selectedId != $(this).attr("id")){
+                  $(this).prop("disabled",true);
+              }
+            });
+        }
+        else {
+            $(".bloq-select").each(function( index ) {
+              if(selectedId != $(this).attr("id")){
+                  $(this).prop("disabled",false);
+              }
+            });
+        }
+
+    });
+</script>
+<script type="text/javascript" src="[% version('/js/jquery.tablesorter.min.js') %]"></script>
+<script>
+	$(document).ready(function()
+	    {
+	    	$('.time').each(function(){
+	    		$(this).html($(this).html().split(" ")[0]);
+	    	});
+	        $("#reports").tablesorter( {sortList: [[3,1], [4,0]]} );
+	    }
+	);
+</script>
+</script>
 [% INCLUDE 'footer.html' %]
 
 [% BLOCK problemsb %]
+	<tbody>
 	[% FOR p IN problems %]
 		<tr class="dash-problem [% p.deadline %]">
 			<td><a href="/report/[% p.id %]">[% p.title | html %]</a></td>
 			<td>[% p.group | html %]</td>
 			<td>[% p.category | html %]</td>
-			<td>[% p.created | html %]</td>
-			<td>[% p.lastupdate_council | html %]</td>
-			<td>[% p.state | html %]</td>
+			<td class="time">[% p.created IF p.created %]</td>
+			<td class="time">[% p.lastupdate_council IF p.lastupdate_council %]</td>
+			<td>[% p.state_name | html %]</td>
 		</tr>
 	[% END %]
+	</tbody>
 [% END %]

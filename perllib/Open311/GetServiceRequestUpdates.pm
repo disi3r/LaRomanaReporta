@@ -79,11 +79,7 @@ sub update_comments {
         return 0;
     }
 
-    print Dumper($requests);
-
     for my $request (@$requests) {
-        use Data::Dumper;
-
         my $request_id = $request->{service_request_id};
 
         # If there's no request id then we can't work out

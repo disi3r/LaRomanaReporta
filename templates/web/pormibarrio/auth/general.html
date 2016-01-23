@@ -4,7 +4,7 @@
 %]
 
 <form action="[% c.uri_for() %]" method="post" name="general_auth" class="validate">
-<input type="hidden" name="r" value="/my">
+<input type="hidden" name="r" value="[% c.req.params.r | html %]">
     [% IF email_error;
 
         # other keys include fqdn, mxcheck if you'd like to write a custom error message

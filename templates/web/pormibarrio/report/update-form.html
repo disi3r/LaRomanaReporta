@@ -31,37 +31,38 @@
 		[% END %]
 		</div>
 		<div class="boxs">
-			<div class="checkbox">
-				<input type="checkbox" name="may_show_name" id="form_may_show_name" value="1"[% ' checked' IF update.anonymous==0 OR (c.cobrand.default_show_name AND update.anonymous=='') %]>
-				<label class="inline" for="form_may_show_name">[% loc('Show my name publicly') %]</label>
-			</div>
-			<div class="checkbox">
-				<input type="checkbox" name="add_alert" id="form_add_alert" value="1"[% ' checked' IF add_alert %]>
-				<label class="inline" for="form_add_alert">[% loc( 'Alert me to future updates' ) %]</label>
-			</div>
-
 			[% IF c.user && c.user.belongs_to_body( problem.bodies_str ) %]
-			<div class="form-group">
-				<label for="form_state">[% loc( 'State' ) %]</label>
-				<select name="state" id="form_state">
-					[% FOREACH state IN [ ['confirmed', loc('Open')], ['investigating',
-					loc('Investigating')], ['action scheduled', loc('Action Scheduled')],
-					['in progress', loc('In Progress')], ['duplicate', loc('Duplicate')],
-					['unable to fix', loc('Unable to fix')], ['not responsible', loc('Not Responsible')],
-					['fixed', loc('Fixed')], ['hidden', loc('Hidden')] ] %]
-					<option [% 'selected ' IF state.0 == problem.state %] value="[% state.0 %]">[% state.1 %]</option>
-					[% END %]
-				</select>
-			</div>
-			<div class="form-group">
-				<label for="form_category">[% loc( 'Assign category' ) %]</label>
-				<select name="new_category" id="form_category">
-					[% FOREACH cat IN categories %]
-					<option [% 'selected ' IF cat == problem.category %] value="[% cat %]">[% cat %]</option>
-					[% END %]
-				</select>
-			</div>
+				<input type="hidden" name="may_show_name" id="form_may_show_name" value="1">
+				<input type="hidden" name="add_alert" id="form_may_show_name" value="1">
+				<input type="hidden" id="terms_agree" value="1">
+				<div class="form-group">
+					<label for="form_state">[% loc( 'State' ) %]</label>
+					<select name="state" id="form_state">
+						[% FOREACH state IN [ ['investigating',
+						loc('Investigating')], ['action scheduled', loc('Action Scheduled')],
+						['in progress', loc('In Progress')], ['fixed', loc('Fixed')] ] %]
+						<option [% 'selected ' IF state.0 == problem.state %] value="[% state.0 %]">[% state.1 %]</option>
+						[% END %]
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="form_category">[% loc( 'Assign category' ) %]</label>
+					<select name="new_category" id="form_category">
+						[% FOREACH cat IN categories %]
+						<option [% 'selected ' IF cat == problem.category %] value="[% cat %]">[% cat %]</option>
+						[% END %]
+					</select>
+				</div>
+				<textarea rows=4 name="update" id="form_update" placeholder="Escriba aquí su comentario *" class="[% IF field_errors.update %] error [% END %] required">[% update.text | html %]</textarea>
 			[% ELSE %]
+				<div class="checkbox">
+					<input type="checkbox" name="may_show_name" id="form_may_show_name" value="1"[% ' checked' IF update.anonymous==0 OR (c.cobrand.default_show_name AND update.anonymous=='') %]>
+					<label class="inline" for="form_may_show_name">[% loc('Show my name publicly') %]</label>
+				</div>
+				<div class="checkbox">
+					<input type="checkbox" name="add_alert" id="form_add_alert" value="1"[% ' checked' IF add_alert %]>
+					<label class="inline" for="form_add_alert">[% loc( 'Alert me to future updates' ) %]</label>
+				</div>
 				[% IF problem.is_fixed AND c.user_exists AND c.user.id == problem.user_id %]
 					<div class="checkbox">
 						<input type="checkbox" name="reopen" id="form_reopen" value="1"[% ' checked' IF update.mark_open %]>
@@ -73,13 +74,14 @@
 						<label class="inline" for="form_fixed">[% loc('This problem has been fixed') %]</label>
 					</div>
 				[% END %]
+				<textarea rows=4 name="update" id="form_update" placeholder="Escriba aquí su comentario *" class="[% IF field_errors.update %] error [% END %] required">[% update.text | html %]</textarea>
+				<div class="checkbox terms_agree">
+					<input type="checkbox" id="terms_agree" value="">
+		            <label class="inline">[% loc('Agreed') %]<a href="/privacy"> [% loc('Terms & Conditions') %]</a></label>
+				</div>
 			[% END %]
 		</div>
-		<textarea rows=4 name="update" id="form_update" placeholder="Escriba aquí su comentario *" class="[% IF field_errors.update %] error [% END %] required">[% update.text | html %]</textarea>
-		<div class="checkbox">
-			<input type="checkbox" id="terms-agree" value="">
-            <label class="inline">[% loc('Agreed') %]<a href="/privacy"> [% loc('Terms & Conditions') %]</a></label>
-		</div>
+		
 		<!--Sign In-->
 		[% IF c.user_exists %]
 			<input type="hidden" name="name" id="form_name" value="[% update.name || c.user.name | html %]">
@@ -90,7 +92,8 @@
 		[% END %]
 	</div>
 	[% IF !c.user_exists %]
-		[% INCLUDE auth/login_block.html 
+		[% INCLUDE auth/login_block.html
+			one_time_login = 1 
 	        summary = loc("Login to your account to be able to send your update to your local government")
 	        sign_in_button = '<button class="btn btn-block btn-green" type="submit" id="submit_register" name="submit_register">Regístrate y publica</button>'
 	    %]

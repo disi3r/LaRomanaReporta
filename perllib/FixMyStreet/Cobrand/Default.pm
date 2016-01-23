@@ -896,4 +896,5 @@ sub send_comptroller_agregate { 0 }
 
 sub send_comptroller_repeat { 0 }
 
+sub skip_send_after { 0 }
 1;

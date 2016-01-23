@@ -14,15 +14,40 @@
 [% map_html %]
 
 </div>
-
+<iframe id="ifmcontentstoprint" style="height: 0px; width: 0px; position: absolute"></iframe>
 <div class="c-report">
 	<div class="container-report">
 		<!--REPORT-->
-		<div class="report">
+		<div class="report visible-print-block">
 			<div id="update-display" class="info-report scrolled-report">
+			<div id="print-header">
+                    <table align="center" style="width: 95%; height: 180px; margin: 0 auto 0 auto;">
+                        <tbody>
+                          <tr>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarrio/images/logoIMM.jpg"></td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;">
+                              <div id="report-print-header-title">
+                                <br/><br/>
+                                Comprobante de reporte<br/>
+                                Reporte Nº [% problem.id | html %]<br/>
+                                Fecha: <span id="today"></span>
+                              </div>
+                            </td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/LogoPMBazulFondoBlanco.png"></td>
+                          </tr>
+                          <tr>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;">Intendencia de Montevideo<br/> www.montevideo.gub.uy</td>
+                            <td style="width: 33%;"></td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;">www.pormibarrio.uy</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+                </div>
+
                 [% INCLUDE 'report/_main.html' %]
                 [% TRY %][% INCLUDE 'report/_message_manager.html' %][% CATCH file %][% END %]
-                <div class="actions">
+                <div class="actions hidden-print">
                     <ul class="actions">
                         <li><button type="button" class="follow-report">[% loc('Get updates' ) %]</button></li>
                         [% IF c.user_exists AND c.cobrand.users_can_hide AND ( c.user.belongs_to_body( c.cobrand.council_id ) OR c.user.id == problem.user_id ) %]
@@ -51,8 +76,8 @@
                         </form>
                     </div>
                     <div class="reportar-hide-content user-info">
-                        <form method="post" action="/report/delete/[% problem.id %]" id="remove-from-site-form">
-                            <button type="submit" id="key-tool-hide" class="btn btn-sky btn-small btn-comentar" value="Remove from site">[% loc('Confirm') %]</button>
+                        <form id="hide-form" method="post" action="/report/delete/[% problem.id %]" id="remove-from-site-form">
+                            <button onclick="ConfirmDialog('¿Está seguro de que desea ocultar su reporte? Este no aparecerá más en la página si es ocultado.');" type="submit" id="key-tool-hide" class="btn btn-sky btn-small btn-comentar" value="Remove from site">[% loc('Confirm') %]</button>
                         </form>
                     </div>
                     <div style="" class="reportar-abuso-content user-info">
@@ -82,14 +107,14 @@
                         </form>
                     </div>
                 </div><!--end actions -->   
-                <div class="comments">
+                <div id="comments-on-report" class="comments">
                     <h3>Comentarios</h3>
                 [% IF problem.is_fixed %]
                     <p class="status-report-im">La IM no recibirá comentarios ya que el problema se encuentra finalizado. Puedes hacer un nuevo reclamo haciendo click <a href="" id="new-report-link">aquí</a>.</p>
                     <script>$('#new-report-link').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom; return false; });</script>
                 [% END %]
                     [% INCLUDE 'report/updates.html' %]
-                    <div class="comment-user comment">
+                    <div id="comment-login" class="comment-user comment">
                         [% INCLUDE 'report/update-form.html' %]
                     </div>
                 </div>
@@ -120,6 +145,72 @@
 			$('#update-display').slimScroll({ scrollTo: $('[% scroll_to %]').offset().top }); 
 		});
 	[% END %]
+</script>
+
+<script>
+function printReportDetail(){
+    var fullDate = new Date();
+    var twoDigitMonth = fullDate.getMonth();
+    twoDigitMonth = twoDigitMonth +1;
+    twoDigitMonth = twoDigitMonth + "";
+    if(twoDigitMonth.length==1){
+	twoDigitMonth="0" +twoDigitMonth;
+    }
+    var twoDigitDate = fullDate.getDate()+"";if(twoDigitDate.length==1)	twoDigitDate="0" +twoDigitDate;
+    var hour = fullDate.getHours();
+    if (hour < 10){
+      hour = "0" + hour;
+    }
+    var minute = fullDate.getMinutes();
+    if (minute < 10){
+      minute = "0" + minute;
+    }
+    var currentDate = twoDigitDate + "/" + twoDigitMonth + "/" + fullDate.getFullYear() + " " + hour + ":" + minute;
+    $("#today").empty();
+    $("#today").append(currentDate);
+    var content = document.getElementById("update-display");
+    var pri = document.getElementById("ifmcontentstoprint").contentWindow;
+    pri.document.open();
+    pri.document.write(content.innerHTML);
+    pri.document.close();
+    pri.focus();
+    var $photo = $("#report_photo_img").clone();
+    var $head = $("#ifmcontentstoprint").contents().find("head");
+    $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarrio/base.css", type: "text/css" }));
+    $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarrio/layout.css", type: "text/css" }));
+    $head.append($("<link/>",{ rel: "stylesheet", href: "/js/fancybox/jquery.fancybox-1.3.4.css", type: "text/css" }));
+    $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarrio/main.css", type: "text/css" }));
+    $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarrio/bootstrap.min.css", type: "text/css" }));
+    $head.append($("<link/>",{ rel: "stylesheet", href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic", type: "text/css" }));
+    $head.append($("<link/>",{ rel: "stylesheet", href: "/js/OpenLayers-2.13.1/theme/default/style.css", type: "text/css" }));
+    $("#ifmcontentstoprint").contents().find("#report_photo").append($photo);
+    $('#ifmcontentstoprint').ready(function() {
+        setTimeout(function(){pri.print();}, 650);
+    });
+
+}
+
+function ConfirmDialog(message){
+    $('<div></div>').appendTo('body')
+                    .html('<div><h6>'+message+'</h6></div>')
+                    .dialog({
+                        modal: true, title: 'Ocultar reporte', zIndex: 10000, autoOpen: true,
+                        width: '300px', resizable: false,
+                        buttons: {
+                            Si: function () {
+                                $("#hide-form").submit();
+                                $(this).dialog("close");
+                            },
+                            No: function () {
+                                $(this).dialog("close");
+                            }
+                        },
+                        close: function (event, ui) {
+                            return false;
+                            $(this).remove();
+                        }
+                    });
+    };
 </script>
 
 [% INCLUDE 'footer.html' %]

@@ -8,6 +8,7 @@ use LWP::UserAgent;
 use DateTime::Format::W3CDTF;
 use HTTP::Request::Common qw(POST);
 use warnings;
+use Data::Dumper;
 
 has jurisdiction => ( is => 'ro', isa => 'Str' );;
 has api_key => ( is => 'ro', isa => 'Str' );
@@ -16,7 +17,7 @@ has test_mode => ( is => 'ro', isa => 'Bool' );
 has test_uri_used => ( is => 'rw', 'isa' => 'Str' );
 has test_req_used => ( is => 'rw' );
 has test_get_returns => ( is => 'rw' );
-has endpoints => ( is => 'rw', default => sub { { services => 'services.xml', requests => 'requests.xml', service_request_updates => 'servicerequestupdates.xml', update => 'servicerequestupdates.xml' } } );
+has endpoints => ( is => 'rw', default => sub { { services => 'services.xml', requests => 'requests.xml', service_request_updates => 'servicerequestupdates.xml', update => 'servicerequestupdates.xml', service_request_new => 'newServiceRequestLogs.xml' } } );
 has debug => ( is => 'ro', isa => 'Bool', default => 0 );
 has debug_details => ( is => 'rw', 'isa' => 'Str', default => '' );
 has success => ( is => 'rw', 'isa' => 'Bool', default => 0 );
@@ -39,7 +40,10 @@ sub get_service_list {
     my $self = shift;
 
     my $service_list_xml = $self->_get( $self->endpoints->{services} );
-
+    print "SERVICE LIST \n";
+    print $self->endpoints->{services};
+    print $service_list_xml;
+    print "\nTermina";
     if ( $service_list_xml ) {
         return $self->_get_xml_object( $service_list_xml );
     } else {
@@ -53,6 +57,42 @@ sub get_service_meta_info {
 
     my $service_meta_xml = $self->_get( "services/$service_id.xml" );
     return $self->_get_xml_object( $service_meta_xml );
+}
+
+sub get_service_custom_meta_info {
+    my $self = shift;
+    my $service_id = shift;
+
+    my $service_meta_xml = $self->_get( "requestsPortal/$service_id.xml" );
+    return $self->_get_xml_object( $service_meta_xml );
+}
+
+#Servicio para obtener los Ids de problemas nuevos
+sub get_service_problems {
+    my $self = shift;
+    my $start_date = shift;
+    my $end_date = shift;
+
+    my $params = {};
+
+    if ( $start_date || $end_date ) {
+        return 0 unless $start_date && $end_date;
+
+        $params->{start_date} = $start_date;
+        $params->{end_date} = $end_date;
+    }
+
+    my $xml = $self->_get( $self->endpoints->{service_request_new}, $params || undef );
+    my $service_requests = $self->_get_xml_object( $xml );
+    my $requests;
+    if ( ref $service_requests->{request} eq 'ARRAY' ) {
+        $requests = $service_requests->{request};
+    }
+    else {
+        $requests = [ $service_requests->{request} ];
+    }
+
+    return $requests;
 }
 
 sub send_service_request {
@@ -378,7 +418,8 @@ sub _get {
     $uri->query_form( $params );
 
     $self->debug_details( $self->debug_details . "\nrequest:" . $uri->as_string );
-
+    print "GET";
+    print $uri->as_string;
     my $content;
     if ( $self->test_mode ) {
         $self->success(1);
@@ -388,6 +429,7 @@ sub _get {
         my $ua = LWP::UserAgent->new;
         my $user = mySociety::Config::get('HTTPS_USER_AUTH', undef);
         my $password = mySociety::Config::get('HTTPS_PASS_AUTH', undef);
+        $ua->ssl_opts(verify_hostname => 0);
         $ua->credentials("www.montevideo.gub.uy:443", "www.montevideo.gub.uy:443", $user, $password);
 
         my $req = HTTP::Request->new(
@@ -431,6 +473,7 @@ sub _post {
     $self->debug_details( $self->debug_details . "\nrequest:" . $req->as_string );
 
     my $ua = LWP::UserAgent->new;
+    $ua->ssl_opts(verify_hostname => 0);
     my $user = mySociety::Config::get('HTTPS_USER_AUTH', undef);
     my $password = mySociety::Config::get('HTTPS_PASS_AUTH', undef);
 
@@ -453,7 +496,7 @@ sub _post {
     } else {
         $self->success(0);
         print "ERROR";
-        #print $self->debug_details;
+        print $res->decoded_content;
         $self->error( sprintf(
             "request failed: %s\nerror: %s\n%s\n",
             $res->status_line,

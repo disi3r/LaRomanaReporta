@@ -1,3 +1,4 @@
+[% USE date %]
 [% INCLUDE header.html
     title = loc('Stats')
 %]
@@ -5,11 +6,11 @@
 	<form method="post" action="stats" enctype="application/x-www-form-urlencoded" accept-charset="utf-8">
 		<div class="stats-form stats-form-first">
 			<label for="start_date">[% loc('Start Date:') %]</label>
-		    <input type="text" placeholder="[% loc('Click here or enter as yyyy-mm-dd') %]" name="start_date" id="stats-start-date"
-		      value="[% start_date ? start_date.strftime( '%Y-%m-%d') : '' | html %]" />
+		    <input type="text" placeholder="Introduzca la fecha con el formato día/mes/año" name="start_date" id="stats-start-date"
+		      value="[% start_date ? start_date.strftime( '%d/%m/%Y') : '01/08/2014' | html %]" />
 
 		    <label for="end_date">[% loc('End Date:') %]</label>
-		    <input type="text" placeholder="[% loc('Click here or enter as yyyy-mm-dd') %]" name="end_date" id="stats-end-date" size="5" value="[% end_date ? end_date.strftime( '%Y-%m-%d') : '' | html %]" />
+		    <input type="text" placeholder="Introduzca la fecha con el formato día/mes/año" name="end_date" id="stats-end-date" size="5" value="[% end_date ? end_date.strftime( '%d/%m/%Y') : date.format(date.now, '%d/%m/%Y') %]" />
 		    
 		    <input class="btn-stats" type="submit" name="getcounts"  size="30" id="getcounts" value="Ingresar" />
 		</div>
@@ -17,7 +18,12 @@
 		    <input class="btn-stats" type="submit" name="last_week" value="Última semana" />
 		    <input class="btn-stats" type="submit" name="last_month" value="Último mes" />
 		    <input class="btn-stats" type="submit" name="last_six_months" value="Últimos 6 meses" />
-		    <input class="btn-stats" type="submit" name="all" value="Desde el comienzo" />
+		    <input id="from_start" class="btn-stats" type="submit" name="all" value="Desde el comienzo" />
+		    <script>
+		    	$('#from_start').click(function(){
+		    		$('#stats-start-date').val('01/08/2014');
+		    	});
+		    </script>
 		</div>
 	</form>
 
@@ -28,283 +34,287 @@
 	[% END %]
 </div>
 
-<script src="[% start %][% version('/js/highcharts.js') %]" charset="utf-8"></script>
-<script src="[% start %][% version('/js/highcharts-3d.js') %]" charset="utf-8"></script>
-<script src="[% start %][% version('/js/jquery-ui/js/jquery-ui-1.10.3.custom.min.js') %]" charset="utf-8"></script>
-<link rel="stylesheet" href="[% start %][% version('/js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css') %]">
+[% IF start_date %]
+	<script src="[% start %][% version('/js/highcharts.js') %]" charset="utf-8"></script>
+	<script src="[% start %][% version('/js/highcharts-3d.js') %]" charset="utf-8"></script>
+	<script src="[% start %][% version('/js/jquery-ui/js/jquery-ui-1.10.3.custom.min.js') %]" charset="utf-8"></script>
+	<link rel="stylesheet" href="[% start %][% version('/js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css') %]">
 
-<div id="download-data"></div>
-<h3 style="margin-top: 4%; text-align: center;">Visualizando desde [% start_date_solo %] al [% end_date_solo %]</h3>
-<div id="graphs" style="height: 400px">
-	<div class="graph-totals-values" class="chart-group"></div>
-	<div id="graph-totals" style="height: 300px; width: 60%;" class="chart-group"></div>
-	<div id="graph-total-cat" style="height: 400px; width: 100%;" class="chart-group"></div>
-	<div id="graph-evolution" style="height: 400px; width: 100%;" class="chart-group"></div>
-	<div id="chart-subcat">
-		<select id="subcat-select"></select>
+	<div id="download-data"></div>
+	<h3 style="margin-top: 4%; text-align: center;">Visualizando desde [% start_date ? start_date.strftime( '%d/%m/%Y') : '' | html %] al [% end_date ? end_date.strftime( '%d/%m/%Y') : '' | html %]</h3>
+	<div id="graphs" style="height: 400px">
+		<div class="graph-totals-values" class="chart-group"></div>
+		<div id="graph-totals" style="height: 300px; width: 60%;" class="chart-group"></div>
+		<div id="graph-total-cat" style="height: 400px; width: 100%;" class="chart-group"></div>
+		<div id="graph-evolution" style="height: 400px; width: 100%;" class="chart-group"></div>
+		<div id="chart-subcat">
+			<select id="subcat-select"></select>
+		</div>
+		<div id="graph-subcat" style="height: 400px;"></div>
 	</div>
-	<div id="graph-subcat" style="height: 400px;"></div>
-</div>
-<script>
+	<script>
 
-[% IF stats_json %]
-	//Create main stats
-	var stats = [% stats_json %];
-	$(".graph-totals-values").append($("<span class='values-titles'>"+stats.users+" usuarios*</span><span class='values-titles'>"+stats.total+" reportes</span><span>"+stats.fixed+" finalizados</span><span>"+stats.in_progress+" en progreso</span><span>"+stats.confirmed+" ingresados</span>"));
-	create_charts(stats, false);
-	var totals_csv = '"grupo","categoria","total_reportados","total_finalizados","total_en_progreso","total_ingresados"\r\n';
-	$.each(stats, function(gid,group){
-		if (typeof group.name != 'undefined'){
-			//Create group structure
-			$("#graph-subcat").append($("<div>", {id: "group"+gid, class: "graph-group", style: "height: 300px;"}));
-			$("#group"+gid).append($("<div class='graph-totals-values' class='chart-group'><h2>"+group.name+"</h2><span>"+group.fixed+" finalizados</span><span>"+group.in_progress+" en progreso</span><span>"+group.confirmed+" ingresados</span></div>"));
-			$("#group"+gid).append($("<div>", {id: "chart-cat"+gid, class: "chart-group", style: "height: 300px; width: 60%;"}));
-			$("#group"+gid).append($("<div>", {id: "chart-totals"+gid, class: "chart-group", style: "height: 300px; width: 100%;"}));
-			$("#group"+gid).append($("<div>", {id: "chart-evolution"+gid, class: "chart-group", style: "height: 300px; width: 100%;"}));
-			var data = [];
-			//Append option
-			$("#subcat-select").append($("<option>", {value: gid, text: group.name}));
-			
-			//Create chart
-			data.push('Desglose '+group.name);
-			data.push('Total de reportes enviados a la IM en '+group.name);
-			data.push("#chart-cat"+gid);
-			data.push('Totales en '+group.name);
-			data.push("#chart-totals"+gid);
-			data.push('Evolucion en '+group.name);
-			data.push("#chart-evolution"+gid);
-			create_charts(group, data);
+	[% IF stats_json %]
+		//Create main stats
+		var stats = [% stats_json %];
+		$(".graph-totals-values").append($("<span class='values-titles'>"+stats.users+" usuarios*</span><span class='values-titles'>"+stats.total+" reportes</span><span>"+stats.fixed+" finalizados</span><span>"+stats.in_progress+" en progreso</span><span>"+stats.confirmed+" ingresados</span>"));
+		create_charts(stats, false);
+		var totals_csv = '"grupo","categoria","total_reportados","total_finalizados","total_en_progreso","total_ingresados"\r\n';
+		$.each(stats, function(gid,group){
+			if (typeof group.name != 'undefined'){
+				//Create group structure
+				$("#graph-subcat").append($("<div>", {id: "group"+gid, class: "graph-group", style: "height: 300px;"}));
+				$("#group"+gid).append($("<div class='graph-totals-values' class='chart-group'><h2>"+decodeURIComponent(escape(group.name))+"</h2><span>"+group.fixed+" finalizados</span><span>"+group.in_progress+" en progreso</span><span>"+group.confirmed+" ingresados</span></div>"));
+				$("#group"+gid).append($("<div>", {id: "chart-cat"+gid, class: "chart-group", style: "height: 300px; width: 60%;"}));
+				$("#group"+gid).append($("<div>", {id: "chart-totals"+gid, class: "chart-group", style: "height: 300px; width: 100%;"}));
+				$("#group"+gid).append($("<div>", {id: "chart-evolution"+gid, class: "chart-group", style: "height: 300px; width: 100%;"}));
+				var data = [];
+				//Append option
+				$("#subcat-select").append($("<option>", {value: gid, text: decodeURIComponent(escape(group.name))}));
+				
+				//Create chart
+				data.push('Desglose '+decodeURIComponent(escape(group.name)));
+				data.push('Total de reportes enviados a la IM en '+decodeURIComponent(escape(group.name)));
+				data.push("#chart-cat"+gid);
+				data.push('Totales en '+decodeURIComponent(escape(group.name)));
+				data.push("#chart-totals"+gid);
+				data.push('Evolucion en '+decodeURIComponent(escape(group.name)));
+				data.push("#chart-evolution"+gid);
+				create_charts(group, data);
 
-			//Create CSV
-			$.each(group, function(subcatname, subcat){
-				if( $.isPlainObject(subcat) ){
-					var line = gid+','+subcat.name+','+subcat.total+','+subcat.fixed+','+subcat.in_progress+','+subcat.confirmed;
-					totals_csv += line + '\r\n';
-				}
-			});
-		}
-	});
-	//Ocultamos todos al principio salvo el primero
-	//Select options to change divs to be seen
-	$("#subcat-select").change(function(e){
-		$( "#subcat-select option:selected" ).each(function() {
-			$('.graph-group').hide();
-			$("#group"+$( this ).val()).show();
-    	});
-	});
-	//Creamos links para descarga de datos
-	$("#download-data").append('<a onclick="download_totals(totals_csv)" class="download-links" id="download-totals">Descarga de totales</a>');
-	[% IF problem_csv %]
-		var problem_csv = [% problem_csv %];
-		$("#download-data").append('<a onclick="download_totals(problem_csv)" class="download-links" id="download-reports">Descarga de reportes</a>');
-	[% END %]
-	function download_totals(var_csv){
-		if (navigator.appName != 'Microsoft Internet Explorer'){
-        	window.open('data:text/csv;charset=utf-8,' + escape(var_csv));
-    	}
-	    else{
-	        var popup = window.open('','csv','');
-	        popup.document.body.innerHTML = '<pre>' + str + '</pre>';
-	    }
-	}
-	function download_reports(){
-		if (navigator.appName != 'Microsoft Internet Explorer'){
-        	window.open('data:text/csv;charset=utf-8,' + escape(var_csv));
-    	}
-	    else{
-	        var popup = window.open('','csv','');
-	        popup.document.body.innerHTML = '<pre>' + str + '</pre>';
-	    }
-	}
-	//Chart for group totals
-	function create_charts(groups, data){
-		var groups_totals = [];
-		var groups_names = [];
-		var groups_fixed = [];
-		var groups_in_progress = [];
-		var groups_confirmed = [];
-		var groups_months = [% months_json %];
-		var groups_evol_totals = [];
-		var groups_evol_fixed = [];
-		var groups_evol_in_progress = [];
-		var groups_evol_confirmed = [];
-
-		var confirmed_title = 'Confirmados por categoría';
-		var confirmed_subtitle = 'Total de reportes enviados a la IM por categoría';
-		var confirmed_div = '#graph-totals';
-		var totals_title = 'Totales por categoría';
-		var totals_div = '#graph-total-cat';
-		var evolution_title = 'Evolución de reportes';
-		var evolution_div = '#graph-evolution';
-
-		if ( data ){
-			confirmed_title = data[0];
-			confirmed_subtitle = data[1];
-			confirmed_div = data[2];
-			totals_title = data[3];
-			totals_div = data[4];
-			evolution_title = data[5];
-			evolution_div = data[6];
-		}
-		$.each(groups, function(gid,group){
-			if( $.isPlainObject(group) ){
-				groups_totals.push([group.name,group.total]);
-				groups_names.push(group.name);
-				groups_fixed.push(group.fixed);
-				groups_in_progress.push(group.in_progress);
-				groups_confirmed.push(group.confirmed);
-				if ( data ){
-					groups_evol_fixed = group.evolution.fixed;
-					groups_evol_in_progress = group.evolution.in_progress;
-					groups_evol_confirmed = group.evolution.confirmed;
-				}
-				else{
-					groups_evol_totals.push({name: group.name, data: group.evolution});
-				}
+				//Create CSV
+				$.each(group, function(subcatname, subcat){
+					if( $.isPlainObject(subcat) ){
+						var line = gid+','+subcat.name+','+subcat.total+','+subcat.fixed+','+subcat.in_progress+','+subcat.confirmed;
+						totals_csv += line + '\r\n';
+					}
+				});
 			}
 		});
-	    $(confirmed_div).highcharts({
-	        chart: {
-	            type: 'pie',
-	            options3d: {
-	                enabled: true,
-	                alpha: 60
-	            }
-	        },
-	        title: {
-	            text: confirmed_title
-	        },
-	        subtitle: {
-	            text: confirmed_subtitle
-	        },
-	        plotOptions: {
-	            pie: {
-	                innerSize: 100,
-	                depth: 45
-	            }
-	        },
-	        series: [{
-	            name: 'Reportes',
-	            data: groups_totals
-	        }]
-	    });
-		//Chart for group details
-	    $(totals_div).highcharts({
-	        chart: {
-	            type: 'bar'
-	        },
-	        title: {
-	            text: totals_title
-	        },
-	        xAxis: {
-	            categories: groups_names
-	        },
-	        yAxis: {
-	            min: 0,
-	            title: {
-	                text: 'Total de reportes'
-	            }
-	        },
-	        legend: {
-	            reversed: true
-	        },
-	        plotOptions: {
-	            series: {
-	                stacking: 'normal'
-	            }
-	        },
-	        series: [{
-	            name: 'Finalizados',
-	            data: groups_fixed
-	        }, {
-	            name: 'En progreso',
-	            data: groups_in_progress
-	        }, {
-	            name: 'Ingresados',
-	            data: groups_confirmed
-	        }]
-	    });
-	    if ( data ){
-		    //Charts for evolution
-		    $(evolution_div).highcharts({
+		//Ocultamos todos al principio salvo el primero
+		//Select options to change divs to be seen
+		$("#subcat-select").change(function(e){
+			$( "#subcat-select option:selected" ).each(function() {
+				$('.graph-group').hide();
+				$("#group"+$( this ).val()).show();
+	    	});
+		});
+		//Creamos links para descarga de datos
+		$("#download-data").append('<a onclick="download_totals(totals_csv)" class="download-links" id="download-totals">Descarga de totales</a>');
+		[% IF problem_csv %]
+			var problem_csv = [% problem_csv %];
+			$("#download-data").append('<a onclick="download_totals(problem_csv)" class="download-links" id="download-reports">Descarga de reportes</a>');
+		[% END %]
+		function download_totals(var_csv){
+			if (navigator.appName != 'Microsoft Internet Explorer'){
+	        	window.open('data:text/csv;charset=utf-8,' + escape(var_csv));
+	    	}
+		    else{
+		        var popup = window.open('','csv','');
+		        popup.document.body.innerHTML = '<pre>' + str + '</pre>';
+		    }
+		}
+		function download_reports(){
+			if (navigator.appName != 'Microsoft Internet Explorer'){
+	        	window.open('data:text/csv;charset=utf-8,' + escape(var_csv));
+	    	}
+		    else{
+		        var popup = window.open('','csv','');
+		        popup.document.body.innerHTML = '<pre>' + str + '</pre>';
+		    }
+		}
+		//Chart for group totals
+		function create_charts(groups, data){
+			var groups_totals = [];
+			var groups_names = [];
+			var groups_fixed = [];
+			var groups_in_progress = [];
+			var groups_confirmed = [];
+			var groups_months = [% months_json %];
+			var groups_evol_totals = [];
+			var groups_evol_fixed = [];
+			var groups_evol_in_progress = [];
+			var groups_evol_confirmed = [];
+
+			var confirmed_title = 'Confirmados por categoría';
+			var confirmed_subtitle = 'Total de reportes enviados a la IM';
+			var confirmed_div = '#graph-totals';
+			var totals_title = 'Totales por categoría';
+			var totals_div = '#graph-total-cat';
+			var evolution_title = 'Evolución de reportes';
+			var evolution_div = '#graph-evolution';
+
+			if ( data ){
+				confirmed_title = data[0];
+				confirmed_subtitle = data[1];
+				confirmed_div = data[2];
+				totals_title = data[3];
+				totals_div = data[4];
+				evolution_title = data[5];
+				evolution_div = data[6];
+			}
+			$.each(groups, function(gid,group){
+				if( $.isPlainObject(group) ){
+					groups_totals.push([decodeURIComponent(escape(group.name)),group.total]);
+					groups_names.push(decodeURIComponent(escape(group.name)));
+					groups_fixed.push(group.fixed);
+					groups_in_progress.push(group.in_progress);
+					groups_confirmed.push(group.confirmed);
+					if ( data ){
+						groups_evol_fixed = group.evolution.fixed;
+						groups_evol_in_progress = group.evolution.in_progress;
+						groups_evol_confirmed = group.evolution.confirmed;
+					}
+					else{
+						groups_evol_totals.push({name: decodeURIComponent(escape(group.name)), data: group.evolution});
+					}
+				}
+			});
+		    $(confirmed_div).highcharts({
 		        chart: {
-		            type: 'area'
-		        },
-		        title: {
-		            text: evolution_title
-		        },
-		        xAxis: {
-		            categories: groups_months,
-		            tickmarkPlacement: 'on',
-		            title: {
-		                enabled: false
+		            type: 'pie',
+		            options3d: {
+		                enabled: true,
+		                alpha: 60
 		            }
 		        },
-		        yAxis: {
-		            title: {
-		                text: 'Reportes'
-		            },
+		        title: {
+		            text: confirmed_title
 		        },
-		        tooltip: {
-		            shared: true,
-		            valueSuffix: ' reportes'
+		        subtitle: {
+		            text: confirmed_subtitle
 		        },
 		        plotOptions: {
-		            area: {
-		                stacking: 'normal',
-		                lineColor: '#666666',
-		                lineWidth: 1,
-		                marker: {
-		                    lineWidth: 1,
-		                    lineColor: '#666666'
-		                }
+		            pie: {
+		                innerSize: 100,
+		                depth: 45
+		            }
+		        },
+		        series: [{
+		            name: 'Reportes',
+		            data: groups_totals
+		        }]
+		    });
+			//Chart for group details
+		    $(totals_div).highcharts({
+		        chart: {
+		            type: 'bar'
+		        },
+		        title: {
+		            text: totals_title
+		        },
+		        xAxis: {
+		            categories: groups_names
+		        },
+		        yAxis: {
+		            min: 0,
+		            title: {
+		                text: 'Total de reportes'
+		            }
+		        },
+		        legend: {
+		            reversed: true
+		        },
+		        plotOptions: {
+		            series: {
+		                stacking: 'normal'
 		            }
 		        },
 		        series: [{
 		            name: 'Finalizados',
-		            data: groups_evol_fixed
+		            data: groups_fixed
 		        }, {
 		            name: 'En progreso',
-		            data: groups_evol_in_progress
+		            data: groups_in_progress
 		        }, {
-		            name: 'Iniciados',
-		            data: groups_evol_confirmed
+		            name: 'Ingresados',
+		            data: groups_confirmed
 		        }]
 		    });
+		    if ( data ){
+			    //Charts for evolution
+			    $(evolution_div).highcharts({
+			        chart: {
+			            type: 'area'
+			        },
+			        title: {
+			            text: evolution_title
+			        },
+			        xAxis: {
+			            categories: groups_months,
+			            tickmarkPlacement: 'on',
+			            title: {
+			                enabled: false
+			            }
+			        },
+			        yAxis: {
+			            title: {
+			                text: 'Reportes'
+			            },
+			        },
+			        tooltip: {
+			            shared: true,
+			            valueSuffix: ' reportes'
+			        },
+			        plotOptions: {
+			            area: {
+			                stacking: 'normal',
+			                lineColor: '#666666',
+			                lineWidth: 1,
+			                marker: {
+			                    lineWidth: 1,
+			                    lineColor: '#666666'
+			                }
+			            }
+			        },
+			        series: [{
+			            name: 'Finalizados',
+			            data: groups_evol_fixed
+			        }, {
+			            name: 'En progreso',
+			            data: groups_evol_in_progress
+			        }, {
+			            name: 'Iniciados',
+			            data: groups_evol_confirmed
+			        }]
+			    });
+			}
+			else {
+				$(evolution_div).highcharts({
+			        title: {
+			            text: evolution_title,
+			            x: -20 //center
+			        },
+			        xAxis: {
+			            categories: groups_months
+			        },
+			        yAxis: {
+			            title: {
+			                text: 'Reportes'
+			            },
+			            plotLines: [{
+			                value: 0,
+			                width: 1,
+			                color: '#808080'
+			            }]
+			        },
+			        tooltip: {
+			            valueSuffix: ' reportes'
+			        },
+			        legend: {
+			            layout: 'vertical',
+			            align: 'right',
+			            verticalAlign: 'middle',
+			            borderWidth: 0
+			        },
+			        series: groups_evol_totals
+			    });
+			}
 		}
-		else {
-			$(evolution_div).highcharts({
-		        title: {
-		            text: evolution_title,
-		            x: -20 //center
-		        },
-		        xAxis: {
-		            categories: groups_months
-		        },
-		        yAxis: {
-		            title: {
-		                text: 'Reportes'
-		            },
-		            plotLines: [{
-		                value: 0,
-		                width: 1,
-		                color: '#808080'
-		            }]
-		        },
-		        tooltip: {
-		            valueSuffix: ' reportes'
-		        },
-		        legend: {
-		            layout: 'vertical',
-		            align: 'right',
-		            verticalAlign: 'middle',
-		            borderWidth: 0
-		        },
-		        series: groups_evol_totals
-		    });
-		}
-	}
+	[% END %]
+	</script>
+[% ELSE %]
+	<h3 style="margin-top: 4%; text-align: center;">[% loc('Select the period you want') %]</h3>
 [% END %]
-</script>
 
 [% INCLUDE footer.html %]

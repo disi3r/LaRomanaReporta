@@ -54,6 +54,8 @@
 
         <script type="text/javascript" src="[% version('/js/jquery-slimscroll/jquery.slimscroll.min.js') %]"></script>
         <!--<script type="text/javascript" src="[% version('/js/jquery.easing.1.3.js') %]"></script>-->
+        <script src="[% start %][% version('/js/jquery-ui-1.11.4/jquery-ui.min.js') %]" charset="utf-8"></script>
+        <link rel="stylesheet" href="[% start %][% version('/js/jquery-ui-1.11.4/jquery-ui.min.css') %]">
         <script type="text/javascript" src="[% version('/js/geoconverter.js') %]"></script>
 
         <!--CSS-->
@@ -161,8 +163,6 @@
     
     <header id="site-header" role="banner"></header>
 
-    [% pre_container_extra %]
-
     <div class="container [% "$containerclass" | html IF containerclass %]">
         <!--TOP CONTAINER-->
         <div class="top-container">
@@ -179,8 +179,8 @@
             <div class="info-user" id="info-user">
                 <!-- Vista logueado -->
                 [% IF c.user_exists %]
-                <div class="dropdown user-log-on" style="display:block">
-                    <a data-toggle="dropdown" class="user-name" href="#">
+                <div id="dropdown-user-menu" class="dropdown user-log-on" style="display:block">
+                    <a id="data-toggle-link" data-toggle="dropdown" class="user-name" href="#">
                         [% IF c.user.picture_url %]
                             <img class="img-circle" alt="" id="current_user_avatar">
                             <script>
@@ -201,6 +201,16 @@
                                 Mi perfil
                             </a>
                         </li>
+                        [% IF c.user.from_body %]
+                        <li>
+                            <a class="user-profile" href="/dashboard">
+                                <svg class="icon icon-icono1" viewBox="0 0 24 24">
+                                  <use xlink:href="#icon-icono1"></use>
+                                </svg>
+                                Tablero
+                            </a>
+                        </li>
+                        [% END %]
                         <li>
                             <a class="user-sesion" href="/auth/sign_out">
                                 <svg class="icon icon-icono2" viewBox="0 0 24 24">
@@ -215,7 +225,7 @@
                  [% ELSE %]
                  <!--Vista sin login-->
                     <div class="list-inline dropdown user-log-on">
-                        <a class="user-name" href="#">
+                        <a class="user-name" href="#" style="display:none;">
                             <img class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">Anonimo
                         </a>
                         <a class="green" href="/auth">Inicia sesión ó Registrate</a>
@@ -239,7 +249,7 @@
             </a>
             <ul class="r-small">
                 <li class="reportar reportar-small">
-                    <a href="javascript:void(0)" onclick="geolocate(10000, 3)">
+                    <a href="javascript:void(0)" onclick="geolocate(4000, 3)">
                         <svg class="icon icon-icono8" viewBox="0 0 24 24"><use xlink:href="#icon-icono8"></use></svg>
                         <span>Reportar</span>
                     </a>
@@ -248,8 +258,8 @@
             <div class="navbar-collapse collapse">
                 <ul>
                     <li class="home"><a href="/"><span></span></a></li>
-                    <li class="reportar"><a href="javascript:void(0);" onclick="report(10000, 4)"><svg class="icon icon-icono8" viewBox="0 0 24 24"><use xlink:href="#icon-icono8"></use></svg><span>Reportar</span></a></li>
-                    <li class="reportes"><a href="javascript:void(0);" onclick="report_list(10000, 2)"><svg class="icon icon-icono1" viewBox="0 0 24 24"><use xlink:href="#icon-icono1"></use></svg><span>Reportes</span></a></li>
+                    <li class="reportar"><a href="javascript:void(0);" onclick="report(2500, 4)"><svg class="icon icon-icono8" viewBox="0 0 24 24"><use xlink:href="#icon-icono8"></use></svg><span>Reportar</span></a></li>
+                    <li class="reportes"><a href="javascript:void(0);" onclick="report_list(2500, 2)"><svg class="icon icon-icono1" viewBox="0 0 24 24"><use xlink:href="#icon-icono1"></use></svg><span>Reportes</span></a></li>
                     <li class="doc-info"><a href="/faq"><svg class="icon icon-icono3" viewBox="0 0 24 24"><use xlink:href="#icon-icono3"></use></svg><span>Preguntas</span></a></li>
                     <li class="help"><a href="http://datauy.uservoice.com/forums/233161-por-mi-barrio" target="_blank"><svg class="icon icon-icono3" viewBox="-2 0 30 30"><use xlink:href="#icon-lifeguard"></use></svg><span>Ayuda</span></a></li>
                     <li class="stats"><a href="/stats"><svg class="icon icon-stats" viewBox="-2 0 30 30"><use xlink:href="#icon-stats"></use></svg><span>Estadísticas</span></a></li>

@@ -5,11 +5,11 @@
             <p>[% summary || loc("Login or signup to help impoving our city") %]</p>
         </div>
         <div class="form-group">
+            <p class="no-account">
+                Si aún no tenés cuenta, creá una ahora!<br>
+                <a class="green registrate" href="#">Regístrate aquí con tu correo electrónico</a>
+            </p>
             [% IF c.config.FACEBOOK_APP_ID || c.config.TWITTER_KEY %]
-            <div class="checkbox-group">
-                <input type="checkbox" id="not_update_photo" name="not_update_photo"></input>
-                <label class="inline">[% loc('Do not replace my image with social image') %]</label>
-            </div>
             <div class="social-buttons">
                 [% IF c.config.FACEBOOK_APP_ID %]
                     <button name="facebook_sign_in" id="facebook_sign_in" value="facebook_sign_in" class="btn btn-block btn-social btn-facebook">Accede con Facebook</button>
@@ -18,13 +18,17 @@
                     <button name="twitter_sign_in" id="twitter_sign_in" value="twitter_sign_in" class="btn btn-block btn-social btn-twitter">Accede con Twitter</button>
                 [% END %]
             </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="not_update_photo" name="not_update_photo"></input>
+                <label class="inline">[% loc('Do not replace my image with social image') %]</label>
+            </div>
             [% END %]
         </div>
-        <p>...ó ingresa los datos si ya tienes cuenta:</p>
         [% IF sign_in_error  %]
             <p class="error-m">[% loc('Email or password incorrect. Maybe you want to <a class="green registrate" href="#">register</a>?') %]</p>
         [% END %]
         <div class="form-group">
+            <p>Ingresa tus datos si ya tienes cuenta:</p>
             <input type="email" class="[% IF field_errors.email %] error [% END %]" value="[% user.email | html %]" name="form_email" id="form_email" placeholder="Correo electrónico *">
             [% IF loc_email_error  %]
                 <p class="error-m">[% loc_email_error %]</p>
@@ -48,10 +52,6 @@
                 <button class="btn btn-block btn-green" type="submit" id="new_password_mail" name="email_sign_in" value='1'>Envíame instrucciones</button>
             </div>
             [% END %]
-            <p class="no-account">
-                ¿No utilizas redes sociales? No hay problema!<br>
-                <a class="green registrate" href="#">Regístrate aquí con tu correo electrónico</a>
-            </p>
         </div>
     </div> <!-- bloque-sesion -->
     <div class="bloque-registro">
@@ -97,3 +97,11 @@
         $('div.bloque-sesion').slideUp();
     </script>
 [% END %]
+<script type="text/javascript">
+  $(document).keypress(function(e) {
+    if(e.which == 13) {
+        e.preventDefault();
+        $("#submit_sign_in").click();
+    }
+  });
+</script>

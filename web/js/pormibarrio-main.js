@@ -215,10 +215,6 @@ $( document ).ready(function() {
         $('#my').hide();
         $('#user-profile').show();
     });
-    $('#edit-profile-cancel').click(function(e) {
-    	e.preventDefault();
-        document.location.href = '/my';
-    });
     
     //FILTRO REPORTES EN PERFIL
     if ($('.content').hasClass('content-vertical')){
@@ -275,21 +271,23 @@ $( document ).ready(function() {
 		$('#send-password').slideToggle();
 	});
 	//Disable submits if terms agree
-    if ( $("#terms-agree").length ){
-    	$("input[type='submit']").attr("disabled", true);
-    	$("button[type='submit']").attr("disabled", true);
-    	$(".btn-social").attr("disabled", true);
-    	//But suscribe to problems
-    	$('#btn-suscribe').attr("disabled", false);
-    	$('#key-tool-report-abuse').attr("disabled", false);
-    	$('#key-tool-hide').attr("disabled", false);
+    if ( $("#terms_agree").length ){
+    	//Terms and conditions
+	    $("button").click(function(e) {
+	    	if ( !($("#terms_agree").val() || $("#terms_agree").attr("checked")) ){
+	    		e.preventDefault();
+	    		$('.terms-agree-error').remove();
+                $('.terms_agree').after('<p class="error-m terms-agree-error">Debe aceptar los términos y condiciones</p>');
+	    	}
+		});
+		$('input[type="submit"]').click(function(e) {
+	    	if ( !($("#terms_agree").val() || $("#terms_agree").attr("checked")) ){
+	    		e.preventDefault();
+	    		$('.terms-agree-error').remove();
+                $(this).after('<p class="error-m terms-agree-error">Debe aceptar los términos y condiciones</p>');
+	    	}
+		});
 	}
-    //Terms and conditions
-    $("#terms-agree").click(function() {
-	  $("input[type='submit']").attr("disabled", !this.checked);
-	  $("button[type='submit']").attr("disabled", !this.checked);
-	  $(".btn-social").attr("disabled", !this.checked);
-	});
 	//DATE PICKERS
 	if ( $('#stats-start-date').length ){
 		$( "#stats-start-date" ).datepicker({

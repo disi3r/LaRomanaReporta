@@ -1,0 +1,189 @@
+[% extra_css = BLOCK %]
+	    <link rel="stylesheet" href="[% version('/cobrands/fixmystreet/dashboard.css') %]">
+[% END %]
+
+[%
+    INCLUDE 'header.html'
+        title = loc('Dashboard')
+        robots = 'noindex, nofollow'
+        bodyclass = 'fullwidthpage'
+%]
+<iframe id="ifmcontentstoprint" style="height: 0px; width: 0px; position: absolute"></iframe>
+<form>
+<a class="btn btn-close-report deadlines" href="/dashboard/deadlines">Plazos</a>
+<a class="btn btn-close-report deadlines" style="margin-right: 20px;" href="#" onclick="printDashboardReports();">Imprimir</a>
+<div id="dashboard-print-content">
+	<hgroup>
+	    <h2>Reportes y Acciones para</h2>
+	    <h1>[% council.name %]</h1>
+	</hgroup>
+
+	<div class="filters">
+	    <p>
+	        <label for="category">Categoría:</label>
+	        <select name="category"><option value=''>Todas/Todos</option>
+	            [% FOR cat_op IN category_options %]
+	                <option value='[% cat_op | html %]'[% ' selected' IF category == cat_op %]>[% cat_op | html %]</option>
+	            [% END %]
+	        </select>
+	    </p>
+
+	    <p>
+	        <input type="submit" value="Buscar">
+	    </p>
+
+	    <br clear="all" />
+	</div>
+
+
+	<table width="100%" id="overview">
+	    <tr>
+	        <th>&nbsp;</th>
+	        <th scope="col"><abbr title="Week To Date">Esta semana</abbr></th>
+	        <th scope="col">Últimos 7 días</th>
+	        <th scope="col">Últimas 4 semanas</th>
+	        <th scope="col">Último año</th>
+	    </tr>
+
+	    [%
+	    rows = {
+	        '0' => [ "total", "Total de reportes recibidos" ]
+	        '1' => [ "fixed - council", "Reportes marcados como 'Arreglado' por la Municipalidad" ]
+	        '2' => [ "fixed_user", "Reportes marcados como 'Arreglado' por los usuarios" ]
+	    };
+	    FOR row IN rows %]
+	    <tr id="[% row.value.0.replace('[^\w]+', '_' ) %]">
+	        <th scope="row">[% row.value.1 %]</th>
+	        <td>[% problems.wtd.${row.value.0} %]</td>
+	        <td>[% problems.week.${row.value.0} %]</td>
+	        <td>[% problems.weeks.${row.value.0} %]</td>
+	        <td>[% problems.ytd.${row.value.0} %]</td>
+	    </tr>
+	    [% END %]
+
+	    <tr class='subtotal' id="total_fixed">
+	        <th scope="row">Total de reportes marcados como "Arreglado"</th>
+	        <td>[% problems.wtd.${"fixed - council"} + problems.wtd.fixed_user %]</td>
+	        <td>[% problems.week.${"fixed - council"} + problems.week.fixed_user %]</td>
+	        <td>[% problems.weeks.${"fixed - council"} + problems.weeks.fixed_user %]</td>
+	        <td>[% problems.ytd.${"fixed - council"} + problems.ytd.fixed_user %]</td>
+	    </tr>
+
+	    [%
+	    rows = {
+	        '0' => [ "in progress", "En progreso" ]
+	        '1' => [ "action scheduled", "Planificados" ]
+	        '2' => [ "investigating", "Investigando" ]
+	        '3' => [ "closed", "Cerrados" ]
+	    };
+	    wtd = 0, week = 0, weeks = 0, ytd = 0;
+	    FOR row IN rows %]
+	    <tr id="[% row.value.0.replace('[^\w]+', '_' ) %]">
+	        <th scope="row">[% row.value.1 %]</th>
+	        <td>[% problems.wtd.${row.value.0} %]</td>
+	        <td>[% problems.week.${row.value.0} %]</td>
+	        <td>[% problems.weeks.${row.value.0} %]</td>
+	        <td>[% problems.ytd.${row.value.0} %]</td>
+	    </tr>
+	    [% END %]
+
+	    <tr class='subtotal' id="marked">
+	        <th scope="row">Total de reportes marcados en algún Estado de Respuesta (no incluye los marcados como "Arreglado")</th>
+	        <td>[% problems.wtd.${"in progress"} + problems.wtd.${"action scheduled"} +
+	            problems.wtd.investigating + problems.wtd.closed %]</td>
+	        <td>[% problems.week.${"in progress"} + problems.week.${"action scheduled"} +
+	            problems.week.investigating + problems.wtd.closed %]</td>
+	        <td>[% problems.weeks.${"in progress"} + problems.weeks.${"action scheduled"} +
+	            problems.weeks.investigating + problems.wtd.closed %]</td>
+	        <td>[% problems.ytd.${"in progress"} + problems.ytd.${"action scheduled"} +
+	            problems.ytd.investigating + problems.wtd.closed %]</td>
+	    </tr>
+
+	    <tr id="avg_fixed">
+	        <th scope="row">Promedio de tiempo que tarda la Municipalidad para marcar como "Arreglado" un reporte</th>
+	        <td>[% problems.wtd.time_to_fix %]</td>
+	        <td>[% problems.week.time_to_fix %]</td>
+	        <td>[% problems.weeks.time_to_fix %]</td>
+	        <td>[% problems.ytd.time_to_fix %]</td>
+	    </tr>
+
+	    <tr id="avg_marked">
+	        <th scope="row">Promedio de tiempo que tarda la Municipalidad para marcar el reporte en un Estado de Respuesta (no incluye la opción de "Arreglado")</th>
+	        <td>[% problems.wtd.time_to_mark %]</td>
+	        <td>[% problems.week.time_to_mark %]</td>
+	        <td>[% problems.weeks.time_to_mark %]</td>
+	        <td>[% problems.ytd.time_to_mark %]</td>
+	    </tr>
+
+	    <tr class='subtotal' id="not_marked">
+	        <th scope="row">Total sin marcar</th>
+	        <td>[% problems.wtd.not_marked %]</td>
+	        <td>[% problems.week.not_marked %]</td>
+	        <td>[% problems.weeks.not_marked %]</td>
+	        <td>[% problems.ytd.not_marked %]</td>
+	    </tr>
+
+	</table>
+</div>
+
+<h2>Reportes</h2>
+
+                </select>
+<p>Estados de respuesta: <select name="state">
+<option value=''>Todas/Todos</option>
+                [% FOREACH state IN [ ['investigating',
+                    loc('Investigating')], ['action scheduled', loc('Action Scheduled')],
+                    ['in progress', loc('In Progress')], ['duplicate', loc('Duplicate')],
+                    ['not responsible', loc('Not Responsible')],['clarify', loc('Clarify Report')],
+                    ['fixed', loc('Fixed')] ] %]
+                    <option [% 'selected ' IF state.0 == q_state %] value="[% state.0 %]">[% state.1 %]</option>
+                [% END %]
+</select>
+<input type="submit" value="Buscar">
+
+<table width="100%" id="reports">
+    <tr>
+        <th scope="col">Menores a 7 días</th>
+        <th scope="col">Entre 7-14 días</th>
+        <th scope="col">Entre 14-30 días</th>
+    </tr>
+    <tr>
+        <td width="34%"><ul>[% INCLUDE list, list = lists.1 %]</ul></td>
+        <td width="33%"><ul>[% INCLUDE list, list = lists.2 %]</ul></td>
+        <td width="33%"><ul>[% INCLUDE list, list = lists.3 %]</ul></td>
+    </tr>
+</table>
+
+</form>
+
+[% INCLUDE 'footer.html' %]
+
+[% BLOCK list %]
+[% FOR p IN list %]
+<li><a href="/report/[% p.id %]">[% p.title | html %]</a> <date>[% p.confirmed.dmy('/') %]</date></li>
+[% END %]
+[% END %]
+
+<script type="text/javascript">
+	function printDashboardReports(){
+	    var content = document.getElementById("dashboard-print-content");
+			//content = content.innerHTML.replace('<input type="submit" value="Buscar">','');
+	    var pri = document.getElementById("ifmcontentstoprint").contentWindow;
+	    pri.document.open();
+	    pri.document.write(content.innerHTML.replace('<input type="submit" value="Buscar">',''));
+	    pri.document.close();
+	    pri.focus();
+	    var $head = $("#ifmcontentstoprint").contents().find("head");
+	    $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/base.css?1444680842", type: "text/css" }));
+	    $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/layout.css?1444680842", type: "text/css" }));
+	    $head.append($("<link/>",{ rel: "stylesheet", href: "/js/fancybox/jquery.fancybox-1.3.4.css?1444680842", type: "text/css" }));
+	    $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/main.css?1445289253", type: "text/css" }));
+	    $head.append($("<link/>",{ rel: "stylesheet", href: "/cobrands/pormibarriocr/bootstrap.min.css?1444680842", type: "text/css" }));
+	    $head.append($("<link/>",{ rel: "stylesheet", href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic", type: "text/css" }));
+	    $head.append($("<link/>",{ rel: "stylesheet", href: "/js/OpenLayers-2.13.1/theme/default/style.css", type: "text/css" }));
+	    $('#ifmcontentstoprint').ready(function() {
+	        setTimeout(function(){pri.print();}, 1000);
+	    });
+
+	}
+</script>

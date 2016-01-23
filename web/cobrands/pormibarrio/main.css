@@ -919,6 +919,23 @@ a.btn-close-report:hover{
 	text-decoration:none
 }
 
+a.btn-print-report{
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.3);
+	position:absolute;
+	right:100px;
+	top:20px;
+	font-weight:600;
+	text-transform:uppercase;
+	color:#fff;
+	font-size:0.875em;
+	padding:2px 10px
+}
+
+a.btn-print-report:hover{
+	background:rgba(0,0,0,0.5);
+	text-decoration:none
+}
+
 div.report .img-top{
 	width:100%;
 	height:auto;
@@ -2617,4 +2634,46 @@ tr.noDeadLine{
 .deadlines-filter{
 	width: 100%;
 	float: left;
+}
+
+/*PRINT*/
+#print-header{
+	visibility: hidden;
+	height: 15px;
+}
+
+@media print {
+
+  #print-header{
+  	margin-top: 25px;
+	visibility: visible;
+	height: 200px;
+  }
+
+  #report_photo_link{
+  	display: none;
+  }
+
+  #report_photo{
+  	margin-left: 30px;
+  }
+
+  #report_photo_img{
+  	max-width: 95%;
+  }
+
+  #display_problem_print {
+  	visibility: hidden;
+  }
+  #display_problem_close {
+  	visibility: hidden;
+  }
+
+  #comment-login{
+  	display:none;
+  	visibility: hidden;
+  }
+  #comments-on-report{
+  	visibility: visible;
+  }
 }
