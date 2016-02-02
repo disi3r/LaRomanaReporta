@@ -148,13 +148,11 @@
 <script>
 function printReportDetail(){
     var fullDate = new Date();
-    var twoDigitMonth = fullDate.getMonth();
-    twoDigitMonth = twoDigitMonth +1;
+    var twoDigitMonth = fullDate.getMonth()+ 1;
     twoDigitMonth = twoDigitMonth + "";
-    if(twoDigitMonth.length==1){
-	twoDigitMonth="0" +twoDigitMonth;
-    }
-    var twoDigitDate = fullDate.getDate()+"";if(twoDigitDate.length==1)	twoDigitDate="0" +twoDigitDate;
+    if(twoDigitMonth.length==1)	twoDigitMonth="0" +twoDigitMonth;
+    var twoDigitDate = fullDate.getDate()+"";
+    if(twoDigitDate.length==1)	twoDigitDate="0" +twoDigitDate;
     var hour = fullDate.getHours();
     if (hour < 10){
       hour = "0" + hour;
