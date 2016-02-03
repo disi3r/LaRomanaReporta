@@ -17,7 +17,8 @@ my $dt = DateTime->now();
 my $dt_24hrs_ago = $dt->clone;
 $dt_24hrs_ago->add( minutes => -5 );
 
-my $tz = 'America/Montevideo';
+my $tz = DateTime::TimeZone->new( name => FixMyStreet->config('TIME_ZONE') );
+
 $dt->set_time_zone( $tz );
 $dt_24hrs_ago->set_time_zone( $tz );
 

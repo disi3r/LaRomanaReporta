@@ -715,7 +715,7 @@ div.it-r:hover, div.rl div.active{
 	background-color:#fff;
 }
 
-div.r-icon{
+img.r-icon{
 	width:60px;
 	height:60px;
 	float:left;
@@ -779,62 +779,6 @@ div.it-r ul li.icon-tags span{
 	height:16px;
 	margin-top:2px
 }
-
-
-/*Arbolado*/
-div.r-category-group-1, 
-div.r-category-group-39{
-	background:url(images/r-arbolado.png) no-repeat left top;	
-}
-h3.r-category-group-1, 
-h3.r-category-group-39{
-	color:#3b8686;
-}
-
-/*Saneamiento*/
-div.r-category-group-37{
-	background:url(images/r-saneamiento.png) no-repeat left top;	
-}
-h3.r-category-group-37{
-	color: #c3c7c8;	
-}
-
-/*Basura*/
-div.r-category-group-18,
-div.r-category-group-38,
-div.r-category-group-40 {
-	background:url(images/r-limpieza.png) no-repeat left top;	
-}
-h3.r-category-group-18,
-h3.r-category-group-38,
-h3.r-category-group-40{
-	color: #a40301;	
-}
-
-/*Barometrica*/
-div.r-barometrica, div.r-category-group-3 {
-	background:url(images/r-barometrica.png) no-repeat left top;	
-}
-h3.barometrica{
-	color:#d9cf48;
-}
-
-/*Viales*/
-div.r-category-group-6 {
-	background:url(images/r-viales.png) no-repeat left top;	
-}
-h3.r-category-group-6{
-	color:#f47229;
-}
-
-/*Desarrollo*/
-div.r-category-group-36{
-	background:url(images/r-basura.png) no-repeat left top;	
-}
-h3.r-category-group-36{
-	color:#f47026;
-}
-
 
 /*MAP-------------------------------------------------------------------------------*/
 div.map{

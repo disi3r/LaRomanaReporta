@@ -364,7 +364,7 @@ sub send_reports {
                 }
                 $reporters{ $sender } ||= $sender->new();
 
-                if ( $reporters{ $sender }->should_skip( $row ) ) {
+                if ( $reporters{ $sender }->should_skip( $row ) || $cobrand->skip_send_after( $row ) ) {
                     debug_print("skipped by sender " . $sender_info->{method} . " (might be due to previous failed attempts?)", $row->id) if $debug_mode;
                 } else {
                     debug_print("OK, adding recipient body " . $body->id . ":" . $body->name . ", " . $body->send_method, $row->id) if $debug_mode;

@@ -58,6 +58,9 @@ sub validate_identity_document {
 			#1234567-X -> X = [(1x8) + (2x1) + (3x2) + (4x3) + (5x4) + (6x7) + (7x6)] mod 10 -> X = [ 8 +2 +6 +12 +20 +42 +42] mod 10 = 132 mod 10 = 2
 			my @magic = (4,3,6,7,8,9,2);
 			my @identity_document_array = reverse(split("", $parts[0]));
+			if (scalar @identity_document_array > 7){
+				return 0;
+			}
 			my $result = 0;
 			for ( my $pos = 0; $pos < scalar @identity_document_array; $pos++ ) {
 					$result += ($magic[$pos] * $identity_document_array[$pos])%10;
@@ -264,5 +267,13 @@ sub send_comptroller_agregate { 0 }
 
 sub send_comptroller_repeat { 0 }
 
+sub skip_send_after {
+	my $self = shift;
+    my $row  = shift;
+
+    return 0 unless $row->send_fail_count;
+
+    return $row->send_fail_count > 24;
+}
 
 1;

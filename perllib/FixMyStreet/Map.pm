@@ -139,9 +139,23 @@ sub map_pins {
         }
         
         my $colour = $c->cobrand->pin_colour( $p, 'around', $c, \%categories);
-        [ $p->latitude, $p->longitude,
-          $colour,
-          $p->id, $p->title_safe,'', $username, $p->category, $categories{$p->category}, $p->created->ymd('-'), 1, 1, $p->state
+        [   $p->latitude, 
+            $p->longitude,
+            $colour,
+            $p->id, 
+            $p->title_safe,
+            '', 
+            $username, 
+            $p->category, 
+            $categories{$p->category}, 
+            $p->created->ymd('-'), 
+            1, 
+            1, 
+            $p->state, 
+            $p->category_color($categories{$p->category}),
+            $p->is_fixed,
+            $p->has_comments,
+            length($p->photo) == 40 ? 1 : 0
         ]
     } @$around_map, @$nearby;
 
