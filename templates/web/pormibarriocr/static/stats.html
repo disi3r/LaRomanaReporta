@@ -2,7 +2,10 @@
 [% INCLUDE header.html
     title = loc('Stats')
 %]
+
+<iframe id="ifmcontentstoprint" style="height: 0px; width: 0px; position: absolute"></iframe>
 <div id="chart-options">
+
 	<form method="post" action="stats" enctype="application/x-www-form-urlencoded" accept-charset="utf-8">
 		<div class="stats-form stats-form-first">
 			<label for="start_date">[% loc('Start Date:') %]</label>
@@ -11,7 +14,7 @@
 
 		    <label for="end_date">[% loc('End Date:') %]</label>
 		    <input type="text" placeholder="Introduzca la fecha con el formato día/mes/año" name="end_date" id="stats-end-date" size="5" value="[% end_date ? end_date.strftime( '%d/%m/%Y') : date.format(date.now, '%d/%m/%Y') %]" />
-		    
+
 		    <input class="btn-stats" type="submit" name="getcounts"  size="30" id="getcounts" value="Ingresar" />
 		</div>
 	    <div class="stats-form">
@@ -34,19 +37,54 @@
 	[% END %]
 </div>
 
+[% IF problem_csv %]
+  <script>var problem_csv = [% problem_csv %];</script>
+[% END %]
+
 [% IF start_date %]
 	<script src="[% start %][% version('/js/highcharts.js') %]" charset="utf-8"></script>
 	<script src="[% start %][% version('/js/highcharts-3d.js') %]" charset="utf-8"></script>
 	<script src="[% start %][% version('/js/jquery-ui/js/jquery-ui-1.10.3.custom.min.js') %]" charset="utf-8"></script>
 	<link rel="stylesheet" href="[% start %][% version('/js/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css') %]">
 
-	<div id="download-data"></div>
-	<h3 style="margin-top: 4%; text-align: center;">Visualizando desde [% start_date ? start_date.strftime( '%d/%m/%Y') : '' | html %] al [% end_date ? end_date.strftime( '%d/%m/%Y') : '' | html %]</h3>
-	<div id="graphs" style="height: 400px">
+	<div id="download-data">
+    <a onclick="download_totals(totals_csv)" class="download-links" id="download-totals">Descarga de totales</a>
+    <a onclick="download_totals(problem_csv)" class="download-links" id="download-reports">Descarga de reportes</a>
+    <a id="display_chart_print" class="btn hidden-print download-links" href="#" onClick="printStats();">Imprimir</a>
+  </div>
+
+  <h3 style="margin-top: 4%; text-align: center;">Visualizando desde [% start_date ? start_date.strftime( '%d/%m/%Y') : '' | html %] al [% end_date ? end_date.strftime( '%d/%m/%Y') : '' | html %]</h3>
+  <div id="graphs" style="height: 400px">
+    <div id="initial-graphs">
+      <div id="print-header">
+                    <table align="center" style="width: 95%; height: 180px; margin: 0 auto 0 auto;">
+                        <tbody>
+                          <tr>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/escudoPalmares.png"></td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;">
+                              <div id="stats-print-header-title">
+                                <br/><br/>
+                                Estadisticas de Por Mi Barrio<br/>
+                                Visualizando desde [% start_date ? start_date.strftime( '%d/%m/%Y') : '' | html %] al [% end_date ? 	  end_date.strftime( '%d/%m/%Y') : '' | html %]<br/>
+                                Fecha: <span id="today"></span>
+                              </div>
+                            </td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;"><img style="width: 96px; height: 106px;" src="[% c.cobrand.base_url %]/cobrands/pormibarriocr/images/LogoPMBazulFondoBlanco.png"></td>
+                          </tr>
+                          <tr>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;">Municipalidad de Palmares <br/> www.munipalmares.go.cr</td>
+                            <td style="width: 33%;"></td>
+                            <td align="center" style="width: 33%; vertical-align: center; horizontal-align: center;">www.pormibarrio.cr</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+    </div>
 		<div class="graph-totals-values" class="chart-group"></div>
 		<div id="graph-totals" style="height: 300px; width: 60%;" class="chart-group"></div>
 		<div id="graph-total-cat" style="height: 400px; width: 100%;" class="chart-group"></div>
 		<div id="graph-evolution" style="height: 400px; width: 100%;" class="chart-group"></div>
+  </div>
 		<div id="chart-subcat">
 			<select id="subcat-select"></select>
 		</div>
@@ -57,21 +95,21 @@
 	[% IF stats_json %]
 		//Create main stats
 		var stats = [% stats_json %];
-		$(".graph-totals-values").append($("<span class='values-titles'>"+stats.users+" usuarios*</span><span class='values-titles'>"+stats.total+" reportes</span><span>"+stats.fixed+" finalizados</span><span>"+stats.in_progress+" en progreso</span><span>"+stats.confirmed+" ingresados</span>"));
+		$(".graph-totals-values").append($("<div class='values-titles'>"+stats.users+" usuarios*</div><div class='values-titles'>"+stats.total+" reportes</div><div>"+stats.fixed+" finalizados</div><div>"+stats.in_progress+" en progreso</div><div>"+stats.confirmed+" ingresados</div>"));
 		create_charts(stats, false);
 		var totals_csv = '"grupo","categoria","total_reportados","total_finalizados","total_en_progreso","total_ingresados"\r\n';
 		$.each(stats, function(gid,group){
 			if (typeof group.name != 'undefined'){
 				//Create group structure
-				$("#graph-subcat").append($("<div>", {id: "group"+gid, class: "graph-group", style: "height: 300px;"}));
-				$("#group"+gid).append($("<div class='graph-totals-values' class='chart-group'><h2>"+decodeURIComponent(escape(group.name))+"</h2><span>"+group.fixed+" finalizados</span><span>"+group.in_progress+" en progreso</span><span>"+group.confirmed+" ingresados</span></div>"));
-				$("#group"+gid).append($("<div>", {id: "chart-cat"+gid, class: "chart-group", style: "height: 300px; width: 60%;"}));
-				$("#group"+gid).append($("<div>", {id: "chart-totals"+gid, class: "chart-group", style: "height: 300px; width: 100%;"}));
-				$("#group"+gid).append($("<div>", {id: "chart-evolution"+gid, class: "chart-group", style: "height: 300px; width: 100%;"}));
+				$("#graph-subcat").append($("<div>", {id: "group"+gid, class: "graph-group"}));
+				$("#group"+gid).append($("<div class='graph-totals-values' class='chart-group'><h2>"+decodeURIComponent(escape(group.name))+"</h2><div>"+group.fixed+" finalizados</div><div>"+group.in_progress+" en progreso</div><div>"+group.confirmed+" ingresados</div></div>"));
+				$("#group"+gid).append($("<div>", {id: "chart-cat"+gid, class: "chart-group", style: "width: 60%;"}));
+				$("#group"+gid).append($("<div>", {id: "chart-totals"+gid, class: "chart-group", style: "width: 100%;"}));
+				$("#group"+gid).append($("<div>", {id: "chart-evolution"+gid, class: "chart-group", style: "width: 100%;"}));
 				var data = [];
 				//Append option
 				$("#subcat-select").append($("<option>", {value: gid, text: decodeURIComponent(escape(group.name))}));
-				
+
 				//Create chart
 				data.push('Desglose '+decodeURIComponent(escape(group.name)));
 				data.push('Total de reportes enviados a la Municipalidad en '+decodeURIComponent(escape(group.name)));
@@ -100,11 +138,7 @@
 	    	});
 		});
 		//Creamos links para descarga de datos
-		$("#download-data").append('<a onclick="download_totals(totals_csv)" class="download-links" id="download-totals">Descarga de totales</a>');
-		[% IF problem_csv %]
-			var problem_csv = [% problem_csv %];
-			$("#download-data").append('<a onclick="download_totals(problem_csv)" class="download-links" id="download-reports">Descarga de reportes</a>');
-		[% END %]
+
 		function download_totals(var_csv){
 			if (navigator.appName != 'Microsoft Internet Explorer'){
 	        	window.open('data:text/csv;charset=utf-8,' + escape(var_csv));
@@ -317,4 +351,37 @@
 	<h3 style="margin-top: 4%; text-align: center;">[% loc('Select the period you want') %]</h3>
 [% END %]
 
+<script>
+  function printStats(){
+    var fullDate = new Date();
+    var twoDigitMonth = fullDate.getMonth()+ 1;
+    twoDigitMonth = twoDigitMonth + "";
+    if(twoDigitMonth.length==1)	twoDigitMonth="0" +twoDigitMonth;
+    var twoDigitDate = fullDate.getDate()+"";
+    if(twoDigitDate.length==1)	twoDigitDate="0" +twoDigitDate;
+    var hour = fullDate.getHours();
+    if (hour < 10){
+      hour = "0" + hour;
+    }
+    var minute = fullDate.getMinutes();
+    if (minute < 10){
+      minute = "0" + minute;
+    }
+    var currentDate = twoDigitDate + "/" + twoDigitMonth + "/" + fullDate.getFullYear() + " " + hour + ":" + minute;
+    $("#today").empty();
+    $("#today").append(currentDate);
+    var content = document.getElementById("initial-graphs");
+    var content2 = document.getElementById("graph-subcat");
+    var pri = document.getElementById("ifmcontentstoprint").contentWindow;
+    pri.document.open();
+    pri.document.write(content.innerHTML);
+    pri.document.write(content2.innerHTML);
+    pri.document.close();
+    pri.focus();
+
+    $('#ifmcontentstoprint').ready(function() {
+        setTimeout(function(){pri.print();}, 650);
+    });
+}
+</script>
 [% INCLUDE footer.html %]

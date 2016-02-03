@@ -973,6 +973,15 @@ a.btn-print-report{
 	padding:2px 10px
 }
 
+#display_chart_print{
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.3);
+	font-weight:600;
+	text-transform:uppercase;
+	color:#fff;
+	font-size:0.875em;
+	padding:2px 10px;
+}
+
 a.btn-print-report:hover{
 	background:rgba(0,0,0,0.5);
 	text-decoration:none
@@ -2431,10 +2440,10 @@ div.content-vertical{
 		margin: 0;
 	}
 	/*Graphs*/
-	.graph-totals-values span.values-titles{
+	.graph-totals-values div.values-titles{
 		font-size: 1.4em;
 	}
-	.graph-totals-values span{
+	.graph-totals-values div{
 		font-size: 0.9em;
 	}
 }
@@ -2565,7 +2574,7 @@ div#stats-menu:hover{
 	width: 100%;
 }
 .graph-group{
-	width: 100%;
+	width: 60%;
 	height: 400px;
 }
 #download-data{
@@ -2598,7 +2607,7 @@ div#stats-menu:hover{
 }
 
 .content-horizontal .chart-group{
-	width: 40%;
+	width: 100%;
 	margin: 2%;
 }
 
@@ -2657,13 +2666,13 @@ input#getcounts{
 	padding: 10% 4%;
 	float: left;
 }
-.graph-totals-values span{
+.graph-totals-values div{
 	width: 100%;
 	font-size: 1.3em;
 	float: left;
 }
 
-.graph-totals-values span.values-titles {
+.graph-totals-values div.values-titles {
 	font-size: 1.8em;
 }
 
@@ -2716,10 +2725,22 @@ tr.problem-warning{
 
 @media print {
 
+	#chart-options{
+		display: none;
+	}
+
+	#muniSelect{
+		display: none;
+	}
+
+	#download-data{
+		display: none;
+	}
+
   #print-header{
   	margin-top: 25px;
-	visibility: visible;
-	height: 200px;
+		visibility: visible;
+		height: 200px;
   }
 
   #report_photo_link{
