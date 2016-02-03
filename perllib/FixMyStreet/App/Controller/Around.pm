@@ -295,6 +295,12 @@ sub ajax_geo : Path('/ajax_geo') {
             category => @$pin[7],
             date => @$pin[9],
             state => @$pin[12],
+            pin_url => '/i/pin-'.@$pin[2].'.png',
+            category_url => '/i/r-category-group-'.@$pin[8].'.png',
+            color => @$pin[13],
+            fixed => @$pin[14],
+            has_comment => @$pin[15],
+            has_photo => @$pin[16],
         );
         #Create feature
         my $geo_pin = Geo::JSON::Feature->new({
