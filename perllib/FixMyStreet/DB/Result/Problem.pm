@@ -648,6 +648,17 @@ sub category_group {
 	return 0;
 }
 
+sub category_color {
+  my $problem = shift;
+  my $group_id = shift;
+  my $contact_group = FixMyStreet::App->model('DB::ContactsGroup')->find({ group_id => $group_id });
+    if ( $contact_group ) {
+      return $contact_group->group_color;
+    }
+    
+  return 0;
+}
+
 # returns true if the external id is the council's ref, i.e., useful to publish it
 # (by way of an example, the barnet send method returns a useful reference when
 # it succeeds, so that is the ref we should show on the problem report page).
@@ -761,7 +772,7 @@ sub update_from_open311_service_request {
     # of course if local timezone is not the one that went into the data
     # base then we're also in trouble
     my $lastupdate = $self->lastupdate;
-    $lastupdate->set_time_zone( DateTime::TimeZone->new( name => 'local' ) );
+    $lastupdate->set_time_zone( DateTime::TimeZone->new( name => FixMyStreet->config('TIME_ZONE') ) );
 
     # update from open311 is older so skip
     if ( $req_time < $lastupdate ) {
