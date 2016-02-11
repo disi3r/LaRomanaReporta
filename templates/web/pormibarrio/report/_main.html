@@ -7,21 +7,33 @@
 	<!--Intro Report-->
 	<div class="intro-report">
 		<a id="display_problem_print" class="btn btn-print-report hidden-print" href="#" onClick="printReportDetail();">Imprimir</a>
-		<a id="display_problem_close" class="btn btn-close-report hidden-print" href="#">Cerrar</a>
-		<script>$('#display_problem_close').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom; return false; });</script>
+        <a id="display_problem_close" class="btn btn-close-report hidden-print" href="#">Cerrar</a>
+		<script>$('#display_problem_close').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom+"&list=1"; return false; });</script>
 		<h3>
             [% problem.title | html %]
             [% IF problem.is_fixed %]
                 <img alt="Resuelto" class="img-resuelto" src='/cobrands/pormibarrio/images/resuelto.png' />
             [% END %]
         </h3>
-		<address>[% problem.meta_line(c) | html %]</address>
+		<address>[% problem.postcode != ''? problem.postcode : loc('No address specified') %]</address>
 		<p>[% add_links( problem.detail ) | html %]</p>
-		<span class="sign"><!--[% problem.meta_line(c) | html %]--></span>
+		<div class="sign">
+            <div class="picture">
+                [% IF problem.user.picture_url && !problem.anonymous and problem.name != ''%] 
+                <img alt="[% problem.name %]" class="img-circle" width="35" height="35" src="[% problem.user.picture_url %]">
+                [% ELSE %]
+                <img alt="" class="img-circle" width="35" height="35" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">
+                [% END %]
+            </div>
+            <div class="author">
+                <span>[% problem.meta_line(c) | html %]</span>
+            </div>
+        </div>                            
 	</div>
 </div>
 <div class="status-report">
     <h4>Estado del reporte</h4>
+    <span class="report-state">[% state_t %]</span>
     <span class="status-report-im">Su reclamo en la IM: 
     	[% IF problem.can_display_external_id %] 
     		<a target="_blank" href="http://www.montevideo.gub.uy/tramites/aplicacion/consulta-de-reclamos?numReclamo=[% problem.can_display_external_id | html %]" > [% problem.can_display_external_id | html %] </a>
@@ -30,3 +42,4 @@
     	[% END %]
     </span>
 </div>
+

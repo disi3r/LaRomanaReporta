@@ -142,8 +142,7 @@ $( document ).ready(function() {
 	});
 	$('.registrate-back').click(function(e){
 		e.preventDefault();
-		var sesCont = $('.bloque-sesion .form-group')[1];
-		$('#form_email').prependTo(sesCont);
+		$('#form_email').insertBefore('#password_sign_in');
 		$('div.bloque-registro').slideUp();
 		$('div.bloque-sesion').slideDown();	
 	});
@@ -293,7 +292,7 @@ $( document ).ready(function() {
 		$( "#stats-start-date" ).datepicker({
 	      defaultDate: "-1w",
 	      changeMonth: true,
-	      dateFormat: 'yy-mm-dd' ,
+	      dateFormat: 'dd/mm/yy' ,
 	      // This sets the other fields minDate to our date
 	      onClose: function( selectedDate ) {
 	        $( "#stats-end-date" ).datepicker( "option", "minDate", selectedDate );
@@ -302,7 +301,7 @@ $( document ).ready(function() {
 	    $( "#stats-end-date" ).datepicker({
 	     /// defaultDate: "+1w",
 	      changeMonth: true,
-	      dateFormat: 'yy-mm-dd' ,
+	      dateFormat: 'dd/mm/yy' ,
 	      onClose: function( selectedDate ) {
 	        $( "#stats-start-date" ).datepicker( "option", "maxDate", selectedDate );
 	      }
@@ -373,12 +372,12 @@ function report(timeout, zoom){
 				$('#side').hide();
 				break;
 			default:
-				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=4';
+				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=4&list=0';
 		}
 	}
 	else {
 
-		geolocate(timeout, zoom);
+		geolocate(timeout, zoom, 0);
 	}
 }
 
@@ -393,7 +392,7 @@ function report_list(timeout, zoom){
 				window.history.back();
 				break;
 			default:
-				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=2';
+				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=2&list=1';
 		}
 	}
 	else {
@@ -401,8 +400,14 @@ function report_list(timeout, zoom){
 	}
 }
 
-function geolocate(timeout, zoom){
-	setTimeout(function(){location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom}, timeout);
+function geolocate(timeout, zoom, is_list ){
+	var list = '&list=1';
+	if (!is_list){
+		list = '&list=0';
+	}
+	setTimeout(function(){location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom+ list }, timeout);
+	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
+    $('.overlay').show();
 	if (geo_position_js.init()) {
 	    console.log('Va a init');
 	    geo_position_js.getCurrentPosition(function(pos) {
@@ -411,27 +416,23 @@ function geolocate(timeout, zoom){
 	        var longitude = pos.coords.longitude;
 	        //Redirigimos si esta fuera de montevideo
 	        if ( latitude < -35 || latitude > -34.6695163){
-	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom;
+	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
 	        }
 	        else if (longitude > -56.168270 || longitude < -56.4350581){
-	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom;
+	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
 	        }
 	        else {
-	        	location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom;
+	        	location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
 	        }
 	    }, 
 	    function(err) {
-	        console.log('Entra a err');
-	        if (err.code == 1) { // User said no
-	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom;
-	        } 
-	        else { 
-	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom;
-	        }
+	        $('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.');
+-	    	$('#loader_throbber').append('<br/>Cargando Montevideo por defecto.');
+	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
 	    }, 
 	    {
 	        enableHighAccuracy: true,
-	        timeout: 10000
+	        timeout: 4000
 	    });
 	}
 }

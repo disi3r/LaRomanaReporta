@@ -189,6 +189,7 @@ sub format_problem_for_display : Private {
         push @categories, $contact->category;
     }
     $c->stash->{categories} = \@categories;
+    $c->stash->{state_t} = $problem->as_hashref($c)->{state_t};
     return 1;
 }
 

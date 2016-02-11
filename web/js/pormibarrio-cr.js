@@ -452,7 +452,7 @@ function geolocate(timeout, zoom, is_list){
     }
 	setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list}, 2500);
 	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
-    $('.overlay').show();0
+    $('.overlay').show();
 	if (geo_position_js.init()) {
 	    console.log('Va a init');
 	    geo_position_js.getCurrentPosition(function(pos) {

@@ -63,9 +63,11 @@
 
 
 
-
-    <div id="side">
-
+    [% IF list %]
+        <div id="side">
+    [% ELSE %]
+        <div id="side" style="display:none">
+    [% END %]
         [% IF allow_creation %]
             [% TRY %][% INCLUDE 'around/extra_text.html' %][% CATCH file %][% END %]
         [% END %]
@@ -80,7 +82,11 @@
     </div>
 
     [% IF allow_creation %]
-    <div style="display:none" id="side-form">
+        [% IF list %]
+            <div id="side-form" style="display:none">
+        [% ELSE %]
+            <div id="side-form">
+        [% END %]
     [% INCLUDE "report/new/fill_in_details_form.html"
         js = 1,
         report.used_map = 1

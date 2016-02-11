@@ -10,7 +10,7 @@
 	<div class="intro-report">
     <a id="display_problem_print" class="btn btn-print-report hidden-print" href="#" onClick="printReportDetail();">Imprimir</a>
 		<a id="display_problem_close" class="btn btn-close-report hidden-print" href="#">Cerrar</a>
-		<script>$('#display_problem_close').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom; return false; });</script>
+		<script>$('#display_problem_close').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom+"&list=1"; return false; });</script>
 		<h3>
             [% problem.title | html %]
             [% IF problem.is_fixed %]
