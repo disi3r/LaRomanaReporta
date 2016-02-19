@@ -1270,6 +1270,13 @@ div.user-picture{
 	overflow:hidden
 }
 
+span.report-state{
+	display: block;
+}
+span.report-state:first-letter{
+	text-transform: uppercase;
+}
+
 div.actions {
     margin-bottom: 20px;
     padding: 20px 40px;

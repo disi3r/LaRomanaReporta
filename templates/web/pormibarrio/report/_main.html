@@ -1,45 +1,140 @@
 [% IF c.cobrand.allow_photo_display(problem) && problem.photo %]
-    [% IF problem.get_photo_params.url_full %]<a href="[% problem.get_photo_params.url_full %]">[% END %]
-		<img alt="Photo of this report" [% IF problem.get_photo_params.height %]height="[% problem.get_photo_params.height %]" width="[% problem.get_photo_params.width %]"[% END %] src="[% problem.get_photo_params.url_full %]" class="img-top">
+    [% IF problem.get_photo_params.url_full %]<a href="[% c.cobrand.base_url %][% problem.get_photo_params.url_full %]">[% END %]
+        <img alt="Photo of this report" [% IF problem.get_photo_params.height %]height="[% problem.get_photo_params.height %]" width="[% problem.get_photo_params.width %]"[% END %] src="[% c.cobrand.base_url %][% problem.get_photo_params.url_full %]" class="img-top">
     [%- IF problem.get_photo_params.url_full %]<!--<span>zoom</span>--></a>[% END %]
 [% END %]
 <div class="info-report">
-	<!--Intro Report-->
-	<div class="intro-report">
-		<a id="display_problem_print" class="btn btn-print-report hidden-print" href="#" onClick="printReportDetail();">Imprimir</a>
+    <!--Intro Report-->
+    <div class="intro-report">
+        [% IF !mobile %]
+        <a id="display_problem_print" class="btn btn-print-report hidden-print" href="#" onClick="printReportDetail();">Imprimir</a>
         <a id="display_problem_close" class="btn btn-close-report hidden-print" href="#">Cerrar</a>
-		<script>$('#display_problem_close').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom+"&list=1"; return false; });</script>
-		<h3>
+        <script>$('#display_problem_close').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom+"&list=1"; return false; });</script>
+        [% END %]
+        <h3>
             [% problem.title | html %]
             [% IF problem.is_fixed %]
-                <img alt="Resuelto" class="img-resuelto" src='/cobrands/pormibarrio/images/resuelto.png' />
+                <img alt="Resuelto" class="img-resuelto" src='[% c.cobrand.base_url %]cobrands/pormibarrio/images/resuelto.png' />
             [% END %]
         </h3>
-		<address>[% problem.postcode != ''? problem.postcode : loc('No address specified') %]</address>
-		<p>[% add_links( problem.detail ) | html %]</p>
-		<div class="sign">
+        <address>[% problem.postcode != ''? problem.postcode : loc('No address specified') %]</address>
+        <p>[% add_links( problem.detail ) | html %]</p>
+        <div class="sign">
             <div class="picture">
                 [% IF problem.user.picture_url && !problem.anonymous and problem.name != ''%] 
-                <img alt="[% problem.name %]" class="img-circle" width="35" height="35" src="[% problem.user.picture_url %]">
+                <img alt="[% problem.name %]" class="img-circle" width="35" height="35" src="[% index(problem.user.picture_url, 'http') == -1 ? c.cobrand.base_url : '' %][% problem.user.picture_url %]">
                 [% ELSE %]
-                <img alt="" class="img-circle" width="35" height="35" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">
+                <img alt="" class="img-circle" width="35" height="35" src="[% c.cobrand.base_url %]cobrands/pormibarrio/images/no-profile-picture.jpg">
                 [% END %]
             </div>
             <div class="author">
                 <span>[% problem.meta_line(c) | html %]</span>
             </div>
-        </div>                            
-	</div>
+        </div>
+        [% IF problem.is_fixed %]
+            <span class="report-defensoria status-report-im">Frente a la continuidad del problema puede consultar con la Defensoría del Vecino.<br><a href="http://defensoria.pormibarrio.uy/reclamos/?pmb=[% problem.id %]" target="_blank">Comunicarme con la Defensoría del Vecino</a></span>
+        [% END %]
+    </div>
 </div>
 <div class="status-report">
     <h4>Estado del reporte</h4>
     <span class="report-state">[% state_t %]</span>
     <span class="status-report-im">Su reclamo en la IM: 
-    	[% IF problem.can_display_external_id %] 
-    		<a target="_blank" href="http://www.montevideo.gub.uy/tramites/aplicacion/consulta-de-reclamos?numReclamo=[% problem.can_display_external_id | html %]" > [% problem.can_display_external_id | html %] </a>
-    	[% ELSE %]
-    		No hemos podido ingresar el reclamo aún
-    	[% END %]
+        [% IF problem.can_display_external_id %] 
+            <a target="_blank" href="http://www.montevideo.gub.uy/tramites/aplicacion/consulta-de-reclamos?numReclamo=[% problem.can_display_external_id | html %]" > [% problem.can_display_external_id | html %] </a>
+        [% ELSE %]
+            No hemos podido ingresar el reclamo aún
+        [% END %]
     </span>
 </div>
 
+[% IF tasks AND !mobile %]
+    <div class="tasks clearfix">
+        <h3>Actividad</h3>
+        <span id="report-activity"></span>
+        <span id="report-activity-detail"></span>
+    </div>
+    [% USE date %]
+    <script>
+        var tasks = {};
+        [% FOREACH task IN tasks %]
+            var tkey;
+            [% IF task.planned %]
+                tkey = [% task.planned.strftime( '%Y%m%d') %];
+            [% ELSE %]
+                tkey = [% task.created.strftime( '%Y%m%d') %];
+            [% END %]
+        
+        if (!tasks[tkey]){
+            tasks[tkey] = [];
+        }
+        tasks[tkey].push(
+            {
+                name : "[% task.name %]", 
+                area : "[% task.area %]", 
+                status : "[% task.status %]", 
+                report : "[% task.report %]",
+                created : "[% task.created %]", 
+                planned : "[% task.planned %]",
+            }
+        );
+        [% END %]
+        if ( !$.isEmptyObject(tasks) ) {
+            $( "#report-activity-detail" ).html('<p>Seleccione un día en el calendario para ver las tareas asociadas</p>');
+            $( "#report-activity" ).datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                //numberOfMonths: 3,
+                //showButtonPanel: true,
+                selectMultiple:true,
+                beforeShowDay: function (date) {
+                    var theday = date.getFullYear() + ('0'+(date.getMonth()+1)).slice(-2) + ('0'+date.getDate()).slice(-2);
+                    if ( theday in tasks ){
+                        var alt = '';
+                        for (var i = tasks[theday].length - 1; i >= 0; i--) {
+                            alt += tasks[theday][i].name +"\n"; 
+                        };
+                        return [true, 'activity-date', alt];
+                    }
+                    else{
+                        return [false];
+                    }
+                },
+                onSelect: function(dateText, inst) {
+                    var theday = inst.selectedYear + ('0'+(inst.selectedMonth+1)).slice(-2) + ('0'+inst.selectedDay).slice(-2);
+                        insert_html_tasks(theday);
+                }
+            });
+            //Page being load twice
+            $('#btn-tasks').remove();
+            $( "#report-activity" ).append('<button id="btn-tasks" onclick="insert_html_tasks()" class="btn">Ver todas las tareas</button>');
+        }
+        else {
+            $( "#report-activity-detail" ).html('<p>No se han registrado actividades</p>');
+        }
+
+        function insert_html_tasks(aday){
+            var recur_tasks = [];
+            if ( typeof aday != 'undefined' ) {
+                recur_tasks = tasks[aday];
+            }
+            else {
+                for (var prop in tasks) {
+                    if ( tasks.hasOwnProperty(prop) ) {
+                        for (var i = tasks[prop].length - 1; i >= 0; i--) {
+                            recur_tasks.push(tasks[prop][i]);
+                        };
+                    }
+                };
+            }
+            var tasksHtml = '';
+            for (var i = recur_tasks.length - 1; i >= 0; i--) {
+                tasksHtml += '<h4>'+recur_tasks[i].name+'</h4>';
+                tasksHtml +='<span>'+recur_tasks[i].status+' '+( recur_tasks[i].planned ? recur_tasks[i].planned : 'No planificada aún')+'</span>';
+                tasksHtml += '<div class="activity-detail-report"><p>'+( recur_tasks[i].report ? recur_tasks[i].report : '' )+'</p>';
+                tasksHtml += '<p>'+( recur_tasks[i].area ? recur_tasks[i].area : '')+'</p></div>';
+            };
+            $('#report-activity-detail').html(tasksHtml);
+        }
+    </script>
+[% END %]

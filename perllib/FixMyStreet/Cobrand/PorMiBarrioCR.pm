@@ -228,4 +228,7 @@ sub skip_update_check { 1 }
 sub send_comptroller_agregate { 0 }
 
 sub send_comptroller_repeat { 0 }
+
+sub use_tasks { 0 }
+
 1;

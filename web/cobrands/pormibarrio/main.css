@@ -874,8 +874,6 @@ div.report{
 	border-radius: 5px;
     height: 100%;
     top:20%;
-    left: 290px;
-    margin-left: -290px;
     position: absolute;
     width: 580px;
     opacity:1;
@@ -1022,8 +1020,8 @@ div.author span a:hover{
 }
 
 div.author span{
-	color:#7d7d7d;
-	font-size:15px;
+	color: #7d7d7d;
+	font-size: 0.94em;
 }
 
 span.sign, span.time-report{
@@ -1056,7 +1054,14 @@ span.status-report-im{
     font-style: italic;
 }
 
-div.status-report h4, div.comments h3{
+.report-defensoria{
+	margin-top: 10px;
+	padding-top: 10px;
+	float: left;
+	border-top: 1px solid #EBEBEB;
+}
+
+div.status-report h4, div.comments h3, div.tasks h3{
 	text-transform:uppercase;
 	color:#fc4349;
 	font-weight:600;
@@ -1228,6 +1233,87 @@ span.report-state{
 }
 span.report-state:first-letter{
 	text-transform: uppercase;
+}
+
+div.tasks{
+	background-color: #FBFBFB;
+	padding: 20px 40px;
+	border-top: 1px solid #EBEBEB;
+	border-bottom: 1px solid #EBEBEB;
+}
+
+div.tasks button{
+	background: #CCC url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50%;
+	vertical-align: bottom;
+	padding: 4px 3.25em;
+}
+
+#report-activity{
+	font-size: 12px;
+	float: left;
+	margin-top:	10px;
+	max-width: 50%;
+}
+
+.content-vertical #report-activity{
+	padding: 10px;
+	width: 100%;
+}
+
+#report-activity-detail{
+	padding: 5px 12px;
+	float: left;
+	max-width: 50%;
+	font-size: 0.9em;
+	max-height: 240px;
+	overflow: auto;
+}
+
+#report-activity-detail h4{
+	font-size: 1.2em;
+	color: #464646;
+	font-weight: normal;
+	margin: 5px 0px 0px;
+}
+
+#report-activity-detail span{
+	font-size: 0.85em;
+	font-style: italic;
+	color: #7D7D7D;
+}
+
+.activity-detail-report{
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+	overflow: auto;
+	border-bottom: 1px solid #EBEBEB;
+	color: #7D7D7D;
+	font-size: 1em;
+	line-height: 1.4375em;
+}
+.content-vertical #report-activity-detail{
+	max-width: 100%;
+}
+
+#report-activity-detail li{
+	padding: 0 8px;
+}
+
+#report-activity-detail ul{
+	border: 1px solid #AAA;
+	margin-top: 10px;
+}
+
+#report-activity-detail li.task-name{
+	font-weight: bold;
+	text-align: center;
+	background: #CCC url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50%;
+	padding: 2px 0;
+	vertical-align: middle;
+}
+
+.activity-date{
+    background-color: green;
 }
 
 div.actions {

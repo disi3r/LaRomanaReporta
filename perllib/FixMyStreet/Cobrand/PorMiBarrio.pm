@@ -276,4 +276,6 @@ sub skip_send_after {
     return $row->send_fail_count > 24;
 }
 
+sub use_tasks { 0 }
+
 1;

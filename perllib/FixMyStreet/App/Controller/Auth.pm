@@ -96,7 +96,7 @@ sub email_sign_in : Private {
     my ( $self, $c ) = @_;
 
     # check that the email is valid - otherwise flag an error
-    my $raw_email = lc( $c->req->param('form_email') || $c->req->param('login_email') || '' );
+    my $raw_email = lc( $c->req->param('login_email') || $c->req->param('form_email') || '' );
 
     my $email_checker = Email::Valid->new(
         #-mxcheck  => 1,
