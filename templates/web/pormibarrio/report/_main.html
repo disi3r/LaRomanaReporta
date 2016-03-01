@@ -24,7 +24,7 @@
                 [% IF problem.user.picture_url && !problem.anonymous and problem.name != ''%] 
                 <img alt="[% problem.name %]" class="img-circle" width="35" height="35" src="[% index(problem.user.picture_url, 'http') == -1 ? c.cobrand.base_url : '' %][% problem.user.picture_url %]">
                 [% ELSE %]
-                <img alt="" class="img-circle" width="35" height="35" src="[% c.cobrand.base_url %]cobrands/pormibarrio/images/no-profile-picture.jpg">
+                <img alt="" class="img-circle" width="35" height="35" src="[% c.cobrand.base_url %]/cobrands/pormibarrio/images/no-profile-picture.jpg">
                 [% END %]
             </div>
             <div class="author">
