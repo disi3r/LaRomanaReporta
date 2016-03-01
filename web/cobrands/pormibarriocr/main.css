@@ -18,7 +18,7 @@ body{
 	position: absolute;
 	height: 100%;
 	width: 100%;
-	background:url(images/bg/pmb-mapa-sp-cr.png) no-repeat center top;
+	background:url(images/bg/pmb-mapa-cr.png) no-repeat center top;
 -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -27,7 +27,7 @@ body{
 
 body.fullwidthpage{
 	width: 100%;
-	background: url(images/bg/pmb-mapa-sp-cr.png) no-repeat scroll center top / cover rgba(0, 0, 0, 0);
+	background: url(images/bg/pmb-mapa-cr.png) no-repeat scroll center top / cover rgba(0, 0, 0, 0);
 -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -1828,6 +1828,19 @@ div.profile h2{
 }
 #send-password{
 	font-size: 0.8em;
+}
+
+div.img-profile-admin {
+    clear: both;
+    position: relative;
+    left: 10px;
+    margin: 20px auto;
+}
+
+div.edit-img-admin {
+    padding: 24px 0px;
+    position: relative;
+    bottom: 25px;
 }
 
 div.img-profile{

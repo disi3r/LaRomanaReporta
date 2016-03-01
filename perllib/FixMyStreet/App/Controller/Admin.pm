@@ -465,7 +465,7 @@ sub lookup_body : Private {
     $c->detach( '/page_error_404_not_found' )
       unless $body;
     $c->stash->{body} = $body;
-    
+
     if ($body->body_areas->first) {
         my $example_postcode = mySociety::MaPit::call('area/example_postcode', $body->body_areas->first->area_id);
         if ($example_postcode && ! ref $example_postcode) {
@@ -999,6 +999,7 @@ sub user_add : Path('user_edit') : Args(0) {
     }, {
         key => 'users_email_key'
     } );
+
     $c->stash->{user} = $user;
 
     $c->forward( 'log_edit', [ $user->id, 'user', 'edit' ] );
@@ -1041,6 +1042,14 @@ sub user_edit : Path('user_edit') : Args(1) {
             $c->stash->{field_errors}->{email} = _('Please enter a valid email');
             return 1;
         }
+        #Process photo
+        $c->forward('/photo/process_photo');
+        if ( my $fileid = $c->stash->{upload_fileid} ) {
+            $user->picture_url( '/upload/'.$fileid.'.jpeg' );
+        }
+        #Update user
+        $user->modified(\'ms_current_timestamp()');
+        
         $user->update;
 
         if ($edited) {
@@ -1115,7 +1124,7 @@ sub stats : Path('stats') : Args(0) {
         my $bymonth = $c->req->param('bymonth');
         $c->stash->{bymonth} = $bymonth;
         my ( %body, %dates );
-        $body{bodies_str} = { like => $c->req->param('body') } 
+        $body{bodies_str} = { like => $c->req->param('body') }
             if $c->req->param('body');
 
         $c->stash->{selected_body} = $c->req->param('body');
@@ -1136,7 +1145,7 @@ sub stats : Path('stats') : Args(0) {
 
         if ( $c->req->param('bymonth') ) {
             %select = (
-                select => [ 
+                select => [
                     { extract => \"year from $field", -as => 'c_year' },
                     { extract => \"month from $field", -as => 'c_month' },
                     { 'count' => 'me.id' }
@@ -1190,7 +1199,7 @@ sub set_allowed_pages : Private {
              'flagged'  => [_('Flagged'), 6],
              'stats'  => [_('Stats'), 6],
              'config' => [ undef, undef ],
-             'user_edit' => [undef, undef], 
+             'user_edit' => [undef, undef],
              'body' => [undef, undef],
              'body_edit' => [undef, undef],
              'report_edit' => [undef, undef],
