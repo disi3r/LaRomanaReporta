@@ -56,6 +56,8 @@ sub pin_colour {
 		my $category_name = $p->category;
 
 		if ( $categories && $categories->{$category_name}) {
+			#Get category pin
+			my $icon = $p->category_icon( $categories->{$category_name} );
 			my $pin = 'group-'.$categories->{$category_name};
 			if ($p->is_fixed){
 				$pin .= '-resuelto';

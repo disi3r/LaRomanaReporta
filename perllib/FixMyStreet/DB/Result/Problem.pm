@@ -661,6 +661,17 @@ sub category_color {
   return 0;
 }
 
+sub category_icon {
+  my $problem = shift;
+  my $group_id = shift;
+  my $contact_group = FixMyStreet::App->model('DB::ContactsGroup')->find({ group_id => $group_id });
+    if ( $contact_group ) {
+      return $contact_group->group_icon;
+    }
+    
+  return 0;
+}
+
 # returns true if the external id is the council's ref, i.e., useful to publish it
 # (by way of an example, the barnet send method returns a useful reference when
 # it succeeds, so that is the ref we should show on the problem report page).

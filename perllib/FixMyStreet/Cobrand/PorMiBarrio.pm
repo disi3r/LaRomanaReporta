@@ -124,7 +124,9 @@ sub pin_colour {
 		my $category_name = $p->category;
 
 		if ( $categories && $categories->{$category_name}) {
-			my $pin = 'group-'.$categories->{$category_name};
+			#Get category pin
+			my $icon = $p->category_icon( $categories->{$category_name} );
+			my $pin = 'group-'.$icon;
 			if ($p->is_fixed){
 				$pin .= '-resuelto';
 			}
@@ -140,22 +142,6 @@ sub pin_colour {
 	} else {
 		return $p->is_fixed ? 'green' : 'red';
 	}
-}
-
-sub pin_category_group {
-    my ( $self, $p, $context, $c, $categories ) = @_;
-    #return 'green' if time() - $p->confirmed->epoch < 7 * 24 * 60 * 60;
-
-    if ( $context eq 'around' || $context eq 'reports' || $context eq 'my') {
-			my $category_name = $p->category;
-			if ( $categories && $categories->{$category_name}) {
-				return $categories->{$category_name};
-			} else {
-				return '0';
-			}
-		} else {
-			return '0';
-		}
 }
 
 # let staff and owners hide reports
