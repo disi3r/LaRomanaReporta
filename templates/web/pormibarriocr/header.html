@@ -165,8 +165,8 @@
     <div class="container [% "$containerclass" | html IF containerclass %]">
         <!--TOP CONTAINER-->
         <div class="top-container">
-              <!--BUSCADOR-->
-              [% INCLUDE 'around/postcode_form.html' %]
+            <!--BUSCADOR-->
+            [% INCLUDE 'around/postcode_form.html' %]
             <div id="stats-menu">
                 <a href="/stats">
                     <svg class="icon icon-icono1" viewBox="-2 0 30 30">
@@ -182,6 +182,10 @@
                     <a id="data-toggle-link" data-toggle="dropdown" class="user-name" href="#">
                         [% IF c.user.picture_url %]
                             <img class="img-circle" alt="" id="current_user_avatar">
+                            <script>
+                                $("#current_user_avatar").error(function() { $( this ).attr("src", "/cobrands/pormibarrio/images/no-profile-picture.jpg"); }).
+                                    attr( "src", "[% c.user.picture_url %]" );
+                            </script>
                         [% ELSE %]
                             <img class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">
                         [% END %]
