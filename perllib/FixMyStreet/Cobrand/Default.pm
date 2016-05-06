@@ -900,4 +900,6 @@ sub skip_send_after { 0 }
 
 sub use_tasks { 0 }
 
+sub update_on_view { 0 }
+
 1;

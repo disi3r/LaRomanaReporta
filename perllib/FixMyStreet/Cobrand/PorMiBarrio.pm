@@ -45,15 +45,15 @@ sub validate_document {1}
 sub validate_identity_document {
 	my $self = shift;
 	my $identity_document = shift;
-	
+
 	#my $identity_document = $c->stash->{user}->identity_document;
-	
-	if ( $identity_document ) {	
+
+	if ( $identity_document ) {
 		$identity_document = Utils::trim_text( $identity_document );
 		$identity_document =~ s/\.|\ //g;
-		
+
 		my @parts = split /-/, $identity_document;
-		
+
 		if (scalar @parts eq 2) {
 			#1234567-X -> X = [(1x8) + (2x1) + (3x2) + (4x3) + (5x4) + (6x7) + (7x6)] mod 10 -> X = [ 8 +2 +6 +12 +20 +42 +42] mod 10 = 132 mod 10 = 2
 			my @magic = (4,3,6,7,8,9,2);
@@ -101,7 +101,7 @@ sub report_check_for_errors {
 	} else {
         $errors{identity_document} = _('Please enter your ID');
     }
-    
+
     return (
         %{ $c->stash->{field_errors} },
         %{ $c->stash->{report}->user->check_for_errors },
@@ -119,10 +119,10 @@ Returns the colour of pin to be used for a particular report
 sub pin_colour {
     my ( $self, $p, $context, $c, $categories ) = @_;
     #return 'green' if time() - $p->confirmed->epoch < 7 * 24 * 60 * 60;
-    
+
     if ( $context eq 'around' || $context eq 'reports' || $context eq 'my') {
 		my $category_name = $p->category;
-		
+
 		if ( $categories && $categories->{$category_name}) {
 			my $pin = 'group-'.$categories->{$category_name};
 			if ($p->is_fixed){
@@ -142,6 +142,22 @@ sub pin_colour {
 	}
 }
 
+sub pin_category_group {
+    my ( $self, $p, $context, $c, $categories ) = @_;
+    #return 'green' if time() - $p->confirmed->epoch < 7 * 24 * 60 * 60;
+
+    if ( $context eq 'around' || $context eq 'reports' || $context eq 'my') {
+			my $category_name = $p->category;
+			if ( $categories && $categories->{$category_name}) {
+				return $categories->{$category_name};
+			} else {
+				return '0';
+			}
+		} else {
+			return '0';
+		}
+}
+
 # let staff and owners hide reports
 sub users_can_hide { 1 }
 
@@ -155,14 +171,14 @@ sub on_map_default_max_pin_age {
 #this is a test
 sub problems_clause {
 	return {-NOT =>{-AND => [
-                    'confirmed' => { '<', \"current_timestamp-'3 month'::interval" },
-                    'state' => { 'like', 'fixed%' },
-                ]}};
+											'confirmed' => { '<', \"current_timestamp-'3 month'::interval" },
+											'state' => { 'like', 'fixed%' },
+									]}};
 }
 
 sub geocode_postcode {
     my ( $self, $s, $c ) = @_;
-    #$response->{error} = ( { address => 'Direccion', latitude => 'latitud', longitude => 'longi' } ); 
+    #$response->{error} = ( { address => 'Direccion', latitude => 'latitud', longitude => 'longi' } );
     my $response = {};
     $c->log->debug(qq/GEOPOSTCODE HARDCODED/);
     my @addresses;
@@ -172,7 +188,7 @@ sub geocode_postcode {
     my @term_arr = split(',', $s);
 
     $c->log->debug(@term_arr);
-    
+
     if (@term_arr){
     	$c->log->debug(qq/GEOPOSTCODE ENTRA/);
     	my $ua = LWP::UserAgent->new;
@@ -201,7 +217,7 @@ sub geocode_postcode {
 	    if ( $res->is_success ) {
 
 	    	$c->log->debug(qq/GEOPOSTCODE SUCCESS/);
-	    	
+
 	    	if ( $last ){
 	    		my $addr_content = JSON->new->utf8->allow_nonref->decode($res->decoded_content);
 	    		$c->log->debug(Dumper($addr_content->{geom}->{coordinates}));
@@ -219,14 +235,14 @@ sub geocode_postcode {
 		        	push @addresses, { address => $_->{nombre}, latitude => $_->{codigo}, longitude => '' };
 		        }
 		    }
-	    } 
+	    }
 	    else {
 	    	$c->log->debug(qq/GEOPOSTCODE FAIL/);
 	    }
 	}
     $c->log->debug(qq/GEOPOSTCODE FIN/);
     #$response->{latitude} = '1';
-    $response->{error} = \@addresses; 
+    $response->{error} = \@addresses;
     return $response;
 }
 
@@ -276,6 +292,8 @@ sub skip_send_after {
     return $row->send_fail_count > 24;
 }
 
-sub use_tasks { 0 }
+sub use_tasks { 1 }
+
+sub update_on_view { 1 }
 
 1;
