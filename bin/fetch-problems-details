@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use DateTime;
+use DateTime::Format::W3CDTF;
+use Open311::GetServiceRequestUpdates;
+require 5.8.0;
+
+use FixMyStreet::App;
+use CronFns;
+my ($verbose, $nomail) = CronFns::options();
+
+use Open311;
+
+print 'A FETCH DETAILS';
+
+my $tasks = Open311::GetServiceRequestUpdates->new(
+    verbose => 1,
+);
+
+$tasks->fetch_tasks;

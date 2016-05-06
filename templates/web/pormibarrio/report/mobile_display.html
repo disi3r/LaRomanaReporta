@@ -1,0 +1,246 @@
+<div class="report visible-print-block">
+	<div id="update-display" class="info-report">
+
+        [% INCLUDE 'report/_main.html', mobile=1 %]
+        [% TRY %][% INCLUDE 'report/_message_manager.html' %][% CATCH file %][% END %]
+        <div id="comments-on-report" class="comments">
+            <h3>Comentarios</h3>
+            [% INCLUDE 'report/updates.html', mobile=1 %]
+        </div>	
+	</div><!--end update-display-->
+</div><!--end report-->
+<style type="text/css">
+div.report{
+    opacity:1;
+    overflow:auto;
+    -webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+div.report-medium{
+    left:392px; 
+    -webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+div.image-report{
+    position:relative   
+}
+
+div.report .img-top{
+    width:100%;
+    height:auto;
+    margin-bottom:-4px;
+    /*max-height: 300px;*/
+}
+
+div.info-report{
+    background-color:#fff;  
+}
+
+div.intro-report{
+    padding:30px 40px;
+    overflow:auto;
+    color:#7d7d7d;
+}
+
+div.intro-report h3{
+    font-size:2.37625em;
+    margin:0;
+    font-weight:normal;
+    color:#000;
+    width: 86%;
+}
+
+div.intro-report address{
+    font-size:14px;
+    background:url(images/pin-address.png) no-repeat left top;
+    padding:2px 0 2px 26px;
+    font-style:normal;  
+}
+
+div.intro-report p{
+    font-size:1.125em;
+    line-height:1.5em;
+    margin:0;
+    padding:15px 0; 
+}
+
+a.btn-close-report {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-size: 0.875em;
+    font-weight: 600;
+    padding: 2px 10px;
+    position: absolute;
+    right: 30px;
+    text-transform: uppercase;
+    top: 20px;
+}
+
+div.sign{
+    margin-top:10px;
+}
+
+div.sign div.picture{
+    float:left;
+    padding-right:15px;
+    background-color:#fff
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+
+div.sign div.author{
+    border-top:#ebebeb solid 1px;
+    margin-top:2px;
+    padding-top:4px;
+}
+
+div.author span a{
+    color:#252525   
+}
+
+div.author span a:hover{
+    text-decoration:none;
+    color:#3e3e3e;  
+}
+
+div.author span{
+    color: #7d7d7d;
+    font-size: 0.94em;
+}
+
+span.sign, span.time-report{
+    font-size:0.875em;
+    font-style:italic;
+    color:#7d7d7d   
+}
+
+span.sign{
+    float:left;
+    margin-top:10px;    
+}
+
+span.sign a{
+    color:#252525;
+    text-decoration:none    
+}
+
+.report-defensoria {
+    margin-top: 10px;
+    padding-top: 10px;
+    float: left;
+    border-top: 1px solid #EBEBEB;
+}
+
+div.status-report{
+    background-color:#fbfbfb;
+    padding:20px 40px;
+    border-top:#ebebeb solid 1px;
+    border-bottom:#ebebeb solid 1px;
+}
+
+p.status-report-im,
+span.status-report-im{
+    color: #7d7d7d;
+    font-size: 0.875em;
+    font-style: italic;
+}
+
+div.status-report h4, div.comments h3, div.tasks h3{
+    text-transform:uppercase;
+    color:#fc4349;
+    font-weight:600;
+    font-size:0.875em;  
+}
+
+div.comments h3 {
+    padding: 20px 0 0 40px;
+}
+
+div.status-report ul{
+    margin-top:5px; 
+}
+
+div.status-report li{
+    padding:10px 0;
+    font-size:1em;
+    border-bottom:#ebebeb solid 1px;    
+    color:#7d7d7d;
+    font-size:1em;
+    line-height:1.4375em;
+}
+
+div.status-report li:before{
+    content:"\2022";
+    color:#2c3e50;
+    margin-right:3px    
+}
+
+div.status-report li:last-child{
+    border-bottom:none;
+    padding-bottom:0    
+}
+
+div.status-report li span{
+    float:right;
+    color:#7d7d7d   
+}
+
+div.comment{
+    padding:25px 40px;
+    overflow:auto;
+    border-bottom:#ebebeb solid 1px
+}
+
+div.user-log-on img.img-circle{
+    width:30px;
+    height:auto;
+    margin-right:20px;  
+}
+
+a.user-name{
+    color:#fff;
+    padding:0 20px
+}
+
+a.user-name:hover, a.user-name:active{
+    opacity:.7;
+    text-decoration:none    
+}
+
+a.user-name:hover img.img-circle{
+    opacity:1;  
+}
+
+div.user-avatar{
+    float:left;
+    width:60px;
+    height:60px;
+    border-radius: 100px;
+    margin-right:20px;  
+}
+
+div.current-user-avatar{
+    /*margin: 0 20px 0 40px;*/
+}
+
+div.user-avatar img{
+    max-width:100%;
+    height:auto;
+    border-radius:50%;
+}
+
+.img-responsive{
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.tasks, #display_problem_print, #display_problem_close{
+    display: none;
+}
+</style>
