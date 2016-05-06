@@ -1,8 +1,8 @@
 <a class="text report-link" id="Id-[% problem.id %]" href="[% c.uri_for('/report', problem.id ) %]" onmouseover="bigPIN(this)" onMouseOut="smallPIN(this)">
 	<div class="it-r" id="problem-list-[% problem.id %]">
-		<div class="r-icon r-category-group-[% problem.category_group(c) %]"></div>
+		<img src="/i/category/[% problem.category_icon(problem.category_group) %].png" class="r-icon" />
 		<div class="it-r-info">	
-			<h3 class="r-category-group-[% problem.category_group(c) %]">[% problem.category | html %]</h3>
+			<h3 style="color:[% problem.category_color(problem.category_group) %];">[% problem.category | html %]</h3>
 			<p>[% problem.title | html %] </p>
 			<ul class="details">
 				<li>[% problem.confirmed.strftime('%Y-%m-%d %H:%M') %]</li>

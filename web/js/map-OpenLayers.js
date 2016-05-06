@@ -165,7 +165,7 @@ function fixmystreet_onload() {
     });
     pin_layer_style_map.addUniqueValueRules('default', 'size', {
         'normal': {
-            externalGraphic: "/i/pin-${colour}.png",
+            externalGraphic: "/i/pins/${colour}.png",
             graphicWidth: 29,
             graphicHeight: 34,
             graphicXOffset: -15,
@@ -177,7 +177,7 @@ function fixmystreet_onload() {
             backgroundYOffset: -10
         },
         'big': {
-            externalGraphic: "/i/pin-${colour}-big.png",
+            externalGraphic: "/i/pins/${colour}-big.png",
             graphicWidth: 67,
             graphicHeight: 69,
             graphicXOffset: -33,

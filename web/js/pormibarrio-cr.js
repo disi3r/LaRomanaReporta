@@ -3,6 +3,8 @@
  * FixMyStreet JavaScript for PMB design
  */
 
+var selectedCategories = new Array();
+
 //WIDTH SEARCH
 var locatorGeoLonLat = null;
 var locatorName = null;
@@ -452,7 +454,7 @@ function geolocate(timeout, zoom, is_list){
     }
 	setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list}, 2500);
 	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
-    $('.overlay').show();
+    $('.overlay').show();0
 	if (geo_position_js.init()) {
 	    console.log('Va a init');
 	    geo_position_js.getCurrentPosition(function(pos) {

@@ -21,7 +21,6 @@ tags
 FixMyStreet-EmptyHomes.po
 FixMyBarangay.po
 
-/web/i/*
 /web/css/core.css
 /web/css/main.css
 /web/cobrands/*/*.css

@@ -56,18 +56,17 @@ sub pin_colour {
 		my $category_name = $p->category;
 
 		if ( $categories && $categories->{$category_name}) {
-			#Get category pin
+			#Get category icon
 			my $icon = $p->category_icon( $categories->{$category_name} );
-			my $pin = 'group-'.$categories->{$category_name};
 			if ($p->is_fixed){
-				$pin .= '-resuelto';
+				$icon .= '-resuelto';
 			}
 			else{
 				if ($p->state eq 'in progress'){
-					$pin .= '-proceso';
+					$icon .= '-proceso';
 				}
 			}
-			return $pin;
+			return $icon;
 		} else {
 			return 'yellow';
 		}
