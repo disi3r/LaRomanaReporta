@@ -125,17 +125,17 @@ sub pin_colour {
 
 		if ( $categories && $categories->{$category_name}) {
 			#Get category pin
+			#Get category icon
 			my $icon = $p->category_icon( $categories->{$category_name} );
-			my $pin = 'group-'.$icon;
 			if ($p->is_fixed){
-				$pin .= '-resuelto';
+				$icon .= '-resuelto';
 			}
 			else{
 				if ($p->state eq 'in progress'){
-					$pin .= '-proceso';
+					$icon .= '-proceso';
 				}
 			}
-			return $pin;
+			return $icon;
 		} else {
 			return 'yellow';
 		}
@@ -268,6 +268,10 @@ sub skip_update_check { 1 }
 sub send_comptroller_agregate { 0 }
 
 sub send_comptroller_repeat { 0 }
+
+sub send_council_agregate { 0 }
+
+sub send_council_repeat { 0 }
 
 sub skip_send_after {
 	my $self = shift;
