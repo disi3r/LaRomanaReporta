@@ -200,6 +200,7 @@ sub display_location : Private {
             my $p = (ref $_ eq 'FixMyStreet::App::Model::DB::Nearby') ? $_->problem : $_;
 
             my $colour = $c->cobrand->pin_colour( $p, 'around', $c, \%categories );
+            my $category_group = $c->cobrand->pin_category_group( $p, 'around', $c, \%categories );
             {
                 latitude  => $p->latitude,
                 longitude => $p->longitude,
@@ -209,7 +210,7 @@ sub display_location : Private {
                 type      => '',
                 user      => $p->user->name,
                 category  => $p->category,
-                catId  => %categories->{$p->category},
+                catId  => $category_group,
                 date      =>  $p->created->ymd('-'),
                 hasPhoto  => 1,
                 hasComments => 1,
@@ -295,8 +296,8 @@ sub ajax_geo : Path('/ajax_geo') {
             category => @$pin[7],
             date => @$pin[9],
             state => @$pin[12],
-            pin_url => '/i/pin-'.@$pin[2].'.png',
-            category_url => '/i/r-category-group-'.@$pin[8].'.png',
+            pin_url => '/i/pins/'.@$pin[2].'.png',
+            category_url => '/i/category/'.@$pin[2].'.png',
             color => @$pin[13],
             fixed => @$pin[14],
             has_comment => @$pin[15],
