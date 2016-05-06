@@ -1,0 +1,3 @@
+insert into alert_type (ref, template, head_sql_query, head_table, head_title, head_link, head_description, item_table, item_where, item_order, item_title,item_link,item_description) values ('comptroller_overdue', 'alert-comptroller-overdue', '', 'problem', 'Reporte retrasado', '', 'Used to create comptroller alerts', '','','','','','');
+
+insert into alert_type (ref, template, head_sql_query, head_table, head_title, head_link, head_description, item_table, item_where, item_order, item_title,item_link,item_description) values ('council_overdue', 'alert-council-overdue', '', 'problem', 'Reporte retrasado', '', 'Used to create comptroller alerts', '','','','','','');

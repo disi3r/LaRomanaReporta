@@ -8,6 +8,7 @@ use DateTime::Format::W3CDTF;
 has system_user => ( is => 'rw' );
 has start_date => ( is => 'ro', default => undef );
 has end_date => ( is => 'ro', default => undef );
+has last_update_council => ( is => 'ro', default => undef );
 has suppress_alerts => ( is => 'rw', default => 0 );
 has verbose => ( is => 'ro', default => 0 );
 
@@ -16,7 +17,6 @@ Readonly::Scalar my $AREA_ID_OXFORDSHIRE => 2237;
 
 sub fetch {
     my $self = shift;
-    print 'Arranca FETCH';
     my $bodies = FixMyStreet::App->model('DB::Body')->search(
         {
             send_method     => 'Open311',
@@ -97,7 +97,6 @@ sub update_comments {
             my $c = $p->comments->search( { external_id => $request->{update_id} } );
 
             if ( !$c->first ) {
-                print "\nEntra a comment\n";
                 my $comment_time = DateTime::Format::W3CDTF->parse_datetime( $request->{updated_datetime} );
 
                 my $comment = FixMyStreet::App->model('DB::Comment')->new(
@@ -121,13 +120,11 @@ sub update_comments {
                 if ( $comment->created > $p->lastupdate ) {
                     my $state = $self->map_state( $request->{status} );
                     print $request->{status};
-                    print "\nEntra a update\n";
                     print $state;
                     # don't update state unless it's an allowed state and it's
                     # actually changing the state of the problem
                     if ( FixMyStreet::DB::Result::Problem->council_states()->{$state} && $p->state ne $state &&
                         !( $p->is_fixed && FixMyStreet::DB::Result::Problem->fixed_states()->{$state} ) ) {
-                        print "\nEntra a state\n";
                         $p->state($state);
                         $comment->problem_state($state);
                     }
@@ -136,8 +133,6 @@ sub update_comments {
                 $p->lastupdate( $comment->created );
                 $p->update;
                 $comment->insert();
-
-                print "\nHace el update\n";
 
                 if ( $self->suppress_alerts ) {
                     my $alert = FixMyStreet::App->model('DB::Alert')->find( {
@@ -157,6 +152,48 @@ sub update_comments {
     }
 
     return 1;
+}
+
+sub fetch_tasks {
+    use Data::Dumper;
+    my $self = shift;
+
+    my $bodies = FixMyStreet::App->model('DB::Body')->search(
+        {
+            send_method     => 'Open311',
+            send_comments   => 1,
+            comment_user_id => { '!=', undef },
+            endpoint        => { '!=', '' },
+        }
+    );
+    while ( my $body = $bodies->next ) {
+
+        my $o = Open311->new(
+            endpoint     => $body->endpoint,
+            #api_key      => $body->api_key,
+            #jurisdiction => $body->jurisdiction,
+        );
+
+        $self->suppress_alerts( $body->suppress_alerts );
+        $self->system_user( $body->comment_user );
+        #Get external_ids for looping
+        my %where;
+        if ( !$self->last_update_council ){
+            $where{external_id} = 'is not null';
+            $where{bodies_str} = { '=', "'".$body->id."'" };
+            $where{state} = { 'not in', "'%fixed%', 'hidden', 'closed'" };
+        }
+        print 'ARRANCA CON BODY ';
+        print $body->id;
+        my @problems = FixMyStreet::App->model('DB::Problem')->search( \%where );
+        print Dumper(@problems);
+        print 'NADA?';
+        foreach my $problem (@problems){
+            print "\n PROBLEM \n";
+            print Dumper($problem->get_columns());
+        }
+    }
+
 }
 
 sub map_state {
