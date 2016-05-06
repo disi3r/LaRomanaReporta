@@ -240,6 +240,7 @@ $( document ).ready(function() {
                 $(divContainerId).append('<select id="muniSelect" class="locate"></select>');
                 $(categoriesSelectId).append('<option disabled selected>Elegí tu Municipalidad</option>');
                 $(categoriesSelectId).append('<option value="PALMARES" class="muni">PALMARES</option>');
+                $(categoriesSelectId).append('<option value="OSA" class="muni">OSA</option>');
             }
         }
 
@@ -271,7 +272,10 @@ $( document ).ready(function() {
 
         switch(muni) {
         case 'PALMARES':
-            location.href = '/around?latitude=10.050;longitude=-84.433&zoom=4';
+            location.href = '/around?latitude=10.0563244;longitude=-84.4355793&zoom=4';
+            break;
+        case 'OSA':
+            location.href = '/around?latitude=8.9792135;longitude=-83.5373015&zoom=4';
             break;
         default:
             window.location.href = "http://pormibarrio.cr";
