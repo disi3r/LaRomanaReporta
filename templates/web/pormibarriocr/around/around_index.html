@@ -33,15 +33,18 @@
     $.urlParam = function(name){
         var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
         try {
-          return results[1] || 0;
-        }
+          if(results[1]){
+            return results[1];
+          }else{
+            return 0;
+          }
         catch(err) {
           return null;
         }
     }
-    if($.urlParam('list')==1){
-        set_active_nav_button('report-all-button');
-    }else{
+    if(!$.urlParam('list')){
         set_active_nav_button('report-button');
+    }else{
+        set_active_nav_button('report-all-button');
     }
 </script>
