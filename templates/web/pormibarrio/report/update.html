@@ -4,13 +4,14 @@
      <div class="comment comment-[% update.name %]">
 		<div class="user-avatar">
 			[% IF update.users.picture_url && !update.anonymous and update.name != ''%]	
-				<img alt="" class="user_avatar_[% update.users.id %]"></div>
+				<img alt="" class="user_avatar_[% update.users.id %]" src="[% update.users.picture_link(mobile, c.cobrand.base_url) %]"></div>
 				<script>
-					$(".user_avatar_[% update.users.id %]").error(function() { $(this).attr("src", "/cobrands/pormibarrio/images/no-profile-picture.jpg"); }).
-						attr( "src", "[% update.users.picture_url %]" );
+					$(".user_avatar_[% update.users.id %]").error(function() { $(this).attr("src", "[% mobile ? c.cobrand.base_url : '' %]/cobrands/pormibarrio/images/no-profile-picture.jpg"); }).
+						attr( "src", "[% update.users.picture_link(mobile, c.cobrand.base_url) %]" );
+						alert("[% update.users.picture_link(mobile, c.cobrand.base_url) %]");
 				</script>
 			[% ELSE %]
-				<img alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg"></div>
+				<img alt="" src="[% mobile ? c.cobrand.base_url : '' %]/cobrands/pormibarrio/images/no-profile-picture.jpg"></div>
 			[% END %]
 		<div class="user-info">
 			[% IF update.anonymous || update.name == '' %]
@@ -22,7 +23,7 @@
 		</div>
 		<div class="user-comment">
 			[% add_links( update.text ) | html_para %]
-			[% INCLUDE 'report/photo.html' object=update %]
+			[% INCLUDE 'report/photo.html' object=update, mobile=mobile %]
 		</div>
 	</div>
 [% IF loop.last %]

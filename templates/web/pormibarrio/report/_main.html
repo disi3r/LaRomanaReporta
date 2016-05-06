@@ -1,6 +1,6 @@
 [% IF c.cobrand.allow_photo_display(problem) && problem.photo %]
-    [% IF problem.get_photo_params.url_full %]<a href="[% c.cobrand.base_url %][% problem.get_photo_params.url_full %]">[% END %]
-        <img alt="Photo of this report" [% IF problem.get_photo_params.height %]height="[% problem.get_photo_params.height %]" width="[% problem.get_photo_params.width %]"[% END %] src="[% c.cobrand.base_url %][% problem.get_photo_params.url_full %]" class="img-top">
+    [% IF problem.get_photo_params.url_full %]<a href="[% mobile ? c.cobrand.base_url : '' %][% problem.get_photo_params.url_full %]">[% END %]
+        <img alt="Photo of this report" [% IF problem.get_photo_params.height %]height="[% problem.get_photo_params.height %]" width="[% problem.get_photo_params.width %]"[% END %] src="[% mobile ? c.cobrand.base_url : '' %][% problem.get_photo_params.url_full %]" class="img-top">
     [%- IF problem.get_photo_params.url_full %]<!--<span>zoom</span>--></a>[% END %]
 [% END %]
 <div class="info-report">
@@ -14,7 +14,7 @@
         <h3>
             [% problem.title | html %]
             [% IF problem.is_fixed %]
-                <img alt="Resuelto" class="img-resuelto" src='[% c.cobrand.base_url %]cobrands/pormibarrio/images/resuelto.png' />
+                <img alt="Resuelto" class="img-resuelto" src='[% mobile ? c.cobrand.base_url : '' %]/cobrands/pormibarrio/images/resuelto.png' />
             [% END %]
         </h3>
         <address>[% problem.postcode != ''? problem.postcode : loc('No address specified') %]</address>
@@ -22,9 +22,9 @@
         <div class="sign">
             <div class="picture">
                 [% IF problem.user.picture_url && !problem.anonymous and problem.name != ''%] 
-                <img alt="[% problem.name %]" class="img-circle" width="35" height="35" src="[% index(problem.user.picture_url, 'http') == -1 ? c.cobrand.base_url : '' %][% problem.user.picture_url %]">
+                <img alt="[% problem.name %]" class="img-circle" width="35" height="35" src="[% problem.user.picture_link(mobile, c.cobrand.base_url) %]">
                 [% ELSE %]
-                <img alt="" class="img-circle" width="35" height="35" src="[% c.cobrand.base_url %]/cobrands/pormibarrio/images/no-profile-picture.jpg">
+                <img alt="" class="img-circle" width="35" height="35" src="[% mobile ? c.cobrand.base_url : '' %]/cobrands/pormibarrio/images/no-profile-picture.jpg">
                 [% END %]
             </div>
             <div class="author">

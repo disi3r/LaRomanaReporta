@@ -2,7 +2,7 @@
 [% photo = object.get_photo_params %]
 <div class="user-picture">
     [% IF photo.url_full %]<a href="[% photo.url_full %]" rel="fancy">[% END
-    %]<img alt="Photo of this report" class="img-responsive" [% IF photo.height %]height="[% photo.height %]" width="[% photo.width %]"[% END %] src="[% photo.url %]">
+    %]<img alt="Photo of this report" class="img-responsive" [% IF photo.height %]height="[% photo.height %]" width="[% photo.width %]"[% END %] src="[% mobile ? c.cobrand.base_url : '' %][% photo.url %]">
     [%- IF photo.url_full %]</a>[% END %]
 </div>
 [% END %]
