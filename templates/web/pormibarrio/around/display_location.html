@@ -108,13 +108,16 @@
       $.each( categories, function( key, val ) {
         if(key!=-2){
           var name="";
+          var icon = "./i/category/";
           $.each( val, function( key2, val2 ) {
             if(key2=="name"){
               name = val2;
             }
+            if(key2=="icon"){
+              icon = icon + val2 + ".png";
+            }
           });
-          var group_id = key;
-          var icon = "./i/r-category-group-"+group_id+".png"
+          var group_id = key;          
           addCategoryFilter(name,group_id,icon);
         }
       });

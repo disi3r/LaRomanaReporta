@@ -649,10 +649,12 @@ sub setup_categories_and_bodies : Private {
 	my %groups_items;
 	my %groups_items_encoded;
 	my %groups;
+  my %groups_icons;
 	my %category_in_group;
 
 	foreach (@contacts_group) {
 		$groups{$_->group_id} = $_->group_name unless $groups{$_->group_id};
+    $groups_icons{$_->group_id} = $_->group_icon unless $groups_icons{$_->group_id};
 		$groups_items_encoded{$_->group_id} = [];
 	}
 
@@ -730,6 +732,7 @@ sub setup_categories_and_bodies : Private {
 
                 if ( !$groups_items{$contact->group_id} ){
                     $groups_items{$contact->group_id}{name} = $groups{$contact->group_id};
+                    $groups_items{$contact->group_id}{icon} = $groups_icons{$contact->group_id};
                 }
 				push (@{$groups_items{$contact->group_id}{categories}}, $contact->category);
 		        push (@{$groups_items_encoded{$contact->group_id}}, encode_entities($contact->category, "ñóéáúí"));
