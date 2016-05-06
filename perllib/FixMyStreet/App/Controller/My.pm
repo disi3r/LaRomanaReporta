@@ -114,17 +114,17 @@ sub my : Path : Args(0) {
 
 sub edit : Path('edit'){
     my ( $self, $c ) = @_;
-    $c->detach( 'redirect' ) unless $c->user;
+    $c->detach( '/auth/redirect' ) unless $c->user;
 
     # If not a post then no submission
-    return unless $c->req->method eq 'POST';
+    #return unless $c->req->method eq 'POST';
     $c->stash->{page} = 1;
     #Proces FB & TW vinculations
     if ( $c->req->params->{'facebook_unlink'} || $c->req->params->{'twitter_unlink'} ){
         $c->user->facebook_id(undef) if $c->req->params->{'facebook_unlink'};
         $c->user->twitter_id(undef) if $c->req->params->{'twitter_unlink'};
         $c->user->update();
-        $c->stash->{messages} = _('Los cambios han sido guardados');
+        $c->stash->{messages} = _('Changes has been saved');
         return;
     }
     #Link accounts
@@ -146,12 +146,13 @@ sub edit : Path('edit'){
             $c->stash->{password_error} = $password_error;
             $c->stash->{new_password}   = $new;
             $c->stash->{confirm}        = $confirm;
+            $c->stash->{field_errors}->{password_error} = $password_error;
             return;
         }
         # we should have a usable password - save it to the user
         $c->user->obj->update( { password => $new } );
         $c->stash->{messages} = _('Your password has been changed');
-        return;
+        return 1;
     }
 
     #Process email
@@ -213,7 +214,7 @@ sub edit : Path('edit'){
     #Update user
     $c->user->modified(\'ms_current_timestamp()');
     $c->user->update();
-    $c->stash->{messages} = _('Los cambios han sido guardados');
+    $c->stash->{messages} = _('Changes has been saved');
     return;
 }
 

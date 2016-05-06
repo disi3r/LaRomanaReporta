@@ -218,4 +218,20 @@ sub split_name {
     return { first => $first || '', last => $last || '' };
 }
 
+=head2 picture_link
+
+    $picture_url = $user->picture_link($is_mobile, $cobrand_base);
+
+Returns a string with url according to absolute or relative.
+
+=cut
+sub picture_link {
+  my ( $self, $is_mobile, $base_url ) = @_;
+
+  if ( $is_mobile && index($self->picture_url, 'http') == -1 ){
+    return $base_url.$self->picture_url;
+  }
+  return $self->picture_url;
+}
+
 1;

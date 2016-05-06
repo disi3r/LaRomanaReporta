@@ -127,7 +127,7 @@ sub email_sign_in : Private {
 	    $user_params->{email} = $good_email if $good_email;
 	    $user_params->{name} = $c->req->param('name') if $c->req->param('name');
 	    $user_params->{password} = $c->req->param('password_register') if $c->req->param('password_register');
-		$user_params->{identity_document} = $c->req->param('identity_document') if $c->req->param('identity_document');;
+		$user_params->{identity_document} = $c->req->param('identity_document') if $c->req->param('identity_document');
 	    $user_params->{phone} = $c->req->param('phone') if $c->req->param('phone');
 	    $user = $c->model('DB::User')->new( $user_params );
 	}
@@ -695,8 +695,18 @@ sub ajax_sign_in : Path('ajax/sign_in') {
     my $return = {};
     if ( $c->forward( 'sign_in' ) ) {
         $return->{name} = $c->user->name;
+        $return->{phone} = $c->user->phone;
+        $return->{identity_document} = $c->user->identity_document;
+        if ( $c->user->picture_url ){
+        	$return->{picture_url} = $c->cobrand->base_url.$c->user->picture_url;
+        }
+        else {
+        	$return->{picture_url} = '';	
+        }
     } else {
         $return->{error} = 1;
+        $return->{result} = 0;
+        $return->{message} = _('User or password incorrect');
     }
 
     my $body = JSON->new->utf8(1)->encode( $return );
@@ -732,6 +742,74 @@ sub ajax_check_auth : Path('ajax/check_auth') {
     my $body = JSON->new->utf8(1)->encode( $data );
     $c->res->content_type('application/json; charset=utf-8');
     $c->res->code($code);
+    $c->res->body($body);
+
+    return 1;
+}
+
+sub ajax_create_user : Path('ajax/create_user') {
+	my ( $self, $c ) = @_;
+	
+	$c->forward('email_sign_in');
+	my %result;
+
+	if ( $c->stash->{field_errors} && %{$c->stash->{field_errors}} ){
+		my $errors = '';
+		foreach ( keys %{$c->stash->{field_errors}} ){
+			$errors .= $c->stash->{field_errors}->{$_}."\n";
+		}
+		%result = ( result => '0', message => $errors );
+	}
+	else {
+		$c->log->debug( "\nENTRA A OK\n\n" );
+		%result = ( result => 1, message => _('Email has been sent for confirmation') );
+	}
+
+	my $body = JSON->new->utf8(1)->encode( \%result );
+    $c->res->content_type('application/json; charset=utf-8');
+    $c->res->body($body);
+
+    return 1;
+}
+
+sub ajax_edit_user : Path('ajax/edit_user') {
+	my ( $self, $c ) = @_;
+	
+	my %result;
+
+	$c->log->debug("\n OBJETO: \n");
+	$c->log->debug(Dumper($c->req));
+
+	if ( $c->req->params->{email} && $c->req->params->{password_sign_in} && $c->authenticate( { email => $c->req->params->{email}, password => $c->req->params->{password_sign_in} } ) ) {
+        $c->forward('/my/edit');
+		if ( $c->stash->{field_errors} && %{$c->stash->{field_errors}} ){
+			my $errors = '';
+			foreach ( keys %{$c->stash->{field_errors}} ){
+				$errors .= $c->stash->{field_errors}->{$_}."\n";
+			}
+			%result = ( result => '0', message => $errors );
+		}
+		else {
+			%result = (
+				result => 1, 
+				email => $c->user->email,
+				name => $c->user->name,
+				phone => $c->user->phone,
+				identity_document => $c->user->identity_document,
+			);
+			if ( $c->user->picture_url ){
+	        	%result->{picture_url} = $c->cobrand->base_url.$c->user->picture_url;
+	        }
+	        else {
+	        	%result->{picture_url} = '';	
+	        }
+		}
+    } else {
+		%result = ( result => 0, password => _('User or password incorrect') );
+    }
+
+	my $body = JSON->new->utf8(1)->encode( \%result );
+    $c->res->content_type('application/json; charset=utf-8');
     $c->res->body($body);
 
     return 1;

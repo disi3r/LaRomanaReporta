@@ -3,6 +3,8 @@ package FixMyStreet::App::Controller::Report;
 use Moose;
 use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
+use Data::Dumper;
+use Open311;
 
 =head1 NAME
 
@@ -73,6 +75,9 @@ sub _display : Private {
     $c->forward( 'load_problem_or_display_error', [ $id ] );
     $c->forward( 'load_updates' );
     $c->forward( 'format_problem_for_display' );
+    if ($c->cobrand->use_tasks){
+        $c->forward( 'load_problem_tasks' );
+    }
 }
 
 sub support : Path('support') : Args(0) {
@@ -116,6 +121,19 @@ sub load_problem_or_display_error : Private {
                 '/page_error_403_access_denied',
                 [ sprintf(_('That report cannot be viewed on %s.'), $c->cobrand->site_title) ]    #
             );
+        }
+    }
+    #Check if cobrand allows update when viewing and that problem has flag has_updates
+    if ( $c->cobrand->update_on_view && $problem->has_updates ){
+        my $body = ( values $problem->bodies )[0];
+        my $open311 = Open311->new( endpoint => $body->endpoint );
+        my $prequest = $open311->get_service_custom_meta_info($problem->external_id);
+        if ( ref $prequest eq 'HASH' && exists $prequest->{request} ){
+            #update general information
+            $c->log->debug( "\n HAY UPDATE:\n" );
+            $c->log->debug( Dumper($prequest->{request}) );
+            $c->log->debug( "\n TERMINA UPDATE:\n\n" );
+            #update tasks
         }
     }
 
@@ -170,15 +188,12 @@ sub format_problem_for_display : Private {
 
     $c->forward('generate_map_tags');
 
+    $c->log->debug("\n\nARRANCA UPDATE\n");
+    $c->log->debug(Dumper($c->stash->{updates}));
+    $c->log->debug("\n\nTERMINA UPDATE\n");
+
     if ( $c->stash->{ajax} ) {
-        $c->res->content_type('application/json; charset=utf-8');
-        my $content = JSON->new->utf8(1)->encode(
-            {
-                report => $c->cobrand->problem_as_hashref( $problem, $c ),
-                updates => $c->cobrand->updates_as_hashref( $problem, $c ),
-            }
-        );
-        $c->res->body( $content );
+        $c->stash->{template} = 'report/mobile_display.html';
         return 1;
     }
     #stash contacts so they can be changed
@@ -259,6 +274,22 @@ sub delete :Local :Args(1) {
     } );
 
     return $c->res->redirect($uri);
+}
+
+sub load_problem_tasks : Private {
+    my ( $self, $c ) = @_;
+
+    my $p = $c->stash->{problem};
+
+    my @tasks = $c->model('DB::Task')->search({ problem_id => $p->id })->all;
+
+    #@tasks = map { { $_->get_columns } } @tasks;
+
+    $c->stash->{tasks} = \@tasks;
+    $c->log->debug("\n\nARRANCA TASK\n");
+    #$c->log->debug(Dumper(@tasks));
+    $c->log->debug("\nTERMINA TASK\n\n");
+    return 1;
 }
 
 __PACKAGE__->meta->make_immutable;
