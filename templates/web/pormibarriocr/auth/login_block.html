@@ -43,7 +43,7 @@
             </div>
             <input class="btn btn-block btn-reportar" type="submit" id="submit_sign_in" name="submit_sign_in" value="[% loc('Access') %]">
             [% IF one_time_login %]
-            <a class="green send-password" href="#">[% loc('Have you forgotten your password') %]</a>
+            <a class="green send-password" href="#">[% loc('Have you forgotten your password?') %]</a>
             <div id="send-password" style="display: none">
                 <input type="email" class="[% IF field_errors.email %] error [% END %]" name="login_email" id="login_email" placeholder="Correo electrónico *">
                 [% IF field_errors.login_email  %]
