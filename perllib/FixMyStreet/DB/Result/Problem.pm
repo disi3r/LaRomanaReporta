@@ -104,6 +104,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "lastupdate_council",
   { data_type => "timestamp", is_nullable => 1 },
+  "has_updates",
+  { data_type => "boolean", default_value => \"false", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->has_many(
@@ -377,7 +379,7 @@ sub check_for_errors {
         || $self->name =~ m/\ba\s*n+on+((y|o)mo?u?s)?(ly)?\b/i )
     {
         $errors{name} = _(
-'Please enter your full name, councils need this information – if you do not wish your name to be shown on the site, untick the box below'
+'Please enter your full name, councils need this information. If you do not wish your name to be shown on the site, untick the box below'
         ) unless $self->cobrand eq 'emptyhomes';
     }
 

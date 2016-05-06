@@ -7,7 +7,7 @@
         = pc
         ? c.uri_for( "/rss/pc", pc )
         : c.uri_for( "/rss/l/$short_latitude,$short_longitude" );
-            
+
     email_url = c.uri_for(
         '/alert/list',
         {
@@ -37,7 +37,9 @@
 
     allow_creation = !c.cobrand.only_authed_can_create || (c.user && c.user.from_body);
 %]
-
+<div id="s-categories">
+  <h4>Filtrar reportes:</h4>
+</div>
 [% IF allow_creation %]
 <form action="[% c.uri_for('/report/new') %]" method="post" name="mapForm" id="mapForm" enctype="multipart/form-data" class="validate">
     [% IF c.req.params.map_override %]
@@ -98,5 +100,67 @@
 [% IF allow_creation %]
 </form>
 [% END %]
-
 [% INCLUDE 'footer.html' %]
+<script type="text/javascript">
+  function getCategoryGroups(){
+    $.getJSON( "/report/new/ajax?latitude=-34.906557&longitude=-56.199769&format=json", function( data ) {
+      var categories = data.categories;
+      $.each( categories, function( key, val ) {
+        if(key!=-2){
+          var name="";
+          $.each( val, function( key2, val2 ) {
+            if(key2=="name"){
+              name = val2;
+            }
+          });
+          var group_id = key;
+          var icon = "./i/r-category-group-"+group_id+".png"
+          addCategoryFilter(name,group_id,icon);
+        }
+      });
+    })
+      .done(function() {
+      })
+      .fail(function() {
+        //console.log( "error" );
+      })
+      .always(function() {
+        //console.log( "complete" );
+      });
+  }
+
+  function addCategoryFilter(name,group_id,icon){
+      var html = "<div class='category_filter' id='category_filter_" + group_id + "' onclick='selectCategoryGroup(\""+group_id+"\")'>";
+      html = html + "<img class='filter_icon' src='."+icon+"'/>";
+      html = html + "<h3>" + name + "</h3>";
+      html = html + "</div>";
+      $("#s-categories").append(html);
+  }
+
+  function selectCategoryGroup(id){
+    if(!selectedCategories){
+      selectedCategories = new Array();
+    }
+    var filter = document.getElementById("category_filter_"+id);
+    if(filter.style.backgroundColor == "transparent" || filter.style.backgroundColor == ""){
+      filter.style.backgroundColor = "#000000";
+      selectedCategories.push(id);
+    }else{
+      filter.style.backgroundColor = "transparent";
+      /*var index = selectedCategories.indexOf(id);
+      if (index > -1) {
+          selectedCategories = selectedCategories.splice(index, 1);
+      }*/
+      var newList = new Array();
+      selectedCategories.forEach(function(element,index,array){
+        if(element!=id){
+          newList.push(element);
+        }
+      });
+      selectedCategories = newList;
+    }
+    //fixmystreet_update_filtered_pins();
+  }
+
+  getCategoryGroups();
+</script>

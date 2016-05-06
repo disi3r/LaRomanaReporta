@@ -135,6 +135,11 @@ sub problem_rules {
 				'action' => 'email'
 			},
 			{
+				'max_time' => 1,
+				'class' => 'council_overdue',
+				'action' => 'email'
+			},
+			{
 				'max_time' => 8,
 				'class' => 'problem-alert'
 			},
@@ -147,6 +152,11 @@ sub problem_rules {
 			{
 				'max_time' => 10,
 				'class' => 'comptroller_overdue',
+				'action' => 'email'
+			},
+			{
+				'max_time' => 1,
+				'class' => 'council_overdue',
 				'action' => 'email'
 			},
 			{
@@ -165,6 +175,11 @@ sub problem_rules {
 				'action' => 'email'
 			},
 			{
+				'max_time' => 1,
+				'class' => 'council_overdue',
+				'action' => 'email'
+			},
+			{
 				'max_time' => 8,
 				'class' => 'problem-alert'
 			},
@@ -177,6 +192,11 @@ sub problem_rules {
 			{
 				'max_time' => 10,
 				'class' => 'comptroller_overdue',
+				'action' => 'email'
+			},
+			{
+				'max_time' => 1,
+				'class' => 'council_overdue',
 				'action' => 'email'
 			},
 			{
@@ -195,6 +215,11 @@ sub problem_rules {
 				'action' => 'email'
 			},
 			{
+				'max_time' => 1,
+				'class' => 'council_overdue',
+				'action' => 'email'
+			},
+			{
 				'max_time' => 8,
 				'class' => 'problem-alert'
 			},
@@ -207,6 +232,11 @@ sub problem_rules {
 			{
 				'max_time' => 10,
 				'class' => 'comptroller_overdue',
+				'action' => 'email'
+			},
+			{
+				'max_time' => 1,
+				'class' => 'council_overdue',
 				'action' => 'email'
 			},
 			{
@@ -228,6 +258,10 @@ sub skip_update_check { 1 }
 sub send_comptroller_agregate { 0 }
 
 sub send_comptroller_repeat { 0 }
+
+sub send_council_agregate { 0 }
+
+sub send_council_repeat { 0 }
 
 sub use_tasks { 0 }
 

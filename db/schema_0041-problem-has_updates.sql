@@ -1,0 +1,1 @@
+alter table problem add column has_updates boolean;

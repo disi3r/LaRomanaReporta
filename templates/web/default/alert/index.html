@@ -30,7 +30,7 @@ To find out what local alerts we have for you, please enter your [% c.cobrand.co
 <form method="get" action="/alert/list" class="full-width">
   <fieldset>
     <div class="form-txt-submit-box">
-      <input type="text" name="pc" value="[% pc | html %]" placeholder="[% tprintf(loc('e.g. ‘%s’ or ‘%s’'), c.cobrand.example_places) %]">
+      <input type="text" name="pc" value="[% pc | html %]" placeholder='[% tprintf(loc("e.g. \"%s\" or \"%s\""), c.cobrand.example_places) %]'>
       <input class="green-btn" type="submit" value="[% loc('Go') %]">
     </div>
   </fieldset>

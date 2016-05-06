@@ -1,6 +1,6 @@
 [%
     IF pretty_pc;
-        title = tprintf( loc("Local RSS feeds and email alerts for ‘%s’"), pretty_pc );
+        title = tprintf( loc("Local RSS feeds and email alerts for \"%s\""), pretty_pc );
     ELSE;
         title = loc('Local RSS feeds and email alerts');
     END;
@@ -11,7 +11,7 @@
 [% IF pretty_pc %]
     [%
         pretty_pc = pretty_pc | html | replace(' ', '&nbsp;');
-        title = tprintf( loc("Local RSS feeds and email alerts for ‘%s’"), pretty_pc );
+        title = tprintf( loc("Local RSS feeds and email alerts for \"%s\""), pretty_pc );
     %]
 [% END %]
 

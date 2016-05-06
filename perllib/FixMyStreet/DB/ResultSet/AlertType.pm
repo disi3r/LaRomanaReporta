@@ -19,7 +19,7 @@ use Data::Dumper;
 sub email_alerts ($) {
     my ( $rs ) = @_;
 
-    my $q = $rs->search( { '-AND' => [ 
+    my $q = $rs->search( { '-AND' => [
         ref => {'-not_like', '%local_problems%' },
         ref => {'-not_like', '%comptroller_overdue%' },
         ] } );
@@ -44,8 +44,8 @@ sub email_alerts ($) {
             from alert, $item_table";
         }
         $query .= "
-            where alert_type='$ref' 
-            and whendisabled is null 
+            where alert_type='$ref'
+            and whendisabled is null
             and $item_table.confirmed >= whensubscribed
             and $item_table.confirmed >= ms_current_timestamp() - '7 days'::interval
             and (select whenqueued from alert_sent where alert_sent.alert_id = alert.id and alert_sent.parameter::integer = $item_table.id) is null
@@ -65,8 +65,8 @@ sub email_alerts ($) {
 
             my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($row->{alert_cobrand})->new();
 
-            # Cobranded and non-cobranded messages can share a database. In this case, the conf file 
-            # should specify a vhost to send the reports for each cobrand, so that they don't get sent 
+            # Cobranded and non-cobranded messages can share a database. In this case, the conf file
+            # should specify a vhost to send the reports for each cobrand, so that they don't get sent
             # more than once if there are multiple vhosts running off the same database. The email_host
             # call checks if this is the host that sends mail for this cobrand.
             next unless $cobrand->email_host;
@@ -86,58 +86,7 @@ sub email_alerts ($) {
             }
 
             # create problem status message for the templates
-            if ( FixMyStreet::DB::Result::Problem::fixed_states()->{$row->{state}} ) {
-                if($row->{state} eq "fixed"){
-                    $data{state_message} = "arreglado";
-                }
-                if($row->{state} eq "fixed - user"){
-                    $data{state_message} = "arreglado - usuario";
-                }
-                if($row->{state} eq "fixed - council"){
-                    $data{state_message} = "arreglado - municipalidad";
-                }
-                #$data{state_message} = _("Este reporte ha sido marcado como arreglado.");
-                #$data{state_message} = $row->{state};
-            } elsif ( FixMyStreet::DB::Result::Problem::closed_states()->{$row->{state}} ) {
-                if($row->{state} eq "closed"){
-                    $data{state_message} = "cerrado";
-                }
-                if($row->{state} eq "unable to fix"){
-                    $data{state_message} = "no se puede arreglar";
-                }
-                if($row->{state} eq "not responsible"){
-                    $data{state_message} = "no responsable";
-                }
-                if($row->{state} eq "duplicate"){
-                    $data{state_message} = "duplicado";
-                }
-                if($row->{state} eq "internal referral"){
-                    $data{state_message} = "referencia interna";
-                }
-                #$data{state_message} = _("Este reporte ha sido marcado como cerrado.");
-                #$data{state_message} = $row->{state};
-            } else {
-                if($row->{state} eq "confirmed"){
-                    $data{state_message} = "abierto";
-                }
-                if($row->{state} eq "investigating"){
-                    $data{state_message} = "investigando";
-                }
-                if($row->{state} eq "in progress"){
-                    $data{state_message} = "en progreso";
-                }
-                if($row->{state} eq "planned"){
-                    $data{state_message} = "planificado";
-                }
-                if($row->{state} eq "action scheduled"){
-                    $data{state_message} = "acción agendada";
-                }
-                if($row->{state} eq "clarify"){
-                    $data{state_message} = "clarificar reporte";
-                }
-                #$data{state_message} = _("Este reporte ha sido marcado como abierto.");
-                #$data{state_message} = $row->{state};
-            }
+            $data{state_message} = _($row->{state});
 
             my $url = $cobrand->base_url( $row->{alert_cobrand_data} );
             if ( $hashref_restriction && $hashref_restriction->{bodies_str} && $row->{bodies_str} ne $hashref_restriction->{bodies_str} ) {
@@ -268,14 +217,14 @@ sub send_comptroller_alerts() {
         next unless $cobrand->email_host;
         next if $alert->is_from_abuser;
 
-        %data = ( 
-            template => $template, 
-            data => '', 
-            alert_id => $alert->id, 
-            alert_email => $alert->user->email, 
-            lang => $alert->lang, 
-            cobrand => $alert->cobrand, 
-            cobrand_data => $alert->cobrand_data 
+        %data = (
+            template => $template,
+            data => '',
+            alert_id => $alert->id,
+            alert_email => $alert->user->email,
+            lang => $alert->lang,
+            cobrand => $alert->cobrand,
+            cobrand_data => $alert->cobrand_data
         );
         my $q;
         if ($cobrand->send_comptroller_repeat){
@@ -396,6 +345,97 @@ sub _send_aggregated_alert_email(%) {
         $token->insert();
     } else {
         print "Failed to send alert $data{alert_id}!";
+    }
+}
+
+sub send_council_alerts() {
+    my ( $rs, $alert_class ) = @_;
+    print "\n <-- Arranca alertas a funcionarios  $alert_class -->\n";
+    my $query = FixMyStreet::App->model('DB::Alert')->search( {
+        alert_type   => $alert_class,
+        whendisabled => undef,
+        confirmed    => 1
+    }, {
+        order_by     => 'id'
+    } );
+    my $template = $rs->find( { ref => $alert_class } )->template;
+    my %agregated_alerts;
+    my %data;
+    while (my $alert = $query->next) {
+        my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($alert->cobrand)->new();
+        next unless $cobrand->email_host;
+        next if $alert->is_from_abuser;
+
+        %data = (
+            template => $template,
+            data => '',
+            alert_id => $alert->id,
+            alert_email => $alert->user->email,
+            lang => $alert->lang,
+            cobrand => $alert->cobrand,
+            cobrand_data => $alert->cobrand_data
+        );
+        my $q;
+        if ($cobrand->send_council_repeat){
+            $q = "select id, title, category, (select email as email from contacts where contacts.category = problem.category limit 1) from problem where id = ?";
+            $q = dbh()->prepare($q);
+            $q->execute($alert->parameter);
+        }
+        else {
+            $q = "select id, title, category, (select email as email from contacts where contacts.category = problem.category limit 1) from problem where id = ?
+                and (select whenqueued from alert_sent where alert_sent.alert_id = ?
+                 and alert_sent.parameter::integer = problem.id limit 1) is null";
+            $q = dbh()->prepare($q);
+            $q->execute($alert->parameter, $alert->id);
+        }
+        my $row = $q->fetchrow_hashref;
+        if ($row) {
+            FixMyStreet::App->model('DB::AlertSent')->create( {
+                alert_id  => $alert->id,
+                parameter => $row->{id},
+            } );
+            my $url = mySociety::Config::get('BASE_URL');
+            if ($cobrand->send_council_agregate){
+                my $problem_string = $row->{id}.",".$row->{title}.",".$row->{category}.",".$url . "/report/" . $row->{id};
+                if (exists $agregated_alerts{$alert->user->id}){
+                    push @{$agregated_alerts{$alert->user->id}{lines}}, $problem_string;
+                }
+                else {
+                    #First alert set parameters
+                    $agregated_alerts{$alert->user->id} = { %data };
+                    $agregated_alerts{$alert->user->id}{lines} = [ $problem_string ];
+                }
+            }
+            else {
+                $data{summary} .= "";
+                $data{category} = $row->{category};
+                $data{title} = $row->{title};
+                $data{problem_url} = $url . "/report/" . $row->{id};
+                $data{alert_email} = $row->{email};
+                print "\nSEND MAIL: $row->{title}\n";
+                _send_aggregated_alert_email(%data);
+            }
+        }
+    }
+    #If we have alerts to be agregated
+    if (%agregated_alerts){
+        for my $aa_key ( keys %agregated_alerts ){
+            my %aa_obj = %{$agregated_alerts{$aa_key}};
+            $data{summary} = '';
+            foreach ( @{$aa_obj{lines}} ){
+                $data{summary} .= $_;
+                $data{summary} .= "\n\n------\n\n";
+            }
+            $data{title} = _("Summary of reports");
+            $data{problem_url} = '';
+            $data{category} = _("several categories");
+            $data{cobrand} = $aa_obj{cobrand};
+            $data{alert_email} = $aa_obj{alert_email};
+            $data{lang} = $aa_obj{lang};
+            $data{cobrand_data} = $aa_obj{cobrand_data};
+            print "\nSEND AGREGATED MAIL: $data{summary}\n";
+            _send_aggregated_alert_email(%data);
+        }
     }
 }
 

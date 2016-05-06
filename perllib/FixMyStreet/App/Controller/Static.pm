@@ -46,6 +46,9 @@ sub faq : Global : Args(0) {
     my $lang_code = $c->stash->{lang_code};
     my $template  = "faq/faq-$lang_code.html";
     $c->stash->{template} = $template;
+    if ( $c->req->param('ajax') ){
+        $c->stash->{mobile} = 1;
+    }
 }
 
 sub fun : Global : Args(0) {

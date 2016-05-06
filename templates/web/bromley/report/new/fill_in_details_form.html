@@ -61,7 +61,7 @@
             [% IF field_errors.detail %]
                 <p class='form-error'>[% field_errors.detail %]</p>
             [% END %]
-            <textarea rows="7" cols="26" name="detail" id="form_detail" placeholder="[% loc('Please describe the exact location of the report. Example: “2 dumped mattresses outside Number 19 Stockwell Close”') %]" required>[% report.detail | html %]</textarea>
+            <textarea rows="7" cols="26" name="detail" id="form_detail" placeholder="[% loc('Please describe the exact location of the report. Example: "2 dumped mattresses outside Number 19 Stockwell Close"') %]" required>[% report.detail | html %]</textarea>
 
             [% IF js %]
                 <div id="form_category_row">

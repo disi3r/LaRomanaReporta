@@ -67,6 +67,23 @@ function fixmystreet_zoomToBounds(bounds) {
     }
 }
 
+function category_is_selected(category_group_id){
+  //TODO: Agregar la lógica de filtro acá.
+  //Leer los iconos del selector activo y si el category_group_id = value devuelve true
+  var result = false;
+  if(selectedCategories && selectedCategories.length>0){
+    selectedCategories.forEach(function(element,index,array){
+      if(element==category_group_id){
+        result = true;
+      }
+    });
+
+  }else{
+    result = true;
+  }
+  return result;
+}
+
 function fms_markers_list(pins, transform) {
     var markers = [];
     for (var i=0; i<pins.length; i++) {
@@ -93,7 +110,9 @@ function fms_markers_list(pins, transform) {
             hasPhoto : pin[10] || 1,
             hasComments : pin[11] || 1
         });
-        markers.push( marker );
+        if(category_is_selected(pin[8])){
+          markers.push(marker);
+        }
     }
     if(typeof locatorGeoLonLat != 'undefined'){
         //alert(locatorName);
@@ -109,7 +128,6 @@ function fms_markers_list(pins, transform) {
             hasPhoto : 0,
             hasComments : 0
         });
-        //markers.push( placeOfReferenceLocator );
     }
     return markers;
 }
@@ -187,16 +205,16 @@ function fixmystreet_onload() {
         });
     }
     fixmystreet.markers = new OpenLayers.Layer.Vector("Pins", pin_layer_options);
-    fixmystreet.markers.events.register( 'loadend', fixmystreet.markers, function(evt) {
+    /*fixmystreet.markers.events.register( 'loadend', fixmystreet.markers, function(evt) {
         if (fixmystreet.map.popups.length) {
             fixmystreet.map.removePopup(fixmystreet.map.popups[0]);
         }
-    });
+    });*/
 
     var markers = fms_markers_list( fixmystreet.pins, true );
-
-    fixmystreet.markers.addFeatures( markers );
-
+    fixmystreet.markers.removeAllFeatures();
+    fixmystreet.markers.addFeatures( markers )
+    //console.log(fixmystreet.markers);
     function onPopupClose(evt) {
         fixmystreet.select_feature.unselect(selectedFeature);
         OpenLayers.Event.stop(evt);
@@ -221,9 +239,9 @@ function fixmystreet_onload() {
                 null,
                 popupHtml,
                 { size: new OpenLayers.Size(0,0), offset: new OpenLayers.Pixel(0,-40) },
-                true, 
+                true,
                 this.onPopupClose);
-            console.log('Crea el popup');
+            //console.log('Crea el popup');
             feature.popup = popup;
             fixmystreet.map.addPopup(popup);
         });
@@ -295,7 +313,7 @@ $(function(){
 
     // Set specific map config - some other JS included in the
     // template should define this
-    set_map_config(); 
+    set_map_config();
 
     // Create the basics of the map
     fixmystreet.map = new OpenLayers.Map(
@@ -380,9 +398,9 @@ $(function(){
         fixmystreet.drag.deactivate();
         $('#side-form').hide();
         $('#side').show();
-        
+
         //$('#sub_map_links').show();
-        
+
         //only on mobile
         $('#mob_sub_map_links').remove();
         $('.mobile-map-banner').html('<a href="/">' + translation_strings.home + '</a> ' + translation_strings.place_pin_on_map);
@@ -504,7 +522,7 @@ OpenLayers.Format.FixMyStreet = OpenLayers.Class(OpenLayers.Format.JSON, {
 });
 
 /* Click handler */
-OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
+OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
     defaultHandlerOptions: {
         'single': true,
         'double': false,
@@ -518,12 +536,12 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
             {}, this.defaultHandlerOptions);
         OpenLayers.Control.prototype.initialize.apply(
             this, arguments
-        ); 
+        );
         this.handler = new OpenLayers.Handler.Click(
             this, {
                 'click': this.trigger
             }, this.handlerOptions);
-    }, 
+    },
 
     trigger: function(e) {
         if (typeof fixmystreet.nav_control != 'undefined') {
@@ -626,4 +644,3 @@ OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
         location.hash = 'report';
     }
 });
-

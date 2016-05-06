@@ -8,7 +8,7 @@ body, h1, h2, h3, h4, h5, h6, p, form{
 ul{
 	padding:0;
 	margin:0;
-	list-style-type:none;	
+	list-style-type:none;
 }
 
 body{
@@ -114,7 +114,7 @@ div#fms_pan_zoom.pan-horizontal div{
 	padding: 30px 40px;
 }
 
-#form_sign_in input.error, #form_sign_in input.error:focus, 
+#form_sign_in input.error, #form_sign_in input.error:focus,
 #form_sign_in select.error, #form_sign_in select.error:focus,
 #form_sign_in textarea.error, #form_sign_in textarea.error:focus {
     background: none;
@@ -155,7 +155,7 @@ div.c-intro{
 div.c-intro h2{
 	font-weight:300;
 	font-size:3.375em;
-	margin: 4rem 0 0 0; 	
+	margin: 4rem 0 0 0;
 }
 
 div.c-intro p{
@@ -174,7 +174,7 @@ div.step{
 	width:33.3333%;
 	float:left;
 	min-width:276px;
-	text-align:center	
+	text-align:center
 }
 
 div.step h3{
@@ -199,7 +199,7 @@ div.c-buttons-intro{
 a.know-more{
 	display:block;
 	margin:23px 0 4px 0;
-	color:#fff	
+	color:#fff
 }
 
 a.know-more:hover{
@@ -284,9 +284,9 @@ div.top-container{
 	position:fixed;
 	background-color:rgba(19,30,41,0.96);
 	z-index:5000;
-	width:100%;	
+	width:100%;
 	top:0;
-	left:0	
+	left:0
 }
 
 div.s-calles{
@@ -338,7 +338,7 @@ div.s-calles input:focus{
 .btn-search{
 	background-color:rgba(88,190,247,0.30);
 	color:#4f606e;
-	padding:4px 15px!important;	
+	padding:4px 15px!important;
 	margin-top: 13px;
 }
 
@@ -400,7 +400,7 @@ ul.user-login li{
 
 ul.user-login li a{
 	font-size:1em;
-	color:#758a9d	
+	color:#758a9d
 }
 
 ul.user-login li a:hover{
@@ -409,13 +409,13 @@ ul.user-login li a:hover{
 }
 
 div.user-log-on{
-	margin:12px 0 0 0;	
+	margin:12px 0 0 0;
 }
 
 div.user-log-on img.img-circle{
 	width:30px;
 	height:auto;
-	margin-right:20px;	
+	margin-right:20px;
 }
 
 a.user-name{
@@ -425,11 +425,11 @@ a.user-name{
 
 a.user-name:hover, a.user-name:active{
 	opacity:.7;
-	text-decoration:none	
+	text-decoration:none
 }
 
 a.user-name:hover img.img-circle{
-	opacity:1;	
+	opacity:1;
 }
 
 .dropdown-menu{
@@ -443,7 +443,7 @@ a.user-name:hover img.img-circle{
 	-moz-border-radius-bottomleft: 4px;
 	border-bottom-left-radius: 4px;
 	padding:0;
-	overflow:hidden	
+	overflow:hidden
 }
 
 .dropdown-menu>li>a{
@@ -468,7 +468,7 @@ a.user-name:hover img.img-circle{
 
 a:focus{
 	outline:none;
-	text-decoration:none	
+	text-decoration:none
 }
 
 
@@ -490,7 +490,7 @@ nav.first-navigation{
 nav.first-navigation:hover{
 	width:183px;
 	-webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-	transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+	transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 nav.first-navigation li{
@@ -531,7 +531,7 @@ nav.first-navigation:hover li a span{
 }
 
 nav.first-navigation li a:hover{
-	text-decoration:none;	
+	text-decoration:none;
 }
 
 nav.first-navigation li.home a{
@@ -571,7 +571,7 @@ nav.first-navigation:hover li.home a span{
 }
 
 .navbar-collapse span{
-	padding-left:48px;	
+	padding-left:48px;
 }
 
 li.reportar{
@@ -579,7 +579,7 @@ li.reportar{
 }
 
 li.stats{
-	display:none;		
+	display:none;
 }
 
 li.reportar a{
@@ -591,7 +591,7 @@ li.reportar a{
 li.reportes a{
 	/*border-bottom:#2c3e50 solid 1px;*/
 	height:55px;
-	/* background:url(../images/icon-reportes.png) no-repeat 20px center; */	
+	/* background:url(../images/icon-reportes.png) no-repeat 20px center; */
 }
 
 li.reportes a:hover, li.help a:hover, li.doc-info a:hover{
@@ -604,7 +604,7 @@ li.help a{
 }
 
 li.profile{
-	border-bottom:none !important;	
+	border-bottom:none !important;
 }
 
 li.profile span{
@@ -616,11 +616,11 @@ nav.first-navigation li.profile a{
 	width:35px;
 	height:35px;
 	text-indent:inherit;
-	padding-left:15px	
+	padding-left:15px
 }
 
 nav.first-navigation:hover li.profile a{
-	padding-left:15px	
+	padding-left:15px
 }
 
 nav.first-navigation li.profile a img{
@@ -653,7 +653,7 @@ ul.help-info li a{
 
 li.data a{
 	/*border-top:#2c3e50 solid 1px;*/
-	background:url(images/icon-data.png) no-repeat center 10px;	
+	background:url(images/icon-data.png) no-repeat center 10px;
 }
 
 li.my-society a{
@@ -676,7 +676,7 @@ li.avina a{
 }
 
 ul.second li{
-	
+
 }
 
 ul.second li.pmb{
@@ -705,7 +705,7 @@ li.s-reports a{
 }
 
 li.s-reports a:hover, li.s-help a:hover{
-	background-color:#131e29	
+	background-color:#131e29
 }
 
 li.s-help a{
@@ -728,7 +728,7 @@ div.sub{
 div.open-side{
 	left:183px;
 	-webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-	transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+	transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	opacity:1!important;
 	z-index:1000;
 }
@@ -736,7 +736,7 @@ div.open-side{
 div.side-active{
 	left:183px;
 	-webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-	transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+	transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	opacity:1!important
 }
 
@@ -754,14 +754,14 @@ div.ir{
 div.ir h2{
 	font-size:2.375em;
 	font-weight:300;
-	color:#2c3e50;	
+	color:#2c3e50;
 }
 
 div.ir p{
 	color:#7d7d7d;
 	font-size:1.125em;
 	margin-top:10px;
-	line-height:24px;	
+	line-height:24px;
 }
 
 div.it-r{
@@ -784,7 +784,7 @@ img.r-icon{
 	width:60px;
 	height:60px;
 	float:left;
-	margin-right:19px	
+	margin-right:19px
 }
 
 div.it-r-info{
@@ -883,13 +883,13 @@ div.report{
 }
 
 div.report-medium{
-	left:392px;	
+	left:392px;
 	-webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 div.image-report{
-	position:relative	
+	position:relative
 }
 
 a.btn-back{
@@ -901,7 +901,7 @@ a.btn-back{
 	color:#fff;
 	font-size:0.875em;
 	background:rgba(0,0,0,0.3);
-	padding:2px 10px	
+	padding:2px 10px
 }
 
 a.registrate-back:hover{
@@ -918,7 +918,7 @@ a.btn-close-report{
 	color:#fff;
 	font-size:0.875em;
 	background:rgba(0,0,0,0.3);
-	padding:2px 10px	
+	padding:2px 10px
 }
 
 a.btn-close-report:hover{
@@ -952,7 +952,7 @@ div.report .img-top{
 }
 
 div.info-report{
-	background-color:#fff;	
+	background-color:#fff;
 }
 
 div.intro-report{
@@ -973,14 +973,14 @@ div.intro-report address{
 	font-size:14px;
 	background:url(images/pin-address.png) no-repeat left top;
 	padding:2px 0 2px 26px;
-	font-style:normal;	
+	font-style:normal;
 }
 
 div.intro-report p{
 	font-size:1.125em;
 	line-height:1.5em;
 	margin:0;
-	padding:15px 0;	
+	padding:15px 0;
 }
 
 a.btn-close-report {
@@ -1012,12 +1012,12 @@ div.sign div.author{
 }
 
 div.author span a{
-	color:#252525	
+	color:#252525
 }
 
 div.author span a:hover{
 	text-decoration:none;
-	color:#3e3e3e;	
+	color:#3e3e3e;
 }
 
 div.author span{
@@ -1028,17 +1028,17 @@ div.author span{
 span.sign, span.time-report{
 	font-size:0.875em;
 	font-style:italic;
-	color:#7d7d7d	
+	color:#7d7d7d
 }
 
 span.sign{
 	float:left;
-	margin-top:10px;	
+	margin-top:10px;
 }
 
 span.sign a{
 	color:#252525;
-	text-decoration:none	
+	text-decoration:none
 }
 
 div.status-report{
@@ -1066,7 +1066,7 @@ div.status-report h4, div.comments h3, div.tasks h3{
 	text-transform:uppercase;
 	color:#fc4349;
 	font-weight:600;
-	font-size:0.875em;	
+	font-size:0.875em;
 }
 
 div.comments h3 {
@@ -1074,13 +1074,13 @@ div.comments h3 {
 }
 
 div.status-report ul{
-	margin-top:5px;	
+	margin-top:5px;
 }
 
 div.status-report li{
 	padding:10px 0;
 	font-size:1em;
-	border-bottom:#ebebeb solid 1px;	
+	border-bottom:#ebebeb solid 1px;
 	color:#7d7d7d;
 	font-size:1em;
 	line-height:1.4375em;
@@ -1089,17 +1089,17 @@ div.status-report li{
 div.status-report li:before{
 	content:"\2022";
 	color:#2c3e50;
-	margin-right:3px	
+	margin-right:3px
 }
 
 div.status-report li:last-child{
 	border-bottom:none;
-	padding-bottom:0	
+	padding-bottom:0
 }
 
 div.status-report li span{
 	float:right;
-	color:#7d7d7d	
+	color:#7d7d7d
 }
 
 div.comment{
@@ -1113,7 +1113,7 @@ div.user-avatar{
 	width:60px;
 	height:60px;
 	border-radius: 100px;
-	margin-right:20px;	
+	margin-right:20px;
 }
 
 div.current-user-avatar{
@@ -1123,7 +1123,7 @@ div.current-user-avatar{
 div.user-avatar img{
 	max-width:100%;
 	height:auto;
-	border-radius:100px;
+	border-radius:50%;
 }
 
 div.user-info textarea, div.user-info .form-control {
@@ -1163,7 +1163,7 @@ div.user-info form textarea{
 	width:397px;
 	color:#464646;
 	width:84%;
-	height:45px;	
+	height:45px;
 }
 
 .form-group label {
@@ -1180,7 +1180,7 @@ div.edit-profile div.checkbox label{
 }
 
 div.user-comment .btn-disabled{
-	background-color:#58bef7;	
+	background-color:#58bef7;
 }
 
 div.user-info textarea::-webkit-input-placeholder { color: #7d7d7d; font-style:italic}
@@ -1189,7 +1189,7 @@ div.user-info h4{
 	font-size:1.375em;
 	color: #464646;;
 	font-weight:normal;
-	margin:5px 0 0 0	
+	margin:5px 0 0 0
 }
 
 div.user-comment{
@@ -1200,12 +1200,12 @@ div.user-comment{
 div.user-comment p{
 	color:#7d7d7d;
 	font-size:1em;
-	line-height:1.4375em	
+	line-height:1.4375em
 }
 
 div.comment-user{
 	border-bottom: medium none;
-	padding-bottom: 5px;	
+	padding-bottom: 5px;
 }
 
 p.status-report-im {
@@ -1220,13 +1220,13 @@ div.comments-user-info {
 }
 
 div.imm-comment{
-	background-color:#fbfbfb;	
+	background-color:#fbfbfb;
 }
 
 div.user-picture{
 	margin-top:15px;
 	border-radius:5px;
-	overflow:hidden	
+	overflow:hidden
 }
 
 span.report-state{
@@ -1410,11 +1410,11 @@ div.new-report{
 }
 
 div.new-report .ir{
-	border:none;	
+	border:none;
 }
 
 div.new-report .ir h2{
-	color:#fff;	
+	color:#fff;
 }
 
 div.new-report .ir p{
@@ -1433,7 +1433,7 @@ div.c-scroll-reportar{
 
 div.c-form-report div.ir{
 	padding:0;
-	margin-bottom:20px	
+	margin-bottom:20px
 }
 
 .form-group{
@@ -1453,7 +1453,7 @@ div.c-form-report div.ir{
 }
 
 .form-group label.active{
-	color:#fff;	
+	color:#fff;
 }
 
 .form-group input, .form-group textarea, .form-group select{
@@ -1472,13 +1472,13 @@ div.c-form-report div.ir{
 }
 
 .form-group textarea{
-	height:auto;	
+	height:auto;
 }
 
 .form-group select option{
 	padding:5px 10px;
 	background-color:#1e2e3d;
-	color:#758a9d	
+	color:#758a9d
 }
 
 .form-group select option:hover{
@@ -1503,11 +1503,11 @@ div.drag{
 	border:#65788a dashed 1px;
 	text-align:center;
 	padding:20px;
-	cursor:pointer	
+	cursor:pointer
 }
 
 div.drag span{
-	font-size:1em;	
+	font-size:1em;
 }
 
 #InputFile{
@@ -1524,7 +1524,7 @@ div.drag span{
 
 .help-block{
 	font-size:0.875em;
-	color:#758a9d;	
+	color:#758a9d;
 }
 
 .form-group input.form-error, .form-group input.form-error:focus,
@@ -1544,7 +1544,7 @@ p.error-m {
 .btn-block{
 	width:100%;
 	text-align:center;
-	display:block	
+	display:block
 }
 
 .btn{
@@ -1560,22 +1560,22 @@ p.error-m {
 
 .btn-reportar{
 	color:#fff;
-	background:#65788a	
+	background:#65788a
 }
 
 .btn-reportar:hover{
 	background-color:#768a9d;
 	color:#fff;
-	text-decoration:none		
+	text-decoration:none
 }
 
 .btn-disabled{
 	opacity:0.3;
-	cursor:default	
+	cursor:default
 }
 
 .btn-disabled:hover{
-	background:#65788a	
+	background:#65788a
 }
 
 .btn-green{
@@ -1586,16 +1586,16 @@ p.error-m {
 .btn-green:hover{
 	background-color:#25c995;
 	text-decoration:none;
-	color:#fff	
+	color:#fff
 }
 
 a.green{
-	color:#1fb384;	
+	color:#1fb384;
 }
 
 a.green:hover{
 	color:#25c995;
-	text-decoration:none	
+	text-decoration:none
 }
 
 .btn-social{
@@ -1604,7 +1604,7 @@ a.green:hover{
 	font-weight:400;
 	padding:8px 10px;
 	margin-bottom:10px;
-	color:#fff	
+	color:#fff
 }
 
 .btn-facebook{
@@ -1616,16 +1616,16 @@ a.green:hover{
 }
 
 .btn-twitter{
-	background-color:#55acee;	
+	background-color:#55acee;
 }
 
 .btn-twitter:hover{
-	background-color:#65bdff	
+	background-color:#65bdff
 }
 
 .btn-sky{
 	background-color:#58bef7;
-	color:#fff;	
+	color:#fff;
 }
 
 .btn-sky:hover{
@@ -1648,7 +1648,7 @@ a.green:hover{
 	float:right;
 	background-color:#fc4349;
 	border-radius:0;
-	padding:9px 15px;	
+	padding:9px 15px;
 }
 
 .btn-detalle:hover{
@@ -1685,7 +1685,7 @@ div.login{
 
 div.login div.ir{
 	padding:0;
-	margin-bottom:20px	
+	margin-bottom:20px
 }
 
 *.no-account{
@@ -1725,11 +1725,11 @@ div.checkbox a{
 	background:none;
 	padding:0!important;
 	text-transform:none!important;
-	color:#58bef7!important	
+	color:#58bef7!important
 }
 
 div.checkbox a:hover{
-	color:#65bdff!important;	
+	color:#65bdff!important;
 }
 
 /*TOOLTIPS y PINS*/
@@ -1769,7 +1769,7 @@ div.tool div.it-r{
 }
 
 div.tool div.it-r-info{
-	padding:20px 25px;	
+	padding:20px 25px;
 }
 
 div.tool-details{
@@ -1789,7 +1789,7 @@ div.tool-details img{
 span.name{
 	font-size:0.875em;
 	color:#252525;
-	font-style:italic;	
+	font-style:italic;
 }
 
 .btn-detalle span{
@@ -1841,7 +1841,7 @@ div.user-profile{
 
 div.profile{
 	padding-top:20px;
-	text-align:center	
+	text-align:center
 }
 
 .btn-editar{
@@ -1891,12 +1891,12 @@ div.profile li.dot{
 }
 
 div.profile ul li a{
-	color:#58bef7	
+	color:#58bef7
 }
 
 div.profile ul li a:hover{
 	color:#87cdf5;
-	text-decoration:none	
+	text-decoration:none
 }
 
 .rep-filtro{
@@ -1906,7 +1906,7 @@ div.profile ul li a:hover{
 .btn-filtro, .btn-filtro:focus, .btn-filtro:active, .btn-filtro:active:focus{
 	padding:0;
 	background:#FFF;
-	font-size:0.875em;	
+	font-size:0.875em;
 	margin: 0 10px;
 	opacity:0.3;
 	outline:none;
@@ -1918,13 +1918,13 @@ div.profile ul li a:hover{
 
 .btn-filtro .icon{
 	width: 31px;
-	height: 31px;	
+	height: 31px;
 }
 
 .btn-filtro span{
 	color:#7d7d7d;
 	text-transform:none;
-	font-weight:400;	
+	font-weight:400;
 }
 
 .btn-filter{
@@ -1934,7 +1934,7 @@ p.no-reportes{
 	text-align:center;
 	padding: 32px 5px;
 	font-size:1.375em;
-	color:#7d7d7d;	
+	color:#7d7d7d;
 }
 
 #user-interactions,
@@ -2000,11 +2000,11 @@ p.no-reportes{
 }
 
 div.edit-img{
-	padding:24px 0;	
+	padding:24px 0;
 }
 
 div.edit-profile{
-	padding: 7px 0;	
+	padding: 7px 0;
 }
 
 div.edit-profile .form-control {
@@ -2066,12 +2066,12 @@ div.como-funciona{
 div.como-funciona h2{
 	font-weight:300;
 	font-size:2.375em;
-	color:#2c3e50	
+	color:#2c3e50
 }
 
 div.como-funciona dl{
 	margin-top:28px;
-	margin-bottom:0	
+	margin-bottom:0
 }
 
 div.como-funciona dt{
@@ -2079,7 +2079,7 @@ div.como-funciona dt{
 	color:#58bef7;
 	font-weight:300;
 	text-transform:uppercase;
-	margin-bottom:10px;	
+	margin-bottom:10px;
 }
 
 div.como-funciona dd, div.como-funciona dd a{
@@ -2088,12 +2088,12 @@ div.como-funciona dd, div.como-funciona dd a{
 }
 
 div.como-funciona dd{
-	margin-bottom:5px;	
+	margin-bottom:5px;
 }
 
 div.como-funciona dd a:hover{
 	text-decoration:none;
-	opacity:0.7	
+	opacity:0.7
 }
 
 /*RESPUESTAS DE COMO FUNCIONA-----------------------------------------------*/
@@ -2149,11 +2149,11 @@ div.respuesta p{
 	font-size:1.125em;
 	color:#7d7d7d;
 	line-height:28px;
-	margin-top:30px;	
+	margin-top:30px;
 }
 
 div.respuesta p a{
-	color:#58bef7	
+	color:#58bef7
 }
 
 div.respuesta p a:hover{
@@ -2164,8 +2164,8 @@ div.respuesta p a:hover{
 /*TOOLTIPS y PINS*/
 
 .tooltip{
-	display: inline-block; 
-	position: relative; 
+	display: inline-block;
+	position: relative;
 	right: -1px;
 }
 .arrow_box {
@@ -2205,7 +2205,7 @@ div.tool div.it-r{
 }
 
 div.tool div.it-r-info{
-	padding:20px 25px;	
+	padding:20px 25px;
 }
 
 div.tool-details{
@@ -2225,7 +2225,7 @@ div.tool-details img{
 span.name{
 	font-size:0.875em;
 	color:#252525;
-	font-style:italic;	
+	font-style:italic;
 }
 
 .btn-detalle span{
@@ -2238,16 +2238,16 @@ span.name{
 }
 
 .tool h3{
-	color:#a40301	
+	color:#a40301
 }
 
 a.navbar-brand, li.reportar-small {
-	display:none;	
+	display:none;
 }
 
 .navbar-collapse{
 	padding-left:0;
-	padding-right:0;	
+	padding-right:0;
 }
 
 /*MEDIAQUERIES------------------------------------------------------------*/
@@ -2257,27 +2257,27 @@ div.content-vertical{
 }
 
 @media (max-width: 967px) {
-	
+
 	/*INTRO*/
 	div.c-intro{
 		padding-left:20px;
 		padding-right:20px;
 		padding-top:12rem;
 	}
-	
+
 	div.c-intro p{
-		width:auto		
+		width:auto
 	}
-	
+
 	div.step{
 		float:none;
-		margin:0 auto 4rem;		
+		margin:0 auto 4rem;
 	}
-	
+
 	div.c-buttons-intro{
-		margin-top:3rem;		
+		margin-top:3rem;
 	}
-	
+
 }
 
 @media (max-width: 860px) {
@@ -2285,26 +2285,26 @@ div.content-vertical{
 		height: 55px;
 		top: 90px;
 	}
-	
+
 	#info-user{
-		display:none;	
+		display:none;
 	}
-	
+
 	div.s-calles {
 		padding-left: 0;
 		width:100% !important;
 		max-width: 100%;
 	}
-	
+
 	div.s-calles .pull-left {
 		width: 75%;
 	}
-	
+
 	.btn-search {
 		margin-top: 13px;
 		margin-right:20px;
 	}
-	
+
 	ul.l-calles {
 		padding-left: 0;
 	}
@@ -2318,7 +2318,7 @@ div.content-vertical{
 		margin:20px 0 0 9px;
 		position:absolute
 	}
-	
+
 	.navbar-toggle .icon-bar{
 		background-color:#fff;
 		border-radius:0;
@@ -2326,23 +2326,23 @@ div.content-vertical{
 		height:6px;
 		margin-bottom:7px;
 	}
-	
+
 	ul.help-info{
 		position:relative;
 		left:auto;
 		bottom:auto;
-		width:auto				
+		width:auto
 	}
-	
+
 	ul.help-info li a{
-		text-indent:inherit!important		
+		text-indent:inherit!important
 	}
-	
+
 	nav.first-navigation{
 		overflow: visible;
 		background: #1e2e3d;
 	}
-	
+
 	nav.first-navigation li {
 		border-bottom: none;
 	}
@@ -2350,32 +2350,32 @@ div.content-vertical{
 	nav.first-navigation:hover ul.help-info li a{
 		padding-left:55px;
 	}
-	
+
 	li.data a, li.my-society a, li.avina a{
-		background-position:20px center;		
+		background-position:20px center;
 	}
-	
+
 	.navbar-brand{
 		padding:0;
 		width:32.5%; /* 208 / 640 */
 		margin:2rem auto 0;
 		float:none;
 		display:block!important;
-		height:70px;	
+		height:70px;
 	}
-	
+
 	nav.first-navigation li.profile a{
 		width:100%;
 		height:100%;
-		overflow:auto		
-	}	
-	
+		overflow:auto
+	}
+
 	nav.first-navigation li.profile a span{
 		opacity:1;
 		float:left;
-		margin-top:4px;		
+		margin-top:4px;
 	}
-	
+
 	.navbar-collapse{
 		background-color:#131e29;
 		margin:0!important;
@@ -2383,41 +2383,41 @@ div.content-vertical{
 		border-bottom:#495f73 solid 5px;
 		max-height:none;
 	}
-	
+
 	nav.first-navigation, nav.first-navigation:hover{
 		width:100%;
 		height:90px;
 		padding-top:12px;
 		padding:0
 	}
-	
+
 	nav.first-navigation:hover{
-		width:100%		
+		width:100%
 	}
-	
+
 	nav.first-navigation li a, ul.help-info li a{
 		border-radius:0;
 		display:block;
 		width:100%
 	}
-	
+
 	nav.first-navigation li a:hover, ul.help-info li a:hover{
 		background-color:#2a3e51
 
 	}
-	
+
 	nav.first-navigation li.home a{
 		display:none;
 	}
-	
+
 	li.reportar{
-		display:none;	
+		display:none;
 	}
 
 	li.stats{
-		display:block;		
+		display:block;
 	}
-	
+
 	li.reportar-small{
 		position: absolute;
 		right: 0;
@@ -2426,7 +2426,7 @@ div.content-vertical{
 		text-indent:-9999em;
 		display:block;
 	}
-	
+
 	nav.first-navigation li.reportar-small a, nav.first-navigation:hover li.reportar-small a{
 		width: 110px;
 		padding: 15px 0px 0px !important;
@@ -2435,30 +2435,30 @@ div.content-vertical{
 		position: relative;
 		background: none repeat scroll 0% 0% #FC4349;
 	}
-	
+
 	nav.first-navigation li a, nav.first-navigation:hover li a{
 		text-indent:inherit;
 		padding:15px 25px 15px 61px;
-		height:auto!important	
+		height:auto!important
 	}
-	
+
 	/*LISTADO DE REPORTES*/
 	div.sub{
 		opacity:1;
 		width:100%;
 		/*padding-top:80px;*/
-		left:0;		
+		left:0;
 	}
-	
+
 	div.side-active{
-		left:0		
+		left:0
 	}
-	
+
 	/*DETALLE DE REPORTE*/
 	div.container-report{
-		margin-left:0px;		
+		margin-left:0px;
 	}
-	
+
 	div.report{
 		width:100%;
 		left:0;
@@ -2467,7 +2467,7 @@ div.content-vertical{
 		margin-top:90px;
 		margin-left:0
 	}
-	
+
 	.container{
 		padding-left:0;
 		padding-right:0;
@@ -2492,32 +2492,32 @@ div.content-vertical{
 		margin:15px auto;
 		clear:both;
 		display:block;
-		width:60%		
+		width:60%
 	}
-	
+
 	.footer{
 		position:relative;
 		height:auto;
-		margin-top:40px		
+		margin-top:40px
 	}
 }
 
 @media (max-width: 480px) {
 	/*INTRO*/
 	.btn-intro{
-		width:100%		
+		width:100%
 	}
 	/* - */
 	nav.first-navigation, nav.first-navigation:hover {
 		height: 60px;
 		padding-top: 8px;
 	}
-	
+
 	nav.first-navigation li.reportar-small a, nav.first-navigation:hover li.reportar-small a {
 		width: 70px;
 		height: 60px!important;
 	}
-	
+
 	nav.first-navigation li.reportar-small a .icon {
 		position: absolute;
 		top: 10px;
@@ -2525,17 +2525,17 @@ div.content-vertical{
 		width: 60px;
 		height: 41px;
 	}
-	
+
 	.navbar-toggle {
 		margin: 0;
 	}
-	
+
 	.navbar-toggle .icon-bar {
 		width: 31px;
 		height: 4px;
 		margin-bottom: 6px;
 	}
-	
+
 	.navbar-brand {
 		width: 140px;
 		margin: 0rem auto 0;
@@ -2549,11 +2549,11 @@ div.content-vertical{
 	div.s-calles .pull-left {
 		width: 60%;
 	}
-	
+
 	div.s-calles .form-group {
 		margin-bottom: 0;
 	}
-	
+
 	/* reportar */
 	div.report {
 		margin-top: 40px;
@@ -2564,23 +2564,23 @@ div.content-vertical{
 		height: 76%;
 		margin-bottom: 20px;
 	}
-	
+
 	.btn-comentar {
 		padding: 6px 10px;
 		font-size: 0.750em;
 	}
-	
+
 	div.edit-profile .btn-social {
 		font-size: 0.938em;
 	}
-	
+
 	div.it-r div.it-r-info {
 		width: 65%;
 	}
 	#stats-menu{
 		display: none;
 	}
-	
+
 }
 
 /*CHARTS*/
@@ -2629,7 +2629,7 @@ div#stats-menu:hover{
 	padding-bottom: 10px;
 	border-bottom: #ebebeb solid 1px;
 }
-#chart-options input, 
+#chart-options input,
 #chart-options label{
 	display: inline-block;
 	width: 17%;
@@ -2779,4 +2779,50 @@ tr.noDeadLine{
   #comments-on-report{
   	visibility: visible;
   }
+
+
+}
+
+#s-categories{
+	background-color: rgba(0, 0, 0, 0.7);
+	border-radius: 25px 25px 25px 25px;
+	-moz-border-radius: 25px 25px 25px 25px;
+	-webkit-border-radius: 25px 25px 25px 25px;
+	border: 1px solid #000000;
+	min-width: 410px;
+	max-width: 50%;
+	min-height: 80px;
+	position: relative;
+	top: 60px;
+	left: 90%;
+	margin-left: 35%;
+	margin-top: 5%;
+}
+
+#s-categories h4{
+	font-size: 12px;
+	color: #FFFFFF;
+	margin-left: 20px;
+	margin-top: 5px;
+}
+
+.category_filter{
+	float: left;
+	margin-left: 20px;
+	cursor: pointer;
+	margin-top: 5px;
+	text-align:center;
+	background-color: transparent;
+}
+
+.category_filter img{
+}
+
+.category_filter h3{
+	font-size: 12px;
+	color: #FFFFFF;
+}
+
+.filter_icon{
+	width: 35px;
 }

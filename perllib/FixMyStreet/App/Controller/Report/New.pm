@@ -121,7 +121,8 @@ sub report_new_ajax : Path('mobile') : Args(0) {
     $c->forward('initialize_report');
 
     unless ( $c->forward('determine_location') ) {
-        $c->stash->{ json_response } = { errors => 'Unable to determine location' };
+        $c->stash->{ json_response } = { errors => _('Unable to determine location') };
+        $c->stash->{ json_response } .= { message => _('Unable to determine location'), result => 0 };
         $c->forward('send_json_response');
         return 1;
     }
@@ -134,6 +135,7 @@ sub report_new_ajax : Path('mobile') : Args(0) {
     unless ($c->forward('check_for_errors')) {
         $c->stash->{ json_response } = { errors => $c->stash->{field_errors} };
         $c->stash->{ json_response }->{check_name} = $c->user->name if $c->stash->{check_name};
+        $c->stash->{ json_response } .= { message => _('Incorrect name'), result => 0 };
         $c->forward('send_json_response');
         return 1;
     }
@@ -151,12 +153,14 @@ sub report_new_ajax : Path('mobile') : Args(0) {
     } );
     if ( $report->confirmed ) {
         $c->stash->{ json_response } = { success => 1, report => $report->id };
+        $c->stash->{ json_response }->{result} = 1;
     } else {
         $c->stash->{token_url} = $c->uri_for_email( '/P', $token->token );
         $c->send_email( 'problem-confirm.txt', {
             to => [ $report->name ? [ $report->user->email, $report->name ] : $report->user->email ],
         } );
         $c->stash->{ json_response } = { success => 1 };
+        $c->stash->{ json_response }->{result} = 1;
     }
 
     $c->forward('send_json_response');
@@ -181,6 +185,8 @@ sub report_form_ajax : Path('ajax') : Args(0) {
     if ( ! $c->forward('determine_location') ) {
         my $body = JSON->new->utf8(1)->encode( {
             error => $c->stash->{location_error},
+            result => 0,
+            message => $c->stash->{location_error},
         } );
         $c->res->content_type('application/json; charset=utf-8');
         $c->res->body($body);
@@ -188,6 +194,27 @@ sub report_form_ajax : Path('ajax') : Args(0) {
     }
 
     $c->forward('setup_categories_and_bodies');
+
+    #Json for APPs
+    my $body;
+
+    if ( $c->req->param('format') ){
+        if ( $c->req->param('format') == 'json' ){
+            $c->res->content_type('application/json; charset=utf-8');
+            if ( $c->stash->{category_groups} ) {
+                my $cg = $c->stash->{category_groups};
+                $body = JSON->new->utf8->encode({result => 1, categories => \%$cg});
+            }
+            elsif ( @$c->stash->{category_options} ){
+                $body = JSON->new->utf8->encode({result => 1, categories => \@$c->stash->{category_options}});
+            }
+            else {
+                $body = JSON->new->utf8->encode({ message => _('This area is not covered by any council'), result => 0 });
+            }
+            $c->res->body( $body );
+            return 1;
+        }
+    }
 
     # render templates to get the html
     my $category;
@@ -205,7 +232,7 @@ sub report_form_ajax : Path('ajax') : Args(0) {
 
     my $extra_titles_list = $c->cobrand->title_list($c->stash->{all_areas});
 
-    my $body = JSON->new->utf8(1)->encode(
+    $body = JSON->new->utf8(1)->encode(
         {
             councils_text   => $councils_text,
             category        => $category,
@@ -626,7 +653,6 @@ sub setup_categories_and_bodies : Private {
 
 	foreach (@contacts_group) {
 		$groups{$_->group_id} = $_->group_name unless $groups{$_->group_id};
-		$groups_items{$_->group_id} = [];
 		$groups_items_encoded{$_->group_id} = [];
 	}
 
@@ -702,7 +728,10 @@ sub setup_categories_and_bodies : Private {
 
 				$category_in_group{$contact->category} = $contact->group_id unless $category_in_group{$contact->category};
 
-				push (@{$groups_items{$contact->group_id}}, $contact->category);
+                if ( !$groups_items{$contact->group_id} ){
+                    $groups_items{$contact->group_id}{name} = $groups{$contact->group_id};
+                }
+				push (@{$groups_items{$contact->group_id}{categories}}, $contact->category);
 		        push (@{$groups_items_encoded{$contact->group_id}}, encode_entities($contact->category, "ñóéáúí"));
 			} else {
 				push (@{$groups_items{-2}}, $contact->category);
@@ -748,9 +777,9 @@ sub setup_categories_and_bodies : Private {
 			if ( $c->req->param('category') ) {
 				if ( $category_in_group{$c->req->param('category')} ) {
 					my $group_id = $category_in_group{$c->req->param('category')};
-					my @arr_items = @{$groups_items{$group_id}};
+					my @arr_items = @{$groups_items{$group_id}{categories}};
 
-					$c->stash->{category_currently_loaded} = $groups_items{$group_id};
+					$c->stash->{category_currently_loaded} = $groups_items{$group_id}{categories};
 					$c->stash->{category_group} = $group_id;
 				}
 			}
@@ -839,7 +868,7 @@ sub process_user : Private {
         $report->user( $user );
         $report->name( $user->name );
         $c->stash->{check_name} = 1;
-        $c->stash->{field_errors}->{general} = _('You have successfully signed in; please check and confirm your details are accurate:');
+        #$c->stash->{field_errors}->{general} = _('You have successfully signed in; please check and confirm your details are accurate:');
         $c->log->info($user->id . ' logged in during problem creation');
         return 1;
     }

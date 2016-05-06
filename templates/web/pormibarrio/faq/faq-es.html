@@ -1,301 +1,430 @@
-[% INCLUDE 'header.html', title = 'Ayuda', bodyclass = 'static' %]
-<div class="reportes sub report-list" id="faq-list">
-    <div class="c-scroll">
-        <div class="rl scrolled-95">
-        	<div class="como-funciona" id="q-links">
-            	<h2>Información</h2>
-                <dl>
-                	<dt>PorMiBarrio</dt>
-                    <dd>· <a href="#faq01" class="pregunta">¿Qué es Por mi Barrio?</a></dd>
-                    <dd>· <a href="#faq02" class="pregunta">¿Qué rol cumple la Intendencia de Montevideo en Por Mi Barrio?</a></dd>
-                    <dd>· <a href="#faq03" class="pregunta">¿Cómo se financia?</a></dd>
-                    <dd>· <a href="#faq04" class="pregunta">¿Existen otros ejemplos parecidos en el mundo?</a></dd>
-                </dl>
-                <dl>
-                	<dt>¿Cómo funciona?</dt>
-                    <dd>· <a href="#faq05" class="pregunta">¿Cómo funciona?</a></dd>
-                    <dd>· <a href="#faq06" class="pregunta">¿Qué tipo de cosas puedo reclamar?</a></dd>
-                    <dd>· <a href="#faq07" class="pregunta">¿Porqué no puedo reclamar o pedir cualquier cosa?</a></dd>
-                    <dd>· <a href="#faq08" class="pregunta">¿Puedo reportar desde una ceibalita o un celular?</a></dd>
-                    <dd>· <a href="#faq09" class="pregunta">¿Necesito Facebook para registrarme?</a></dd>
-                    <dd>· <a href="#faq10" class="pregunta">¿Qué hago si el reclamo que quiero realizar ya existe?
-                    <dd>· <a href="#faq11" class="pregunta">¿Puedo adjuntar fotos en el reclamo?</a></dd>
-                   	<dd>· <a href="#faq12" class="pregunta">¿Puedo adjuntar videos en el reclamo?</a></dd>
-                </dl>
-                <dl>
-                	<dt>DATA</dt>
-                    <dd>· <a href="#faq13" class="pregunta">¿Qué es DATA?</a></dd>
-                    <dd>· <a href="#faq14" class="pregunta">¿Qué es DATA?¿Quiénes somos?</a></dd>
-                    <dd>· <a href="#faq15" class="pregunta">¿Por qué lo hacemos?</a></dd>
-                </dl>
-                <dl>
-                	<dt>IM</dt>
-                	<dd>· <a href="#faq16" class="pregunta">¿Qué significan los estados que envía la IM?</a></dd>
-                	<dd>· <a href="#faq17" class="pregunta">¿Qué puedo reportar en cada categoría?</a></dd>
-                </dl>
-                <dl>
-                	<dt>Defensoría</dt>
-                	<dd>· <a href="#faq18" class="pregunta">¿Qué es la Defensoría del Vecino?</a></dd>
-                	<dd>· <a href="#faq19" class="pregunta">¿Qué tipo de asuntos atiende?</a></dd>
-                	<dd>· <a href="#faq20" class="pregunta">¿Cómo se inicia una consulta o reclamo?</a></dd>
-                </dl>
-            </div>
-        </div>
-    </div>
-</div>
-<!--end como funcional-->
+[% IF !mobile %]
+	[% INCLUDE 'header.html', title = 'Ayuda', bodyclass = 'static' %]
+	<div class="reportes sub report-list" id="faq-list">
+	    <div class="c-scroll">
+	        <div class="rl scrolled-95">
+	        	[% INCLUDE faq_header %]
+	        </div>
+	    </div>
+	</div>
+[% ELSE %]
+<a ng-click="openWebsite('http://project.pormibarrio.uy/projects/project/61')" href="#" class="add-ticket">Problemas y sugerencias</a>
+	[% INCLUDE faq_header %]
+[% END %]
 
-<!--COMO FUNCIONA-->
 	<div class="faq c-respuestas">
-    <div class="c-scroll">
-        <div class="rl scrolled-95" id="answers">
-            <!--PMB-->
-            <span>VOLVER</span>
-            <div class="respuesta" id="faq01">
-                <h2>¿Qué es Por mi Barrio?</h2>
-				<p>
-					Por Mi Barrio es una plataforma que permite a las personas que viven en Montevideo enviar reportes sobre daños, desperfectos, vandalismo y otros problemas de nuestra ciudad desde su computadora o celular.
-					Es decir, cuando encuentres un problema en tu barrio (<a href="#faq06" class="pregunta">¿Qué tipo de cosas puedo reclamar?</a>) vas a poder entrar en pormibarrio.uy desde tu computadora (ceibalitas incluidas) o celular y reportarlo.
-				</p>               
-            </div>
-            <div class="respuesta" id="faq02">
-   				<h2>¿Qué rol cumple la Intendencia de Montevideo en Por Mi Barrio?</h2>
-                <p>
-					Se firmó un convenio entre la Intendencia de Montevideo y DATA en el que se establece que, por un lado, DATA se encargará del desarrollo de la plataforma y por otro, la IM se compromete a trabajar en la conexión entre Por Mi Barrio y el Sistema Único de Reclamos de la IM (SUR). La Intendencia de Montevideo también brindará apoyo en la comunicación.
-					La plataforma Por Mi Barrio se conecta de forma directa con el SUR, la plataforma asegura que los reportes denunciados llegarán a la división correspondiente de la comuna y permitirá además recibir de forma automática notificaciones sobre la respuesta que la IM da al problema. Esto significa que no sólo se reciben notificaciones cuando el problema está resuelto, sino que también de estados intermedios de avance como -por ejemplo- que la inspección pasó o que se marcó fecha para el arreglo.
-					Este nivel de integración con los sistemas del Municipio no tiene precedentes en las instalaciones de este tipo de plataformas en el resto del mundo. 
-				</p>
-			</div>
-            <div class="respuesta" id="faq03">
-            	<h2>¿Cómo se financia Por Mi Barrio?</h2>
-                <p>
-					Este proyecto fue seleccionado en el Fondo Acelerador de Innovaciones Cívicas App Cívico de <a href="http://www.avina.net/esp/">Avina</a> y <a href="http://www.omidyar.com/">Omidyar</a>, quienes nos entregaron U$S 100.000 para llevar a cabo el desarrollo, la implementación, la comunicación, la documentación y la replicación en un plazo de 1 año y medio.
-				No recibimos fondos de la Intendencia de Montevideo ni de ningún organismo gubernamental o partido político. Tampoco se le cobra por el servicio a usuarios, ni a la Intendencia de Montevideo.
-				</p>
-			</div>
-			<div class="respuesta" id="faq04">
-				<h2>¿Existen otros ejemplos parecidos en el mundo?</h2>
-				<p>
-					Por Mi Barrio se basa en <a href="http://www.fixmystreet.com/">FixMyStreet</a>, de <a href="https://www.mysociety.org/">My Society</a> (Reino Unido) y estamos muy contentos de contar con el apoyo de esta organización en la implantación de esta plataforma. Otros países también la han implementado como Suiza, Australia, Italia, Finlandia y Nueva Zelanda.
-					FixMyStreet es una plataforma de código abierto, esto significa que cualquiera puede tomarla y adaptarla para las necesidades de la ciudad en la que se quiera implementar. Todo esto de forma gratuita. 
-					Esperamos que el proyecto aporte nuevas funcionalidades al software, para que sean utilizadas en otras partes del mundo.
-				</p>
-			</div>
-			<!--Como funciona -->
-            <div class="respuesta" id="faq05">
-                <h2>¿Cómo funciona?</h2>
-				Los reportes se realizan en 3 simples pasos:
-				<ol>
-					<li>Reportá un problema en el mapa o sumate a uno ya creado.</li>
-					<li>Por Mi Barrio lo ingresa al Sistema Único de Reclamos de la IM.</li>
-					<li>Te enviamos información sobre el progreso, hasta su solución.</li>
-				</ol>
-				<p>
-					Para hacer esto, sólo tenés que localizar el problema en un mapa. También se pueden subir fotos y comentarios. A partir de que creaste o te sumaste a un reclamo, vas a recibir en tu correo electrónico las novedades sobre el mismo.
-					Cuando vuelvas a entrar a la página web vas a poder ver tu reporte marcado en un mapa, así como los de los/as demás usuarios/as. También podrás ver los reportes que la <a href="http://www.montevideo.gub.uy/">Intendencia de Montevideo</a> (IM) marcó como solucionados y los que todavía son problemas para el barrio.
-				</p>
-            </div>
-            <div class="respuesta" id="faq06">
-                <h2>¿Qué tipo de cosas puedo reclamar?</h2>
-                <p>
-					Por Mi Barrio incorpora múltiples categorías de reclamos y va a seguir sumando nuevas opciones con el tiempo. Sin embargo, es importante aclarar que un reclamo implica problemas como roturas o vandalismo, no pedidos o expresiones de deseo de los vecinos.
-					En la actualidad los reclamos que pueden hacerse son los que están bajo las categorías:
-				</p>
-					<ul>
-						<li>Arbolado</li>
-						<li>Bocas de tormenta</li>
-						<li>Barrido</li>
-						<li>Basura, escombros y ferias</li>
-						<li>Plantación</li>
-						<li>Contenedores</li>
-					</ul>
+	    <div class="c-scroll">
+	        <div id="answers" class="rl scrolled-95">
+	            <span>VOLVER</span>
+	            <div class="respuesta" id="faq01">
+	                <h2>¿Qué es Por mi Barrio?</h2>
 					<p>
-						Para hacer otro tipo de reclamos, los ususarios deben comunicarse directamente con la Intendencia de Montevideo.
+						Por Mi Barrio es una plataforma que permite a las personas que viven en Montevideo enviar reportes sobre daños, desperfectos, vandalismo y otros problemas de nuestra ciudad desde su computadora o celular.
+						Es decir, cuando encuentres un problema en tu barrio (<a href="#faq06" class="pregunta">¿Qué tipo de cosas puedo reclamar?</a>) vas a poder entrar en pormibarrio.uy desde tu computadora (ceibalitas incluidas) o celular y reportarlo.
 					</p>
-			</div>
-            <div class="respuesta" id="faq07">
-				<h2>¿Porqué no puedo reclamar o pedir cualquier cosa?</h2>
-				<p>
-					Porque Una de las grandes ventajas del sistema es que nos brinda, tanto a las personas que vivimos en Montevideo como a la Intendencia, datos disponibles al público sobre el funcionamiento de los mecanismos de reclamos y la respuesta a los mismos. Cuando se ingresan al sistema pedidos que no pueden ser solucionados por esta vía o se salen del esquema, empeoramos la calidad de los datos con los que podemos conocer cómo, en qué tiempos y con qué nivel de satisfacción se responden a los reclamos de las personas.
-				</p>
-			</div>
-			<div class="respuesta" id="faq08">
-				<h2>¿Puedo reportar desde una ceibalita o un celular?</h2>
-				<p>
-					Sí, sólo tenés que entrar a pormibarrio.uy desde tu navegador web y hacer tu reporte desde cualquier dispositivo.
-				</p>
-			</div>
-            <div class="respuesta" id="faq09">
-                <h2>¿Necesito Facebook para registrarme?</h2>                            
-                <p>Una plataforma que permitirá a las personas que viven en Montevideo enviar reportes sobre daños, 
-                desperfectos, vandalismo y otros problemas de nuestra ciudad desde su computadora o celular.</p>
-                <p>Es decir, cuando encuentres un problema en tu barrio (un pozo en la calle, problemas de arbolado o de iluminación, 
-                contenedores de basura rotos, etc.) vas a poder entrar en pormibarrio.uy desde tu computadora (ceibalitas incluidas) 
-                o celular y reportarlo. Para hacer esto, sólo tenés que localizar el problema en un mapa. También se pueden subir fotos y comentarios.</p>
-                <p>Cuando vuelvas a entrar a la página web vas a poder ver tu reporte marcado en un mapa, así como los de los/as demás 
-                usuarios/as. También podrás ver los reportes que la <a href="javascript:;">Intendencia de Montevideo (IM)</a> marcó como solucionados y 
-                los que todavía son problemas para el barrio. </p>                  
-            </div>
-			<div class="respuesta" id="faq10">
-				<h2>¿Qué hago si el reclamo que quiero realizar ya existe?</h2>
-				<p>
-					En ese caso podés sumarte al al reclamo ya denunciado haciendo comentarios en el mismo. también podés subir alguna foto para actualizar la información sobre el mismo.
-				</p>
-			</div>
-			<div class="respuesta" id="faq11">
-				<h2>¿Puedo adjuntar fotos en el reclamo?</h2>
-				<p>
-					Sí, en el formulario de reporte tenés la opción de subir una foto desde tu computadora.
-				</p>
-            </div>
-            <div class="respuesta" id="faq12">
-            	<h3>¿Puedo adjuntar videos en el reclamo?</h3>
-            	<p>
-					No directamente, por el peso de los videos. Una alternativa sería subir el video a alguna plataforma pública (por ejemplo YouTube) y pegar el link del video en tu comentario o reporte.
-				</p>
-            </div>
-            <!--Como funciona FIN-->
-            <!--DATA-->
-			<div class="respuesta" id="faq13">
-            	<h2>¿Qué es DATA?</h2>
-				<p>
-					<a href="http://datauy.org/">DATA</a> (Datos Abiertos, Transparencia y Acceso a la información) en una organización de la sociedad civil que tiene como misión la creación de herramientas para el accionar colectivo, participativo y colaborativo, apoyándose en la comunidad a través de las tecnologías de la información y comunicación y el uso de la información pública. Buscamos promover la participación, aportando a facilitar las decisiones de la comunidad y generando nuevos espacios de debate público.
-					Trabajamos por la transparencia en el gobierno Uruguayo. Creemos en la horizontalidad y transparencia como forma de construir un espacio donde todos formemos parte de las decisiones.
-				</p>
-			</div>
-			<div class="respuesta" id="faq14">
-            	<h2>¿Quiénes somos?</h2>
-        		<p>
-					El equipo estable de DATA está formado por 6 personas y es interdisciplinario, pero muchas personas de Uruguay y del mundo nos apoyan en algunos proyectos y de muchas formas. Somos activistas, comunicadores/as, programadores/as, apasionados por la transparencia en el gobierno, mujeres, hombres y soñadores/as.
-				</p>
-			</div>
-			<div class="respuesta" id="faq15">
-            	<h2>¿Por qué lo hacemos?</h2>
-            	<p>
-					En nuestra visión decimos que “DATA promueve el desarrollo humano a través de la creación, uso e innovación de tecnologías basadas en datos abiertos, para aportar a mejorar nuestras sociedades y nuestros gobiernos”. Con esa consigna como bandera es que ideamos y elegimos los proyectos en los que trabajamos.
-					Por mi Barrio es  -y consideramos este punto sumamente importante- una iniciativa que no se termina en la web. Forma parte del programa Ciudades Abiertas de DATA, que pretende transformar las relaciones entre la ciudadanía y los gobiernos locales, empoderando a las personas para participar y colaborar en la resolución de problemas urbanos a través de plataformas web y móviles. Para lograrlo, la plataforma en línea es sólo el primer paso y el programa abarca 18 meses que van desde el desarrollo (etapa actual) hasta el dictado de talleres en los barrios de muy diversas zonas de Montevideo para capacitar a los/as vecinos/as en el uso de la herramienta, al tiempo que tenemos la oportunidad de conocer cómo se utiliza y mejorarla para su aplicación local.
-				</p>
-			</div>
-			<div class="respuesta" id="faq16">
-            	<h2>¿Que significan los estados que envía la IM acerca de un reporte?</h2>
-            	<p>
-					En el SUR - Sistema Unico de Reclamo (sistema único donde se gestionan los reclamos de la IM), se manejan tres estados:
-				</p>
-				<p>
-					1. Ingresado, significa que su reclamo a entrado en el sistema informático y está pronto para ser visualizado por los funcionarios municipales. En el reporte de Por Mi Barrio aparece "Se ha creado el reclamo".
-				</p>
-				<p>
-					2. En Proceso, significa que su reclamo ha sido revisado por un funcionario municipal y se comenzó con las tareas para resolverlo y por lo menos se generó una orden de trabajo para el mismo. En esta instancia pueden haber trabajos planificados o realizados, que tienen su informe correspondiente en la consulta de reclamos. En el reporte de Por Mi Barrio aparece "El problema asociado ha quedado en proceso".
-				</p>
-				<p>
-					3. Finalizado, significa que su reclamo ha finalizado para la IM, ya sea porque se terminaron todos los trabajos para solucionarlo, o su reclamo no correspondía. En la consulta de reclamos puede verse el informe donde se le indica lo realizado por la IM. En el reporte de Por Mi Barrio aparece "El problema asociado al reclamo ha quedado finalizado".
-				</p>
-			</div>
-			<div class="respuesta" id="faq17">
-            	<h2>¿Qué puedo reportar en cada categoría?</h2>
-            	<p></p>
-            		<h3>Arbolado</h3>
-            	<p>
-            		<b>Árbol deteriorado/riesgoso/extracción</b><br>
-					Reclamo sobre un árbol que según el vecino en estado irrecuperable: con fisuras, podrido, seco (“muerto”) y por lo tanto el vecino considera que está en peligro de caer; se asocia por ello la posibilidad de pedir su extracción. Es muy importante aclarar que si bien se puede solicitar la extracción, la pertinencia de la misma SIEMPRE será evaluada por un Ingeniero Agrónomo de la IM.
-				</p>
-				<p>
-            		<b>Problemas aéreos/podas/enfermedades</b><br>
-					Reclamo sobre un árbol que está interfiriendo con cables, focos o algún elemento de la vivienda; puede asimismo tener sus ramas con exceso de altura, la copa desbalanceada o presentar alguna enfermedad por insectos, hongos, etc.
-				</p>
-				<p>
-            		<b>Problemas raíces/veredas/subterráneos</b><br>
-					Reclamo sobre un árbol que está interfiriendo con instalaciones subterráneas: Ute, Ose, telefonía, gas, saneamiento, alumbrado, etc. También que haya roto o deteriorado la vereda, la edificación de una vivienda: muro, reja etc.
-				</p>
-				<p></p>
-					<h3>Plantación</h3>
-				<p>
-            		<b>Plantación</b><br>
-					Utilizado para solicitar que se plante un árbol, generalmente este reclamo surge cuando se ha hecho una extracción y no se ha reemplazado el ejemplar.Siempre el tipo de árbol a plantar será definido por el técnico municipal.
-				</p>
-				<p></p>
-					<h3>Bocas de tormenta</h3>
-				<p>
-            		<b>Boca de tormenta obstruida</b><br>
-					Refiere a la obstrucción de las bocas de tormenta, ya sea por una inundación permanente o luego de una lluvia. No corresponde reclamar por este “tipo” de problemas como boca de tormenta sucia, sin tapa (refiere al faltante de tapa de inspección), o con roturas.
-				</p>
-				<p></p>
-				<h3>Barrido</h3>
-				<p>
-            		<b>Falta de Barrido</b><br>
-					Refiere a que no se realizó en barrido de la calle en una zona con barrido manual o mecánico.
-				</p>
-				<p></p>
-					<h3>Basura, escombros y ferias</h3>
-				<p>
-            		<b>Levante de basurales</b><br>
-					Refiere a la solicitud de limpiar un sitio donde se ha arrojado y amontonado basura, NO a la situación donde han tirado basura en torno a un contenedor.
-				</p>
-				<p></p>
-					<h3>Contenedores</h3>
-				<p>
-            		<b>Residuos fuera del contenedor por capacidad insuficiente</b><br>
-					Refiere a cuando en forma habitual, el Contenedor se completa y no es posible para los vecinos depositar la basura. Implica “el conocimiento” de esta situación por parte del reclamante.
-				</p>
-				<p>
-            		<b>Residuos fuera del contenedor por uso indebido/clasificado</b><br>
-					Refiere a cuando existe basura entorno al Contenedor, pero NO porque el mismo se encuentre con su capacidad colmada sino que por el mal uso (indebido) de un Clasificador y/o un Vecino/a.
-				</p>
-				<p>
-            		<b>Rotura o incendio de contenedor (residuos fuera)</b><br>
-					Refiere a la rotura o falta de algún elemento del Contenedor, así como al incendio del mismo, <b>no dudar en llamar primero a los bomberos y después hacer su reclamo</b>.
-				</p>
-				<p>
-            		<b>Traslado/Rotación del contenedor</b><br>
-					Solicitud de alguna de estas acciones a la IM. Cabe aclarar que el sitio ocupado por un Contenedor ha sido estudiado y definido por la Institución, las ubicaciones van cambiando y se estudian todos los pedidos informándose el resultado a los solicitantes. El pedido no implica que se mueve de su posición actual. 
-				</p>
-				<p></p>
-					<h3>Viales</h3>
-				<p>
-	            	<b>Bache</b><br>
-					Agujero, hoyo, hundimiento en el pavimento de calles o caminos, producido por el uso u otras causas.
-				</p>
-				<p>
-	            	<b>Bache con agua</b><br>
-					Agujero, hoyo, hundimiento en el pavimento de calles o caminos, producido por el uso u otras causas, y que además contiene agua.
-				</p>
-				<p>
-	            	<b>Desnivel</b><br>
-					Diferencia de niveles en una calle o camino, causando depresión y/o elevación en el terreno.
-				</p>
-				<p>
-            		<b>Desnivel con agua</b><br>
-					Diferencia de niveles en una calle o camino, causando depresión y/o elevación en el terreno, y que además contiene agua.
-				</p>
-				<p>
-					<b>Grieta</b><br>
-					Hendidura alargada y poco profunda en la superficie del pavimento. Fisura estrecha producto de la separación de dos materiales.
-				</p>
-			</div>
-			<div class="respuesta" id="faq18">
-            	<h2>¿Qué es la Defensoría del Vecino?</h2>
-        		<p>
-					La Defensoría del Vecino es una Institución creada por decreto de la Junta Departamental de Montevideo, cuyo titular es votado/a por esta. Tiene como objetivos de su actuación “promover el respeto de los derechos humanos dentro del Departamento, el mejor cumplimiento de los servicios departamentales y/o municipales y el logro de una mayor transparencia y eficacia de la gestión del Gobierno Departamental”. Las funciones fundamentales de la institución son escuchar, investigar y sugerir soluciones a reclamos que los vecinos y vecinas de Montevideo tengan en relación al gobierno Departamental así como aportar al mejor conocimiento de determinadas temáticas en articulación con otras instituciones y realizar aportes a la normativa departamental.
-				</p>
-			</div>
-			<div class="respuesta" id="faq19">
-            	<h2>¿Qué tipo de asuntos atiende?</h2>
-        		<p>
-					Todas las consultas, reclamos y propuestas relacionadas a servicios que cumplen la Intendencia de Montevideo y los Municipios directa o indirectamente, exceptuando los que tienen que ver con la relación con sus funcionarios.
-				</p>
-			</div>
-			<div class="respuesta" id="faq20">
-            	<h2>¿Cómo se inicia una consulta o reclamo?</h2>
-        		<p>
-					1. Por nuestros teléfonos 2916 16 16 y 0800 1616 
-					2. En nuestras oficinas de Juan Carlos Gómez 1472, de lunes a viernes en el horario de 9 a 17hs.
-					3. En nuestra página Web completando el <a href="http://www.defensordelvecino.com.uy/reclamos/">formulario de reclamo</a>.
-					4. A través de nuestra Fanpage en Facebook: <a href="https://www.facebook.com/defensoriaMVD">Defensoría del Vecino</a>. 
-					5. A través de nuestro Twitter <a href="https://twitter.com/defensoriamvd">@defensoriamvd</a>. 
-				</p>
-			</div>
-        </div>
-    </div>
-</div>
+	            </div>
+	            <div class="respuesta" id="faq02">
+	   				<h2>¿Qué rol cumple la Intendencia de Montevideo en Por Mi Barrio?</h2>
+	                <p>
+						Se firmó un convenio entre la Intendencia de Montevideo y DATA en el que se establece que, por un lado, DATA se encargará del desarrollo de la plataforma y por otro, la IM se compromete a trabajar en la conexión entre Por Mi Barrio y el Sistema Único de Reclamos de la IM (SUR). La Intendencia de Montevideo también brindará apoyo en la comunicación.
+						La plataforma Por Mi Barrio se conecta de forma directa con el SUR, la plataforma asegura que los reportes denunciados llegarán a la división correspondiente de la comuna y permitirá además recibir de forma automática notificaciones sobre la respuesta que la IM da al problema. Esto significa que no sólo se reciben notificaciones cuando el problema está resuelto, sino que también de estados intermedios de avance como -por ejemplo- que la inspección pasó o que se marcó fecha para el arreglo.
+						Este nivel de integración con los sistemas del Municipio no tiene precedentes en las instalaciones de este tipo de plataformas en el resto del mundo.
+					</p>
+				</div>
+	            <div class="respuesta" id="faq03">
+	            	<h2>¿Cómo se financia Por Mi Barrio?</h2>
+	                <p>
+						Este proyecto fue seleccionado en el Fondo Acelerador de Innovaciones Cívicas App Cívico de <a href="http://www.avina.net/esp/">Avina</a> y <a href="http://www.omidyar.com/">Omidyar</a>, quienes nos entregaron U$S 100.000 para llevar a cabo el desarrollo, la implementación, la comunicación, la documentación y la replicación en un plazo de 1 año y medio.
+					No recibimos fondos de la Intendencia de Montevideo ni de ningún organismo gubernamental o partido político. Tampoco se le cobra por el servicio a usuarios, ni a la Intendencia de Montevideo.
+					</p>
+				</div>
+				<div class="respuesta" id="faq04">
+					<h2>¿Existen otros ejemplos parecidos en el mundo?</h2>
+					<p>
+						Por Mi Barrio se basa en <a href="http://www.fixmystreet.com/">FixMyStreet</a>, de <a href="https://www.mysociety.org/">My Society</a> (Reino Unido) y estamos muy contentos de contar con el apoyo de esta organización en la implantación de esta plataforma. Otros países también la han implementado como Suiza, Australia, Italia, Finlandia y Nueva Zelanda.
+						FixMyStreet es una plataforma de código abierto, esto significa que cualquiera puede tomarla y adaptarla para las necesidades de la ciudad en la que se quiera implementar. Todo esto de forma gratuita.
+						Esperamos que el proyecto aporte nuevas funcionalidades al software, para que sean utilizadas en otras partes del mundo.
+					</p>
+				</div>
+				<!--Como funciona -->
+	            <div class="respuesta" id="faq05">
+	            	<p>
+		                <h2>¿Cómo funciona?</h2>
+						Los reportes se realizan en 3 simples pasos:
+						<ol>
+							<li>Reportá un problema en el mapa o sumate a uno ya creado.</li>
+							<li>Por Mi Barrio lo ingresa al Sistema Único de Reclamos de la IM.</li>
+							<li>Te enviamos información sobre el progreso, hasta su solución.</li>
+						</ol>
+					</p>
+					<p>
+						Para hacer esto, sólo tenés que localizar el problema en un mapa. También se pueden subir fotos y comentarios. A partir de que creaste o te sumaste a un reclamo, vas a recibir en tu correo electrónico las novedades sobre el mismo.
+						Cuando vuelvas a entrar a la página web vas a poder ver tu reporte marcado en un mapa, así como los de los/as demás usuarios/as. También podrás ver los reportes que la <a href="http://www.montevideo.gub.uy/">Intendencia de Montevideo</a> (IM) marcó como solucionados y los que todavía son problemas para el barrio.
+					</p>
+	            </div>
+	            <div class="respuesta" id="faq06">
+	                <h2>¿Qué tipo de cosas puedo reclamar?</h2>
+	                <p>
+						Por Mi Barrio incorpora múltiples categorías de reclamos y va a seguir sumando nuevas opciones con el tiempo. Sin embargo, es importante aclarar que un reclamo implica problemas como roturas o vandalismo, no pedidos o expresiones de deseo de los vecinos.
+						En la actualidad los reclamos que pueden hacerse son los que están bajo las categorías:
+					</p>
+						<ul>
+							<li>Arbolado</li>
+							<li>Bocas de tormenta</li>
+							<li>Barrido</li>
+							<li>Basura, escombros y ferias</li>
+							<li>Plantación</li>
+							<li>Contenedores</li>
+						</ul>
+						<p>
+							Para hacer otro tipo de reclamos, los ususarios deben comunicarse directamente con la Intendencia de Montevideo.
+						</p>
+				</div>
+	            <div class="respuesta" id="faq07">
+					<h2>¿Porqué no puedo reclamar o pedir cualquier cosa?</h2>
+					<p>
+						Porque Una de las grandes ventajas del sistema es que nos brinda, tanto a las personas que vivimos en Montevideo como a la Intendencia, datos disponibles al público sobre el funcionamiento de los mecanismos de reclamos y la respuesta a los mismos. Cuando se ingresan al sistema pedidos que no pueden ser solucionados por esta vía o se salen del esquema, empeoramos la calidad de los datos con los que podemos conocer cómo, en qué tiempos y con qué nivel de satisfacción se responden a los reclamos de las personas.
+					</p>
+				</div>
+				<div class="respuesta" id="faq08">
+					<h2>¿Puedo reportar desde una ceibalita o un celular?</h2>
+					<p>
+						Sí, sólo tenés que entrar a pormibarrio.uy desde tu navegador web y hacer tu reporte desde cualquier dispositivo.
+					</p>
+				</div>
+	            <div class="respuesta" id="faq09">
+	                <h2>¿Necesito Facebook para registrarme?</h2>
+	                <p>Una plataforma que permitirá a las personas que viven en Montevideo enviar reportes sobre daños,
+	                desperfectos, vandalismo y otros problemas de nuestra ciudad desde su computadora o celular.</p>
+	                <p>Es decir, cuando encuentres un problema en tu barrio (un pozo en la calle, problemas de arbolado o de iluminación,
+	                contenedores de basura rotos, etc.) vas a poder entrar en pormibarrio.uy desde tu computadora (ceibalitas incluidas)
+	                o celular y reportarlo. Para hacer esto, sólo tenés que localizar el problema en un mapa. También se pueden subir fotos y comentarios.</p>
+	                <p>Cuando vuelvas a entrar a la página web vas a poder ver tu reporte marcado en un mapa, así como los de los/as demás
+	                usuarios/as. También podrás ver los reportes que la <a href="javascript:;">Intendencia de Montevideo (IM)</a> marcó como solucionados y
+	                los que todavía son problemas para el barrio. </p>
+	            </div>
+				<div class="respuesta" id="faq10">
+					<h2>¿Qué hago si el reclamo que quiero realizar ya existe?</h2>
+					<p>
+						En ese caso podés sumarte al al reclamo ya denunciado haciendo comentarios en el mismo. también podés subir alguna foto para actualizar la información sobre el mismo.
+					</p>
+				</div>
+				<div class="respuesta" id="faq11">
+					<h2>¿Puedo adjuntar fotos en el reclamo?</h2>
+					<p>
+						Sí, en el formulario de reporte tenés la opción de subir una foto desde tu computadora.
+					</p>
+	            </div>
+	            <div class="respuesta" id="faq12">
+	            	<h2>¿Puedo adjuntar videos en el reclamo?</h2>
+	            	<p>
+						No directamente, por el peso de los videos. Una alternativa sería subir el video a alguna plataforma pública (por ejemplo YouTube) y pegar el link del video en tu comentario o reporte.
+					</p>
+	            </div>
+	            <!--Como funciona FIN-->
+	            <!--DATA-->
+				<div class="respuesta" id="faq13">
+	            	<h2>¿Qué es DATA?</h2>
+					<p>
+						<a href="http://datauy.org/">DATA</a> (Datos Abiertos, Transparencia y Acceso a la información) en una organización de la sociedad civil que tiene como misión la creación de herramientas para el accionar colectivo, participativo y colaborativo, apoyándose en la comunidad a través de las tecnologías de la información y comunicación y el uso de la información pública. Buscamos promover la participación, aportando a facilitar las decisiones de la comunidad y generando nuevos espacios de debate público.
+						Trabajamos por la transparencia en el gobierno Uruguayo. Creemos en la horizontalidad y transparencia como forma de construir un espacio donde todos formemos parte de las decisiones.
+					</p>
+				</div>
+				<div class="respuesta" id="faq14">
+	            	<h2>¿Quiénes somos?</h2>
+	        		<p>
+						El equipo estable de DATA está formado por 6 personas y es interdisciplinario, pero muchas personas de Uruguay y del mundo nos apoyan en algunos proyectos y de muchas formas. Somos activistas, comunicadores/as, programadores/as, apasionados por la transparencia en el gobierno, mujeres, hombres y soñadores/as.
+					</p>
+				</div>
+				<div class="respuesta" id="faq15">
+	            	<h2>¿Por qué lo hacemos?</h2>
+	            	<p>
+						En nuestra visión decimos que “DATA promueve el desarrollo humano a través de la creación, uso e innovación de tecnologías basadas en datos abiertos, para aportar a mejorar nuestras sociedades y nuestros gobiernos”. Con esa consigna como bandera es que ideamos y elegimos los proyectos en los que trabajamos.
+						Por mi Barrio es  -y consideramos este punto sumamente importante- una iniciativa que no se termina en la web. Forma parte del programa Ciudades Abiertas de DATA, que pretende transformar las relaciones entre la ciudadanía y los gobiernos locales, empoderando a las personas para participar y colaborar en la resolución de problemas urbanos a través de plataformas web y móviles. Para lograrlo, la plataforma en línea es sólo el primer paso y el programa abarca 18 meses que van desde el desarrollo (etapa actual) hasta el dictado de talleres en los barrios de muy diversas zonas de Montevideo para capacitar a los/as vecinos/as en el uso de la herramienta, al tiempo que tenemos la oportunidad de conocer cómo se utiliza y mejorarla para su aplicación local.
+					</p>
+				</div>
+				<div class="respuesta" id="faq16">
+	            	<h2>¿Que significan los estados que envía la IM acerca de un reporte?</h2>
+	            	<p>
+						En el SUR - Sistema Unico de Reclamo (sistema único donde se gestionan los reclamos de la IM), se manejan tres estados:
+					</p>
+					<p>
+						1. Ingresado, significa que su reclamo a entrado en el sistema informático y está pronto para ser visualizado por los funcionarios municipales. En el reporte de Por Mi Barrio aparece "Se ha creado el reclamo".
+					</p>
+					<p>
+						2. En Proceso, significa que su reclamo ha sido revisado por un funcionario municipal y se comenzó con las tareas para resolverlo y por lo menos se generó una orden de trabajo para el mismo. En esta instancia pueden haber trabajos planificados o realizados, que tienen su informe correspondiente en la consulta de reclamos. En el reporte de Por Mi Barrio aparece "El problema asociado ha quedado en proceso".
+					</p>
+					<p>
+						3. Finalizado, significa que su reclamo ha finalizado para la IM, ya sea porque se terminaron todos los trabajos para solucionarlo, o su reclamo no correspondía. En la consulta de reclamos puede verse el informe donde se le indica lo realizado por la IM. En el reporte de Por Mi Barrio aparece "El problema asociado al reclamo ha quedado finalizado".
+					</p>
+				</div>
+				<div class="respuesta" id="faq17">
+	            	<h2>¿Qué puedo reportar en cada categoría?</h2>
+	            	<p></p>
+	            		<h3>Arbolado</h3>
+	            	<p>
+	            		<b>Árbol deteriorado/riesgoso/extracción</b><br>
+						Reclamo sobre un árbol que según el vecino en estado irrecuperable: con fisuras, podrido, seco (“muerto”) y por lo tanto el vecino considera que está en peligro de caer; se asocia por ello la posibilidad de pedir su extracción. Es muy importante aclarar que si bien se puede solicitar la extracción, la pertinencia de la misma SIEMPRE será evaluada por un Ingeniero Agrónomo de la IM.
+					</p>
+					<p>
+	            		<b>Problemas aéreos/podas/enfermedades</b><br>
+						Reclamo sobre un árbol que está interfiriendo con cables, focos o algún elemento de la vivienda; puede asimismo tener sus ramas con exceso de altura, la copa desbalanceada o presentar alguna enfermedad por insectos, hongos, etc.
+					</p>
+					<p>
+	            		<b>Problemas raíces/veredas/subterráneos</b><br>
+						Reclamo sobre un árbol que está interfiriendo con instalaciones subterráneas: Ute, Ose, telefonía, gas, saneamiento, alumbrado, etc. También que haya roto o deteriorado la vereda, la edificación de una vivienda: muro, reja etc.
+					</p>
+					<p></p>
+						<h3>Plantación</h3>
+					<p>
+	            		<b>Plantación</b><br>
+						Utilizado para solicitar que se plante un árbol, generalmente este reclamo surge cuando se ha hecho una extracción y no se ha reemplazado el ejemplar.Siempre el tipo de árbol a plantar será definido por el técnico municipal.
+					</p>
+					<p></p>
+						<h3>Bocas de tormenta</h3>
+					<p>
+	            		<b>Boca de tormenta obstruida</b><br>
+						Refiere a la obstrucción de las bocas de tormenta, ya sea por una inundación permanente o luego de una lluvia. No corresponde reclamar por este “tipo” de problemas como boca de tormenta sucia, sin tapa (refiere al faltante de tapa de inspección), o con roturas.
+					</p>
+					<p></p>
+					<h3>Barrido</h3>
+					<p>
+	            		<b>Falta de Barrido</b><br>
+						Refiere a que no se realizó en barrido de la calle en una zona con barrido manual o mecánico.
+					</p>
+					<p></p>
+						<h3>Basura, escombros y ferias</h3>
+					<p>
+	            		<b>Levante de basurales</b><br>
+						Refiere a la solicitud de limpiar un sitio donde se ha arrojado y amontonado basura, NO a la situación donde han tirado basura en torno a un contenedor.
+					</p>
+					<p></p>
+						<h3>Contenedores</h3>
+					<p>
+	            		<b>Residuos fuera del contenedor por capacidad insuficiente</b><br>
+						Refiere a cuando en forma habitual, el Contenedor se completa y no es posible para los vecinos depositar la basura. Implica “el conocimiento” de esta situación por parte del reclamante.
+					</p>
+					<p>
+	            		<b>Residuos fuera del contenedor por uso indebido/clasificado</b><br>
+						Refiere a cuando existe basura entorno al Contenedor, pero NO porque el mismo se encuentre con su capacidad colmada sino que por el mal uso (indebido) de un Clasificador y/o un Vecino/a.
+					</p>
+					<p>
+	            		<b>Rotura o incendio de contenedor (residuos fuera)</b><br>
+						Refiere a la rotura o falta de algún elemento del Contenedor, así como al incendio del mismo, <b>no dudar en llamar primero a los bomberos y después hacer su reclamo</b>.
+					</p>
+					<p>
+	            		<b>Traslado/Rotación del contenedor</b><br>
+						Solicitud de alguna de estas acciones a la IM. Cabe aclarar que el sitio ocupado por un Contenedor ha sido estudiado y definido por la Institución, las ubicaciones van cambiando y se estudian todos los pedidos informándose el resultado a los solicitantes. El pedido no implica que se mueve de su posición actual.
+					</p>
+					<p></p>
+						<h3>Viales</h3>
+					<p>
+		            	<b>Bache</b><br>
+						Agujero, hoyo, hundimiento en el pavimento de calles o caminos, producido por el uso u otras causas.
+					</p>
+					<p>
+		            	<b>Bache con agua</b><br>
+						Agujero, hoyo, hundimiento en el pavimento de calles o caminos, producido por el uso u otras causas, y que además contiene agua.
+					</p>
+					<p>
+		            	<b>Desnivel</b><br>
+						Diferencia de niveles en una calle o camino, causando depresión y/o elevación en el terreno.
+					</p>
+					<p>
+	            		<b>Desnivel con agua</b><br>
+						Diferencia de niveles en una calle o camino, causando depresión y/o elevación en el terreno, y que además contiene agua.
+					</p>
+					<p>
+						<b>Grieta</b><br>
+						Hendidura alargada y poco profunda en la superficie del pavimento. Fisura estrecha producto de la separación de dos materiales.
+					</p>
+				</div>
+				<div class="respuesta" id="faq18">
+	            	<h2>¿Qué es la Defensoría del Vecino?</h2>
+	        		<p>
+						La Defensoría del Vecino es una Institución creada por decreto de la Junta Departamental de Montevideo, cuyo titular es votado/a por esta. Tiene como objetivos de su actuación “promover el respeto de los derechos humanos dentro del Departamento, el mejor cumplimiento de los servicios departamentales y/o municipales y el logro de una mayor transparencia y eficacia de la gestión del Gobierno Departamental”. Las funciones fundamentales de la institución son escuchar, investigar y sugerir soluciones a reclamos que los vecinos y vecinas de Montevideo tengan en relación al gobierno Departamental así como aportar al mejor conocimiento de determinadas temáticas en articulación con otras instituciones y realizar aportes a la normativa departamental.
+					</p>
+				</div>
+				<div class="respuesta" id="faq19">
+	            	<h2>¿Qué tipo de asuntos atiende?</h2>
+	        		<p>
+						Todas las consultas, reclamos y propuestas relacionadas a servicios que cumplen la Intendencia de Montevideo y los Municipios directa o indirectamente, exceptuando los que tienen que ver con la relación con sus funcionarios.
+					</p>
+				</div>
+				<div class="respuesta" id="faq20">
+	            	<h2>¿Cómo se inicia una consulta o reclamo?</h2>
+	        		<p>
+						1. Por nuestros teléfonos 2916 16 16 y 0800 1616
+						2. En nuestras oficinas de Juan Carlos Gómez 1472, de lunes a viernes en el horario de 9 a 17hs.
+						3. En nuestra página Web completando el <a href="http://www.defensordelvecino.com.uy/reclamos/">formulario de reclamo</a>.
+						4. A través de nuestra Fanpage en Facebook: <a href="https://www.facebook.com/defensoriaMVD">Defensoría del Vecino</a>.
+						5. A través de nuestro Twitter <a href="https://twitter.com/defensoriamvd">@defensoriamvd</a>.
+					</p>
+				</div>
+        	</div>
+    	</div>
+	</div>
 
-[% INCLUDE 'footer.html' %]
+[% IF !mobile %]
+	[% INCLUDE 'footer.html' %]
+[% ELSE %]
+
+	<style type="text/css">
+		/*COMO FUNCIONA------------------------------------------------------------------*/
+		div.como-funciona{
+			padding: 0 10px;
+			background-color:rgba(248, 248, 248, 0.80)
+		}
+
+		div.como-funciona h2{
+			font-weight:300;
+			font-size:2.375em;
+			color:#2c3e50
+		}
+
+		div.como-funciona dl{
+			margin-top:28px;
+			margin-bottom:0
+		}
+
+		div.como-funciona dt{
+			font-size:0.875em;
+			color:#58bef7;
+			font-weight:300;
+			text-transform:uppercase;
+			margin-bottom:10px;
+		}
+
+		div.como-funciona dd, div.como-funciona dd a{
+			font-size:1em;
+			color:#7d7d7d;
+			transition: all 0.3s ease 0s;
+			text-decoration: none;
+			background: transparent none repeat scroll 0% 0%;
+			box-sizing: border-box;
+			line-height: 1.5em;
+			font-family: "Source Sans Pro",sans-serif;
+		}
+
+		div.como-funciona dd{
+			margin-bottom:5px;
+		}
+
+		/*RESPUESTAS DE COMO FUNCIONA-----------------------------------------------*/
+		div.c-respuestas{
+			top:55px;
+			padding:0;
+			/*background:rgba(255, 255, 255, 0.9);*/
+			z-index:400;
+		}
+
+		.content-vertical div.c-respuestas{
+			left:0;
+		}
+
+		div.c-respuestas span{
+			display: none;
+		}
+
+		div.respuesta{
+			padding: 60px 0 0;
+		}
+
+		.content-vertical div.respuesta{
+			padding: 60px 60px 0;
+		}
+
+		div.respuesta h2{
+			font-size:2.1em;
+			font-weight:normal;
+			color:#252525;
+			line-height: 1.1;
+			margin: 0;
+		}
+
+		.content-vertical div.respuesta h2{
+			font-size: 1.5em;
+		}
+
+		div.respuesta p{
+			font-size:1.125em;
+			color:#7d7d7d;
+			line-height:28px;
+			margin-top:30px;
+			text-align: justify;
+		}
+
+		div.respuesta p a{
+			color:#58bef7
+		}
+		ul {
+			list-style-type: none;
+		}
+		div {
+			font-family: 'Source Sans Pro', sans-serif;
+			font-size: 16px;
+			line-height: 1.42857143;
+			color: #383f3a;
+		}
+		h3 {
+			font-weight: 500;
+			line-height: 1.1;
+			color: inherit;
+			font-size: 28px;
+		}
+		.add-ticket {
+			background-color: #58bef7;
+			color: #fff;
+			padding: 9px 10px 0px;
+			margin-top: 5px;
+			text-decoration: none;
+			height: 30px;
+			vertical-align: middle;
+			border: #d3d3d3 solid 1px;
+			border-radius: 5px;
+			padding: 6px 10px 6px;
+			display: block;
+		}
+	</style>
+[% END %]
+
+[% BLOCK faq_header %]
+	<div class="como-funciona" id="q-links">
+    	<h2>Información</h2>
+        <dl>
+        	<dt>PorMiBarrio</dt>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq01');\"" : "href='#faq01'" %] class="pregunta">¿Qué es Por mi Barrio?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq02');\"" : "href='#faq02'" %] class="pregunta">¿Qué rol cumple la Intendencia de Montevideo en Por Mi Barrio?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq03');\"" : "href='#faq03'" %] class="pregunta">¿Cómo se financia?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq04');\"" : "href='#faq04'" %] class="pregunta">¿Existen otros ejemplos parecidos en el mundo?</a></dd>
+        </dl>
+        <dl>
+        	<dt>¿Cómo funciona?</dt>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq05');\"" : "href='#faq05'" %] class="pregunta">¿Cómo funciona?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq06');\"" : "href='#faq06'" %] class="pregunta">¿Qué tipo de cosas puedo reclamar?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq07');\"" : "href='#faq07'" %] class="pregunta">¿Porqué no puedo reclamar o pedir cualquier cosa?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq08');\"" : "href='#faq08'" %] class="pregunta">¿Puedo reportar desde una ceibalita o un celular?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq09');\"" : "href='#faq09'" %] class="pregunta">¿Necesito Facebook para registrarme?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq10');\"" : "href='#faq10'" %] class="pregunta">¿Qué hago si el reclamo que quiero realizar ya existe?
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq11');\"" : "href='#faq11'" %] class="pregunta">¿Puedo adjuntar fotos en el reclamo?</a></dd>
+           	<dd>· <a [% mobile ? "ng-click=\"scrollMe('faq12');\"" : "href='#faq12'" %] class="pregunta">¿Puedo adjuntar videos en el reclamo?</a></dd>
+        </dl>
+        <dl>
+        	<dt>DATA</dt>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq13');\"" : "href='#faq13'" %] class="pregunta">¿Qué es DATA?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq14');\"" : "href='#faq14'" %] class="pregunta">¿Qué es DATA?¿Quiénes somos?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq15');\"" : "href='#faq15'" %] class="pregunta">¿Por qué lo hacemos?</a></dd>
+        </dl>
+        <dl>
+        	<dt>IM</dt>
+        	<dd>· <a [% mobile ? "ng-click=\"scrollMe('faq16');\"" : "href='#faq16'" %] class="pregunta">¿Qué significan los estados que envía la IM?</a></dd>
+        	<dd>· <a [% mobile ? "ng-click=\"scrollMe('faq17');\"" : "href='#faq17'" %] class="pregunta">¿Qué puedo reportar en cada categoría?</a></dd>
+        </dl>
+        <dl>
+        	<dt>Defensoría</dt>
+        	<dd>· <a [% mobile ? "ng-click=\"scrollMe('faq18');\"" : "href='#faq18'" %] class="pregunta">¿Qué es la Defensoría del Vecino?</a></dd>
+        	<dd>· <a [% mobile ? "ng-click=\"scrollMe('faq19');\"" : "href='#faq19'" %] class="pregunta">¿Qué tipo de asuntos atiende?</a></dd>
+        	<dd>· <a [% mobile ? "ng-click=\"scrollMe('faq20');\"" : "href='#faq20'" %] class="pregunta">¿Cómo se inicia una consulta o reclamo?</a></dd>
+        </dl>
+    </div>
+[% END %]

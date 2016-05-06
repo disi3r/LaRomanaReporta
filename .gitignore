@@ -14,19 +14,24 @@ inc/
 _Inline/
 lib
 tags
+.htpasswd
+*.log
 
 *.mo
 FixMyStreet-EmptyHomes.po
 FixMyBarangay.po
 
+/web/i/*
 /web/css/core.css
 /web/css/main.css
 /web/cobrands/*/*.css
 !/web/cobrands/pormibarrio/*
+!/web/cobrands/pormibarriocr/*
 /web/cobrands/seesomething
-/web/photo
+/web/photo/*
+/web/cache/*
 /local
-/web/upload
+/web/upload/*
 
 /web/cobrands/fixmystreet/compass_app_log.txt
 blog/web/wp
