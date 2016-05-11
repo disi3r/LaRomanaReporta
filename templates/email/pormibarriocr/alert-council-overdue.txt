@@ -1,0 +1,11 @@
+Subject: Reporte Atrasado - '<?=$values['title']?>'
+
+Título del reporte: <?=$values['title']?>
+
+Nombre de la categoría: <?=$values['category']?>
+
+Link del reporte: <?=$values['problem_url']?>
+
+<?=$values['summary']?>
+
+<?=$values['signature']?>

@@ -377,12 +377,12 @@ sub send_council_alerts() {
         );
         my $q;
         if ($cobrand->send_council_repeat){
-            $q = "select id, title, category, (select email as email from contacts where contacts.category = problem.category limit 1) from problem where id = ?";
+            $q = "select id, title, category, (select email from contacts where contacts.category = problem.category limit 1) as email from problem where id = ?";
             $q = dbh()->prepare($q);
             $q->execute($alert->parameter);
         }
         else {
-            $q = "select id, title, category, (select email as email from contacts where contacts.category = problem.category limit 1) from problem where id = ?
+            $q = "select id, title, category, (select email from contacts where contacts.category = problem.category limit 1) as email from problem where id = ?
                 and (select whenqueued from alert_sent where alert_sent.alert_id = ?
                  and alert_sent.parameter::integer = problem.id limit 1) is null";
             $q = dbh()->prepare($q);

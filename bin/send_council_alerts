@@ -23,4 +23,4 @@ CronFns::language($site);
 #load cobrand.pm
 #get problem_rules
 #get action -> email and alert class, now fixed: 'comptroller_overdue'
-FixMyStreet::App->model('DB::AlertType')->send_comptroller_alerts('council_overdue');
+FixMyStreet::App->model('DB::AlertType')->send_council_alerts('council_overdue');
