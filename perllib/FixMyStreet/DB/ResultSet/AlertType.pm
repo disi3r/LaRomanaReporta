@@ -22,6 +22,7 @@ sub email_alerts ($) {
     my $q = $rs->search( { '-AND' => [
         ref => {'-not_like', '%local_problems%' },
         ref => {'-not_like', '%comptroller_overdue%' },
+	ref => {'-not_like', '%council_overdue%' },
         ] } );
     while (my $alert_type = $q->next) {
         my $ref = $alert_type->ref;
@@ -56,7 +57,6 @@ sub email_alerts ($) {
         # XXX Ugh - needs work
         $query =~ s/\?/alert.parameter/ if ($query =~ /\?/);
         $query =~ s/\?/alert.parameter2/ if ($query =~ /\?/);
-
         $query = dbh()->prepare($query);
         $query->execute();
         my $last_alert_id;

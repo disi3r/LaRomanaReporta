@@ -6,6 +6,7 @@ package FixMyStreet::DB::Result::Problem;
 
 use strict;
 use warnings;
+use Data::Dumper;
 
 use base 'DBIx::Class::Core';
 __PACKAGE__->load_components("FilterColumn", "InflateColumn::DateTime", "EncodedColumn");
@@ -859,12 +860,11 @@ sub deadline {
   if ($cobrand->deadlines){
     my %deadlines = $cobrand->problem_rules();
     my $deadline = { 'class' => 'noDeadLine' };
-
     if ( !$problem->is_fixed and $problem->is_open ){
       if ( exists $deadlines{$problem_group} ){
         foreach my $deadline_actions (@{ $deadlines{$problem_group} }){
           #Deadline is now - maxtime - nonwork
-          my $deadline_date = $cobrand->to_working_days_date($now, $deadline_actions->{max_time});
+          my $deadline_date = $cobrand->to_working_days_date($now->clone(), $deadline_actions->{max_time});
           if ($problem->lastupdate_council) {
             if ( $deadline_date->epoch >= $problem->lastupdate_council->epoch ){
               $deadline = $deadline_actions;
@@ -872,7 +872,7 @@ sub deadline {
             }
           }
           else{
-            if ($problem->confirmed){
+            if ($problem->confirmed){             
               if ( $deadline_date->epoch >= $problem->confirmed->epoch ){
                 $deadline = $deadline_actions;
                 last;

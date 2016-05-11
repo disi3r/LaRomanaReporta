@@ -99,7 +99,8 @@ sub send {
             _parameters_ => $h,
             _line_indent => $row->cobrand eq 'zurich' ? '' : undef, # XXX Access to Cobrand module here?
             To => $self->to,
-            From => $self->send_from( $row ),
+            'Reply-To' => '"'.$row->name .'" <'.$row->user->email.'>',
+            From => mySociety::Config::get('CONTACT_NAME').' <'.mySociety::Config::get('CONTACT_EMAIL').'>',
         },
         mySociety::Config::get('CONTACT_EMAIL'),
         \@recips,
