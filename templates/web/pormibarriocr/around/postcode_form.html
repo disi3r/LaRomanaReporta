@@ -7,211 +7,17 @@
 <ul class="list-unstyled l-calles">
 </ul>
 <!--/lista CALLES-->
-
+[% IF all_areas.keys.first %]
+<script type="text/javascript" language="javascript" src="js/postcodes/area_[% all_areas.keys.first %].json"></script>
+[% END %]
 <script type="text/javascript">
 $( document ).ready(function() {
     //<OBJECT>//
     function PlaceOfReference(){
-    this.placesOfReference = [
-            {
-                "category":"BANCOS Y CAJEROS",
-                "places":
-                        [
-
-                            {"nombre":"MUTUAL ALAJUELA",
-                            "latitude":'10.0547748408',
-                            "longitude":'-84.4326878713'},
-
-                            {"nombre":"BANCO NACIONAL",
-                            "latitude":'10.0602591944',
-                            "longitude":'-84.4392100165'},
-
-                            {"nombre":"BANCO POPULAR",
-                            "latitude":'10.0543073533',
-                            "longitude":'-84.434734945'},
-
-                            {"nombre":"CAJEROS-B.N.",
-                            "latitude":'10.0556119978',
-                            "longitude":'-84.4322925711'},
-
-                            {"nombre":"CAJERO-DAVIVIENDA",
-                            "latitude":'10.0553956707',
-                            "longitude":'-84.432489101'},
-
-                            {"nombre":"OFICINA-B.C.R",
-                            "latitude":'10.0535388035',
-                            "longitude":'-84.4329284694'},
-
-                            {"nombre":"COOPAVEGRA",
-                            "latitude":'10.0556972306',
-                            "longitude":'-84.4349308297'}
-                        ]
-            },
-
-            {
-                "category":"CENTROS EDUCATIVOS",
-                "places":
-                        [
-                            {"nombre":"UNIVERSIDAD NACIONAL ESTATAL A DISTANCIA (U.N.E.D)",
-                            "latitude":'10.0612707426',
-                            "longitude":'-84.4364895418'},
-
-                            {"nombre":"ESCUELA SANTA MARIA GORETTI",
-                            "latitude":'10.0598097661',
-                            "longitude":'-84.4366706012'},
-
-                            {"nombre":"ESCUELA JACINTO AVILA ARAYA",
-                            "latitude":'10.0325048124',
-                            "longitude":'-84.4245958878'},
-
-                            {"nombre":"ESCUELA LOS PINOS",
-                            "latitude":'10.0258227162',
-                            "longitude":'-84.4320896955'},
-
-                            {"nombre":"CENTRO DE EDUCACION NUTRICIONAL LA GRANJA PALMARES",
-                            "latitude":'10.0535854126',
-                            "longitude":'-84.4435428629'},
-
-                            {"nombre":"ESCUELA ERMIDA BLANCO GONZALEZ",
-                            "latitude":'10.053079023',
-                            "longitude":'-84.443288174'},
-
-                            {"nombre":"COLEGIO BILINGUE DE PALMARES",
-                            "latitude":'10.0538900292',
-                            "longitude":'-84.4347443851'},
-
-                            {"nombre":"UNIVERSIDAD DE COSTA RICA",
-                            "latitude":'10.0585652514',
-                            "longitude":'-84.4311110695'},
-
-                            {"nombre":"ESCUELA MANUEL BERNARDO GOMEZ",
-                            "latitude":'10.0582314504',
-                            "longitude":'-84.4316453588'},
-
-                            {"nombre":"CENTRO INFANTIL ELIZA ALVAREZ VARGAS",
-                            "latitude":'10.0532160108',
-                            "longitude":'-84.4317745273'},
-
-                            {"nombre":"KINDER DE PALMARES",
-                            "latitude":'10.0569450061',
-                            "longitude":'-84.4328925255'},
-
-                            {"nombre":"ESCUELA DANIEL SOLORZANO MURILLO",
-                            "latitude":'10.0442982469',
-                            "longitude":'-84.4199076147'},
-
-                            {"nombre":"COLEGIO DR. RICARDO MORENO CAÑAS",
-                            "latitude":'10.0373216296',
-                            "longitude":'-84.4398962447'},
-
-                            {"nombre":"ESCUELA PABLO ALVARADO VARGAS",
-                            "latitude":'10.0343602765',
-                            "longitude":'-84.4510103181'},
-
-                            {"nombre":"ESCUELA DR. RICARDO MORENO CAÑAS",
-                            "latitude":'10.0411116766',
-                            "longitude":'-84.4347174038'},
-
-                            {"nombre":"COLEGIO SAN AGUSTIN",
-                            "latitude":'10.0618741632',
-                            "longitude":'-84.4372168668'},
-
-                            {"nombre":"ESCUELA PRESBITERO VENANCIO DE OÑA Y MARTINEZ",
-                            "latitude":'10.0229690788',
-                            "longitude":'-84.444534598'},
-
-                            {"nombre":"ESCUELA JULIA FERNANDEZ RODRIGUEZ",
-                            "latitude":'10.0569933619',
-                            "longitude":'-84.4221406473'},
-
-                            {"nombre":"ESCUELA JOAQUIN L. SANCHO QUESADA",
-                            "latitude":'10.0700081142',
-                            "longitude":'-84.4360851411'},
-
-                            {"nombre":"ESCUELA LA UNION",
-                            "latitude":'10.0459881358',
-                            "longitude":'-84.4411666384'},
-
-                            {"nombre":"COLEGIO NOCTURNO DE PALMARES",
-                            "latitude":'10.053799178',
-                            "longitude":'-84.4352148745'},
-
-                            {"nombre":"C.T.P. SANTOCRISTO DE ESQUIPULAS",
-                            "latitude":'10.0558243068',
-                            "longitude":'-84.4217127913'},
-
-                            {"nombre":"CENTRO INFANTIL BILINGUE ANGELS",
-                            "latitude":'10.0595325147',
-                            "longitude":'-84.4360625402'}
-                        ]
-            },
-
-            {
-                "category":"PLAZAS DE DEPORTES",
-                "places":
-                        [
-                            {"nombre":"PLAZA DEPORTES COLEGIO PALMARES",
-                            "latitude":'10.05287198',
-                            "longitude":'-84.43594409'},
-
-                            {"nombre":"PLAZA DEPORTES LA COCALECA",
-                            "latitude":'10.04402294',
-                            "longitude":'-84.42028842'},
-
-                            {"nombre":"PLAZA DEPORTES ZARAGOZA",
-                            "latitude":'10.04108136',
-                            "longitude":'-84.42811078'},
-
-                            {"nombre":"PLAZA DEPORTES DE RINCON",
-                            "latitude":'10.0388026',
-                            "longitude":'-84.44155231'},
-
-                            {"nombre":"PLAZA DEPORTES CALLE VARGAS",
-                            "latitude":'10.04559696',
-                            "longitude":'-84.43961968'},
-
-                            {"nombre":"PLAZA DEPORTES CALLE JIMENEZ",
-                            "latitude":'10.03609527',
-                            "longitude":'-84.4531033'},
-
-                            {"nombre":"PLAZA DEPORTES LA RECTA",
-                            "latitude":'10.05937156',
-                            "longitude":'-84.44071618'},
-
-                            {"nombre":"PLAZA DEPORTES BUENOS AIRES",
-                            "latitude":'10.06844398',
-                            "longitude":'-84.43508841'},
-
-                            {"nombre":"PLAZA DEPORTES SANTIAGO",
-                            "latitude":'10.02698959',
-                            "longitude":'-84.44257076'},
-                            
-                            {"nombre":"PLAZA DEPORTES CANDELARIA",
-                            "latitude":'10.0286264',
-                            "longitude":'-84.41349127'},
-                            
-                            {"nombre":"PLAZA DEPORTES LOS PINOS",
-                            "latitude":'10.02618873',
-                            "longitude":'-84.43208491'},
-                            
-                            {"nombre":"PLAZA DEPORTES ESQUIPULAS",
-                            "latitude":'10.05986349',
-                            "longitude":'-84.42498068'},
-                            
-                            {"nombre":"PLAZA DEPORTES LA GRANJA",
-                            "latitude":'10.05326851',
-                            "longitude":'-84.44717097'},
-                            
-                            {"nombre":"ESTADIO FUTBOL PALMARES",
-                            "latitude":'10.05937156',
-                            "longitude":'-84.44071618'},
-                            
-                            {"nombre":"PLAZA DEPORTES LA RECTA",
-                            "latitude":'10.05772645',
-                            "longitude":'-84.42974023'},                            
-                        ]
-            }
-        ];
+        if (typeof postcodeObject === 'undefined') {
+            postcodeObject = {};
+        }
+        this.placesOfReference = postcodeObject;
         this.getLongitude = getLongitude;
         this.getLatitude = getLatitude;
         this.printSelects = printSelects;
@@ -287,15 +93,15 @@ $( document ).ready(function() {
     });
     $('.locateDetails').on('change', function(){
         var cat = $("#streetLocate").val() - 1;
-        var placeOfReference = new PlaceOfReference();
-        var lon = placeOfReference.getLongitude(cat,this.value);
-        var lat = placeOfReference.getLatitude(cat,this.value);
+        //var placeOfReference = new PlaceOfReference();
+        var lon = placesOfReference.getLongitude(cat,this.value);
+        var lat = placesOfReference.getLatitude(cat,this.value);
         var lonlat = new OpenLayers.LonLat(lon, lat);
         var geo_lonlat = new OpenLayers.Geometry.Point(lon,lat);
         lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
         geo_lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
         locatorGeoLonLat = geo_lonlat;
-        locatorName = placeOfReference.getName(cat,this.value);
+        locatorName = placesOfReference.getName(cat,this.value);
         var placeOfReferenceLocator = new OpenLayers.Feature.Vector(geo_lonlat, {
             colour: 'locator',
             size: 'normal',
@@ -310,7 +116,31 @@ $( document ).ready(function() {
         });
         fixmystreet.map.zoomTo(4);
         fixmystreet.map.panTo(lonlat);
-        fixmystreet.markers.addFeatures( [placeOfReferenceLocator] );
+        if (typeof fixmystreet.locators === 'undefined') {
+            var pin_layer_style_map = new OpenLayers.StyleMap({
+                'default': new OpenLayers.Style({
+                    graphicTitle: "${title}",
+                    graphicOpacity: 1,
+                    graphicZIndex: 11,
+                })
+            });
+            pin_layer_style_map.addUniqueValueRules('default', 'size', {
+                'normal': {
+                    externalGraphic: "/i/pins/${colour}.png",
+                    graphicWidth: 29,
+                    graphicHeight: 34,
+                    graphicXOffset: -15,
+                    graphicYOffset: -29,
+                }
+            });
+            fixmystreet.locators = new OpenLayers.Layer.Vector("Locators", {styleMap: pin_layer_style_map});
+            fixmystreet.locators.addFeatures( [placeOfReferenceLocator] );
+            fixmystreet.map.addLayer(fixmystreet.locators);
+        }
+        else {
+            fixmystreet.locators.removeAllFeatures();
+            fixmystreet.locators.addFeatures( [placeOfReferenceLocator] );
+        }
     });
 });
 </script>

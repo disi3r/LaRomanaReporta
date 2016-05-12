@@ -213,7 +213,7 @@ function fixmystreet_onload() {
 
     var markers = fms_markers_list( fixmystreet.pins, true );
     fixmystreet.markers.removeAllFeatures();
-    fixmystreet.markers.addFeatures( markers )
+    fixmystreet.markers.addFeatures( markers );
     //console.log(fixmystreet.markers);
     function onPopupClose(evt) {
         fixmystreet.select_feature.unselect(selectedFeature);

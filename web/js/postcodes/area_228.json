@@ -1,0 +1,226 @@
+var postcodeObject = [
+    {
+        "category":"CIUDAD CORTES",
+        "places":
+            [
+
+                {"nombre":"MUNICIPALIDAD DE OSA",
+                "latitude":"8.979094",
+                "longitude":"-83.532190"},
+
+                {"nombre":"HOSPITAL TOMAS CASAS",
+                "latitude":"8.988031",
+                "longitude":"-83.546108"},
+
+                {"nombre":"LICEO PACIFICO SUR",
+                "latitude":"8.977977",
+                "longitude":"-83.531304"},
+
+                {"nombre":"PARQUE CENTRAL CIUDAD CORTES",
+                "latitude":"8.956473",
+                "longitude":"-83.524700"},
+
+                {"nombre":"TRIBUNALES DE JUSTICIA",
+                "latitude":"8.957592",
+                "longitude":"-83.524767"},
+
+                {"nombre":"BARRIO JANETH PACHECO",
+                "latitude":"8.981820",
+                "longitude":"-83.540379"},
+
+                {"nombre":"BARRIO RENACIMIENTO",
+                "latitude":"8.970328",
+                "longitude":"-83.527268"},
+				
+				{"nombre":"BARRIO LOURDES",
+                "latitude":"8.967523",
+                "longitude":"-83.527420"}
+            ]
+    },
+
+    {
+        "category":"PALMAR",
+        "places":
+            [
+                {"nombre":"PARQUE PALMAR NORTE",
+                "latitude":"8.961103",
+                "longitude":"-83.455106"},
+
+                {"nombre":"IGLESIA CATOLICA PLAMAR NORTE",
+                "latitude":"8.961270",
+                "longitude":"-83.454185"},
+
+                {"nombre":"CALLE COMERCIO PALMAR NORTE",
+                "latitude":"8.960681",
+                "longitude":"-83.458284"},
+
+                {"nombre":"ESCUELA EDUARDO GARNIER",
+                "latitude":"8.961736",
+                "longitude":"-83.455381"},
+
+                {"nombre":"PARQUE PALMAR SUR",
+                "latitude":"8.953794",
+                "longitude":"-83.464979"},
+
+                {"nombre":"CLINICA CCSS PALMAR SUR",
+                "latitude":"8.955412",
+                "longitude":"-83.464183"},
+
+                {"nombre":"AEROPUERTO PALMAR SUR",
+                "latitude":"8.955335",
+                "longitude":"-83.465704"},
+
+                {"nombre":"ESCUELA PALMAR SUR",
+                "latitude":"8.955064",
+                "longitude":"-83.464677"}  
+            ]
+    },
+
+    {
+        "category":"SIERPE",
+        "places":
+            [
+                {"nombre":"PARQUE DE SIERPE",
+                "latitude":"8.859850",
+                "longitude":"-83.471523"},
+
+                {"nombre":"PLAZA DE DEPORTES SIERPE",
+                "latitude":"8.860862",
+                "longitude":"-83.472369"},
+
+                {"nombre":"ESCUELA DE SIERPE",
+                "latitude":"8.861544",
+                "longitude":"-83.472597"},
+
+                {"nombre":"COLEGIO DE SIERPE",
+                "latitude":"8.861436",
+                "longitude":"-83.471839"},
+
+                {"nombre":"EBAIS CCSS DE SIERPE",
+                "latitude":"8.861450",
+                "longitude":"-83.471219"},
+
+                {"nombre":"IGLESIA CATOLICA DE SIERPE",
+                "latitude":"8.860107",
+                "longitude":"-83.470829"},
+
+                {"nombre":"FUERZA PUBLICA DE SIERPE",
+                "latitude":"8.859086",
+                "longitude":"-83.472997"}                       
+            ]
+    },
+	
+	{
+        "category":"BAHIA BALLENA",
+        "places":
+            [
+                {"nombre":"PARQUE NACIONAL MARINO BALLENO",
+                "latitude":"9.155286",
+                "longitude":"-83.748130"},
+
+                {"nombre":"ESCUELA FLOR DE BAHIA BALLENA",
+                "latitude":"9.158514",
+                "longitude":"-83.742362"},
+
+                {"nombre":"PLAZA DE DEPORTES BAHIA BALLENA",
+                "latitude":"9.158064",
+                "longitude":"-83.742856"},
+
+                {"nombre":"BANCO NACIONAL UVITA",
+                "latitude":"9.165562",
+                "longitude":"-83.736337"},
+
+                {"nombre":"DOMINICALITO",
+                "latitude":"9.233341",
+                "longitude":"-83.838055"},
+
+                {"nombre":"DOMINICAL",
+                "latitude":"9.253146",
+                "longitude":"-83.864168"},
+
+                {"nombre":"LICEO DE UVITA",
+                "latitude":"9.172959",
+                "longitude":"-83.745765"},
+
+                {"nombre":"UVITA",
+                "latitude":"9.172914",
+                "longitude":"-83.739033"}                       
+            ]
+    },
+	
+	{
+        "category":"PIEDRAS BLANCAS",
+        "places":
+            [
+                {"nombre":"ESCUELA DE PIEDRAS BLANCAS",
+                "latitude":"8.784214",
+                "longitude":"-83.240891"},
+
+                {"nombre":"SALON MULTIUSO",
+                "latitude":"8.780902",
+                "longitude":"-83.237766"},
+
+                {"nombre":"URBANIZACION VILLAS DEL SUR",
+                "latitude":"8.785659",
+                "longitude":"-83.238652"},
+
+                {"nombre":"PLAZA DE DEPORTES",
+                "latitude":"8.779708",
+                "longitude":"-83.238573"},
+
+                {"nombre":"EBAIS CCSS PIEDRAS BLANCAS",
+                "latitude":"8.780831",
+                "longitude":"-83.238483"},
+
+                {"nombre":"FUERZA PUBLICA PIEDRAS BLANCAS",
+                "latitude":"8.786183",
+                "longitude":"-83.242586"},
+
+                {"nombre":"SERVICENTRO CHACARITA",
+                "latitude":"8.798710",
+                "longitude":"-83.253305"},
+
+                {"nombre":"COLEGIO FINCA ALAJUELA",
+                "latitude":"8.782874",
+                "longitude":"-83.257035"}                      
+            ]
+    },
+	
+	{
+        "category":"BAHIA DRAKE",
+        "places":
+            [
+                {"nombre":"PROGRESO",
+                "latitude":"8.714894",
+                "longitude":"-83.633851"},
+
+                {"nombre":"CAMPO ATERRIZAJE BAHIA DRAKE",
+                "latitude":"8.718973",
+                "longitude":"-83.639436"},
+
+                {"nombre":"AGUJITAS",
+                "latitude":"8.689286",
+                "longitude":"-83.664826"},
+
+                {"nombre":"COLEGIO DE DRAKE",
+                "latitude":"8.690233",
+                "longitude":"-83.666110"},
+
+                {"nombre":"EBAIS CCSS DRAKE",
+                "latitude":"8.689854",
+                "longitude":"-83.670088"},
+
+                {"nombre":"ESCUELA DE DRAKE",
+                "latitude":"8.689932",
+                "longitude":"-83.667993"},
+
+                {"nombre":"LOS PLANES DRAKE",
+                "latitude":"8.669765",
+                "longitude":"-83.685264"},
+
+                {"nombre":"RINCON DE SAN JOSECITO",
+                "latitude":"8.655410",
+                "longitude":"-83.711943"}                         
+            ]
+    }
+]
