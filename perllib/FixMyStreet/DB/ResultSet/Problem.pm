@@ -138,13 +138,19 @@ sub around_map {
         order_by => { -desc => 'created' },
     };
     $attr->{rows} = $limit if $limit;
-
+    my $cats = $c->req->param('categories');
     my $q = {
             non_public => 0,
             state => [ FixMyStreet::DB::Result::Problem->visible_states() ],
             latitude => { '>=', $min_lat, '<', $max_lat },
             longitude => { '>=', $min_lon, '<', $max_lon },
     };
+    if($cats && $cats!='all'){
+      my @cats_ids = (split /,/, $cats);
+      my @categories = $c->model('DB::Contact')->get_by_group_id( \@cats_ids )->all;
+      my @catsNames  = map { $_->category } @categories;
+      $q->{category} = {-in => \@catsNames};
+    }
     $q->{'current_timestamp - lastupdate'} = { '<', \"'$interval'::interval" }
         if $interval;
 
@@ -536,7 +542,7 @@ sub alert_deadlines {
     } );
     #Check for each if deadline is passed (next version make it configurable)
     while (my $problem = $problems->next) {
-        if ( $problem->deadline->{action} and $problem->deadline->{action} eq 'email' ){ 
+        if ( $problem->deadline->{action} and $problem->deadline->{action} eq 'email' ){
             #Create alert foreach body in bodies_str
             my @bodies = split(/,/, $problem->bodies_str);
             my $bodies_req = FixMyStreet::App->model("DB::Body")->search({ id => \@bodies });

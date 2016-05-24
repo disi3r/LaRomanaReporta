@@ -68,8 +68,6 @@ function fixmystreet_zoomToBounds(bounds) {
 }
 
 function category_is_selected(category_group_id){
-  //TODO: Agregar la lógica de filtro acá.
-  //Leer los iconos del selector activo y si el category_group_id = value devuelve true
   var result = false;
   if(selectedCategories && selectedCategories.length>0){
     selectedCategories.forEach(function(element,index,array){
@@ -80,6 +78,18 @@ function category_is_selected(category_group_id){
 
   }else{
     result = true;
+  }
+  return result;
+}
+
+function getCategoriesParameter(){
+  if(selectedCategories && selectedCategories.length>0){
+    selectedCategories.forEach(function(element,index,array){
+      result = result + element + ","
+    });
+    result = result.substring(0,result.length-1); //elimino la última ','
+  }else{
+    result = "all";
   }
   return result;
 }
@@ -200,7 +210,7 @@ function fixmystreet_onload() {
         pin_layer_options.strategies = [ fixmystreet.bbox_strategy ];
         pin_layer_options.protocol = new OpenLayers.Protocol.HTTP({
             url: '/ajax',
-            params: fixmystreet.all_pins ? { all_pins: 1 } : { },
+            params: fixmystreet.all_pins ? { all_pins: 1 , categories: getCategoriesParameter()} : {categories: getCategoriesParameter()},
             format: new OpenLayers.Format.FixMyStreet()
         });
     }
@@ -213,7 +223,7 @@ function fixmystreet_onload() {
 
     var markers = fms_markers_list( fixmystreet.pins, true );
     fixmystreet.markers.removeAllFeatures();
-    fixmystreet.markers.addFeatures( markers );
+    fixmystreet.markers.addFeatures( markers )
     //console.log(fixmystreet.markers);
     function onPopupClose(evt) {
         fixmystreet.select_feature.unselect(selectedFeature);

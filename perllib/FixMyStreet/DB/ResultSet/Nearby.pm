@@ -6,7 +6,7 @@ use warnings;
 
 sub nearby {
     my ( $rs, $c, $dist, $ids, $limit, $mid_lat, $mid_lon, $interval ) = @_;
-
+    my $cats = $c->req->param('categories');
     my $params = {
         non_public => 0,
         state => [ FixMyStreet::DB::Result::Problem::visible_states() ],
@@ -15,6 +15,12 @@ sub nearby {
         if $interval;
     $params->{id} = { -not_in => $ids }
         if $ids;
+    if($cats && $cats!='all'){
+      my @cats_ids = (split /,/, $cats);
+      my @categories = $c->model('DB::Contact')->get_by_group_id( \@cats_ids )->all;
+      my @catsNames  = map { $_->category } @categories;
+      $params->{category} = {-in => \@catsNames};
+    }
     $params = {
         %{ $c->cobrand->problems_clause },
         %$params

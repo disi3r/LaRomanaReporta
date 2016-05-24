@@ -117,7 +117,7 @@
               icon = icon + val2 + ".png";
             }
           });
-          var group_id = key;          
+          var group_id = key;
           addCategoryFilter(name,group_id,icon);
         }
       });
@@ -162,7 +162,16 @@
       });
       selectedCategories = newList;
     }
-    //fixmystreet_update_filtered_pins();
+    var strCats = selectedCategories.join(',');
+    if(!strCats){
+      strCats = "all";
+    }
+    fixmystreet.map.layers.forEach(function(element,index,array){
+      if(element.options.protocol){
+        element.options.protocol.params.categories = strCats;
+      }
+    });
+    fixmystreet.markers.refresh({force: true});
   }
 
   getCategoryGroups();
