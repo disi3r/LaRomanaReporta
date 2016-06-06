@@ -14,4 +14,4 @@ Título del problema reportado:
 Descripción del reporte:
 [% report.detail %]
 
-[% INCLUDE 'signature2.txt' %]
+[% INCLUDE 'signature.txt' %]
