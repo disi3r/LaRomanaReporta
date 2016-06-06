@@ -136,7 +136,7 @@ sub problem_rules {
 				'action' => 'email'
 			},
 			{
-				'max_time' => 1,
+				'max_time' => 8,
 				'class' => 'council_overdue',
 				'action' => 'email'
 			},
@@ -156,7 +156,7 @@ sub problem_rules {
 				'action' => 'email'
 			},
 			{
-				'max_time' => 1,
+				'max_time' => 8,
 				'class' => 'council_overdue',
 				'action' => 'email'
 			},
@@ -176,7 +176,7 @@ sub problem_rules {
 				'action' => 'email'
 			},
 			{
-				'max_time' => 1,
+				'max_time' => 8,
 				'class' => 'council_overdue',
 				'action' => 'email'
 			},
@@ -196,7 +196,7 @@ sub problem_rules {
 				'action' => 'email'
 			},
 			{
-				'max_time' => 1,
+				'max_time' => 8,
 				'class' => 'council_overdue',
 				'action' => 'email'
 			},
@@ -216,7 +216,7 @@ sub problem_rules {
 				'action' => 'email'
 			},
 			{
-				'max_time' => 1,
+				'max_time' => 8,
 				'class' => 'council_overdue',
 				'action' => 'email'
 			},
@@ -236,7 +236,7 @@ sub problem_rules {
 				'action' => 'email'
 			},
 			{
-				'max_time' => 1,
+				'max_time' => 8,
 				'class' => 'council_overdue',
 				'action' => 'email'
 			},
