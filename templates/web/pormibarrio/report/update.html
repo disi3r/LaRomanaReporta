@@ -3,12 +3,11 @@
 [% END %]
      <div class="comment comment-[% update.name %]">
 		<div class="user-avatar">
-			[% IF update.users.picture_url && !update.anonymous and update.name != ''%]	
+			[% IF update.users.picture_url && !update.anonymous and update.name != ''%]
 				<img alt="" class="user_avatar_[% update.users.id %]" src="[% update.users.picture_link(mobile, c.cobrand.base_url) %]"></div>
 				<script>
 					$(".user_avatar_[% update.users.id %]").error(function() { $(this).attr("src", "[% mobile ? c.cobrand.base_url : '' %]/cobrands/pormibarrio/images/no-profile-picture.jpg"); }).
 						attr( "src", "[% update.users.picture_link(mobile, c.cobrand.base_url) %]" );
-						alert("[% update.users.picture_link(mobile, c.cobrand.base_url) %]");
 				</script>
 			[% ELSE %]
 				<img alt="" src="[% mobile ? c.cobrand.base_url : '' %]/cobrands/pormibarrio/images/no-profile-picture.jpg"></div>

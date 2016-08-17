@@ -124,7 +124,7 @@ sub load_problem_or_display_error : Private {
         }
     }
     #Check if cobrand allows update when viewing and that problem has flag has_updates
-    if ( $c->cobrand->update_on_view && $problem->has_updates ){
+    if ( $c->cobrand->update_on_view ){
         my $body = ( values $problem->bodies )[0];
         my $open311 = Open311->new( endpoint => $body->endpoint );
         my $prequest = $open311->get_service_custom_meta_info($problem->external_id);
@@ -251,7 +251,7 @@ sub delete :Local :Args(1) {
     return $c->res->redirect($uri) unless $c->user_exists;
 
     my $body = $c->user->obj->from_body;
-    
+
     if ($body){
         return $c->res->redirect($uri) unless $p->bodies->{$body->id};
     }

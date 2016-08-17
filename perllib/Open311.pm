@@ -82,7 +82,9 @@ sub get_service_problems {
         $params->{end_date} = $end_date;
     }
 
+    print "\n GET SERVICE PROBLEMS: ".Dumper($params)."\n";
     my $xml = $self->_get( $self->endpoints->{service_request_new}, $params || undef );
+    print "\n GET SERVICE XML: ".Dumper($xml)."\n";
     my $service_requests = $self->_get_xml_object( $xml );
     my $requests;
     if ( ref $service_requests->{request} eq 'ARRAY' ) {
@@ -469,17 +471,17 @@ sub _post {
         #api_key => $self->api_key,
         %{ $params }
     ];
-    print $req->as_string;
+
     $self->debug_details( $self->debug_details . "\nrequest:" . $req->as_string );
 
     my $ua = LWP::UserAgent->new;
     $ua->ssl_opts(verify_hostname => 0);
+    #$ua->default_header('content-type' => "application/x-www-form-urlencoded;charset=utf-8");
     my $user = mySociety::Config::get('HTTPS_USER_AUTH', undef);
     my $password = mySociety::Config::get('HTTPS_PASS_AUTH', undef);
 
     #Agregado
     $ua->credentials("www.montevideo.gub.uy:443", "www.montevideo.gub.uy:443", $user, $password);
-
     my $res;
 
     if ( $self->test_mode ) {
@@ -488,15 +490,31 @@ sub _post {
     } else {
         $res = $ua->request( $req );
     }
-
+    print "\n\nRESULT\n";
+    print Dumper($res);
     if ( $res->is_success ) {
         print "SUCCESS";
         $self->success(1);
         return $res->decoded_content;
     } else {
+        if ( $res->{_rc} eq 302 ){
+            print "\n\nREDIRECTION:\n";
+            my $res_headers = $res->{_headers};
+            my $h = HTTP::Headers->new(
+                'content-length' => $req->{_headers}->{"content-length"},
+                Content_Type => "application/x-www-form-urlencoded;charset=utf-8"
+            );
+            $req = HTTP::Request->new('POST', $res_headers->{location}, $h, $req->{_content} );
+            $res = $ua->request( $req );
+            if ( $res->is_success ) {
+                print "SUCCESS";
+                $self->success(1);
+                return $res->decoded_content;
+            }
+        }
         $self->success(0);
         print "ERROR";
-        print $res->decoded_content;
+        print Dumper($res);
         $self->error( sprintf(
             "request failed: %s\nerror: %s\n%s\n",
             $res->status_line,

@@ -8,6 +8,7 @@ use Data::Dumper;
 use Try::Tiny;
 use HTML::Entities;
 use utf8;
+use List::Util 'max';
 
 has system_user => ( is => 'rw' );
 has start_date => ( is => 'ro', default => undef );
@@ -21,20 +22,17 @@ sub fetch {
     my $bodies = FixMyStreet::App->model('DB::Body')->search(
         {
             send_method     => 'Open311',
-            send_comments   => 1,
             comment_user_id => { '!=', undef },
             endpoint        => { '!=', '' },
         }
     );
-
     while ( my $body = $bodies->next ) {
-
         my $o = Open311->new(
             endpoint     => $body->endpoint,
             #api_key      => $body->api_key,
             #jurisdiction => $body->jurisdiction,
         );
-        
+
         $self->suppress_alerts( $body->suppress_alerts );
         $self->system_user( $body->comment_user );
         $self->get_problems( $o, { areas => $body->areas }, );
@@ -69,10 +67,6 @@ sub get_problems {
         return 0;
     }
 
-    print '<REQRES>';
-    print(Dumper($requests));
-    print '</REQRES>';
-
     if (@$requests){
         for my $request (@$requests) {
             my $request_id = $request->{service_request_id};
@@ -80,8 +74,10 @@ sub get_problems {
             # what problem it belongs to so just skip
             next unless $request_id;
             #Check that problem has not been submitted yet
-            my $problem = FixMyStreet::App->model('DB::Problem')->find( {external_id => $request_id} ) || 0;
-            if (!$problem){
+            my $report = FixMyStreet::App->model('DB::Problem')->find( {external_id => $request_id} ) || 0;
+            my @tasks;
+            if (!$report){
+              print "\nCreate Report\n";
                 #create the report
                 my $prequest = $open311->get_service_custom_meta_info($request_id);
                 if ( ref $prequest eq 'HASH' && exists $prequest->{request} ){
@@ -89,15 +85,27 @@ sub get_problems {
                     if ($report){
                         # save the report;
                         $report->insert();
+                        @tasks = values $prequest->{request}{request_completed_tasks};
+                        push @tasks, values $prequest->{request}{request_pending_tasks};
+                        print "\nRequest Tasks: ".Dumper(@tasks)."\n";
+                        $report->update_tasks(@tasks);
                     }
                     else{
                         print 'DATA NOT FOUND';
                     }
                 }
             }
+            else {
+              my $prequest = $open311->get_service_custom_meta_info($request_id);
+              if ( ref $prequest eq 'HASH' && exists $prequest->{request} ){
+                @tasks = values $prequest->{request}{request_completed_tasks};
+                push @tasks, values $prequest->{request}{request_pending_tasks};
+                print "\nRequest Update Tasks: ".Dumper(@tasks)."\n";
+                $report->update_tasks(@tasks);
+              }
+            }
         }
     }
-
     return 1;
 }
 
@@ -122,12 +130,13 @@ sub load_data {
         }
         else{
             $lastupdate = $prequest->{requested_datetime};
-        }   
+        }
         print "\nDESCRIPTION: ".Dumper(\$description)."\n";
         my $problem = FixMyStreet::App->model('DB::Problem')->new(
             {
                 user_id   => $self->system_user->id,
-                postcode  => '',
+                bodies_str => '1',
+                postcode  => $prequest->{address},
                 latitude  => $prequest->{lat},
                 longitude => $prequest->{long},
                 title     => decode_entities($prequest->{service_name}),
@@ -145,6 +154,8 @@ sub load_data {
                 lastupdate_council => $lastupdate,
                 confirmed => $prequest->{requested_datetime},
                 external_id => $request_id,
+                cobrand_data => $prequest->{city_council},
+                subcategory => $prequest->{service_area},
             }
         );
 
@@ -154,7 +165,7 @@ sub load_data {
 }
 
 sub map_state {
-    my $self           = shift;
+    my $self = shift;
     my $incoming_state = shift;
 
     $incoming_state = lc($incoming_state);
@@ -166,7 +177,7 @@ sub map_state {
         'no further action'           => 'unable to fix',
         'open'                        => 'confirmed',
         'cerrado'                     => 'fixed - council',
-        'ingresado'                   => 'in progress',     
+        'ingresado'                   => 'in progress',
         'anulado'                     => 'unable to fix',
         'en proceso'                  => 'in progress',
         'iniciado'                  => 'in progress',

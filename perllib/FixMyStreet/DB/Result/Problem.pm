@@ -638,7 +638,7 @@ sub body {
 
 sub category_group {
 	my $problem = shift;
-	
+
 	if ( $problem->category ) {
 		my $contact = FixMyStreet::App->model('DB::Contact')->find({ category => $problem->category, deleted => 0 });
 		if ( $contact ) {
@@ -658,7 +658,7 @@ sub category_color {
     if ( $contact_group ) {
       return $contact_group->group_color;
     }
-    
+
   return 0;
 }
 
@@ -669,7 +669,7 @@ sub category_icon {
     if ( $contact_group ) {
       return $contact_group->group_icon;
     }
-    
+
   return 0;
 }
 
@@ -872,7 +872,7 @@ sub deadline {
             }
           }
           else{
-            if ($problem->confirmed){             
+            if ($problem->confirmed){
               if ( $deadline_date->epoch >= $problem->confirmed->epoch ){
                 $deadline = $deadline_actions;
                 last;
@@ -886,6 +886,48 @@ sub deadline {
   }
   return 0;
 }
+
+sub update_tasks {
+  my ( $problem, $tasks ) = @_;
+
+  if ($tasks){
+    $tasks = [ $tasks ] if ref $tasks ne 'ARRAY';
+      for my $task_req (@{$tasks}) {
+        print "\nTask REQ: ".Dumper($task_req)."\n";
+          my $task_id = $task_req->{task_id};
+          # If there's no task id then we can't work out
+          next unless $task_id;
+          my $options;
+          if ( ref $task_req->{task_result} ne ref {} || ref $task_req->{task_report} ne ref {} ){
+            $options->{status} = $task_req->{task_result};
+            $options->{report} = $task_req->{task_report};
+            $options->{planned} = $task_req->{task_datetime};
+          }
+          else {
+            $options->{status} = 'Not planned yet';
+          }
+          #Get task
+          my $task = FixMyStreet::App->model('DB::Task')->find( {task_id => $task_id} ) || 0;
+          if ($task){
+            print "\nVA A TASK UPDATE";
+            $task->update($options);
+          }
+          else{
+            print "\nVA A TASK CREATE";
+            #Create task
+            $options->{task_id} = $task_id;
+            $options->{problem_id} = $problem->id;
+            $options->{name} = $task_req->{task_name};
+            $options->{area} = $task_req->{task_area};
+            print "\nTASK NEW:\n".Dumper($options)."\n\n";
+            $task = FixMyStreet::App->model('DB::Task')->new($options);
+            $task->insert();
+          }
+      }
+  }
+  return;
+}
+
 # we need the inline_constructor bit as we don't inherit from Moose
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 

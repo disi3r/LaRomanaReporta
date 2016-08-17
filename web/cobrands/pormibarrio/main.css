@@ -1246,7 +1246,9 @@ div.tasks{
 div.tasks button{
 	background: #CCC url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50%;
 	vertical-align: bottom;
-	padding: 4px 3.25em;
+	padding: 4px 2.25em;
+	width: 100%;
+	margin-bottom: 2px;
 }
 
 #report-activity{
@@ -1259,6 +1261,13 @@ div.tasks button{
 .content-vertical #report-activity{
 	padding: 10px;
 	width: 100%;
+}
+.activity-report{
+	padding: 2px 4px 0px;
+	text-decoration: none;
+}
+.activity-report.selected{
+	background-color: #ccc;
 }
 
 #report-activity-detail{
@@ -1281,6 +1290,10 @@ div.tasks button{
 	font-size: 0.85em;
 	font-style: italic;
 	color: #7D7D7D;
+}
+
+#report-activity-detail a{
+	text-decoration: none;
 }
 
 .activity-detail-report{

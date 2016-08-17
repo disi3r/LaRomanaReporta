@@ -21,7 +21,7 @@
         <p>[% add_links( problem.detail ) | html %]</p>
         <div class="sign">
             <div class="picture">
-                [% IF problem.user.picture_url && !problem.anonymous and problem.name != ''%] 
+                [% IF problem.user.picture_url && !problem.anonymous and problem.name != ''%]
                 <img alt="[% problem.name %]" class="img-circle" width="35" height="35" src="[% problem.user.picture_link(mobile, c.cobrand.base_url) %]">
                 [% ELSE %]
                 <img alt="" class="img-circle" width="35" height="35" src="[% mobile ? c.cobrand.base_url : '' %]/cobrands/pormibarrio/images/no-profile-picture.jpg">
@@ -39,8 +39,8 @@
 <div class="status-report">
     <h4>Estado del reporte</h4>
     <span class="report-state">[% state_t %]</span>
-    <span class="status-report-im">Su reclamo en la IM: 
-        [% IF problem.can_display_external_id %] 
+    <span class="status-report-im">Su reclamo en la IM:
+        [% IF problem.can_display_external_id %]
             <a target="_blank" href="http://www.montevideo.gub.uy/tramites/aplicacion/consulta-de-reclamos?numReclamo=[% problem.can_display_external_id | html %]" > [% problem.can_display_external_id | html %] </a>
         [% ELSE %]
             No hemos podido ingresar el reclamo aún
@@ -64,35 +64,37 @@
             [% ELSE %]
                 tkey = [% task.created.strftime( '%Y%m%d') %];
             [% END %]
-        
+
         if (!tasks[tkey]){
             tasks[tkey] = [];
         }
         tasks[tkey].push(
             {
-                name : "[% task.name %]", 
-                area : "[% task.area %]", 
-                status : "[% task.status %]", 
+                name : "[% task.name %]",
+                area : "[% task.area %]",
+                status : "[% task.status %]",
                 report : "[% task.report %]",
-                created : "[% task.created %]", 
+                created : "[% task.created %]",
                 planned : "[% task.planned %]",
+                key : tkey,
             }
         );
         [% END %]
         if ( !$.isEmptyObject(tasks) ) {
-            $( "#report-activity-detail" ).html('<p>Seleccione un día en el calendario para ver las tareas asociadas</p>');
+            insert_html_tasks();
             $( "#report-activity" ).datepicker({
-                defaultDate: "+1w",
                 changeMonth: true,
+                firstDay: 1,
                 //numberOfMonths: 3,
                 //showButtonPanel: true,
+                //gotoCurrent: true,
                 selectMultiple:true,
                 beforeShowDay: function (date) {
                     var theday = date.getFullYear() + ('0'+(date.getMonth()+1)).slice(-2) + ('0'+date.getDate()).slice(-2);
                     if ( theday in tasks ){
                         var alt = '';
                         for (var i = tasks[theday].length - 1; i >= 0; i--) {
-                            alt += tasks[theday][i].name +"\n"; 
+                            alt += tasks[theday][i].name +"\n";
                         };
                         return [true, 'activity-date', alt];
                     }
@@ -115,10 +117,12 @@
 
         function insert_html_tasks(aday){
             var recur_tasks = [];
+            //One day tasks
             if ( typeof aday != 'undefined' ) {
                 recur_tasks = tasks[aday];
             }
             else {
+              //All tasks
                 for (var prop in tasks) {
                     if ( tasks.hasOwnProperty(prop) ) {
                         for (var i = tasks[prop].length - 1; i >= 0; i--) {
@@ -129,12 +133,24 @@
             }
             var tasksHtml = '';
             for (var i = recur_tasks.length - 1; i >= 0; i--) {
-                tasksHtml += '<h4>'+recur_tasks[i].name+'</h4>';
-                tasksHtml +='<span>'+recur_tasks[i].status+' '+( recur_tasks[i].planned ? recur_tasks[i].planned : 'No planificada aún')+'</span>';
+                tasksHtml += '<div class="activity-report"><a onclick="jump_to_date(this,'+recur_tasks[i].key+')"><h4>'+recur_tasks[i].name+'</h4>';
+                tasksHtml +='<span>'+recur_tasks[i].status+' '+( recur_tasks[i].planned ? recur_tasks[i].planned +'</span>';
                 tasksHtml += '<div class="activity-detail-report"><p>'+( recur_tasks[i].report ? recur_tasks[i].report : '' )+'</p>';
-                tasksHtml += '<p>'+( recur_tasks[i].area ? recur_tasks[i].area : '')+'</p></div>';
+                tasksHtml += '<p>'+( recur_tasks[i].area ? recur_tasks[i].area : '')+'</p></div></a></div>';
             };
             $('#report-activity-detail').html(tasksHtml);
+        }
+        function jump_to_date(selector, aday){
+          var day_str = aday.toString();
+          alert(day_str);
+          $( "#report-activity" ).datepicker("setDate", new Date( day_str.substring(0,4),day_str.substring(4,6),day_str.substring(6,7) )
+          );
+          $( "#report-activity" ).datepicker("option", "defaultDate", new Date( day_str.substring(0,4),day_str.substring(4,6),day_str.substring(6,7) )
+          );
+          $( ".activity-report" ).each(function() {
+            $( this ).removeClass( "selected" );
+          });
+          $(selector).parent('.activity-report').addClass('selected');
         }
     </script>
 [% END %]
