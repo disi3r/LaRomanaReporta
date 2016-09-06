@@ -37,8 +37,11 @@
 
     allow_creation = !c.cobrand.only_authed_can_create || (c.user && c.user.from_body);
 %]
-<div id="s-categories">
-  <h4>Filtrar reportes:</h4>
+<div id="s-categories" class="s-categories-maximized">
+  <div id="s-categories-toggle">
+    <div id="toggle-image" class="toggle-down" onclick="toggleCategories();">
+    </div>
+  </div>
 </div>
 [% IF allow_creation %]
 <form action="[% c.uri_for('/report/new') %]" method="post" name="mapForm" id="mapForm" enctype="multipart/form-data" class="validate">
@@ -103,12 +106,20 @@
 [% INCLUDE 'footer.html' %]
 <script type="text/javascript">
   function getCategoryGroups(){
-    $.getJSON( "/report/new/ajax?latitude=-34.906557&longitude=-56.199769&format=json", function( data ) {
+    var latitude = "-34.906557";
+    var longitude = "-56.199769";
+    if(fixmystreet){
+      latitude = fixmystreet.latitude;
+      longitude = fixmystreet.longitude;
+    }
+
+    $.getJSON( "/report/new/ajax?latitude="+latitude+"&longitude="+longitude+"&format=json", function( data ) {
       var categories = data.categories;
       $.each( categories, function( key, val ) {
         if(key!=-2){
           var name="";
           var icon = "./i/category/";
+          var color = "";
           $.each( val, function( key2, val2 ) {
             if(key2=="name"){
               name = val2;
@@ -116,9 +127,12 @@
             if(key2=="icon"){
               icon = icon + val2 + ".png";
             }
+            if(key2=="color"){
+              color = val2;
+            }
           });
           var group_id = key;
-          addCategoryFilter(name,group_id,icon);
+          addCategoryFilter(name,group_id,icon, color);
         }
       });
     })
@@ -132,10 +146,14 @@
       });
   }
 
-  function addCategoryFilter(name,group_id,icon){
-      var html = "<div class='category_filter' id='category_filter_" + group_id + "' onclick='selectCategoryGroup(\""+group_id+"\")'>";
+  function addCategoryFilter(name,group_id,icon,color){
+      /*var html = "<div class='category_filter' id='category_filter_" + group_id + "' onclick='selectCategoryGroup(\""+group_id+"\")'>";
       html = html + "<img class='filter_icon' src='."+icon+"'/>";
       html = html + "<h3>" + name + "</h3>";
+      html = html + "</div>";*/
+      var html = "<div style='background-color: "+color+"' class='category_filter' id='category_filter_" + group_id + "' onclick='selectCategoryGroup(\""+group_id+"\")'>";
+      //html = html + "<img class='filter_icon' src='."+icon+"'/>";
+      html = html + "<h4>" + name + "</h4>";
       html = html + "</div>";
       $("#s-categories").append(html);
   }
@@ -172,6 +190,18 @@
       }
     });
     fixmystreet.markers.refresh({force: true});
+  }
+
+  function toggleCategories(){
+    var actualClass = $("#s-categories").attr("class");
+    if(actualClass=="s-categories-maximized"){
+      $("#s-categories").removeClass().addClass("s-categories-minimized");
+      $("#toggle-image").removeClass().addClass("toggle-up");
+    }else{
+      $("#s-categories").removeClass().addClass("s-categories-maximized");
+      $("#toggle-image").removeClass().addClass("toggle-down");
+    }
+
   }
 
   getCategoryGroups();

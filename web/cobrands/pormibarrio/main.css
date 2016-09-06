@@ -2797,44 +2797,69 @@ tr.noDeadLine{
 }
 
 #s-categories{
-	background-color: rgba(0, 0, 0, 0.7);
-	border-radius: 25px 25px 25px 25px;
-	-moz-border-radius: 25px 25px 25px 25px;
-	-webkit-border-radius: 25px 25px 25px 25px;
-	border: 1px solid #000000;
-	min-width: 410px;
-	max-width: 50%;
-	min-height: 80px;
-	position: relative;
-	top: 60px;
-	left: 90%;
-	margin-left: 35%;
-	margin-top: 5%;
+	background-color: #121e2b;
+	position: absolute;
+	bottom: 0;
+	left: 125%;
+	-webkit-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+	-moz-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+	-o-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+	transition:width 300ms ease-in-out, height 300ms ease-in-out;
 }
 
-#s-categories h4{
-	font-size: 12px;
+.s-categories-maximized{
+	width: 410px;
+	height: 115px;
+}
+
+.s-categories-minimized{
+	width: 410px;
+	height: 15px;
+}
+
+#s-categories-toggle{
+	height: 10px;
+	width: 410px;
+}
+
+#toggle-image{
+	width: 22px;
+	height: 8px;
+	margin: 5px auto 0 auto;
+	cursor: pointer;
+}
+
+.toggle-down{
+	background: url(images/toggle-down.png) no-repeat center center;
+}
+
+.toggle-up{
+	background: url(images/toggle-up.png) no-repeat center center;
+}
+
+.category_filter h4{
+	font-size: 16px;
 	color: #FFFFFF;
-	margin-left: 20px;
+	text-transform: uppercase;
+	margin-left: 10px;
+	margin-right: 10px;
 	margin-top: 5px;
+	margin-bottom: 5px;
+	text-align: center;
 }
 
 .category_filter{
 	float: left;
-	margin-left: 20px;
+	margin-left: 5px;
+	margin-right: 0px;
 	cursor: pointer;
 	margin-top: 5px;
 	text-align:center;
-	background-color: transparent;
 }
 
 .category_filter img{
 }
 
-.category_filter h3{
-	font-size: 12px;
-	color: #FFFFFF;
-}
 
 .filter_icon{
 	width: 35px;
