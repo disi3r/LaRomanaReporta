@@ -899,8 +899,8 @@ sub update_tasks {
           next unless $task_id;
           my $options;
           if ( ref $task_req->{task_result} ne ref {} || ref $task_req->{task_report} ne ref {} ){
-            $options->{status} = $task_req->{task_result};
-            $options->{report} = $task_req->{task_report};
+            $options->{status} = $task_req->{task_result} if ref $task_req->{task_result} ne ref {};
+            $options->{report} = $task_req->{task_report} if ref $task_req->{task_report} ne ref {};
             $options->{planned} = $task_req->{task_datetime};
           }
           else {

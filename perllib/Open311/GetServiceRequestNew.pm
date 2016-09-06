@@ -75,33 +75,24 @@ sub get_problems {
             next unless $request_id;
             #Check that problem has not been submitted yet
             my $report = FixMyStreet::App->model('DB::Problem')->find( {external_id => $request_id} ) || 0;
-            my @tasks;
             if (!$report){
-              print "\nCreate Report\n";
-                #create the report
-                my $prequest = $open311->get_service_custom_meta_info($request_id);
-                if ( ref $prequest eq 'HASH' && exists $prequest->{request} ){
-                    my $report = $self->load_data($prequest->{request}, $request_id);
-                    if ($report){
-                        # save the report;
-                        $report->insert();
-                        @tasks = values $prequest->{request}{request_completed_tasks};
-                        push @tasks, values $prequest->{request}{request_pending_tasks};
-                        print "\nRequest Tasks: ".Dumper(@tasks)."\n";
-                        $report->update_tasks(@tasks);
-                    }
-                    else{
-                        print 'DATA NOT FOUND';
-                    }
-                }
-            }
-            else {
               my $prequest = $open311->get_service_custom_meta_info($request_id);
               if ( ref $prequest eq 'HASH' && exists $prequest->{request} ){
-                @tasks = values $prequest->{request}{request_completed_tasks};
-                push @tasks, values $prequest->{request}{request_pending_tasks};
-                print "\nRequest Update Tasks: ".Dumper(@tasks)."\n";
-                $report->update_tasks(@tasks);
+                print "\nCreate Report\n";
+                #create the report
+                my $report = $self->load_data($prequest->{request}, $request_id);
+                if ($report){
+                    # save the report;
+                    $report->insert();
+                    my @tasks;
+                    @tasks = values $prequest->{request}{request_completed_tasks};
+                    push @tasks, values $prequest->{request}{request_pending_tasks};
+                    print "\nRequest Tasks: ".Dumper(@tasks)."\n";
+                    $report->update_tasks(@tasks);
+                }
+                else{
+                    print 'DATA NOT FOUND';
+                }
               }
             }
         }
@@ -146,7 +137,7 @@ sub load_data {
                 state     =>  $self->map_state( lc($prequest->{status}) ),
                 used_map  => 1,
                 anonymous => 0,
-                category  => decode_entities($prequest->{service_name}) || 'Levante basurales',
+                category  => decode_entities($prequest->{service_name}),
                 areas     => '',
                 cobrand   => 'pormibarrio',
                 lang      => 'es',

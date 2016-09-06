@@ -3,6 +3,7 @@ package Open311::GetServiceRequestUpdates;
 use Moose;
 use Open311;
 use FixMyStreet::App;
+use HTML::Entities;
 use DateTime::Format::W3CDTF;
 
 has system_user => ( is => 'rw' );
@@ -20,7 +21,6 @@ sub fetch {
     my $bodies = FixMyStreet::App->model('DB::Body')->search(
         {
             send_method     => 'Open311',
-            send_comments   => 1,
             comment_user_id => { '!=', undef },
             endpoint        => { '!=', '' },
         }
@@ -87,12 +87,7 @@ sub update_comments {
         next unless $request_id;
 
         my $problem;
-        my $criteria = {
-            external_id => $request_id,
-            # XXX This assumes that areas will actually only be one area.
-            #bodies_str => { like => '%' . join(",", keys %{$body_details->{areas}}) . '%' },
-        };
-        $problem = FixMyStreet::App->model('DB::Problem')->search( $criteria );
+        $problem = FixMyStreet::App->model('DB::Problem')->search( {external_id => $request_id} );
         if (my $p = $problem->first) {
             my $c = $p->comments->search( { external_id => $request->{update_id} } );
 
@@ -154,14 +149,13 @@ sub update_comments {
     return 1;
 }
 
-sub fetch_tasks {
+sub fetch_details {
     use Data::Dumper;
     my $self = shift;
 
     my $bodies = FixMyStreet::App->model('DB::Body')->search(
         {
             send_method     => 'Open311',
-            send_comments   => 1,
             comment_user_id => { '!=', undef },
             endpoint        => { '!=', '' },
         }
@@ -177,23 +171,46 @@ sub fetch_tasks {
         $self->suppress_alerts( $body->suppress_alerts );
         $self->system_user( $body->comment_user );
         #Get external_ids for looping
+        print 'ARRANCA CON BODY '.$body->id;
         my %where;
         if ( !$self->last_update_council ){
-            $where{external_id} = 'is not null';
-            $where{bodies_str} = { '=', "'".$body->id."'" };
-            $where{state} = { 'not in', "'%fixed%', 'hidden', 'closed'" };
+            $where{external_id} = \'is not null';
+            $where{bodies_str} = { '=', $body->id };
+            $where{state} = { 'not in', ['%fixed%', 'hidden', 'closed'] };
         }
-        print 'ARRANCA CON BODY ';
-        print $body->id;
         my @problems = FixMyStreet::App->model('DB::Problem')->search( \%where );
-        print Dumper(@problems);
-        print 'NADA?';
-        foreach my $problem (@problems){
-            print "\n PROBLEM \n";
-            print Dumper($problem->get_columns());
+        print "\nPROBLEMS: \n";
+        for my $problem ( @problems ){
+          print "\nPROBLEMS: ";
+          print $problem->external_id;
         }
+        print 'NADA?';
+        exit();
+        #foreach my $problem (@problems){
+        my $p = FixMyStreet::App->model('DB::Problem')->search( {external_id => '2357316'} ) || 0;
+        my $problem = $p->first;
+        print Dumper($problem->external_id);
+          my $prequest = $o->get_service_custom_meta_info( $problem->external_id );
+          if ( ref $prequest eq 'HASH' && exists $prequest->{request} ){
+            #populate update fields ? cobrand!
+            my $options;
+            $options->{postcode} = $prequest->{request}{address} if $problem->postcode ne $prequest->{request}{address};
+            $options->{state} = $self->map_state( lc($prequest->{request}{status}) ) if $problem->state ne $self->map_state( lc($prequest->{request}{status}) );
+            $options->{category} = decode_entities($prequest->{request}{service_name}) if $problem->category ne decode_entities($prequest->{request}{service_name});
+            $options->{cobrand_data} = $prequest->{request}{city_council} if $problem->cobrand_data ne $prequest->{request}{city_council};
+            $options->{subcategory} = $prequest->{request}{service_area} if $problem->subcategory ne $prequest->{request}{service_area};
+            #If there are changes replicate
+            if ( $options ){
+              print "\n A UPDATE PROBLEM \n";
+              $problem->update($options);
+            }
+            my @tasks = values $prequest->{request}{request_completed_tasks};
+            push @tasks, values $prequest->{request}{request_pending_tasks};
+            print "\nRequest Tasks: ".Dumper(@tasks)."\n";
+            $problem->update_tasks(@tasks);
+          }
+        #}
     }
-
 }
 
 sub map_state {
@@ -209,7 +226,7 @@ sub map_state {
         'no further action'           => 'unable to fix',
         'open'                        => 'confirmed',
         'closed'                      => 'fixed - council',
-        'ingresado'                   => 'in progress',     
+        'ingresado'                   => 'in progress',
         'anulado'                     => 'unable to fix',
         'en proceso'                  => 'in progress',
         'finalizado'                  => 'fixed - council',

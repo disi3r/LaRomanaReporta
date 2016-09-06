@@ -132,9 +132,10 @@
                 };
             }
             var tasksHtml = '';
+            console.log(recur_tasks);
             for (var i = recur_tasks.length - 1; i >= 0; i--) {
                 tasksHtml += '<div class="activity-report"><a onclick="jump_to_date(this,'+recur_tasks[i].key+')"><h4>'+recur_tasks[i].name+'</h4>';
-                tasksHtml +='<span>'+recur_tasks[i].status+' '+( recur_tasks[i].planned ? recur_tasks[i].planned +'</span>';
+                tasksHtml +='<span>'+recur_tasks[i].status+' '+( recur_tasks[i].planned ? recur_tasks[i].planned : recur_tasks[i].created )+'</span>';
                 tasksHtml += '<div class="activity-detail-report"><p>'+( recur_tasks[i].report ? recur_tasks[i].report : '' )+'</p>';
                 tasksHtml += '<p>'+( recur_tasks[i].area ? recur_tasks[i].area : '')+'</p></div></a></div>';
             };

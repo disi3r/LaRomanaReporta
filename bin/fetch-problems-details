@@ -15,8 +15,8 @@ use Open311;
 
 print 'A FETCH DETAILS';
 
-my $tasks = Open311::GetServiceRequestUpdates->new(
+my $service = Open311::GetServiceRequestUpdates->new(
     verbose => 1,
 );
 
-$tasks->fetch_tasks;
+$service->fetch_details;
