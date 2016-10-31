@@ -2801,6 +2801,7 @@ tr.noDeadLine{
 	position: fixed;
 	top: 55px;
 	left: 490px;
+	padding-bottom: 5px;
 	width: -webkit-calc(100% - 490px);
 	width:    -moz-calc(100% - 490px);
 	width:         calc(100% - 490px);
