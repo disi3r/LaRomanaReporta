@@ -408,30 +408,41 @@ function geolocate(timeout, zoom, is_list ){
 	if (!is_list){
 		list = '&list=0';
 	}
-	setTimeout(function(){location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom+ list }, timeout);
+	setTimeout(function(){
+		console.log('Entra a TIMEOUT: '+window.location.hostname);
+		if ( window.location.hostname == 'rivera.pormibarrio.uy'){
+			location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
+		}
+		else if ( window.location.hostname == 'maldonado.pormibarrio.uy'){
+			location.href = '/around?latitude=-34.9145297;longitude=-54.9574799&zoom=' + zoom + list;
+		}
+		else {
+			location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom+ list;
+		}
+	}, timeout);
 	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
-    $('.overlay').show();
+  $('.overlay').show();
+	console.log('HOST'+window.location.hostname);
 	if (geo_position_js.init()) {
 	    console.log('Va a init');
 	    geo_position_js.getCurrentPosition(function(pos) {
 	        console.log('Get current');
 	        var latitude = pos.coords.latitude;
 	        var longitude = pos.coords.longitude;
-	        //Redirigimos si esta fuera de montevideo
-	        if ( latitude < -35 || latitude > -34.6695163){
-	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
-	        }
-	        else if (longitude > -56.168270 || longitude < -56.4350581){
-	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
-	        }
-	        else {
-	        	location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
-	        }
+	        location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
 	    },
 	    function(err) {
 	        $('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.');
-		    	$('#loader_throbber').append('<br/>Cargando Montevideo por defecto.');
-	            location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
+					console.log('Entra a ERROR: '+window.location.hostname);
+					if ( window.location.hostname == 'rivera.pormibarrio.uy'){
+						location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
+					}
+					else if ( window.location.hostname == 'maldonado.pormibarrio.uy'){
+						location.href = '/around?latitude=-34.9145297;longitude=-54.9574799&zoom=' + zoom + list;
+					}
+					else {
+	        	location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
+					}
 	    },
 	    {
 	        enableHighAccuracy: true,
@@ -600,4 +611,107 @@ function form_category_group_onchange() {
 		$("#form_category").html(options);
 
 	}
+}
+
+//FILTROS POR CATEGORIAS
+function getCategoryGroups(){
+	var latitude = "-34.906557";
+	var longitude = "-56.199769";
+	if(fixmystreet){
+		latitude = fixmystreet.latitude;
+		longitude = fixmystreet.longitude;
+	}
+
+	$.getJSON( "/report/new/ajax?latitude="+latitude+"&longitude="+longitude+"&format=json", function( data ) {
+		var categories = data.categories;
+		$.each( categories, function( key, val ) {
+			if(key!=-2){
+				var name="";
+				var icon = "./i/category/";
+				var color = "";
+				$.each( val, function( key2, val2 ) {
+					if(key2=="name"){
+						name = val2;
+					}
+					if(key2=="icon"){
+						icon = icon + val2 + ".png";
+					}
+					if(key2=="color"){
+						color = val2;
+					}
+				});
+				var group_id = key;
+				addCategoryFilter(name,group_id,icon, color);
+			}
+		});
+	})
+		.done(function() {
+		})
+		.fail(function() {
+			//console.log( "error" );
+		})
+		.always(function() {
+			//console.log( "complete" );
+		});
+}
+
+function addCategoryFilter(name,group_id,icon,color){
+		/*var html = "<div class='category_filter' id='category_filter_" + group_id + "' onclick='selectCategoryGroup(\""+group_id+"\")'>";
+		html = html + "<img class='filter_icon' src='."+icon+"'/>";
+		html = html + "<h3>" + name + "</h3>";
+		html = html + "</div>";*/
+		var html = "<div style='background-color: "+color+"' class='category_filter' id='category_filter_" + group_id + "' onclick='selectCategoryGroup(\""+group_id+"\")'>";
+		//html = html + "<img class='filter_icon' src='."+icon+"'/>";
+		html = html + "<h4>" + name + "</h4>";
+		html = html + "</div>";
+		$("#categories-filters").append(html);
+}
+
+function selectCategoryGroup(id){
+	if(!selectedCategories){
+		selectedCategories = new Array();
+	}
+	var filter = document.getElementById("category_filter_"+id);
+	/*if(filter.style.backgroundColor == "transparent" || filter.style.backgroundColor == ""){
+		filter.style.backgroundColor = "#000000";
+		selectedCategories.push(id);
+	}else{
+		filter.style.backgroundColor = "transparent";*/
+	if($("#category_filter_"+id).attr("class") == "category_filter"){
+		$("#category_filter_"+id).attr("class","category_filter_selected");
+		selectedCategories.push(id);
+	}else{
+		$("#category_filter_"+id).attr("class","category_filter");
+		var newList = new Array();
+		selectedCategories.forEach(function(element,index,array){
+			if(element!=id){
+				newList.push(element);
+			}
+		});
+		selectedCategories = newList;
+	}
+	var strCats = selectedCategories.join(',');
+	if(!strCats){
+		strCats = "all";
+	}
+	fixmystreet.map.layers.forEach(function(element,index,array){
+		if(element.options.protocol){
+			element.options.protocol.params.categories = strCats;
+		}
+	});
+	fixmystreet.markers.refresh({force: true});
+}
+
+function toggleCategories(){
+	var actualClass = $("#s-categories").attr("class");
+	if(actualClass=="s-categories-maximized"){
+		$("#s-categories").removeClass().addClass("s-categories-minimized");
+		$("#toggle-image").removeClass().addClass("toggle-down");
+		$("#categories-filters").css('display','none');
+	}else{
+		$("#s-categories").removeClass().addClass("s-categories-maximized");
+		$("#toggle-image").removeClass().addClass("toggle-up");
+		$("#categories-filters").css('display','block');
+	}
+
 }
