@@ -205,11 +205,16 @@ sub geocode_postcode {
 	    	$c->log->debug(qq/GEOPOSTCODE SUCCESS/);
 
 	    	if ( $last ){
+					#$c->log->debug("eNTRA EN LAST");
 	    		my $addr_content = JSON->new->utf8->allow_nonref->decode($res->decoded_content);
-	    		$c->log->debug(Dumper($addr_content->{geom}->{coordinates}));
+					#$c->log->debug($addr_content);
+					#$c->log->debug(Dumper($addr_content));
+	    		#$c->log->debug(Dumper($addr_content->{geoJSON}->{coordinates}));
 	    		#transformar coordenadas
-		    	$response->{latitude} = $addr_content->{geom}->{coordinates}[0];
-		    	$response->{longitude} = $addr_content->{geom}->{coordinates}[1];
+		    	$response->{latitude} = $addr_content->{geoJSON}->{coordinates}[0];
+		    	$response->{longitude} = $addr_content->{geoJSON}->{coordinates}[1];
+					#$c->log->debug(Dumper($response));
+					return $response;
 		    }
 		    else {
 		    	my $addr_content = JSON->new->utf8->allow_nonref->decode($res->decoded_content);
