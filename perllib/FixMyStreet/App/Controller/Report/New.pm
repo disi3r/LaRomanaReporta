@@ -15,6 +15,7 @@ use Utils;
 use mySociety::EmailUtil;
 use JSON;
 use utf8;
+use Data::Dumper;
 
 =head1 NAME
 
@@ -81,6 +82,7 @@ use constant COUNCIL_ID_BROMLEY => 2482;
 
 sub report_new : Path : Args(0) {
     my ( $self, $c ) = @_;
+    $c->log->debug("ENTRO AL REPORT_NEW");
 
     #my $key = "new_report:$site_key";
     #my $result = Memcached::get($key);
@@ -96,10 +98,16 @@ sub report_new : Path : Args(0) {
 
     # create the report - loading a partial if available
     $c->forward('initialize_report');
+    my $report = $c->stash->{report};
+    my $title = $c->req->param("title");
+
 
     # work out the location for this report and do some checks
     return $c->forward('redirect_to_around')
       unless $c->forward('determine_location');
+
+    #$c->log->debug("Key is " . $key);
+    #$c->log->debug("Report id is " . $report->id);
 
     # create a problem from the submitted details
     $c->stash->{template} = "report/new/fill_in_details.html";
@@ -114,9 +122,17 @@ sub report_new : Path : Args(0) {
     $c->forward('process_report');
     $c->forward('/photo/process_photo');
 
-	return unless $c->forward('check_for_errors');
-
-    $c->forward('save_user_and_report');
+    return unless $c->forward('check_for_errors');
+    my $key = $report->user_id . "|" . $title . "|" . $c->stash->{latitude} . "|" . $c->stash->{longitude};
+    my $result = Memcached::get($key);
+    #$c->log->debug("Sera reporte nuevo?");
+    unless ($result) {
+        #$c->log->debug("Nuevo reporte. Key es " . $key);
+        $c->forward('save_user_and_report');
+        $result = 1;
+        Memcached::set($key, $result, 30000);
+        #$c->forward('redirect_or_confirm_creation');
+    }
     $c->forward('redirect_or_confirm_creation');
 }
 
@@ -136,6 +152,8 @@ sub report_new_ajax : Path('mobile') : Args(0) {
         $c->forward('send_json_response');
         return 1;
     }
+    my $report = $c->stash->{report};
+    my $title = $c->req->param("title");
 
     $c->forward('setup_categories_and_bodies');
     $c->forward('process_user');
@@ -150,29 +168,40 @@ sub report_new_ajax : Path('mobile') : Args(0) {
         return 1;
     }
 
-    $c->forward('save_user_and_report');
+    my $key = $report->user_id . "|" . $title . "|" . $c->stash->{latitude} . "|" . $c->stash->{longitude};
+    my $result = Memcached::get($key);
+    #$c->log->debug("Sera reporte nuevo?");
+    unless ($result) {
+        #$c->log->debug("Nuevo reporte. Key es " . $key);
+        $c->forward('save_user_and_report');
 
-    my $report = $c->stash->{report};
-    my $data = $c->stash->{token_data} || {};
-    my $token = $c->model("DB::Token")->create( {
-        scope => 'problem',
-        data => {
-            %$data,
-            id => $report->id
-        }
-    } );
-    if ( $report->confirmed ) {
-        $c->stash->{ json_response } = { success => 1, report => $report->id };
-        $c->stash->{ json_response }->{result} = 1;
-    } else {
-        $c->stash->{token_url} = $c->uri_for_email( '/P', $token->token );
-        $c->send_email( 'problem-confirm.txt', {
-            to => [ $report->name ? [ $report->user->email, $report->name ] : $report->user->email ],
+        my $report = $c->stash->{report};
+        my $data = $c->stash->{token_data} || {};
+        my $token = $c->model("DB::Token")->create( {
+            scope => 'problem',
+            data => {
+                %$data,
+                id => $report->id
+            }
         } );
-        $c->stash->{ json_response } = { success => 1 };
-        $c->stash->{ json_response }->{result} = 1;
-    }
+        if ( $report->confirmed ) {
+            $c->stash->{ json_response } = { success => 1, report => $report->id };
+            $c->stash->{ json_response }->{result} = 1;
+        } else {
+            $c->stash->{token_url} = $c->uri_for_email( '/P', $token->token );
+            $c->send_email( 'problem-confirm.txt', {
+                to => [ $report->name ? [ $report->user->email, $report->name ] : $report->user->email ],
+            } );
+            $c->stash->{ json_response } = { success => 1 };
+            $c->stash->{ json_response }->{result} = 1;
+        }
 
+        $result = 1;
+        Memcached::set($key, $result, 30000);
+        $c->forward('send_json_response');
+    }
+    $c->stash->{ json_response } = { success => 0, error => "Reiteración de reporte ya ingresado"};
+    $c->stash->{ json_response }->{result} = 1;
     $c->forward('send_json_response');
 }
 
