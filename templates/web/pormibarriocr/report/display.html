@@ -3,6 +3,7 @@
     PROCESS "maps/${map.type}.html";
 
     problem_title = 'Problema: ' _ problem.title_safe;
+    body_header_template = 'report/body_print_header_' _ problem.bodies_str _ '.html';
     INCLUDE 'header.html'
         title = problem_title
         rss = [ 'Actualizaciones de este problema, PorMiBarrio', "/rss/$problem.id" ]
@@ -20,7 +21,7 @@
 		<!--REPORT-->
 		<div class="report visible-print-block" >
 			<div id="update-display" class="info-report scrolled-report">
-                [% INCLUDE 'report/body_print_header_' . problem.bodies_str . '.html' %]
+                [% INCLUDE body_header_template %]
                 <div id="print-header">
                     <table align="center" style="width: 95%; height: 180px; margin: 0 auto 0 auto;">
                         <tbody>
