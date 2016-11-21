@@ -454,13 +454,13 @@ function geolocate(timeout, zoom, is_list){
     	list = '&list=1';
     }
 
-	//setTimeout(
-	//	function(){
+	setTimeout(
+		function(){
 			// Si no se puede GeoLocalizar
 		    // location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list
-		    // alert("No logramos identificar automaticamente su municipalidad. Por favor escoga una de las opciones para continuar.");
-	//	}, 2500
-	//);
+		     alert("Por favor escoga una municipalidad del menu en la parte superior izquierda de la pantalla.");
+		}, 2500
+	);
 
 	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
     $('.overlay').show();0
@@ -476,8 +476,9 @@ function geolocate(timeout, zoom, is_list){
 	    	$('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.<br/>');
 	    	//$('#loader_throbber').append('<br/>Cargando Municipalidad de Palmares por defecto.');
 	    	$('#loader_throbber').append('<br/><h1>Por favor escoga una municipalidad</h1><br/>');
-	    	$('#loader_throbber').append('<button type="button" onclick="redirectFlowToLocalGov(\'palmares\',\''+ zoom + '\',\'' + list + '\')">Palmares</button>');
-	    	$('#loader_throbber').append('<button type="button" onclick="redirectFlowToLocalGov(\'osa\',\''+ zoom + '\',\'' + list + '\')">Osa</button>');
+	    	$('#loader_throbber').append('<br/><h1>(en el menu de la parte superior izquierda)</h1><br/>');
+	    	//$('#loader_throbber').append('<button type="button" onclick="redirectFlowToLocalGov(\'palmares\',\''+ zoom + '\',\'' + list + '\')">Palmares</button>');
+	    	//$('#loader_throbber').append('<button type="button" onclick="redirectFlowToLocalGov(\'osa\',\''+ zoom + '\',\'' + list + '\')">Osa</button>');
 	    	
 	    },
 	    {
@@ -488,17 +489,18 @@ function geolocate(timeout, zoom, is_list){
 	//$('#loader_throbber').css("display","none");
 }
 
-
-function redirectFlowToLocalGov(pageName, zoom, list) {
-	switch (pageName) {
-		case "palmares" : 
-			location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list;
-			break;
-		case "osa" :
-			location.href = '/around?latitude=8.9792135;longitude=-83.5373015&zoom=' + zoom + list;
-			break;
-	}
-}
+// Código temporal, puede ser borrado 
+// Prueba para fallo de auto-geolocalización
+//function redirectFlowToLocalGov(pageName, zoom, list) {
+//	switch (pageName) {
+//		case "palmares" : 
+//			location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list;
+//			break;
+//		case "osa" :
+//			location.href = '/around?latitude=8.9792135;longitude=-83.5373015&zoom=' + zoom + list;
+//			break;
+//	}
+//}
 
 //RESPONSIVE TEXT
 $('.responsive').responsiveText();
