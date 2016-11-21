@@ -448,11 +448,20 @@ function report_list(timeout, zoom){
 }
 
 function geolocate(timeout, zoom, is_list){
+
 	var list = '&list=0';
 	if (typeof is_list != 'undefined'){
     	list = '&list=1';
     }
-	setTimeout(function(){location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list}, 2500);
+
+	//setTimeout(
+	//	function(){
+			// Si no se puede GeoLocalizar
+		    // location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list
+		    // alert("No logramos identificar automaticamente su municipalidad. Por favor escoga una de las opciones para continuar.");
+	//	}, 2500
+	//);
+
 	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
     $('.overlay').show();0
 	if (geo_position_js.init()) {
@@ -464,8 +473,12 @@ function geolocate(timeout, zoom, is_list){
 	        location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
 	    },
 	    function(err) {
-	    	$('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.');
-	    	$('#loader_throbber').append('<br/>Cargando Municipalidad de Palmares por defecto.');
+	    	$('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.<br/>');
+	    	//$('#loader_throbber').append('<br/>Cargando Municipalidad de Palmares por defecto.');
+	    	$('#loader_throbber').append('<br/><h1>Por favor escoga una municipalidad</h1><br/>');
+	    	$('#loader_throbber').append('<button type="button" onclick="redirectFlowToLocalGov(\'palmares\',\''+ zoom + '\',\'' + list + '\')">Palmares</button>');
+	    	$('#loader_throbber').append('<button type="button" onclick="redirectFlowToLocalGov(\'osa\',\''+ zoom + '\',\'' + list + '\')">Osa</button>');
+	    	
 	    },
 	    {
 	        enableHighAccuracy: true,
@@ -473,6 +486,18 @@ function geolocate(timeout, zoom, is_list){
 	    });
 	}
 	//$('#loader_throbber').css("display","none");
+}
+
+
+function redirectFlowToLocalGov(pageName, zoom, list) {
+	switch (pageName) {
+		case "palmares" : 
+			location.href = '/around?latitude=10.056;longitude=-84.433&zoom=' + zoom + list;
+			break;
+		case "osa" :
+			location.href = '/around?latitude=8.9792135;longitude=-83.5373015&zoom=' + zoom + list;
+			break;
+	}
 }
 
 //RESPONSIVE TEXT
