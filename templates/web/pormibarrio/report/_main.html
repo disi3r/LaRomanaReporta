@@ -41,13 +41,30 @@
     <span class="report-state">[% state_t %]</span>
     <span class="status-report-im">Su reclamo en la IM:
         [% IF problem.can_display_external_id %]
-            <a target="_blank" href="http://www.montevideo.gub.uy/tramites/aplicacion/consulta-de-reclamos?numReclamo=[% problem.can_display_external_id | html %]" > [% problem.can_display_external_id | html %] </a>
+            [% IF mobile %]
+              <a ng-click="openWebsite('http://www.montevideo.gub.uy/tramites/aplicacion/consulta-de-reclamos?numReclamo=[% problem.can_display_external_id | html %]')"> [% problem.can_display_external_id | html %] </a>
+            [% ELSE %]
+              <a target="_blank" href="http://www.montevideo.gub.uy/tramites/aplicacion/consulta-de-reclamos?numReclamo=[% problem.can_display_external_id | html %]" > [% problem.can_display_external_id | html %] </a>
+            [% END %]
         [% ELSE %]
             No hemos podido ingresar el reclamo aún
         [% END %]
     </span>
 </div>
-
+[% IF mobile %]
+  <ul class="actions">
+      <li><button ng-click="subscribe()" type="button" class="follow-report">[% loc('Get updates' ) %]</button></li>
+      [% IF c.user_exists AND c.cobrand.users_can_hide AND ( c.user.belongs_to_body( c.cobrand.council_id ) OR c.user.id == problem.user_id ) %]
+          <li>
+              <button ng-click="hide()" type="button" class="reportar-hide">Ocultar</button>
+          </li>
+      [% ELSE %]
+          <li>
+              <button ng-click="abuse()" type="button" class="reportar-abuso">[% loc('Report abuse') %]</button>
+          </li>
+      [% END %]
+  </ul>
+[% END %]
 [% IF tasks AND !mobile %]
     <div class="tasks clearfix">
         <h3>Actividad</h3>
