@@ -2891,3 +2891,22 @@ tr.noDeadLine{
 #categories-filters{
 	overflow: hidden;
 }
+
+.footer-intro-table{
+	margin: 0 auto;
+}
+
+.footer-intro-shared{
+	margin-left: 70px;
+}
+
+.caf-logo{
+	margin: 20px;
+}
+.content-vertical .caf-logo{
+	margin: 20px 0;
+}
+
+.data-logo{
+	margin: 4px;
+}

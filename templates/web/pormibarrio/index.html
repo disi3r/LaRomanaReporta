@@ -21,15 +21,15 @@ function locate(){
             else {
                 location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=4';
             }
-        }, 
+        },
         function(err) {
             location.href = '/around?latitude=-34.906557;longitude=-56.199769';
             /*console.log('Entra a err');
             if (err.code == 1) { // User said no
                 location.href = '/around?latitude=-34.906557;longitude=-56.199769';
-            } 
-            else { 
-                
+            }
+            else {
+
                 if (err.code == 1) { // User said no
                     $link.html(translation_strings.geolocation_declined);
                 } else if (err.code == 2) { // No position
@@ -40,7 +40,7 @@ function locate(){
                     $link.html(translation_strings.geolocation_unknown);
                 }
             }*/
-        }, 
+        },
         {
             enableHighAccuracy: true,
             timeout: 2500
@@ -61,7 +61,7 @@ setTimeout(
         overlayDiv.innerHTML = '<h3>Necesitas más tiempo para leer las instrucciones?</h3><p>En caso de ya estar seguro has click en la barra superior del navegador para localizarte. Si no estás en Montevideo pero quieres ver la plataforma has click en AL MAPA el cual te dirigirá a la Plaza independencia, de lo contrario has click en CERRAR, para segiur leyendo la página actual.</p>';
         geoOverlay.appendChild(overlayDiv);
 
-        var overlayClose=document.createElement("BUTTON");  
+        var overlayClose=document.createElement("BUTTON");
         overlayClose.id = 'overlay-close';
         overlayClose.onclick = function(){location.reload();};
         overlayClose.innerHTML = 'Cerrar';
@@ -89,10 +89,9 @@ function video(){
         <div class="c-intro">
             <h1><img src="/cobrands/pormibarrio/images/logo-intro.png" alt="Por mi Barrio"></h1>
             <h2 class="responsive" data-compression="10" data-min="14" data-max="40">Mejorando la ciudad, contigo.</h2>
-            <p>Esta es una plataforma para hacer reclamos por roturas y problemas que veas en la ciudad junto a 
-            vecinos y vecinas, manteniéndote al tanto del proceso de reparación. Lo llevamos adelante desde DATA 
-            (una organización de la sociedad civil) usando la plataforma de servicios abiertos de la Intendencia 
-            de Montevideo y con el apoyo de la Defensoría del Vecino.</p>
+            <p>Esta es una plataforma para hacer reclamos por roturas y problemas que veas en la ciudad junto a
+            vecinos y vecinas, manteniéndote al tanto del proceso de reparación. Lo llevamos adelante desde DATA
+            (una organización de la sociedad civil) en conjunto con gobernos locales, defensorías y vecinos de Uruguay</p>
             <div class="c-buttons-intro">
                 <a href="#" onclick="video()" class="btn btn-reportar btn-intro">Como funciona</a>
                 <a href="#" onclick="report(2500, 4)" class="btn btn-green btn-intro">Comenzar ahora</a>
@@ -100,13 +99,12 @@ function video(){
             <div class="steps">
                 <div class="step step-one">
                     <img src="/cobrands/pormibarrio/images/intro-step-01.png" alt=""/>
-                    <h3>1.Reportá un problema en el mapa o 
+                    <h3>1.Reportá un problema en el mapa o
                     sumate a uno ya creado.</h3>
                 </div>
                 <div class="step step-two">
                     <img src="/cobrands/pormibarrio/images/intro-step-02.png" alt=""/>
-                    <h3>2. Por Mi Barrio lo ingresa al
-                    Sistema Único de Reclamos de la IMM.</h3>
+                    <h3>2. Por Mi Barrio lo envía al organismo que corresponda.</h3>
                 </div>
                 <div class="step step-three">
                     <img src="/cobrands/pormibarrio/images/intro-step-03.png" alt=""/>
@@ -119,12 +117,31 @@ function video(){
         <!--/main container-->
 
         <!--FOOTER-->
-        <div class="footer-intro"> 
-            <img src="/cobrands/pormibarrio/images/data.png" alt="DATA"/>     
-            <a href="/faq" class="know-more">Conoce más sobre PorMiBarrio</a>
+
+        <div class="footer-intro">
+          <table class="footer-intro-table">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="footer-intro-shared">
+                    <label>Un proyecto de</label>
+                    <img class="data-logo" src="/cobrands/pormibarrio/images/data.png" alt="DATA"/>
+                </div>
+              </td>
+                <td>
+                  <div class="footer-intro-shared">
+                      <label>Con el apoyo de</label>
+                      <img src="/cobrands/pormibarrio/images/Avina.png" alt="Avina"/>
+                      <img class="caf-logo" src="/cobrands/pormibarrio/images/Caf.png" alt="CAF"/>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+            <a href="/faq" class="know-more">Conocé más sobre PorMiBarrio</a>
             <p class="photo-credit">Fotografía: Gonzalo Díaz Fornaro</p>
         </div>
-        
+
         <!--end footer-->
 
     [% IF error %]
