@@ -5,6 +5,8 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller'; }
 use Data::Dumper;
 use Open311;
+use JSON;
+use utf8;
 
 =head1 NAME
 
@@ -271,6 +273,61 @@ sub delete :Local :Args(1) {
     } );
 
     return $c->res->redirect($uri);
+}
+
+sub delete_ajax : Path('delete_ajax') :Args(1) {
+    my ( $self, $c, $id ) = @_;
+
+    $c->forward( 'load_problem_or_display_error', [ $id ] );
+    my $p = $c->stash->{problem};
+
+    if($c->user_exists){
+    }else{
+      $c->stash->{ json_response } = { errors => _('El usuario no existe') };
+      $c->stash->{ json_response } .= { message => _('El usuario no existe'), result => 0 };
+      $c->forward('send_json_response');
+    }
+
+    my $body = $c->user->obj->from_body;
+
+    if ($body){
+      if($p->bodies->{$body->id}){
+      }else{
+        $c->stash->{ json_response } = { errors => _('Hubo un error al validar el reporte contra el municipio del usuario') };
+        $c->stash->{ json_response } .= { message => _('Hubo un error al validar el reporte contra el municipio del usuario'), result => 0 };
+        $c->forward('send_json_response');
+      }
+    }
+    if($c->user->id != $p->user_id){
+      $c->stash->{ json_response } = { errors => _('Este reporte no pertenece al usuario') };
+      $c->stash->{ json_response } .= { message => _('Este reporte no pertenece al usuario'), result => 0 };
+      $c->forward('send_json_response');
+    }
+
+    $p->state('hidden');
+    $p->lastupdate( \'ms_current_timestamp()' );
+    $p->update;
+
+    $c->model('DB::AdminLog')->create( {
+        admin_user => $c->user->email,
+        object_type => 'problem',
+        action => 'state_change',
+        object_id => $id,
+    } );
+
+    $c->stash->{ json_response } = { success => 1 };
+    $c->stash->{ json_response }->{result} = 1;
+    $c->forward('send_json_response');
+}
+
+sub send_json_response : Private {
+    my ( $self, $c ) = @_;
+
+    my $body = JSON->new->utf8(1)->encode(
+        $c->stash->{json_response},
+    );
+    $c->res->content_type('application/json; charset=utf-8');
+    $c->res->body($body);
 }
 
 sub load_problem_tasks : Private {

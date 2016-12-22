@@ -66,6 +66,28 @@ sub subscribe : Path('subscribe') : Args(0) {
     $c->go('index');
 }
 
+=head2 subscribe
+
+Target for subscribe form from app
+
+=cut
+
+sub subscribe_ajax : Path('subscribe_ajax') : Args(0) {
+    my ( $self, $c ) = @_;
+
+    # if it exists then it's been submitted so we should
+    # go to subscribe email and let it work out the next step
+    $c->detach('subscribe_email')
+        if exists $c->req->params->{'rznvy'};
+    $c->stash->{ json_response } = { success => 1 };
+    $c->stash->{ json_response }->{result} = 1;
+    my $body = JSON->new->utf8(1)->encode(
+        $c->stash->{json_response},
+    );
+    $c->res->content_type('application/json; charset=utf-8');
+    $c->res->body($body);
+}
+
 =head2 rss
 
 Redirects to relevant RSS feed
@@ -173,7 +195,7 @@ sub confirm : Private {
 Take the alert options from the stash and use these to create a new
 alert. If it finds an existing alert that's the same then use that
 
-=cut 
+=cut
 
 sub create_alert : Private {
     my ( $self, $c ) = @_;
@@ -368,7 +390,7 @@ sub process_user : Private {
 Takes the latitide and longitude from the stash and uses them to generate uris
 for the local rss feeds
 
-=cut 
+=cut
 
 sub setup_coordinate_rss_feeds : Private {
     my ( $self, $c ) = @_;
@@ -460,7 +482,7 @@ sub determine_location : Private {
 
     $c->forward( 'add_recent_photos', [ $num_photos ] );
 
-Adds the most recent $num_photos to the template. If there is coordinate 
+Adds the most recent $num_photos to the template. If there is coordinate
 and population radius information in the stash uses that to limit it.
 
 =cut

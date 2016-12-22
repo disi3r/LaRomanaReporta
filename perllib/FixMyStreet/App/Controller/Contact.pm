@@ -49,6 +49,23 @@ sub submit : Path('submit') : Args(0) {
           && $c->forward('send_email');
 }
 
+=head2 submit
+
+Handle abuse form submission from app
+
+=cut
+
+sub submit : Path('submit_ajax') : Args(0) {
+    my ( $self, $c ) = @_;
+
+   return
+      unless $c->forward('setup_request')
+          && $c->forward('determine_contact_type')
+          && $c->forward('validate')
+          && $c->forward('prepare_params_for_email')
+          && $c->forward('send_email');
+}
+
 =head2 determine_contact_type
 
 Work out if we have got here via a report/update or this is a
@@ -82,7 +99,7 @@ sub determine_contact_type : Private {
 
 =head2 validate
 
-Validate the form submission parameters. Sets error messages and redirect 
+Validate the form submission parameters. Sets error messages and redirect
 to index page if errors.
 
 =cut
