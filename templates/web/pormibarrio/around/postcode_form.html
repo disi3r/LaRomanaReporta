@@ -117,7 +117,20 @@ function streetLocateSubmit(url){
                 var lonlat = new OpenLayers.LonLat(latlon[1], latlon[0]);
                 lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
                 fixmystreet.map.panTo(lonlat);
-                setTimeout(function(){fixmystreet.map.zoomTo(3)},500);
+                fixmystreet_update_pin(lonlat,0);
+                if (fixmystreet.page == 'new') {
+                    /* Already have a pin */
+                    fixmystreet.markers.features[0].move(lonlat);
+                } else {
+                    var markers = fms_markers_list( [ [ lonlat.lat, lonlat.lon, 'green' ] ], false );
+                    fixmystreet.bbox_strategy.deactivate();
+                    fixmystreet.markers.removeAllFeatures();
+                    fixmystreet.markers.addFeatures( markers );
+                    fixmystreet_activate_drag();
+                }
+                setTimeout(function(){
+                  fixmystreet.map.zoomTo(3);
+                },500);
             });
         }
         else{
