@@ -1,13 +1,14 @@
 // This function might be passed either an OpenLayers.LonLat (so has
 // lon and lat) or an OpenLayers.Geometry.Point (so has x and y)
-function fixmystreet_update_pin(lonlat) {
-    lonlat.transform(
-        fixmystreet.map.getProjectionObject(),
-        new OpenLayers.Projection("EPSG:4326")
-    );
-    document.getElementById('fixmystreet.latitude').value = lonlat.lat || lonlat.y;
-    document.getElementById('fixmystreet.longitude').value = lonlat.lon || lonlat.x;
-
+function fixmystreet_update_pin(lonlat,transform=1) {
+    if(transform){
+      lonlat.transform(
+          fixmystreet.map.getProjectionObject(),
+          new OpenLayers.Projection("EPSG:4326")
+      );
+      document.getElementById('fixmystreet.latitude').value = lonlat.lat || lonlat.y;
+      document.getElementById('fixmystreet.longitude').value = lonlat.lon || lonlat.x;
+    }
     $.getJSON('/report/new/ajax', {
             latitude: $('#fixmystreet\\.latitude').val(),
             longitude: $('#fixmystreet\\.longitude').val()
