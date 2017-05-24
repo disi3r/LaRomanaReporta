@@ -228,6 +228,19 @@ sub categories_summary {
     return \%categories;
 }
 
+sub categories_count {
+  my ( $rs ) = @_;
+
+  my $categories_count = $rs->search( {}, {
+      select   => [ 'category', { count => 'id' } ],
+      as       => [ 'category', 'count' ],
+      group_by => [ 'category' ],
+      result_class => 'DBIx::Class::ResultClass::HashRefInflator'
+  } );
+  my %categories = map { $_->{category} => $_->{count} } $categories_count->all;
+  return %categories;
+}
+
 sub get_admin_url {
     my ($rs, $cobrand, $row) = @_;
     return $cobrand->admin_base_url . '/report_edit/' . $row->id;

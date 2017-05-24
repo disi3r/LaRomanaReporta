@@ -39,4 +39,9 @@ sub set {
     $memcache->set(@_);
 }
 
+sub delete {
+    cache_connect() unless $memcache;
+    $memcache->delete(@_);
+}
+
 1;
