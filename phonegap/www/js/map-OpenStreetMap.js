@@ -8,7 +8,7 @@ function set_map_config(perm) {
         //new OpenLayers.Control.LayerSwitcher(),
         new OpenLayers.Control.Navigation(),
         new OpenLayers.Control.Permalink(permalink_id),
-        new OpenLayers.Control.PermalinkFMS('osm_link', 'http://www.openstreetmap.org/'),
+        new OpenLayers.Control.PermalinkFMS('osm_link', 'https://www.openstreetmap.org/'),
         new OpenLayers.Control.PanZoomFMS({id: 'fms_pan_zoom' })
     ];
 }
@@ -24,7 +24,7 @@ OpenLayers.Util.OSM = {};
  * Constant: MISSING_TILE_URL
  * {String} URL of image to display for missing tiles
  */
-OpenLayers.Util.OSM.MISSING_TILE_URL = "http://www.openstreetmap.org/openlayers/img/404.png";
+OpenLayers.Util.OSM.MISSING_TILE_URL = "https://www.openstreetmap.org/openlayers/img/404.png";
 
 /**
  * Property: originalOnImageLoadError
@@ -61,9 +61,9 @@ OpenLayers.Layer.OSM.Mapnik = OpenLayers.Class(OpenLayers.Layer.OSM, {
      */
     initialize: function(name, options) {
         var url = [
-            "http://a.tile.openstreetmap.org/${z}/${x}/${y}.png",
-            "http://b.tile.openstreetmap.org/${z}/${x}/${y}.png",
-            "http://c.tile.openstreetmap.org/${z}/${x}/${y}.png"
+            "https://a.tile.openstreetmap.org/${z}/${x}/${y}.png",
+            "https://b.tile.openstreetmap.org/${z}/${x}/${y}.png",
+            "https://c.tile.openstreetmap.org/${z}/${x}/${y}.png"
         ];
         options = OpenLayers.Util.extend({
             /* Below line added to OSM's file in order to allow minimum zoom level */
@@ -94,9 +94,9 @@ OpenLayers.Layer.OSM.Osmarender = OpenLayers.Class(OpenLayers.Layer.OSM, {
      */
     initialize: function(name, options) {
         var url = [
-            "http://a.tah.openstreetmap.org/Tiles/tile/${z}/${x}/${y}.png",
-            "http://b.tah.openstreetmap.org/Tiles/tile/${z}/${x}/${y}.png",
-            "http://c.tah.openstreetmap.org/Tiles/tile/${z}/${x}/${y}.png"
+            "https://a.tah.openstreetmap.org/Tiles/tile/${z}/${x}/${y}.png",
+            "https://b.tah.openstreetmap.org/Tiles/tile/${z}/${x}/${y}.png",
+            "https://c.tah.openstreetmap.org/Tiles/tile/${z}/${x}/${y}.png"
         ];
         options = OpenLayers.Util.extend({ numZoomLevels: 18, buffer: 0 }, options);
         var newArguments = [name, url, options];
@@ -122,9 +122,9 @@ OpenLayers.Layer.OSM.CycleMap = OpenLayers.Class(OpenLayers.Layer.OSM, {
      */
     initialize: function(name, options) {
         var url = [
-            "http://a.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
-            "http://b.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
-            "http://c.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png"
+            "https://a.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
+            "https://b.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png",
+            "https://c.tile.opencyclemap.org/cycle/${z}/${x}/${y}.png"
         ];
         options = OpenLayers.Util.extend({
             /* Below line added to OSM's file in order to allow minimum zoom level */

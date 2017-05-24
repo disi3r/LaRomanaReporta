@@ -63,7 +63,7 @@
         <link rel="stylesheet" href="[% start %][% version('/cobrands/' _ c.cobrand.moniker _ '/main.css') %]">
 
         <!--FONTS-->
-        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic' rel='stylesheet' type='text/css'>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -74,7 +74,7 @@
 
     [% TRY %][% PROCESS 'set_body_class.html' %][% CATCH file %][% END %]
     <body class="[% bodyclass | html IF bodyclass %]">
-        <svg display="none" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="264" height="24" viewBox="0 0 264 24">
+        <svg display="none" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" width="264" height="24" viewBox="0 0 264 24">
             <defs>
             <g id="icon-icono1">
                 <path class="path1" d="M6.573 8.625c-0.865 0-1.566 0.701-1.566 1.566s0.701 1.567 1.566 1.567c0.865 0 1.566-0.701 1.566-1.567s-0.701-1.566-1.566-1.566zM6.573 11.131c-0.519 0-0.94-0.421-0.94-0.94s0.42-0.939 0.94-0.939c0.519 0 0.94 0.421 0.94 0.939s-0.422 0.94-0.94 0.94z"></path>
@@ -155,7 +155,7 @@
 		 var js, fjs = d.getElementsByTagName(s)[0];
 		 if (d.getElementById(id)) {return;}
 		 js = d.createElement(s); js.id = id;
-		 js.src = "http://connect.facebook.net/es_UY/all.js";
+		 js.src = "https://connect.facebook.net/es_UY/all.js";
 		 fjs.parentNode.insertBefore(js, fjs);
 	   }(document, 'script', 'facebook-jssdk'));
 	</script>
