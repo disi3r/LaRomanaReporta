@@ -23,16 +23,16 @@
         <meta property="og:image:width" content="500">
         <meta property="og:image:height" content="500">
 
-        <!-- Schema.org markup for Google+ --> 
-        <meta itemprop="name" content="Por Mi Barrio"> 
+        <!-- Schema.org markup for Google+ -->
+        <meta itemprop="name" content="Por Mi Barrio">
         <meta itemprop="description" content="Por Mi Barrio es una aplicación web creada por DATA que te permite hacer reclamos sobre tu ciudad, ingrsándolos directamente al Sistema Único de Reclamos de la Intendencia de Montevideo.">
         <!--<meta itemprop="image" content="[% c.cobrand.base_url %]/cobrands/pormibarrio/images/pormibarrio.png">-->
 
-        <!-- Twitter Card data --> 
-        <meta name="twitter:card" content="summary_large_image"> 
-        <meta name="twitter:site" content="@DATAuy"> 
-        <meta name="twitter:title" content="Por Mi Barrio"> 
-        <meta name="twitter:description" content="Por Mi Barrio es una aplicación web creada por DATA que te permite hacer reclamos sobre tu ciudad, ingrsándolos directamente al Sistema Único de Reclamos de la Intendencia de Montevideo."> 
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@DATAuy">
+        <meta name="twitter:title" content="Por Mi Barrio">
+        <meta name="twitter:description" content="Por Mi Barrio es una aplicación web creada por DATA que te permite hacer reclamos sobre tu ciudad, ingrsándolos directamente al Sistema Único de Reclamos de la Intendencia de Montevideo.">
         <meta name="twitter:creator" content="@DATAuy">
         <!-- Twitter summary card with large image must be at least 280x150px -->
 
@@ -160,7 +160,7 @@
 	   }(document, 'script', 'facebook-jssdk'));
 	</script>
 
-    
+
     <header id="site-header" role="banner"></header>
 
     <div class="container [% "$containerclass" | html IF containerclass %]">
@@ -188,11 +188,11 @@
                                     attr( "src", "[% c.user.picture_url %]" );
                             </script>
                         [% ELSE %]
-                            <img class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">                              
+                            <img class="img-circle" alt="" src="/cobrands/pormibarrio/images/no-profile-picture.jpg">
                         [% END %]
                         [% c.user.name | html %]
                     </a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel"> 
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                         <li>
                             <a class="user-profile" href="/my">
                                 <svg class="icon icon-icono4" viewBox="0 0 24 24">
@@ -215,7 +215,7 @@
                             <a class="user-sesion" href="/auth/sign_out">
                                 <svg class="icon icon-icono2" viewBox="0 0 24 24">
                                     <use xlink:href="#icon-icono2"></use>
-                                </svg> 
+                                </svg>
                                 Cerrar Sesión
                             </a>
                         </li>
@@ -234,8 +234,8 @@
                  [% END %]
             </div>
             <!--.end info user-->
-        </div>        
-        <!--.end top container--> 
+        </div>
+        <!--.end top container-->
         <!--FIRST LEVEL NAVIGATION-->
         <nav class="first-navigation">
             <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button">

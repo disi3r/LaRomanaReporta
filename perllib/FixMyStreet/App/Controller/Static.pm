@@ -21,6 +21,14 @@ template depending on language, will need extending at some point.
 
 =cut
 
+sub newstats : Global : Args(0) {
+    my ( $self, $c ) = @_;
+
+    #my $lang_code = $c->stash->{lang_code};
+    my $template  = "static/stats_new.html";
+    $c->stash->{template} = $template;
+}
+
 sub about : Global : Args(0) {
     my ( $self, $c ) = @_;
 
@@ -39,10 +47,10 @@ sub faq : Global : Args(0) {
     # There should be a faq template for each language in a cobrand or default.
     # This is because putting the FAQ translations into the PO files is
     # overkill.
-    
+
     # We rely on the list of languages for the site being restricted so that there
     # will be a faq template for that language/cobrand combo.
-        
+
     my $lang_code = $c->stash->{lang_code};
     my $template  = "faq/faq-$lang_code.html";
     $c->stash->{template} = $template;
@@ -64,7 +72,7 @@ sub iphone : Global : Args(0) {
     my ( $self, $c ) = @_;
 }
 
-sub stats : Global : Args(0) {
+sub stats_old : Global : Args(0) {
     my ( $self, $c ) = @_;
 
     my ( $end_date, @errors );
@@ -169,13 +177,13 @@ sub stats : Global : Args(0) {
 
     my %select = (
             state => [ FixMyStreet::DB::Result::Problem->visible_states() ],
-            select => [ 
-                'id', 'latitude', 'longitude', 'category', 'external_id', 
+            select => [
+                'id', 'latitude', 'longitude', 'category', 'external_id',
                 'created', 'confirmed', 'state', 'whensent', 'lastupdate' ],
             order_by => [ 'confirmed, state' ],
     );
 
-    #Change date format for query 
+    #Change date format for query
     $start_date = $parser->format_datetime($start_date);
     $end_date = $parser->format_datetime($end_date);
 
@@ -216,7 +224,7 @@ sub stats : Global : Args(0) {
                         $first = 0;
                     }
                     else{
-                        #Generate added values for new month 
+                        #Generate added values for new month
                         foreach my $key (keys $problem_by_group){
                             if ( ref($problem_by_group->{$key}) eq 'HASH' ){
                                 push $problem_by_group->{$key}{evolution}, $problem_by_group->{$key}{evolution}->[-1];
@@ -300,6 +308,58 @@ sub stats : Global : Args(0) {
     $c->stash->{stats_json} = $problem_json;
     $c->stash->{problem_csv} = "'".$problem_csv."'";
 
+    return 1;
+}
+
+sub stats : Global : Args(0) {
+    my ( $self, $c ) = @_;
+
+    my ( $end_date, @errors );
+    my $formatter = DateTime::Format::Strptime->new( pattern => '%d/%m/%Y' );
+    my $parser = DateTime::Format::Strptime->new( pattern => '%m-%d-%Y' );
+    my $now = DateTime->now(formatter => $formatter);
+    my $now_start = DateTime->now(formatter => $formatter);
+    #Start date mandatory
+    my $start_date = $formatter->parse_datetime( $c->req->param('start_date') );
+    $c->log->debug($end_date.'<--END TIME 0 START-->'.$start_date);
+    if ( !$c->req->param('start_date') ) {
+        if ( $c->req->param('end_date') ){
+            push @errors, _('Invalid start date');
+            $c->stash->{errors} = \@errors;
+            return 1;
+        }
+        else {
+            return 1;
+        }
+    }
+
+    if ( $c->req->param('last_week') ){
+        $end_date = $now;
+        $start_date = $now_start->subtract(days => 7);
+    }
+    elsif ( $c->req->param('last_month') ){
+        $end_date = $now;
+        $start_date = $now_start->subtract(months => 1);
+    }
+    elsif ( $c->req->param('last_six_months') ){
+        $end_date = $now;
+        $start_date = $now_start->subtract(months => 6);
+    }
+    elsif ( $c->req->param('all') ){
+        $end_date = $now;
+    }
+    else{
+        if ( !$c->req->param('end_date') ){
+            $end_date = $now;
+        }
+        else{
+            $end_date = $formatter->parse_datetime( $c->req->param('end_date') ) ;
+        }
+    }
+    $c->log->debug($end_date.'<--END TIME START-->'.$start_date);
+
+    $c->stash->{start_date} = $start_date;
+    $c->stash->{end_date} = $end_date;
     return 1;
 }
 
