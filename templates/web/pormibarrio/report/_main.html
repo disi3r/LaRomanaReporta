@@ -31,7 +31,7 @@
                 <span>[% problem.meta_line(c) | html %]</span>
             </div>
         </div>
-        [% IF problem.is_fixed %]
+        [% IF problem.is_fixed || problem.deadline.class != 'noDeadLine' %]
             <span class="report-defensoria status-report-im">Frente a la continuidad del problema puede consultar con la Defensoría del Vecino.<br><a href="http://defensoria.pormibarrio.uy/reclamos/?pmb=[% problem.id %]" target="_blank">Comunicarme con la Defensoría del Vecino</a></span>
         [% END %]
     </div>

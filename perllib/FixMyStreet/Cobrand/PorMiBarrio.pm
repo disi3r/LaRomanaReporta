@@ -7,6 +7,7 @@ use JSON;
 use HTTP::Request::Common;
 use Data::Dumper;
 use LWP::UserAgent;
+use DateTime;
 #use Params::Util qw<_HASH _HASH0 _HASHLIKE>;
 
 sub process_extras {
@@ -166,7 +167,6 @@ sub geocode_postcode {
     my ( $self, $s, $c ) = @_;
     #$response->{error} = ( { address => 'Direccion', latitude => 'latitud', longitude => 'longi' } );
     my $response = {};
-    $c->log->debug(qq/GEOPOSTCODE HARDCODED/);
     my @addresses;
     my $req;
     my $last = 0;
@@ -176,10 +176,8 @@ sub geocode_postcode {
     $c->log->debug(@term_arr);
 
     if (@term_arr){
-    	$c->log->debug(qq/GEOPOSTCODE ENTRA/);
     	my $ua = LWP::UserAgent->new;
 	    if ( scalar @term_arr < 2 ){
-	    	$c->log->debug(qq/GEOPOSTCODE MENOR/);
 	    	$req = HTTP::Request->new( GET => 'http://www.montevideo.gub.uy/ubicacionesRestProd/calles?nombre='.$s);
 	    }
 	    else{
@@ -195,11 +193,8 @@ sub geocode_postcode {
 	    		}
 	    		$last = 1;
 	    	}
-	    	$c->log->debug('GEOPOSTCODE MAYOR: '.$term_arr[2]);
 	    }
-	    $c->log->debug(Dumper($req));
 	    my $res = $ua->request( $req );
-	    $c->log->debug(Dumper($res->decoded_content));
 	    if ( $res->is_success ) {
 
 	    	$c->log->debug(qq/GEOPOSTCODE SUCCESS/);
@@ -289,6 +284,69 @@ sub skip_send_after {
 
 sub use_tasks { 1 }
 
-sub update_on_view { 1 }
+sub update_on_view { 0 }
+
+sub begining_date {
+	return DateTime->new(
+		year  =>  2014,
+		month => 8,
+		day   => 1,
+	);
+}
+
+sub deadlines { 1 }
+
+sub problem_rules {
+	return (
+		'1' => [
+			{
+				'max_time' => 30,
+				'class' => 'problem-alert'
+			},
+		],
+		'6' => [
+			{
+				'max_time' => 30,
+				'class' => 'problem-alert',
+			},
+		],
+		'18' => [
+			{
+				'max_time' => 30,
+				'class' => 'problem-alert'
+			}
+		],
+		'37' => [
+			{
+				'max_time' => 30,
+				'class' => 'problem-alert'
+			},
+		],
+		'38' => [
+			{
+				'max_time' => 30,
+				'class' => 'problem-alert'
+			},
+		],
+		'39' => [
+			{
+				'max_time' => 30,
+				'class' => 'problem-alert'
+			},
+		],
+		'40' => [
+			{
+				'max_time' => 30,
+				'class' => 'problem-alert'
+			},
+		],
+		'41' => [
+			{
+				'max_time' => 30,
+				'class' => 'problem-alert'
+			},
+		],
+	);
+}
 
 1;
