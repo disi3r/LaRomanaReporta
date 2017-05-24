@@ -1,0 +1,108 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use DateTime;
+use FixMyStreet::App;
+use Net::CKAN;
+use JSON;
+use mySociety::Config;
+use Data::Dumper;
+
+
+my $base_url = mySociety::Config::get('BASE_URL');
+my $pkg_name = '2016-10-TestPMB8';
+#my $api_package = Api->new();
+my $result = FixMyStreet::App->model("DB::Problem")->search( {
+  '-AND' => [
+    created => { '>=', '2016-10-01' },
+    created => { '<=', '2016-10-30' }
+  ],
+  state => [ FixMyStreet::DB::Result::Problem->visible_states() ],
+} );
+my @reports;
+while ( my $report = $result->next ){
+  my %repo = map { $_ => $report->$_ } qw/id postcode title detail name category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent /;
+  $repo{confirmed} = $repo{confirmed}->ymd if defined($repo{confirmed});
+  $repo{lastupdate} = $repo{lastupdate}->ymd if defined($repo{lastupdate});
+  $repo{lastupdate_council} = $repo{lastupdate_council}->ymd if defined($repo{lastupdate_council});
+  $repo{whensent} = $repo{whensent}->ymd if defined($repo{whensent});
+  push @reports, \%repo;
+}
+my $filename = $pkg_name.'.json';
+my $dir = mySociety::Config::get('UPLOAD_DIR');
+open my $fileHandle, ">", $dir.$filename or die "Can't open '$dir/$filename'\n";
+print $fileHandle encode_json(\@reports);
+close $fileHandle;
+print "Se creó el archivo $dir$filename";
+my $ckan = CKAN->new(
+    server => 'http://test.catalogodatos.gub.uy',
+    api_key => '077e80bd-be43-4ffb-9364-b4115e1bc6ea',
+);
+#print "GROUPS LIST: \n";
+#print Dumper($ckan->get_groups('infraestructura'));
+#print "//GROUPS LIST: \n";
+print "Fetching list of existing UY catoaloge packages ...\n";
+my %packages = map { $_ => 1 } @{ $ckan->get_package };
+die "$pkg_name is too long! Add some shortening rules"
+  if length($pkg_name) > 130;
+if (! $packages{ $pkg_name }) {
+  #Publish PKG, Toad esta data debiera de venir de la api
+  print "NO existe vamos a crearlo...";
+  my $data;
+  my $pkg = {
+      url => $base_url.'/upload/'.$filename,
+      title => $pkg_name,
+      author => 'DATA',
+      maintainer =>'DATA',
+      owner_org => 'data',
+  };
+  $pkg->{name} = name_transformer($pkg_name);
+  $pkg->{license} = 'CC BY-SA';
+  #$pkg->{group} = {name => 'infraestructura'};
+  $pkg->{notes} = <<EOT;
+Reportes => Desglose reportes
+Datos de la plataforma por Mi Barrio para Ocutubre 2016.
+EOT
+  $pkg->{tags} = [
+      'Intendencia de Montevideo',
+      'Intendencia de Rivera',
+      'Intendencia de Maldonado',
+      name_transformer('Reportes'),
+      name_transformer('Reportes Ciudadanos'),
+      split(m/,\s+/, 'json'),
+  ];
+  $pkg->{extras} = {
+      #category => 'Reportes',
+      #subtopic => 'Reportes Ciudadanos',
+      #format => 'json',
+      #agency_link => 'http://datauy.org',
+      #maintainer_email => 'fernando@datauy.org',
+      #author_email => 'contacto@datauy.org',
+  };
+  $pkg->{upload} = {file_0 => $dir.$filename};
+  #Create Package
+  print "\nUploading Package...\n";
+  eval { $ckan->create_package($pkg) };
+  if ($@) {
+    print "\nCKAN response...".$@;
+    if ($@ =~ m/Package name already exists/) {
+        $pkg->{name} = name_transformer("$pkg->{name}");
+        $ckan->create_package($pkg);
+    }
+    else {
+        die $@;
+    }
+  }
+  print "Created " . $ckan->server . '/package/' . $pkg->{name};
+}
+else {
+  #Update package???
+}
+
+sub name_transformer {
+    my $data = lc(shift);
+    $data =~ s/\s+\|.+//;
+    $data =~ s/[^\w\d\-_]//g;
+    return $data;
+}
