@@ -17,41 +17,41 @@ sub new {
     my ($class,%options) = @_;
     my $self = {};
     $self->{options} = \%options;
-    
+
     if (!$options{access_token}){
         croak "Yuo must provide your application id when construct new method\n Net::Facebook::Oauth2->new( application_id => '...' )" unless defined $self->{options}->{application_id};
         croak "Yuo must provide your application secret when construct new method\n Net::Facebook::Oauth2->new( application_secret => '...' )" unless defined $self->{options}->{application_secret};
     }
-    
+
     $self->{browser}          = $options{browser} || LWP::UserAgent->new;
     $self->{access_token_url} = $options{access_token_url} || ACCESS_TOKEN_URL;
     $self->{authorize_url}    = $options{authorize_url} || AUTHORIZE_URL;
     $self->{access_token}     = $options{access_token};
     $self->{display}          = $options{display} || 'page'; ##other values popup and wab
-    
+
     return bless($self, $class);
 }
 
 sub get_authorization_url {
     my ($self,%params) = @_;
-    
+
     $params{callback} ||= $self->{options}->{callback};
     croak "You must pass a callback parameter with Oauth v2.0" unless defined $params{callback};
-    
+
     $params{display} = $self->{display} unless defined $params{display};
     $self->{options}->{callback} = $params{callback};
-    
+
     my $scope = join(",", @{$params{scope}}) if defined($params{scope});
-    
+
     my $url = $self->{authorize_url}
     ."?client_id="
     .uri_escape($self->{options}->{application_id})
     ."&redirect_uri="
     .uri_escape($params{callback});
-    
+
     $url .= "&scope=$scope" if $scope;
     $url .= "&display=".$params{display};
-    
+
     return $url;
 }
 
@@ -60,11 +60,11 @@ sub get_access_token {
     my ($self,%params) = @_;
     $params{callback} ||= $self->{options}->{callback};
     $params{code} ||= $self->{options}->{code};
-    
+
     croak "You must pass a code parameter with Oauth v2.0" unless defined $params{code};
     croak "You must pass callback URL" unless defined $params{callback};
     $self->{options}->{code} = $params{code};
-    
+
     ###generating access token URL
     my $getURL = $self->{access_token_url}
     ."?client_id="
@@ -74,9 +74,8 @@ sub get_access_token {
     ."&client_secret="
     .uri_escape($self->{options}->{application_secret})
     ."&code=$params{code}";
-    
+
     my $response = $self->{browser}->get($getURL);
-    
     ##got an error response from facebook
     ##die and display error message
     if (!$response->is_success){
@@ -84,18 +83,16 @@ sub get_access_token {
         my $error = $j->jsonToObj($response->content());
         croak "'" .$error->{error}->{type}. "'" . " " .$error->{error}->{message};
     }
-    
     ##everything is ok proccess response and extract access token
-    my $file = $response->content();
-    my ($access_token,$expires) = split(/&/, $file);
-    my ($string,$token) = split(/=/, $access_token);
-    
+    my $j = JSON::Any->new;
+    my $parsed_response = $j->jsonToObj($response->content());
+    my $token = $parsed_response->{access_token};
     ###save access token
     if ($token){
         $self->{access_token} = $token;
         return $token;
     }
-    
+
     croak "can't get access token";
 }
 
@@ -106,10 +103,10 @@ sub get {
         $url .= $self->{_has_query} ? '&' : '?';
         $url .= "access_token=" . $self->{access_token};
     }
-    
+
     ##construct the new url
     my @array;
-    
+
     while ( my ($key, $value) = each(%{$params})){
         $value = uri_escape($value);
         push(@array, "$key=$value");
@@ -117,7 +114,7 @@ sub get {
 
     my $string = join('&', @array);
     $url .= "&".$string if $string;
-    
+
     my $response = $self->{browser}->get($url);
     my $content = $response->content();
     return $self->_content($content);
@@ -184,49 +181,49 @@ Net::Facebook::Oauth2 - a simple Perl wrapper around Facebook OAuth v2.0 protoco
 
     use CGI;
     my $cgi = CGI->new;
-    
+
     use Net::Facebook::Oauth2;
-    
-    my $fb = Net::Facebook::Oauth2->new(
-        application_id => 'your_application_id', 
-        application_secret => 'your_application_secret',
-        callback => 'http://yourdomain.com/facebook/callback'
-    );
-    
-    ###get authorization URL for your application
-    my $url = $fb->get_authorization_url(
-        scope => ['offline_access','publish_stream'],
-        display => 'page'
-    );
-    
-    ####now redirect to this url
-    print $cgi->redirect($url);
-    
-    ##once user authorizes your application facebook will send him/her back to your application
-    ##to the callback link provided above
-    
-    ###in your callback block capture verifier code and get access_token
-    
+
     my $fb = Net::Facebook::Oauth2->new(
         application_id => 'your_application_id',
         application_secret => 'your_application_secret',
         callback => 'http://yourdomain.com/facebook/callback'
     );
-    
+
+    ###get authorization URL for your application
+    my $url = $fb->get_authorization_url(
+        scope => ['offline_access','publish_stream'],
+        display => 'page'
+    );
+
+    ####now redirect to this url
+    print $cgi->redirect($url);
+
+    ##once user authorizes your application facebook will send him/her back to your application
+    ##to the callback link provided above
+
+    ###in your callback block capture verifier code and get access_token
+
+    my $fb = Net::Facebook::Oauth2->new(
+        application_id => 'your_application_id',
+        application_secret => 'your_application_secret',
+        callback => 'http://yourdomain.com/facebook/callback'
+    );
+
     my $access_token = $fb->get_access_token(code => $cgi->param('code'));
     ###save this token in database or session
-    
+
     ##later on your application you can use this verifier code to comunicate
     ##with facebook on behalf of this user
-    
+
     my $fb = Net::Facebook::Oauth2->new(
         access_token => $access_token
     );
-    
+
     my $info = $fb->get(
         'https://graph.facebook.com/me' ##Facebook API URL
     );
-    
+
     print $info->as_json;
 
 =head1 DESCRIPTION
