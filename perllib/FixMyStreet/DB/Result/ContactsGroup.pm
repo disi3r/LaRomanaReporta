@@ -27,6 +27,7 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("group_id");
 
+__PACKAGE__->has_many('contacts', 'FixMyStreet::DB::Result::Contact', 'group_id');
 
 # Created by DBIx::Class::Schema::Loader v0.07035 @ 2014-06-04 21:17:14
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Itaky009cU6P02qmXlE2Sg

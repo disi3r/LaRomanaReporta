@@ -8,9 +8,22 @@ use warnings;
 
     $rs = $rs->not_deleted();
 
-Filter down to not deleted contacts - which have C<deleted> set to false;
+Filter down to not deleted contacts - which have <deleted> set to false;
 
 =cut
+
+sub get_groups {
+  my $rs = shift;
+
+  return $rs->search({
+    'me.deleted' => 0,
+    'me.group_id' => {'>=' => 0}
+  },{
+    join => ['contacts_group'],
+    columns => ['me.category', 'me.group_id'],
+    '+columns' => ['contacts_group.group_name', 'contacts_group.group_color'],
+  });
+}
 
 sub get_by_group_id {
     my ( $rs, $cats_ids ) = @_;
