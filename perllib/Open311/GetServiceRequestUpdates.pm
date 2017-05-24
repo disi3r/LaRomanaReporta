@@ -150,67 +150,40 @@ sub update_comments {
 }
 
 sub fetch_details {
-    use Data::Dumper;
-    my $self = shift;
+  use Data::Dumper;
+  my $self = shift;
+  my @id_list = shift;
 
-    my $bodies = FixMyStreet::App->model('DB::Body')->search(
-        {
-            send_method     => 'Open311',
-            comment_user_id => { '!=', undef },
-            endpoint        => { '!=', '' },
-        }
+  my %where;
+  $where{id} = { 'in', @id_list };
+  #Get problems
+  my @problems = FixMyStreet::App->model('DB::Problem')->search( \%where );
+  foreach my $problem (@problems){
+    print "\n A DETAILS PROBLEM: ".$problem->id;
+    #Check problem state is not  '%fixed%', 'hidden', 'closed', 'unable to fix'
+    my $body = ( values %{$problem->bodies} )[0];
+    my $o = Open311->new(
+        endpoint     => $body->endpoint,
     );
-    while ( my $body = $bodies->next ) {
-
-        my $o = Open311->new(
-            endpoint     => $body->endpoint,
-            #api_key      => $body->api_key,
-            #jurisdiction => $body->jurisdiction,
-        );
-
-        $self->suppress_alerts( $body->suppress_alerts );
-        $self->system_user( $body->comment_user );
-        #Get external_ids for looping
-        print 'ARRANCA CON BODY '.$body->id;
-        my %where;
-        if ( !$self->last_update_council ){
-            $where{external_id} = \'is not null';
-            $where{bodies_str} = { '=', $body->id };
-            $where{state} = { 'not in', ['%fixed%', 'hidden', 'closed'] };
-        }
-        my @problems = FixMyStreet::App->model('DB::Problem')->search( \%where );
-        print "\nPROBLEMS: \n";
-        for my $problem ( @problems ){
-          print "\nPROBLEMS: ";
-          print $problem->external_id;
-        }
-        print 'NADA?';
-        exit();
-        #foreach my $problem (@problems){
-        my $p = FixMyStreet::App->model('DB::Problem')->search( {external_id => '2357316'} ) || 0;
-        my $problem = $p->first;
-        print Dumper($problem->external_id);
-          my $prequest = $o->get_service_custom_meta_info( $problem->external_id );
-          if ( ref $prequest eq 'HASH' && exists $prequest->{request} ){
-            #populate update fields ? cobrand!
-            my $options;
-            $options->{postcode} = $prequest->{request}{address} if $problem->postcode ne $prequest->{request}{address};
-            $options->{state} = $self->map_state( lc($prequest->{request}{status}) ) if $problem->state ne $self->map_state( lc($prequest->{request}{status}) );
-            $options->{category} = decode_entities($prequest->{request}{service_name}) if $problem->category ne decode_entities($prequest->{request}{service_name});
-            $options->{cobrand_data} = $prequest->{request}{city_council} if $problem->cobrand_data ne $prequest->{request}{city_council};
-            $options->{subcategory} = $prequest->{request}{service_area} if $problem->subcategory ne $prequest->{request}{service_area};
-            #If there are changes replicate
-            if ( $options ){
-              print "\n A UPDATE PROBLEM \n";
-              $problem->update($options);
-            }
-            my @tasks = values $prequest->{request}{request_completed_tasks};
-            push @tasks, values $prequest->{request}{request_pending_tasks};
-            print "\nRequest Tasks: ".Dumper(@tasks)."\n";
-            $problem->update_tasks(@tasks);
-          }
-        #}
+    my $prequest = $o->get_service_custom_meta_info( $problem->external_id );
+    if ( ref $prequest eq 'HASH' && exists $prequest->{request} ){
+      #populate update fields ? cobrand!
+      my $options;
+      $options->{postcode} = $prequest->{request}{address} if $problem->postcode ne $prequest->{request}{address};
+      $options->{state} = $self->map_state( lc($prequest->{request}{status}) ) if $problem->state ne $self->map_state( lc($prequest->{request}{status}) );
+      $options->{category} = decode_entities($prequest->{request}{service_name}) if $problem->category ne decode_entities($prequest->{request}{service_name});
+      $options->{cobrand_data} = $prequest->{request}{city_council} if $problem->cobrand_data ne $prequest->{request}{city_council};
+      $options->{subcategory} = $prequest->{request}{service_area} if $problem->subcategory ne $prequest->{request}{service_area};
+      #If there are changes replicate
+      if ( $options ){
+        print "\n A UPDATE PROBLEM \n";
+        $problem->update($options);
+      }
+      my @tasks = values $prequest->{request}{request_completed_tasks};
+      push @tasks, values $prequest->{request}{request_pending_tasks};
+      $problem->update_tasks(@tasks);
     }
+  }
 }
 
 sub map_state {
@@ -230,6 +203,7 @@ sub map_state {
         'anulado'                     => 'unable to fix',
         'en proceso'                  => 'in progress',
         'finalizado'                  => 'fixed - council',
+        'cerrado'                      => 'unable to fix',
     );
 
     return $state_map{$incoming_state} || $incoming_state;

@@ -5,6 +5,8 @@ use warnings;
 use DateTime;
 use DateTime::Format::W3CDTF;
 use Open311::GetServiceRequestUpdates;
+use Memcached;
+use Data::Dumper;
 require 5.8.0;
 
 use FixMyStreet::App;
@@ -13,10 +15,43 @@ my ($verbose, $nomail) = CronFns::options();
 
 use Open311;
 
-print 'A FETCH DETAILS';
-
-my $service = Open311::GetServiceRequestUpdates->new(
-    verbose => 1,
+my $bodies = FixMyStreet::App->model('DB::Body')->search(
+  {
+      send_method     => 'Open311',
+      comment_user_id => { '!=', undef },
+      endpoint        => { '!=', '' },
+  }
 );
+while ( my $body = $bodies->next ) {
+  print 'ARRANCA DETAILS CON BODY '.$body->id;
+  my %where;
+  Memcached::set_namespace( FixMyStreet->config('FMS_DB_NAME') . ":" );
 
-$service->fetch_details;
+  #Get external_ids for looping
+  my @report_list;
+  my $mem_current_list = Memcached::get('update_details_current_'.$body->id);
+  my $mem_update_list = Memcached::get('update_details_tail_'.$body->id);
+  if ( !$mem_update_list || !$mem_current_list ){
+    print 'CREATE LIST MEM';
+    $where{external_id} = \'is not null';
+    $where{bodies_str} = { '=', $body->id };
+    $where{state} = { -in => [ FixMyStreet::DB::Result::Problem->open_states() ] };
+    @report_list = map { $_->id } FixMyStreet::App->model('DB::Problem')->search( \%where, {
+      order_by => { -asc => 'lastupdate' },
+      columns => [ 'id' ],
+    } );
+    print "\nSETEO MEM\n";
+    Memcached::set('update_details_tail_'.$body->id, \@report_list);
+    #Every 2 days list is refreshed
+    Memcached::set('update_details_current_'.$body->id, 1, 7200);
+  }
+  else {
+    print 'VA POR LIST MEM';
+    @report_list = @{$mem_update_list};
+  }
+  my @actual_list = splice @report_list, 0, 20;
+  Memcached::set('update_details_tail_'.$body->id, \@report_list);
+  my $service = Open311::GetServiceRequestUpdates->new( verbose => 1 );
+  print 'VA A FETCH';
+  $service->fetch_details(\@actual_list);
+}

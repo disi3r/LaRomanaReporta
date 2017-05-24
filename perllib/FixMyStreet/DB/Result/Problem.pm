@@ -187,9 +187,9 @@ HASHREF.
 
 sub fixed_states {
     my $states = {
-        'fixed'           => 1,
-        'fixed - user'    => 1,
-        'fixed - council' => 1,
+      'fixed'           => _('fixed'),
+      'fixed - council' => _('fixed - council'),
+      'fixed - user'    => _('fixed - user'),
     };
 
     return wantarray ? keys %{ $states } : $states;
@@ -263,23 +263,23 @@ HASHREF.
 
 sub all_states {
     my $states = {
-        'hidden'                      => 1,
-        'partial'                     => 1,
-        'unconfirmed'                 => 1,
-        'confirmed'                   => 1,
-        'investigating'               => 1,
-        'in progress'                 => 1,
-        'planned'                     => 1,
-        'action scheduled'            => 1,
-        'fixed'                       => 1,
-        'fixed - council'             => 1,
-        'fixed - user'                => 1,
-        'unable to fix'               => 1,
-        'not responsible'             => 1,
-        'duplicate'                   => 1,
-        'closed'                      => 1,
-        'internal referral'           => 1,
-        'clarify'                     => 1,
+        'hidden'                      => _('hidden'),
+        'partial'                     => _('partial'),
+        'unconfirmed'                 => _('unconfirmed'),
+        'confirmed'                   => _('confirmed'),
+        'investigating'               => _('investigating'),
+        'in progress'                 => _('in progress'),
+        'planned'                     => _('planned'),
+        'action scheduled'            => _('action scheduled'),
+        'fixed'                       => _('fixed'),
+        'fixed - council'             => _('fixed - council'),
+        'fixed - user'                => _('fixed - user'),
+        'unable to fix'               => _('unable to fix'),
+        'not responsible'             => _('not responsible'),
+        'duplicate'                   => _('duplicate'),
+        'closed'                      => _('closed'),
+        'internal referral'           => _('internal referral'),
+        'clarify'                     => _('clarify'),
     };
 
     return wantarray ? keys %{$states} : $states;
@@ -892,38 +892,57 @@ sub update_tasks {
 
   if ($tasks){
     $tasks = [ $tasks ] if ref $tasks ne 'ARRAY';
-      for my $task_req (@{$tasks}) {
-        print "\nTask REQ: ".Dumper($task_req)."\n";
-          my $task_id = $task_req->{task_id};
-          # If there's no task id then we can't work out
-          next unless $task_id;
-          my $options;
-          if ( ref $task_req->{task_result} ne ref {} || ref $task_req->{task_report} ne ref {} ){
-            $options->{status} = $task_req->{task_result} if ref $task_req->{task_result} ne ref {};
-            $options->{report} = $task_req->{task_report} if ref $task_req->{task_report} ne ref {};
-            $options->{planned} = $task_req->{task_datetime};
-          }
-          else {
-            $options->{status} = 'Not planned yet';
-          }
-          #Get task
-          my $task = FixMyStreet::App->model('DB::Task')->find( {task_id => $task_id} ) || 0;
-          if ($task){
-            print "\nVA A TASK UPDATE";
-            $task->update($options);
-          }
-          else{
-            print "\nVA A TASK CREATE";
-            #Create task
-            $options->{task_id} = $task_id;
-            $options->{problem_id} = $problem->id;
-            $options->{name} = $task_req->{task_name};
-            $options->{area} = $task_req->{task_area};
-            print "\nTASK NEW:\n".Dumper($options)."\n\n";
-            $task = FixMyStreet::App->model('DB::Task')->new($options);
-            $task->insert();
-          }
+    my $updated = 0;
+    for my $task_req (@{$tasks}) {
+      my $task_id = $task_req->{task_id};
+      # If there's no task id then we can't work out
+      next unless $task_id;
+      my $options;
+      $options->{status} = ref $task_req->{task_result} ne ref {} ? $task_req->{task_result} : 'Not planned yet';
+      $options->{report} = ref $task_req->{task_report} ne ref {} ? $task_req->{task_report} : '';
+      $options->{planned} = ref $task_req->{task_report} ne ref {} ? DateTime::Format::W3CDTF->parse_datetime( $task_req->{task_datetime} ) : '';
+      #Get task
+      my $task = FixMyStreet::App->model('DB::Task')->find( {task_id => $task_id} ) || 0;
+      if ($task){
+        if ( $task->status ne $options->{status} || $task->report ne $options->{report} || $options->{planned} ne $task->planned ){
+          $task->update($options);
+          $updated = 1;
+        }
       }
+      else{
+        #Create task
+        $options->{task_id} = $task_id;
+        $options->{problem_id} = $problem->id;
+        $options->{name} = $task_req->{task_name};
+        $options->{area} = $task_req->{task_area};
+        $task = FixMyStreet::App->model('DB::Task')->new($options);
+        $task->insert();
+        $updated = 1;
+      }
+    }
+    if ( $updated ) {
+      #Create commment "Actualizaciones en las tareas"
+      my $pbody = ( values %{$problem->bodies} )[0];
+      my $update = FixMyStreet::App->model('DB::Comment')->new(
+          {
+              problem_id => $problem->id,
+              state      => 'confirmed',
+              created    => \'ms_current_timestamp()',
+              confirmed => \'ms_current_timestamp()',
+              text      => 'Actualizaciones en Tareas asociadas al reclamo',
+              mark_open => 0,
+              mark_fixed => 0,
+              user => $pbody->comment_user,
+              anonymous => 0,
+              name => $pbody->comment_user->name,
+          }
+      );
+      $problem->lastupdate( $update->created );
+      #Hay que levantar el parámetro de last_update_council
+      #$problem->lastupdate_council( $update->created );
+      $problem->update;
+      $update->insert();
+    }
   }
   return;
 }
