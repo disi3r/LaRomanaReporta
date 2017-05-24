@@ -733,7 +733,7 @@ var tooltip = d3.select("body")
  .attr("id","d3_tooltip");
 
 function getCategoriesFilter(){
-	$.getJSON("http://pmbdev.development.datauy.org/report/new/ajax?format=json&lat=-34.901113&lon=-56.164531", function (data) {
+	$.getJSON("/report/new/ajax?format=json&lat=-34.901113&lon=-56.164531", function (data) {
 		catJson = data;
 		$.each(data.categories, function(i, item) {
 			if(i!=-2){
