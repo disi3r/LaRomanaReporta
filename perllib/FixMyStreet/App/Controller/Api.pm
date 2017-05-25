@@ -34,24 +34,25 @@ my $query_key;
 sub begin : Private {
   my ( $self, $c, $method ) = @_;
 
-  $c->log->debug('ENTRA A LA API');
   $c->stash->{format} = $c->req->param('format') ? $c->req->param('format') : 'json';
   if ( $c->forward( 'validate_key' ) ){
     #If load is 1 then all results should be loaded (stats aplication)
     my $mem_key = $c->forward('get_query_key');
-    if ( $mem_key ne '' ){
-      $c->log->debug("QUERY KEY: ".$mem_key);
-      $c->stash->{query_key} = $mem_key;
-      my $api_reports = Memcached::get($mem_key);
-      if ( !$api_reports ){
-        if ( $c->req->param('load') ){
-          $c->forward( 'load_reports' );
-        }
-        else{
-            $c->forward( 'load_problems' );
-        }
+    $c->stash->{query_key} = $mem_key;
+    my $api_reports = Memcached::get($mem_key);
+    if ( !$api_reports ){
+      if ( $c->req->param('load') ){
+        $c->forward( 'load_reports' );
+      }
+      else{
+        $c->forward( 'load_problems' );
       }
     }
+  }
+  else {
+    $c->set_session_cookie_expire(0);
+    $c->stash->{api_result} = {'error' => 'No es posible iniciar sesi&oacute;n genera tu api_key. Instructivo link'};
+    $c->detach();
   }
 }
 
@@ -65,9 +66,7 @@ sub load_reports : Private {
   my ( $self, $c ) = @_;
 
   $c->forward( 'load_problems' );
-  $c->log->debug('LOAD REPORTS');
   for my $callback ( API_DEFINITIONS ) {
-    $c->log->debug('LOAD CALLBACK:'.$callback);
     $c->stash->{api_result} = 0;
     $c->forward( $callback );
     Memcached::set($c->stash->{query_key}.$callback, $c->stash->{api_result}, 3600);
@@ -79,19 +78,19 @@ sub load_reports : Private {
 sub validate_key : Private {
   my ( $self, $c ) = @_;
 
-  #Validate user
+  #Dummy for now
   if ($c->user) {return 1}
   if ( $c->req->param('api_key') ){
-    my $user = $c->model('DB::User')->search( { api_key => $c->req->param('api_key') } )->first;
-    if ($user){
+    #my $user = $c->model('DB::User')->search( { api_key => $c->req->param('api_key') } )->first;
+    #if ($user){
       #log user access
-      $c->stash->{user} = $user;
+      #$c->stash->{user} = $user;
       return 1;
-    }
-    else {
-      $c->set_session_cookie_expire(0);
-  		$c->stash->{api_result} = {'error' => 'No es posible iniciar sesi&oacute;n genera tu api_key. Instructivo link'};
-    }
+    #}
+    #else {
+    #  $c->set_session_cookie_expire(0);
+  #		$c->stash->{api_result} = {'error' => 'No es posible iniciar sesi&oacute;n genera tu api_key. Instructivo link'};
+  #  }
   }
   else {
     $c->set_session_cookie_expire(0);
@@ -131,6 +130,11 @@ sub load_dates : Private {
       }
     }
   }
+  else {
+    $where{'-AND'} = [
+      $key => { '>=', $parser->format_datetime( $c->cobrand->begining_date() ) },
+    ];
+  }
   $c->stash->{from} = $start_date;
   $c->stash->{to} = $end_date;
   return \%where;
@@ -142,7 +146,7 @@ Return conacts by body
 sub get_query_key : Private {
   my ( $self, $c ) = @_;
 
-  $query_key = '';
+  $query_key = 'uy';
   $query_key .= 'bid'.$c->req->param('body_id') if $c->req->param('body_id');
   $query_key .= 'from'.$c->req->param('from') if $c->req->param('from');
   $query_key .= 'to'.$c->req->param('to') if $c->req->param('to');
@@ -162,7 +166,6 @@ Return conacts by body
 sub load_problems : Private {
   my ( $self, $c ) = @_;
 
-    $c->log->debug("\nLOADING PROBLEMS\n");
     my $where = $self->load_dates($c, 'confirmed');
     $where->{state} = [ FixMyStreet::DB::Result::Problem->visible_states() ];
     $where->{bodies_str} = $c->req->param('body_id') if $c->req->param('body_id');
@@ -232,7 +235,6 @@ sub get_groups_categories : Private {
 
 sub get_api_categories : Private {
   my ( $self, $c, $cate ) = @_;
-  $c->log->debug("\nAPI GROUP \n");
   my $api_groups = $c->forward('get_groups_categories');
   my %api_groups = %{$api_groups};
   if ( $c->stash->{api_group} || $c->stash->{api_category} ){
@@ -240,7 +242,6 @@ sub get_api_categories : Private {
     if ($c->stash->{api_group}) {
       my $gid = $c->stash->{api_group};
       if ($c->stash->{cate}) {
-        $c->log->debug("\nVA POR CATE \n");
         for my $cat ( @{$api_groups{$gid}{categories}} ) {
           $new_group->{$cat} = {
             group_color => $api_groups{$gid}{group_color},
@@ -252,7 +253,6 @@ sub get_api_categories : Private {
       else {
           $new_group = { $gid => $api_groups{$gid} } ;
       }
-      $c->log->debug($new_group);
     }
     $new_group = { $c->stash->{api_category} => {
       group_color => '',
@@ -260,14 +260,11 @@ sub get_api_categories : Private {
       categories => [$c->stash->{api_category}],
       }
     } if $c->stash->{api_category};
-    $c->log->debug(Dumper($new_group));
      $api_groups = $new_group;
   }
   else {
-    $c->log->debug('A ELSE');
     if ( $c->stash->{cate} ){
       $c->stash->{cate} = 0;
-      $c->log->debug('POR CATE');
       return $c->forward('get_category_groups');
     }
   }
@@ -290,7 +287,6 @@ sub format_output : Private {
       );
     } elsif ('csv' eq $format) {
       my $output = get_csv_structure($hashref);
-      $c->log->debug($output);
       $c->res->content_type('application/csv; charset=utf-8');
       $c->res->body( $output );
     } else {
@@ -396,7 +392,6 @@ sub getTotals : Path('getTotals') {
 
   my $totals = Memcached::get( $c->stash->{query_key}.'getTotals' );
   if ( !$totals ){
-    $c->log->debug('ENTRA A GetTotals');
     my $where = $self->load_dates($c, 'created_date');
     my $users4period = $c->model('DB::User')->count(\%{$where});
     $totals = {
@@ -415,7 +410,6 @@ sub reportsByCategoryGroup: Path('reportsByCategoryGroup') {
     $c->stash->{api_result} = \@{$mem_groups_total};
   }
   else {
-    $c->log->debug('ENTRA A reportsByCategoryGroup');
     my %cat_count = $c->stash->{api_problems}->categories_count();
     my %groups_count;
     $c->stash->{cate} = 1;
@@ -473,8 +467,6 @@ sub reportsEvolution: Path('reportsEvolution'){
     $c->stash->{cate} = 1 if $c->stash->{api_group} || $c->stash->{api_category};
     my $api_groups  = $c->forward('get_api_categories');
     my %api_groups = %{$api_groups};
-    $c->log->debug("\nEVO GROUP:\n");
-    $c->log->debug(Dumper(%api_groups));
     my %evo_count;
     foreach my $gid (keys \%api_groups){
       #Get sub result by group
@@ -493,7 +485,6 @@ sub reportsEvolution: Path('reportsEvolution'){
         my $to = $first_month_day->clone;
         $to->add( months => 1 )->subtract( days => 1 );
         my $date_value = $from->ymd('/');
-        $c->log->debug('GROUP EVO: '.$gid.' -> '.$group_problems->count());
         my @month_results;
         $evo_count{$api_groups{$gid}{group_name}}{months} = \@month_results;
         while ( $to <= $end_date ){
@@ -566,7 +557,6 @@ sub answerTimeByCategoryGroup: Path('answerTimeByCategoryGroup') {
     $c->stash->{api_result} = \@{$mem_groups_total};
   }
   else {
-    $c->log->debug('answerTimeByCategoryGroup');
     my $completed = $c->stash->{api_problems}->search({
       state => [ FixMyStreet::DB::Result::Problem->fixed_states() ]
     });
@@ -612,13 +602,11 @@ sub answerTimeByState: Path('answerTimeByState') {
   #Get cat_groups to fill details
   my $mem_groups_total = Memcached::get( $c->stash->{query_key}.'answerTimeByState' );
   if ( $mem_groups_total ){
-    $c->log->debug('VA POR MEM; ');
     $c->stash->{api_result} = \@{$mem_groups_total};
   }
   else {
     my %states_average;
     my $now = DateTime->now;
-    $c->log->debug('VA POR ELSE; ');
     my $report;
     my $completed_states = FixMyStreet::DB::Result::Problem->fixed_states();
     my $closed_states = FixMyStreet::DB::Result::Problem->fixed_states();
@@ -657,7 +645,6 @@ sub answerTimeByState: Path('answerTimeByState') {
       }
     }
     my @states_total = map { $states_average{$_} } keys %states_average;
-    $c->log->debug('STATES_TOTAL: '.Dumper(@states_total) );
     $c->stash->{api_result} = \@states_total;
   }
 }
