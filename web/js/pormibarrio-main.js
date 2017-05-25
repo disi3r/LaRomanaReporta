@@ -760,9 +760,13 @@ function getCategoriesFilter(){
 }
 
 function getBodiesFilter(){
-	$("#body-select").append("<option value='1'>Intendencia de Montevideo</option>");
-	$("#body-select").append("<option value='5'>Intendencia de Maldonado</option>");
-	$("#body-select").append("<option value='4'>Intendencia de Rivera</option>");
+	$.getJSON("/api/bodies?api_key=1234", function (data) {
+		$.each(data, function(i, subdata) {
+				$.each(subdata, function(z, item) {
+					$("#body-select").append("<option value='"+z+"'>"+item+"</option>");
+				});
+		});
+	});
 }
 
 function getReportsEvolution(container_id, urlParams){
@@ -1147,30 +1151,7 @@ function getAnswerTimeByCategoryChart(container_id,urlParams){
 			});
 }
 
-function getApiRequestURLParams(date_from,date_to,categoryGroup,category,load,body){
-	var url = "";
-	if(date_from){
-		url += "&from="+date_from;
-	}
-	if(date_to){
-		url += "&to="+date_to;
-	}
-	if(categoryGroup){
-		url += "&gid="+categoryGroup;
-	}
-	if(category){
-		url += "&category="+category;
-	}
-	if(load){
-		url += "&load="+load;
-	}
-	if(body){
-		url += "&body_id="+body;
-	}
-	return url;
-}
-
-function getCharts(){
+function getApiRequestURLParams(){
 	var date_from = $("#stats-start-date").val();
 	var date_to = $("#stats-end-date").val();
 	$("#select-period-title").attr('class', 'hidden');
@@ -1207,7 +1188,30 @@ function getCharts(){
 	if(body==-1){
 		body = null;
 	}
-	urlParams = getApiRequestURLParams(date_from,date_to,categoryGroup,category,load,body);
+	var url = "";
+	if(date_from){
+		url += "&from="+date_from;
+	}
+	if(date_to){
+		url += "&to="+date_to;
+	}
+	if(categoryGroup){
+		url += "&gid="+categoryGroup;
+	}
+	if(category){
+		url += "&category="+category;
+	}
+	if(load){
+		url += "&load="+load;
+	}
+	if(body){
+		url += "&body_id="+body;
+	}
+	return url;
+}
+
+function getCharts(){
+	var urlParams = getApiRequestURLParams();
 	getTotalsChart(urlParams);
 	getReportsByStateChart(urlParams);
 	getReportsPerCategoriesChart("graph-reports-categories",urlParams);
@@ -1225,7 +1229,7 @@ function getRandomColor(originalColor,groupName){
 		for (var i = 0; i < 6; i++ ) {
 				color += letters[Math.floor(Math.random() * 16)];
 		}
-		if(chartLevel==2 || chartLevel==3){
+		if((chartLevel==1 && !originalColor) || chartLevel==2 || chartLevel==3){
 			if(colorsByName[groupName]){
 				return colorsByName[groupName];
 			}else{
@@ -1233,4 +1237,16 @@ function getRandomColor(originalColor,groupName){
 			}
 		}
 		return color;
+}
+
+function download_totals(){
+	var url = "/api/getTotals?api_key=1234&format=csv";
+	url = url + getApiRequestURLParams();
+	var win = window.open(url, '_blank');
+}
+
+function download_reports(){
+	var url = "/api/reports?api_key=1234&format=csv";
+	url = url + getApiRequestURLParams();
+	var win = window.open(url, '_blank');
 }
