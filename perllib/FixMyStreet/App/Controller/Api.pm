@@ -52,9 +52,6 @@ sub begin : Private {
         }
       }
     }
-    else {
-      $c->forward( 'load_problems' );
-    }
   }
 }
 
@@ -146,15 +143,15 @@ sub get_query_key : Private {
   my ( $self, $c ) = @_;
 
   $query_key = '';
-  $query_key .= $c->req->param('body_id') if $c->req->param('body_id');
-  $query_key .= $c->req->param('from') if $c->req->param('from');
-  $query_key .= $c->req->param('to') if $c->req->param('to');
-  $query_key .= $c->req->param('area') if $c->req->param('area');
+  $query_key .= 'bid'.$c->req->param('body_id') if $c->req->param('body_id');
+  $query_key .= 'from'.$c->req->param('from') if $c->req->param('from');
+  $query_key .= 'to'.$c->req->param('to') if $c->req->param('to');
+  $query_key .= 'area'.$c->req->param('area') if $c->req->param('area');
   if ( $c->req->param('category') ){
-    $query_key .= $c->req->param('category');
+    $query_key .= 'cat'.$c->req->param('category');
   }
   elsif ( $c->req->param('gid') ){
-    $query_key .= $c->req->param('gid');
+    $query_key .= 'gid'.$c->req->param('gid');
   }
   return $query_key;
 }
@@ -325,12 +322,12 @@ sub get_csv_structure : Private {
               push @headers, @obj_keys;
               $first_obj = 0;
             }
-            push @middle, join(", ", map { "$_" } @{$row_obj}{@obj_keys});
+            push @middle, join(", ", map { "\"$_\"" } @{$row_obj}{@obj_keys});
           }
         }
         else {
           if ( $first_row) {
-            push @headers, $rkey;
+            push @headers, $row{$rkey};
           }
           if ($multiple){
             push @last, $row{$rkey};
@@ -342,7 +339,7 @@ sub get_csv_structure : Private {
       }
       if ($first_row){
         $first_row = 0;
-        $output = join(", ", map { "$_" } @headers)."\n";
+        $output = join(", ", map { "\"$_\"" } @headers)."\n";
       }
       if ($multiple) {
         foreach my $obj_val (@middle){
@@ -350,19 +347,19 @@ sub get_csv_structure : Private {
           push @multi, @first;
           push @multi, $obj_val;
           push @multi, @last;
-          $output .= join(", ", map { "$_" } @multi)."\n";
+          $output .= join(", ", map { "\"$_\"" } @multi)."\n";
         }
       }
       else {
-        $output .= join(", ", map { "$_" } @first)."\n";
+        $output .= join(", ", map { "\"$_\"" } @first)."\n";
       }
     }
   }
   else {
     my %href = %{$hashref};
     my @obj_keys = sort keys %{$hashref};
-    $output .= join(", ", map { "$_" } @obj_keys)."\n";
-    $output .= join(", ", map { "$_" } @{$hashref}{@obj_keys})."\n";
+    $output .= join(", ", map { "\"$_\"" } @obj_keys)."\n";
+    $output .= join(", ", map { "\"$_\"" } @{$hashref}{@obj_keys})."\n";
   }
   return $output;
 }
@@ -675,6 +672,16 @@ sub categories: Path('categories') {
   my ( $self, $c ) = @_;
   my $res = $c->forward('get_category_groups');
   $c->stash->{api_result} = \%{$res};
+}
+
+sub bodies: Path('bodies') {
+  my ( $self, $c ) = @_;
+  my @bodies = $c->model('DB::Body')->all;
+  my @body_resp;
+  foreach my $body (@bodies) {
+    push @body_resp, { $body->id => $body->name };
+  }
+  $c->stash->{api_result} = \@body_resp;
 }
 
 sub api_test: Path('apiTest') {
