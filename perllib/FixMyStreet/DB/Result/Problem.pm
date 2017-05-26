@@ -881,6 +881,9 @@ sub deadline {
           }
         }
       }
+      else {
+        $deadline = { 'class' => 'alert' };
+      }
     }
     return $deadline;
   }
