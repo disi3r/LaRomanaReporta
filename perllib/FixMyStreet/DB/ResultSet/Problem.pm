@@ -145,7 +145,7 @@ sub around_map {
             latitude => { '>=', $min_lat, '<', $max_lat },
             longitude => { '>=', $min_lon, '<', $max_lon },
     };
-    if($cats && $cats!='all'){
+    if( $cats && $cats ne 'all' ){
       my @cats_ids = (split /,/, $cats);
       my @categories = $c->model('DB::Contact')->get_by_group_id( \@cats_ids )->all;
       my @catsNames  = map { $_->category } @categories;

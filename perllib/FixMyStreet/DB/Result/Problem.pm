@@ -900,7 +900,13 @@ sub update_tasks {
       my $options;
       $options->{status} = ref $task_req->{task_result} ne ref {} ? $task_req->{task_result} : 'Not planned yet';
       $options->{report} = ref $task_req->{task_report} ne ref {} ? $task_req->{task_report} : '';
-      $options->{planned} = ref $task_req->{task_report} ne ref {} ? DateTime::Format::W3CDTF->parse_datetime( $task_req->{task_datetime} ) : '';
+      if ( ref $task_req->{task_datetime} ne ref {} ){
+        my $task_datetime;
+        eval {
+          $task_datetime = DateTime::Format::W3CDTF->parse_datetime( $task_req->{task_datetime} );
+        };
+        if ( !$@ ) { $options->{planned} = $task_datetime; };
+      }
       #Get task
       my $task = FixMyStreet::App->model('DB::Task')->find( {task_id => $task_id} ) || 0;
       if ($task){

@@ -173,7 +173,9 @@ sub fetch_details {
       $options->{state} = $self->map_state( lc($prequest->{request}{status}) ) if $problem->state ne $self->map_state( lc($prequest->{request}{status}) );
       $options->{category} = decode_entities($prequest->{request}{service_name}) if $problem->category ne decode_entities($prequest->{request}{service_name});
       $options->{cobrand_data} = $prequest->{request}{city_council} if $problem->cobrand_data ne $prequest->{request}{city_council};
-      $options->{subcategory} = $prequest->{request}{service_area} if $problem->subcategory ne $prequest->{request}{service_area};
+      if ( exists $prequest->{request}{service_area} && $prequest->{request}{service_area} ne ref {} ){
+        $options->{subcategory} = $prequest->{request}{service_area} if  $problem->subcategory ne ref {} && $problem->subcategory ne $prequest->{request}{service_area} ;
+      }
       #If there are changes replicate
       if ( $options ){
         print "\n A UPDATE PROBLEM \n";
@@ -200,10 +202,12 @@ sub map_state {
         'open'                        => 'confirmed',
         'closed'                      => 'fixed - council',
         'ingresado'                   => 'in progress',
+        'cerrado'                      => 'unable to fix',
         'anulado'                     => 'unable to fix',
         'en proceso'                  => 'in progress',
         'finalizado'                  => 'fixed - council',
         'cerrado'                      => 'unable to fix',
+        'iniciado'                   => 'in progress',
     );
 
     return $state_map{$incoming_state} || $incoming_state;

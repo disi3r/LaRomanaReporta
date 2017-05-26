@@ -238,7 +238,7 @@ sub report_form_ajax : Path('ajax') : Args(0) {
     my $body;
 
     if ( $c->req->param('format') ){
-        if ( $c->req->param('format') == 'json' ){
+        if ( $c->req->param('format') eq 'json' ){
             $c->res->content_type('application/json; charset=utf-8');
             if ( $c->stash->{category_groups} ) {
                 my $cg = $c->stash->{category_groups};

@@ -15,7 +15,7 @@ sub nearby {
         if $interval;
     $params->{id} = { -not_in => $ids }
         if $ids;
-    if($cats && $cats!='all'){
+    if( $cats && $cats  ne 'all' ){
       my @cats_ids = (split /,/, $cats);
       my @categories = $c->model('DB::Contact')->get_by_group_id( \@cats_ids )->all;
       my @catsNames  = map { $_->category } @categories;
