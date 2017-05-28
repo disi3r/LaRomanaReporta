@@ -857,7 +857,7 @@ sub deadline {
   #Get deadlines
   my $problem_group = $problem->category_group;
   my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($problem->cobrand)->new();
-  if ($cobrand->deadlines){
+  if ($cobrand->use_deadlines){
     my %deadlines = $cobrand->problem_rules();
     my $deadline = { 'class' => 'noDeadLine' };
     if ( !$problem->is_fixed and $problem->is_open ){
