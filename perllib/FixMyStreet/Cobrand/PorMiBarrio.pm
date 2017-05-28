@@ -233,7 +233,7 @@ sub geocode_postcode {
 }
 
 #DEADLINES
-sub deadlines { 0 }
+sub use_deadlines { 1 }
 
 my %public_holidays = map { $_ => 1 } (
     '1-1', '1-6', '2-8', '2-9', '3-24', '3-25', '4-18', '5-1','5-16', '6-19', '7-18', '8-25', '10-10','11-2', '12-25'

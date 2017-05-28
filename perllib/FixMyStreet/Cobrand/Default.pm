@@ -87,7 +87,7 @@ sub restriction {
     return $self->moniker ? { cobrand => $self->moniker } : {};
 }
 
-=head2 base_url_with_lang 
+=head2 base_url_with_lang
 
 =cut
 
@@ -259,7 +259,7 @@ sub front_stats_data {
 
 Returns any disambiguating information available. Defaults to none.
 
-=cut 
+=cut
 
 sub disambiguate_location { FixMyStreet->config('GEOCODING_DISAMBIGUATION') or {}; }
 
@@ -612,7 +612,7 @@ sub is_two_tier { 0; }
 
 =item council_rss_alert_options
 
-Generate a set of options for council rss alerts. 
+Generate a set of options for council rss alerts.
 
 =cut
 
@@ -888,7 +888,7 @@ sub to_working_days_date{
 }
 
 #DEADLINES
-sub deadlines { 0 }
+sub use_deadlines { 0 }
 
 sub skip_update_check { 0 }
 

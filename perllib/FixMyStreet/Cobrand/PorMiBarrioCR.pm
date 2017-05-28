@@ -94,7 +94,7 @@ sub problems_clause {
 }
 
 #DEADLINES
-sub deadlines { 1 }
+sub use_deadlines { 1 }
 
 my %public_holidays = map { $_ => 1 } (
     '1-1', '4-2', '4-3', '4-11', '5-1', '6-25', '8-15', '9-15','12-25',
