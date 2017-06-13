@@ -442,7 +442,7 @@ sub facebook_callback: Path('/auth/Facebook') : Args(0) {
 				$c->log->debug('FB CALLBACK ACTUALIZA');
 				#Actualizamos la foto en caso que se quiera
 				if ( !$c->session->{oauth}{not_update_photo} ){
-					$c->user->picture_url( 'http://graph.facebook.com/'.$uid.'/picture?type=square' );
+					$c->user->picture_url( 'https://graph.facebook.com/'.$uid.'/picture?type=square' );
 				}
 				$c->user->facebook_id($uid);
 				$c->user->update();
@@ -457,7 +457,7 @@ sub facebook_callback: Path('/auth/Facebook') : Args(0) {
 					name => $name,
 					email => $email,
 					facebook_id => $uid,
-					picture_url => 'http://graph.facebook.com/'.$uid.'/picture?type=square',
+					picture_url => 'https://graph.facebook.com/'.$uid.'/picture?type=square',
 				});
 				$c->stash->{user} = $new_user;
 				$c->stash->{template} = 'auth/social_signup.html';
@@ -473,8 +473,8 @@ sub facebook_callback: Path('/auth/Facebook') : Args(0) {
 			}
 			else {
 				$c->log->debug('FB CALLBACK FUE PARA AUTENTICAR');
-				if ( $user->picture_url != 'http://graph.facebook.com/'.$uid.'/picture?type=square' and !$c->session->{oauth}{not_update_photo} ) {
-					$user->picture_url( 'http://graph.facebook.com/'.$uid.'/picture?type=square' );
+				if ( $user->picture_url != 'https://graph.facebook.com/'.$uid.'/picture?type=square' and !$c->session->{oauth}{not_update_photo} ) {
+					$user->picture_url( 'https://graph.facebook.com/'.$uid.'/picture?type=square' );
 					$user->update();
 				}
 				#Autenthicate user with immedate expire
@@ -701,7 +701,7 @@ sub ajax_sign_in : Path('ajax/sign_in') {
         	$return->{picture_url} = $c->cobrand->base_url.$c->user->picture_url;
         }
         else {
-        	$return->{picture_url} = '';	
+        	$return->{picture_url} = '';
         }
     } else {
         $return->{error} = 1;
@@ -749,7 +749,7 @@ sub ajax_check_auth : Path('ajax/check_auth') {
 
 sub ajax_create_user : Path('ajax/create_user') {
 	my ( $self, $c ) = @_;
-	
+
 	$c->forward('email_sign_in');
 	my %result;
 
@@ -774,7 +774,7 @@ sub ajax_create_user : Path('ajax/create_user') {
 
 sub ajax_edit_user : Path('ajax/edit_user') {
 	my ( $self, $c ) = @_;
-	
+
 	my %result;
 
 	$c->log->debug("\n OBJETO: \n");
@@ -791,7 +791,7 @@ sub ajax_edit_user : Path('ajax/edit_user') {
 		}
 		else {
 			%result = (
-				result => 1, 
+				result => 1,
 				email => $c->user->email,
 				name => $c->user->name,
 				phone => $c->user->phone,
@@ -801,7 +801,7 @@ sub ajax_edit_user : Path('ajax/edit_user') {
 	        	%result->{picture_url} = $c->cobrand->base_url.$c->user->picture_url;
 	        }
 	        else {
-	        	%result->{picture_url} = '';	
+	        	%result->{picture_url} = '';
 	        }
 		}
     } else {
