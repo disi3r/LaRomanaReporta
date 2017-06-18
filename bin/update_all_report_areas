@@ -1,0 +1,36 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Data::Dumper;
+
+use FixMyStreet::App;
+
+my %where;
+
+print 'ARRANCA';
+#$where{state} = { -in => [ FixMyStreet::DB::Result::Problem->open_states() ] };
+my $report_list = FixMyStreet::App->model('DB::Problem')->search( \%where, {
+  order_by => { -asc => 'lastupdate' },
+} );
+
+while ( my $report = $report_list->next ) {
+  next unless $report->latitude && $report->longitude;
+  my $short_latitude  = Utils::truncate_coordinate($report->latitude);
+  my $short_longitude = Utils::truncate_coordinate($report->longitude);
+  my $area = mySociety::MaPit::call( 'point', "4326/$short_longitude,$short_latitude" );
+  if ( $area->{error} ){
+    print 'ERROR: '.$short_longitude,$short_latitude;
+  }
+  else {
+    my $all_report_areas = ',' . join( ',', sort keys %$area ) . ',';
+    if ( $report->areas ne $all_report_areas ){
+      $report->areas($all_report_areas);
+      $report->update;
+      print "\nUpdate: ".$report->id;
+    }
+    else {
+      print "\nNO Update: ".$report->id;
+    }
+  }
+}

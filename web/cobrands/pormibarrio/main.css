@@ -2706,6 +2706,19 @@ div#stats-menu:hover{
 #subcat-select{
 
 }
+#chart-options-filters input.areas-header-option {
+	width: inherit;
+	float: left;
+	margin-left: 8px;
+}
+#area-filter-header label{
+	min-height: 30px;
+	float: left;
+}
+i {
+	float: left;
+	margin: 6px;
+}
 
 .content-horizontal .chart-group{
 	width: 40%;

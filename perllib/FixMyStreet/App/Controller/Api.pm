@@ -70,7 +70,6 @@ sub load_reports : Private {
     $c->stash->{api_result} = 0;
     $c->forward( $callback );
     Memcached::set($c->stash->{query_key}.$callback, $c->stash->{api_result}, 3600);
-    $c->log->debug('Setting Mem:'.$c->stash->{query_key}.$callback."\n".Dumper($c->stash->{api_result}));
   }
   Memcached::set($c->stash->{query_key}, 1, 3600);
 }
@@ -671,16 +670,38 @@ sub bodies: Path('bodies') {
   $c->stash->{api_result} = \@body_resp;
 }
 
+sub areas: Path('all_areas') {
+  my ( $self, $c ) = @_;
+
+  my %areas;
+  my $all_areas = Memcached::get( 'api_all_areas' );
+  if ( $all_areas ){
+    %areas = $all_areas;
+  }
+  else {
+    my @bodies = $c->model('DB::Body')->all;
+    foreach my $body (@bodies) {
+      #Get area information
+      my $area_id = $body->body_areas->first->area_id;
+      $c->log->debug("\nGetting data for body: ".$body->id.' in '.$area_id."\n" );
+      my $area_childs = mySociety::MaPit::call( 'area', "$area_id/children" );
+      my %area_childs = %{$area_childs};
+      unless ($area_childs->{error}) {
+        foreach ( keys %area_childs ) {
+          $areas{$body->id}{$area_childs{$_}->{type_name}}{$_} = $area_childs{$_}->{name};
+        }
+      }
+    }
+  }
+  $c->stash->{api_result} = \%areas;
+}
+
 sub api_test: Path('apiTest') {
   my ( $self, $c ) = @_;
 
-  my $ckan = CKAN->new(
-      server => 'http://test.catalogodatos.gub.uy',
-      api_key => '077e80bd-be43-4ffb-9364-b4115e1bc6ea',
-  );
-  print "Fetching list of existing UY catoaloge packages ...\n";
-  my %packages = map { $_ => 1 } @{ $ckan->get_packages };
-  $c->stash->{api_result} = \%packages;
+  my $contact = FixMyStreet::App->model('DB::Contact')->find({ category => 'Residuos fuera del contenedor por capacidad insuficiente', deleted => 0 });
+  $c->stash->{api_result} = $contact;
+  $c-log->debug(Dumper($contact));
 }
 
 __PACKAGE__->meta->make_immutable;
