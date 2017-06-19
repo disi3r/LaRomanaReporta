@@ -266,4 +266,12 @@ sub send_council_repeat { 0 }
 
 sub use_tasks { 0 }
 
+sub begining_date {
+	return DateTime->new(
+		year  =>  2014,
+		month => 8,
+		day   => 1,
+	);
+}
+
 1;
