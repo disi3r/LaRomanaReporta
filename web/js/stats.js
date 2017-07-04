@@ -16,14 +16,19 @@ var tooltip = d3.select("body")
  .text("a simple tooltip")
  .attr("id","d3_tooltip");
 
-function getCategoriesFilter(){
-	$.getJSON("/report/new/ajax?format=json&lat=-34.901113&lon=-56.164531", function (data) {
+function getCategoriesFilter(body_id){
+  var api_call = "/api/groups?api_key=1234";
+  if (body_id){
+    $("#category-group-select").empty();
+    api_call += "&body_id="+body_id;
+  }
+	$.getJSON(api_call, function (data) {
 		catJson = data;
-		$.each(data.categories, function(i, item) {
+		$.each(data, function(i, item) {
 			if(i!=-2){
-				$("#category-group-select").append("<option value='gid_"+i+"'>"+item.name+"</option>");
+				$("#category-group-select").append("<option value='gid_"+i+"'>"+item.group_name +"</option>");
 				categoriesArray["gid_"+i] = item.categories;
-				categoryGroups[item.name] = i;
+				categoryGroups[item.group_name] = i;
 			}
 		});
 	});
@@ -55,23 +60,23 @@ function getBodiesFilter(){
 		});
     $("#body-select").change(function() {
   		// Check input( $( this ).val() ) for validity here
-  		var index = $( this ).val();
-      if ( areas[index] ){
+  		var body_id = $( this ).val();
+      if ( areas[body_id] ){
   			$("#area-select").empty();
   			$("#area-select").removeClass("hidden");
         $("#area-select").append('<div id="area-filter-header"/><div id="area-filter-body"/>');
         var first;
-        $.each( areas[index], function(alabel, aoptions){
+        $.each( areas[body_id], function(alabel, aoptions){
           if (!first) {
             first = 1;
-            $("#area-filter-header").append('<label><input class="areas-header-option" type="radio" value="'+index+'-'+alabel+'" name="area-option" checked="checked"><i>'+alabel+'</i></label>');
-            $("#area-filter-body").append("<select class='area-select'><option value='-1'>Todas las áreas</option></select>");
+            $("#area-filter-header").append('<label><input class="areas-header-option" type="radio" value="'+body_id+'-'+alabel+'" name="area-option" checked="checked"><i>'+alabel+'</i></label>');
+            $("#area-filter-body").append("<select class='area-select stats_filter_select'><option value='-1'>Todas las áreas</option></select>");
             $.each(aoptions, function(ai, aname){
               $(".area-select").append("<option value='"+ai+"'>"+aname+"</option>");
             });
           }
           else {
-            $("#area-filter-header").append('<label><input class="areas-header-option" type="radio" value="'+index+'-'+alabel+'" name="area-option"><i>'+alabel+'</i></label>');
+            $("#area-filter-header").append('<label><input class="areas-header-option" type="radio" value="'+body_id+'-'+alabel+'" name="area-option"><i>'+alabel+'</i></label>');
           }
         });
         $('.areas-header-option').click(function() {
@@ -86,6 +91,7 @@ function getBodiesFilter(){
       else {
         $("#area-select").addClass("hidden");
       }
+      getCategoriesFilter(body_id);
 	  });
   });
 }

@@ -12,13 +12,13 @@
           value="" />
 		</div>
     <div id="chart-options-filters">
-      <select id="category-group-select" class="stats_filter_select">
-        <option value="-1">[% loc('All reports') %]</option>
-      </select>
-      <select id="category-select" class="stats_filter_select hidden"></select>
       <select id="body-select" class="stats_filter_select"><option value="-1">[% loc('All bodies') %]</option></select>
       <div id="area-select" class="stats_filter_select hidden"></div>
     </div>
+    <select id="category-group-select" class="stats_filter_select">
+      <option value="-1">[% loc('All reports') %]</option>
+    </select>
+    <select id="category-select" class="stats_filter_select hidden"></select>
     <input class="btn-stats" type="button" onclick="getCharts();"name="getcounts"  size="30" id="getcounts" value="Actualizar valores" />
   [% IF errors %]
       [% FOREACH error IN errors %]
