@@ -155,7 +155,7 @@ sub _populate_service_request_params {
 
     my $params = {
         email => $problem->user->email,
-        description => $description,
+        description => substr($description, 0, 1950),
         service_code => $service_code,
         first_name => $firstname,
         last_name => $lastname || '',
@@ -191,7 +191,7 @@ sub _populate_service_request_params {
     }
 
     if ( $extra->{image_url} ) {
-        $params->{media_url} = $extra->{image_url};
+        #$params->{media_url} = $extra->{image_url};
     }
 
     if ( $self->use_service_as_deviceid && $problem->service ) {

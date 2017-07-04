@@ -174,16 +174,47 @@ sub fetch_details {
       $options->{category} = decode_entities($prequest->{request}{service_name}) if $problem->category ne decode_entities($prequest->{request}{service_name});
       $options->{cobrand_data} = $prequest->{request}{city_council} if $problem->cobrand_data ne $prequest->{request}{city_council};
       if ( exists $prequest->{request}{service_area} && $prequest->{request}{service_area} ne ref {} ){
-        $options->{subcategory} = $prequest->{request}{service_area} if  $problem->subcategory ne ref {} && $problem->subcategory ne $prequest->{request}{service_area} ;
+        $options->{subcategory} = $prequest->{request}{service_area} if  $problem->subcategory && $problem->subcategory ne $prequest->{request}{service_area};
       }
+      #lastupdate Council
+      my $last_update_council = DateTime::Format::W3CDTF->parse_datetime( $prequest->{request}{updated_datetime} );
+      $options->{lastupdate_council} = $last_update_council if !$problem->lastupdate_council || $problem->lastupdate_council < $last_update_council;
+
       #If there are changes replicate
       if ( $options ){
         print "\n A UPDATE PROBLEM \n";
         $problem->update($options);
       }
-      my @tasks = values $prequest->{request}{request_completed_tasks};
-      push @tasks, values $prequest->{request}{request_pending_tasks};
-      $problem->update_tasks(@tasks);
+      my $tasks = [];
+      my @completed_tasks;
+      my @pending_tasks;
+      if (exists $prequest->{request}{request_completed_tasks} && $prequest->{request}{request_completed_tasks} ){
+        @completed_tasks = values $prequest->{request}{request_completed_tasks};
+        if ( @completed_tasks ) {
+          foreach my $ctask (@completed_tasks){
+            $ctask = [ $ctask ] if ref $ctask ne 'ARRAY';
+            foreach (@$ctask){
+              push(@$tasks, $_);
+            }
+          }
+        }
+      }
+      if (exists $prequest->{request}{request_pending_tasks} && $prequest->{request}{request_pending_tasks} ){
+        @pending_tasks = values $prequest->{request}{request_pending_tasks};
+        if ( @pending_tasks ) {
+          foreach my $ptask (@pending_tasks){
+            $ptask = [ $ptask ] if ref $ptask ne 'ARRAY';
+            foreach ( @$ptask ) {
+              push(@$tasks, $_);
+            }
+          }
+        }
+        #push(@$tasks, @pending_tasks) if @pending_tasks;
+      }
+      $problem->update_tasks(\@$tasks);
+    }
+    else {
+      print "ERROR EN DETAILS: ".Dumper($prequest);
     }
   }
 }

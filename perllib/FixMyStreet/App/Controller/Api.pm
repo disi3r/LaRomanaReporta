@@ -207,13 +207,19 @@ sub get_category_groups: Private {
 sub get_groups_categories : Private {
   my ( $self, $c ) = @_;
 
+  my %where;
+  my $gkey = 'group_categories';
+  if ( $c->req->param('body_id') ) {
+    $where{body_id} = $c->req->param('body_id');
+    $gkey .= '_'.$c->req->param('body_id');
+  }
   #Get Memcached
-  my $mem_api_groups = Memcached::get('group_categories');
+  my $mem_api_groups = Memcached::get($gkey);
   if ( $mem_api_groups ){
     return \%{$mem_api_groups};
   }
   else {
-    my @category_groups = $c->model('DB::Contact')->search()->get_groups();
+    my @category_groups = $c->model('DB::Contact')->search(\%where)->get_groups();
     my %api_groups;
     foreach (@category_groups){
       if (exists $api_groups{$_->group_id}){
@@ -371,6 +377,9 @@ sub reports : Path('reports') {
   }
   else {
     my @reports;
+    if ( !$c->stash->{api_problems} ) {
+      $c->forward('load_problems');
+    }
     while ( my $report = $c->stash->{api_problems}->next ){
       my %repo = map { $_ => $report->$_ } qw/id postcode title detail name category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent /;
       $repo{confirmed} = $repo{confirmed}->ymd if defined($repo{confirmed});
@@ -393,6 +402,9 @@ sub getTotals : Path('getTotals') {
   if ( !$totals ){
     my $where = $self->load_dates($c, 'created_date');
     my $users4period = $c->model('DB::User')->count(\%{$where});
+    if ( !$c->stash->{api_problems} ) {
+      $c->forward('load_problems');
+    }
     $totals = {
      'users' => $users4period,
      'reports' => $c->stash->{api_problems}->count()
@@ -409,6 +421,9 @@ sub reportsByCategoryGroup: Path('reportsByCategoryGroup') {
     $c->stash->{api_result} = \@{$mem_groups_total};
   }
   else {
+    if ( !$c->stash->{api_problems} ) {
+      $c->forward('load_problems');
+    }
     my %cat_count = $c->stash->{api_problems}->categories_count();
     my %groups_count;
     $c->stash->{cate} = 1;
@@ -446,6 +461,9 @@ sub reportsByState: Path('reportsByState') {
     $c->stash->{api_result} = \@{$mem_state_resp};
   }
   else {
+    if ( !$c->stash->{api_problems} ) {
+      $c->forward('load_problems');
+    }
     my $state_count = $c->stash->{api_problems}->summary_count();
     my $states = FixMyStreet::DB::Result::Problem->all_states();
     my @state_resp = map { {state => $states->{$_->state}, reports => $_->get_column('state_count')} } $state_count->all;
@@ -467,6 +485,9 @@ sub reportsEvolution: Path('reportsEvolution'){
     my $api_groups  = $c->forward('get_api_categories');
     my %api_groups = %{$api_groups};
     my %evo_count;
+    if ( !$c->stash->{api_problems} ) {
+      $c->forward('load_problems');
+    }
     foreach my $gid (keys \%api_groups){
       #Get sub result by group
       my $group_problems = $c->stash->{api_problems}->search({
@@ -529,7 +550,9 @@ sub reportsByCategoryState: Path('reportsByCategoryState'){
     my %api_groups = %{$api_groups};
     my %groups_count;
     my $states = FixMyStreet::DB::Result::Problem->all_states();
-
+    if ( !$c->stash->{api_problems} ) {
+      $c->forward('load_problems');
+    }
     foreach my $gid (keys \%api_groups){
       my $group_count = $c->stash->{api_problems}->search({
         category => {-in => \@{$api_groups{$gid}{categories}} }
@@ -556,6 +579,9 @@ sub answerTimeByCategoryGroup: Path('answerTimeByCategoryGroup') {
     $c->stash->{api_result} = \@{$mem_groups_total};
   }
   else {
+    if ( !$c->stash->{api_problems} ) {
+      $c->forward('load_problems');
+    }
     my $completed = $c->stash->{api_problems}->search({
       state => [ FixMyStreet::DB::Result::Problem->fixed_states() ]
     });
@@ -610,6 +636,9 @@ sub answerTimeByState: Path('answerTimeByState') {
     my $completed_states = FixMyStreet::DB::Result::Problem->fixed_states();
     my $closed_states = FixMyStreet::DB::Result::Problem->fixed_states();
     my $states = FixMyStreet::DB::Result::Problem->all_states();
+    if ( !$c->stash->{api_problems} ) {
+      $c->forward('load_problems');
+    }
     foreach ( $c->stash->{api_problems}->all ){
       $report = $_;
       my $state = $report->state;
@@ -619,7 +648,7 @@ sub answerTimeByState: Path('answerTimeByState') {
       }
       else {
         if ( exists $completed_states->{$state} || exists $closed_states->{$state} ){
-          $report_duration = ($report->lastupdate->epoch() - $report->confirmed->epoch());
+          $report_duration = ($report->lastupdate_council->epoch() - $report->confirmed->epoch());
         }
         elsif ( $c->stash->{to} ) {
           $report_duration = ( $c->stash->{to}->epoch() - $report->confirmed->epoch() );
@@ -682,6 +711,7 @@ sub areas: Path('all_areas') {
     my @bodies = $c->model('DB::Body')->all;
     foreach my $body (@bodies) {
       #Get area information
+      $c->log->debug("\nGetting data for body: ".$body->id.":\n".Dumper($body->body_areas) );
       my $area_id = $body->body_areas->first->area_id;
       $c->log->debug("\nGetting data for body: ".$body->id.' in '.$area_id."\n" );
       my $area_childs = mySociety::MaPit::call( 'area', "$area_id/children" );
@@ -694,6 +724,19 @@ sub areas: Path('all_areas') {
     }
   }
   $c->stash->{api_result} = \%areas;
+}
+
+sub control_reports: Path('control_reports') {
+  my ( $self, $c ) = @_;
+  #Get array report duration
+  my @all_reports = map { {id => $_->id =>, response => $_->duration} } $c->stash->{api_problems}->all;
+  $c->log->debug(Dumper(@all_reports));
+  #Order array by response time
+  my @order_reports = sort { $a->{response} <=> $b->{response} } @all_reports;
+  my $medium_key = int(scalar @order_reports/2);
+  $medium_key = $medium_key + 1 if ( (scalar @order_reports % 2) == 1 );
+  my $medium = $order_reports[$medium_key];
+  $c->stash->{api_result} = \@order_reports;
 }
 
 sub api_test: Path('apiTest') {

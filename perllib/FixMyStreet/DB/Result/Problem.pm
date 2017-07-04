@@ -956,6 +956,28 @@ sub update_tasks {
   return;
 }
 
+sub duration {
+  my $self = shift;
+  my $to = shift;
+
+  my $report_duration;
+
+  if ( exists $self->fixed_states->{$self->state} || exists $self->closed_states->{$self->state} ){
+    if ( $self->lastupdate_council ){
+      $report_duration = ($self->lastupdate_council->epoch() - $self->confirmed->epoch());
+    }
+    else {
+      $report_duration = ($self->lastupdate->epoch() - $self->confirmed->epoch());
+    }
+  }
+  elsif ( $to ) {
+    $report_duration = ( $to->epoch() - $self->confirmed->epoch() );
+  }
+  else {
+    $report_duration = ( DateTime->now->epoch() - $self->confirmed->epoch() );
+  }
+  return $report_duration;
+}
 # we need the inline_constructor bit as we don't inherit from Moose
 __PACKAGE__->meta->make_immutable( inline_constructor => 0 );
 
