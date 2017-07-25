@@ -366,6 +366,7 @@ sub update_contacts : Private {
         $contact->jurisdiction( $c->req->param('jurisdiction') );
         $contact->api_key( $c->req->param('api_key') );
         $contact->send_method( $c->req->param('send_method') );
+        $contact->group_id( $c->req->param('group_id') );
 
         if ( $contact->in_storage ) {
             $c->stash->{updated} = _('Values updated');
@@ -1049,7 +1050,7 @@ sub user_edit : Path('user_edit') : Args(1) {
         }
         #Update user
         $user->modified(\'ms_current_timestamp()');
-        
+
         $user->update;
 
         if ($edited) {
