@@ -204,7 +204,12 @@ $( document ).ready(function() {
 
 	$('.upload-img').bind("click" , function () {
         $('#InputFile').click();
+
     });
+
+	$("#InputFile").change(function(){
+    readURL(this,'img_preview');
+	});
 
     //CHANGE PASSWORD
 	$( "#change-passwd-btn" ).unbind('click').click(function() {
@@ -322,6 +327,19 @@ $( document ).ready(function() {
 		}
 	});
 });
+
+function readURL(input,img_container_id) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#'+img_container_id).attr('src', e.target.result);
+						$('#'+img_container_id).show();
+        }
+        reader.readAsDataURL(input.files[0]);
+    }else{
+			$('#'+img_container_id).hide();
+		}
+}
 
 /* FUNCIONES DE CAMBIO DE PIN PARA REPORTES EN MAPA */
 //Funcionan como si tuviera solo 2 clases, la primera identifica el reporte y la segunda cambia la transición

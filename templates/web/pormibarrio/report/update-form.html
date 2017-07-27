@@ -26,6 +26,8 @@
 				[% IF field_errors.photo %]
 					<p class='form-error'>[% field_errors.photo %]</p>
 				[% END %]
+				<img id="img_preview" style="display: none;" src="#" alt="" />
+				<br/>
 				<button type="button" class="upload-img">Añadir imagen</button>
 				<input type="file" id="InputFile" name="photo">
 		[% END %]
@@ -81,7 +83,7 @@
 				</div>
 			[% END %]
 		</div>
-		
+
 		<!--Sign In-->
 		[% IF c.user_exists %]
 			<input type="hidden" name="name" id="form_name" value="[% update.name || c.user.name | html %]">
@@ -93,7 +95,7 @@
 	</div>
 	[% IF !c.user_exists %]
 		[% INCLUDE auth/login_block.html
-			one_time_login = 1 
+			one_time_login = 1
 	        summary = loc("Login to your account to be able to send your update to your local government")
 	        sign_in_button = '<button class="btn btn-block btn-green" type="submit" id="submit_register" name="submit_register">Regístrate y publica</button>'
 	    %]

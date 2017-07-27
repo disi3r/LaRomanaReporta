@@ -179,11 +179,16 @@ sub edit : Path('edit'){
             return;
         }
     }
-    #Process photo
-    $c->forward('/photo/process_photo');
-    if ( my $fileid = $c->stash->{upload_fileid} ) {
-        $c->user->picture_url( '/upload/'.$fileid.'.jpeg' );
+    if($c->req->params->{'image_delete'}){
+      $c->user->picture_url('');
+    }else{
+      #Process photo
+      $c->forward('/photo/process_photo');
+      if ( my $fileid = $c->stash->{upload_fileid} ) {
+          $c->user->picture_url( '/upload/'.$fileid.'.jpeg' );
+      }
     }
+
     #Process identity_document
     if ( $c->req->params->{identity_document} and $c->cobrand->validate_document() ){
         my $document = $c->cobrand->validate_identity_document($c->req->params->{identity_document});

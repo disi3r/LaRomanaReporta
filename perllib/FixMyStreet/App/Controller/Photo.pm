@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 BEGIN {extends 'Catalyst::Controller'; }
 
+use Catalyst::Request::Upload;
+use Data::Dumper;
 use DateTime::Format::HTTP;
 use Digest::SHA qw(sha1_hex);
 use File::Path;
@@ -170,10 +172,32 @@ sub process_photo_upload : Private {
     # check that the photo is a jpeg
     my $ct = $upload->type;
     $ct =~ s/x-citrix-//; # Thanks, Citrix
+    if($ct eq 'image/png'){
+        my $filenamepng = $upload->tempname;
+        my $rc;
+        my $img = Image::Magick->new();
+        $rc = $img->Read($filenamepng);
+        my $find = ".png";
+        my $replace = ".jpg";
+        $find = quotemeta $find; # escape regex metachars if present
+        $filenamepng =~ s/$find/$replace/g;
+        $rc = $img->Write($filenamepng); #creates a copy of the png image in jpg format and replace the catalyst upload object
+        my $headers = HTTP::Headers->new( %{ $upload->{headers} } );
+        my $u = Catalyst::Request::Upload->new
+          (
+           size => $upload->{size},
+           type => 'image/jpeg',
+           headers => $headers,
+           tempname => $filenamepng,
+           filename => $upload->{filename},
+          );
+        #die _("PNG IMAGE".Dumper($u));
+        $upload = $u;
+    }
     # Had a report of a JPEG from an Android 2.1 coming through as a byte stream
-    unless ( $ct eq 'image/jpeg' || $ct eq 'image/pjpeg' || $ct eq 'application/octet-stream' ) {
+    unless ($ct eq 'image/png' || $ct eq 'image/jpeg' || $ct eq 'image/pjpeg' || $ct eq 'application/octet-stream' ) {
         $c->log->info('Bad photo tried to upload, type=' . $ct);
-        $c->stash->{photo_error} = _('Please upload a JPEG image only');
+        $c->stash->{photo_error} = _('Please upload a JPEG or PNG image only');
         return;
     }
 
