@@ -8,6 +8,8 @@ use HTTP::Request::Common;
 use Data::Dumper;
 use LWP::UserAgent;
 use DateTime;
+use Switch;
+use URI;
 #use Params::Util qw<_HASH _HASH0 _HASHLIKE>;
 
 sub process_extras {
@@ -165,71 +167,164 @@ sub problems_clause {
 
 sub geocode_postcode {
     my ( $self, $s, $c ) = @_;
+		my $response = {};
     #$response->{error} = ( { address => 'Direccion', latitude => 'latitud', longitude => 'longi' } );
-    my $response = {};
-    my @addresses;
-    my $req;
-    my $last = 0;
-
     my @term_arr = split(',', $s);
 
-    $c->log->debug(@term_arr);
-
     if (@term_arr){
-    	my $ua = LWP::UserAgent->new;
-	    if ( scalar @term_arr < 2 ){
-	    	$req = HTTP::Request->new( GET => 'http://www.montevideo.gub.uy/ubicacionesRestProd/calles?nombre='.$s);
-	    }
-	    else{
-	    	if ( scalar @term_arr < 3){
-	    			$req = HTTP::Request->new( GET => 'http://www.montevideo.gub.uy/ubicacionesRestProd/cruces/'.$term_arr[0].'/?nombre='.$term_arr[1]);
-	    	}
-	    	else{
-	    		if ($term_arr[2] eq 'door'){
-	    			$req = HTTP::Request->new( GET => 'http://www.montevideo.gub.uy/ubicacionesRestProd/direccion/'.$term_arr[0].'/'.$term_arr[1]);
-	    		}
-	    		else{
-	    			$req = HTTP::Request->new( GET => 'http://www.montevideo.gub.uy/ubicacionesRestProd/esquina/'.$term_arr[0].'/'.$term_arr[1]);
-	    		}
-	    		$last = 1;
-	    	}
-	    }
-	    my $res = $ua->request( $req );
-	    if ( $res->is_success ) {
-
-	    	$c->log->debug(qq/GEOPOSTCODE SUCCESS/);
-
-	    	if ( $last ){
-					#$c->log->debug("eNTRA EN LAST");
-	    		my $addr_content = JSON->new->utf8->allow_nonref->decode($res->decoded_content);
-					#$c->log->debug($addr_content);
-					#$c->log->debug(Dumper($addr_content));
-	    		#$c->log->debug(Dumper($addr_content->{geoJSON}->{coordinates}));
-	    		#transformar coordenadas
-		    	$response->{latitude} = $addr_content->{geoJSON}->{coordinates}[0];
-		    	$response->{longitude} = $addr_content->{geoJSON}->{coordinates}[1];
-					#$c->log->debug(Dumper($response));
-					return $response;
-		    }
-		    else {
-		    	my $addr_content = JSON->new->utf8->allow_nonref->decode($res->decoded_content);
-		    	$c->log->debug(qq/GEOPOSTCODE ADDR/);
-		    	$c->log->debug(Dumper($addr_content));
-		    	$c->log->debug(ref $addr_content);
-		    	my $addr;
-		        foreach ( @{$addr_content} ) {
-		        	push @addresses, { address => $_->{nombre}, latitude => $_->{codigo}, longitude => '' };
-		        }
-		    }
-	    }
-	    else {
-	    	$c->log->debug(qq/GEOPOSTCODE FAIL/);
-	    }
-	}
+			my $area = shift @term_arr;
+			$c->log->debug('GEOPOSTCODE AREA: '.$area);
+			my $base_url;
+			switch ($area) {
+				case (300) {
+					$base_url = 'http://www.montevideo.gub.uy/ubicacionesRestProd/';
+					$response = postcode_montevideo(\@term_arr);
+				}
+				case (258) {
+					$c->log->debug('GEOPOSTCODE 258 ');
+					$base_url = 'http://gis.rivera.gub.uy/gisrivera/incphp/xajax/x_suggest.php';
+					$response = postcode_rivera(\@term_arr);
+				}
+				else {
+					$response = postcode_montevideo(\@term_arr);
+				}
+			}
+			$c->log->debug('GEOPOSTCODE AREAS: '.Dumper(\@term_arr));
+		}
+		$c->log->debug(qq/GEOPOSTCODE FAIL/) if (!$response->{error} && !$response->{latitude});
     $c->log->debug(qq/GEOPOSTCODE FIN/);
-    #$response->{latitude} = '1';
-    $response->{error} = \@addresses;
+		#$c->log->debug(Dumper($response));
     return $response;
+}
+
+sub postcode_montevideo {
+	#my ( $term_arr, $c ) = @_;
+	my $term_arr = shift;
+	my $response = {};
+	my @addresses;
+	my $req;
+	my $last = 0;
+	my @term_arr = @{$term_arr};
+
+	if ( scalar @term_arr < 2 ){
+		$req = HTTP::Request->new( GET => 'http://www.montevideo.gub.uy/ubicacionesRestProd/calles?nombre='.$term_arr[0]);
+	}
+	else{
+		if ( scalar @term_arr < 3){
+				$req = HTTP::Request->new( GET => 'http://www.montevideo.gub.uy/ubicacionesRestProd/cruces/'.$term_arr[0].'/?nombre='.$term_arr[1]);
+		}
+		else{
+			if ($term_arr[2] eq 'door'){
+				$req = HTTP::Request->new( GET => 'http://www.montevideo.gub.uy/ubicacionesRestProd/direccion/'.$term_arr[0].'/'.$term_arr[1]);
+			}
+			else{
+				$req = HTTP::Request->new( GET => 'http://www.montevideo.gub.uy/ubicacionesRestProd/esquina/'.$term_arr[0].'/'.$term_arr[1]);
+			}
+			$last = 1;
+		}
+	}
+	my $ua = LWP::UserAgent->new;
+	my $res = $ua->request( $req );
+	if ( $res->is_success ) {
+		my $addr_content = JSON->new->utf8->allow_nonref->decode($res->decoded_content);
+		if ( $last ){
+			$response->{latitude} = $addr_content->{geoJSON}->{coordinates}[0];
+			$response->{longitude} = $addr_content->{geoJSON}->{coordinates}[1];
+			return $response;
+		}
+		else {
+			foreach ( @{$addr_content} ) {
+				push @addresses, { address => $_->{nombre}, latitude => $_->{codigo}, longitude => '' };
+			}
+		}
+	}
+	else {
+		$response->{error} = 0;
+	}
+	$response->{error} = \@addresses;
+	return $response;
+}
+
+sub postcode_rivera {
+	#my ( $term_arr, $c ) = @_;
+	my $term_arr = shift;
+	my $response = {};
+	my @addresses;
+	my $req;
+	my $last = 0;
+	my @term_arr = @{$term_arr};
+
+	my $base_url = 'http://gis.rivera.gub.uy/';
+	my $uri = URI->new( $base_url );
+	my $ua = LWP::UserAgent->new;
+	my $headers = HTTP::Headers->new(
+		DNT => 1,
+		Cookie =>'PHPSESSID=g9ot1a5pdrdntds35vp5kscum6; fef903a4f39c04e02cfc562252c70ad5=ub7bsmmg8e40fbicfgj76cmd01' );
+	$ua->default_headers($headers);
+	if ( scalar @term_arr < 2 ){
+		#$uri->path( 'gisrivera/incphp/xajax/x_search.php' );
+		#$uri->query_form( action => 'searchitem', searchitem => 'rivera_cruce_calles_rivera');
+		#my $req_first = POST $uri->as_string,[ dummy => 'dummy' ];
+		#my $res_first = $ua->request( $req_first );
+		#$c->log->debug('RES RIV FIRST: '.Dumper($res_first));
+		$uri->path( 'gisrivera/incphp/xajax/x_suggest.php' );
+		$uri->query_form( searchitem => 'rivera_cruce_calles_rivera', fldname => 'nom_calle_ini');
+		$req = POST $uri->as_string,[ q => $term_arr[0],	limit => 10 ];
+	}
+	else{
+		if ( scalar @term_arr < 3){
+			$uri->path( 'gisrivera/incphp/xajax/x_suggest.php' );
+			$uri->query_form( searchitem => 'rivera_cruce_calles_rivera', fldname => 'nom_calle_fin');
+			$req = POST $uri->as_string,[
+				dependfldval_nom_calle_ini => $term_arr[0],
+				q => $term_arr[1] ,
+				limit => 10,
+			];
+		}
+		else{
+			$uri->path( $uri->path . 'gisrivera/incphp/xajax/x_info.php' );
+			if ($term_arr[2] eq 'door'){
+				$req = POST $uri->as_string,[
+					nombre => $term_arr[0],
+					puerta => $term_arr[1] ,
+					findlist => 0,
+					searchitem => 'rivera_nro_puerta',
+					mode => 'search',
+				];
+			}
+			else{
+				$req = POST $uri->as_string,[
+					nom_calle_ini => $term_arr[0],
+					nom_calle_fin => $term_arr[1] ,
+					findlist => 0,
+					searchitem => 'rivera_cruce_calles_rivera',
+					mode => 'search',
+				];
+			}
+			$last = 1;
+		}
+	}
+	my $res = $ua->request( $req );
+	if ( $res->is_success ) {
+		if ( $last ){
+			my $addr_content = JSON->new->utf8->allow_nonref->decode($res->decoded_content);
+			my $addr = $addr_content->{queryResult}[1];
+			my @coords = split(/\+/,$addr->{allextent});
+			$response->{latitude} = ($coords[0]+$coords[2])/2;
+			$response->{longitude} = ($coords[1]+$coords[3])/2;
+			return $response;
+		}
+		else {
+			foreach ( split(/\n/,$res->decoded_content) ) {
+				push @addresses, { address => $_, latitude => $_, longitude => '' };
+			}
+		}
+	}
+	else {
+		$response->{error} = 0;
+	}
+	$response->{error} = \@addresses;
+	return $response;
 }
 
 #DEADLINES
@@ -249,7 +344,7 @@ sub is_weekend {
     return $dt->dow > 5;
 }
 
-sub to_working_days_date{
+sub to_working_days_date {
 	my ( $self, $dt, $days ) = @_;
     while ( $days > 0 ) {
         $dt->subtract ( days => 1 );
