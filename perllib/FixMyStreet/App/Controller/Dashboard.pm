@@ -255,7 +255,7 @@ sub deadlines : Local : Args(0) {
     $c->stash->{deadline} = \%deadline;
     $c->stash->{body_id} = $body->id;
     $c->stash->{fixed_states} = [ FixMyStreet::DB::Result::Problem->fixed_states() ];
-    my $problems = $c->forward( '/api/problems' );
+    my $problems = $c->forward( '/api/reports' );
     $c->stash->{problems} = $problems;
     #$c->log->debug(Dumper($problems));
     return;
