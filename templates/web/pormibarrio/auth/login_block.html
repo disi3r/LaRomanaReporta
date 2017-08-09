@@ -49,6 +49,7 @@
                 [% IF field_errors.login_email  %]
                     <p class="error-m">[% field_errors.login_email %]</p>
                 [% END %]
+                <input type="hidden" name="redirect" value='my/edit'>
                 <button class="btn btn-block btn-green" type="submit" id="new_password_mail" name="email_sign_in" value='1'>Envíame instrucciones</button>
             </div>
             [% END %]

@@ -3,14 +3,24 @@
 UNLESS not_page %]
 <div class="reportes sub report-list user-profile" id="user-profile" style="[% style %]">
 	<div class="scrolled-95">
-		[% IF password_changed || messages && !not_page %]
-		<div id="messages">
-			[% messages %]
-			[% IF password_changed %]
-				<p>[% loc('Your password has been changed') %]</p>
-			[% END %]
-		</div>
-		[% END %]
+    [% IF password_changed || messages && !not_page || c.req.arguments.0 == 'pass' %]
+      <div id="messages">
+      [% IF c.req.arguments.0 == 'pass' %]
+          <p>[% loc('Your password needs to be changed') %]</p>
+          <script> $(document).ready(function() {
+              setTimeout(function() {
+                $('#change-passwd-btn').addClass('reportar-abuso-active');
+                $('#my-change-passwd').show();
+              },20);
+          });</script>
+      [% ELSE %]
+  			[% messages %]
+  			[% IF password_changed %]
+  				<p>[% loc('Your password has been changed') %]</p>
+  			[% END %]
+  		[% END %]
+      </div>
+    [% END %]
 	    <!--edit-profile-->
 	    <div class="c-t profile">
 	    	<form method="post" action="[% c.uri_for( '/my/edit' ) %]" id="form_profile_form" name="profileForm" class="validate"[% IF c.cobrand.allow_photo_upload %] enctype="multipart/form-data"[% END %]>

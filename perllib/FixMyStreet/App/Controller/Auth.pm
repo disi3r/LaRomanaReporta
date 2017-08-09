@@ -32,7 +32,6 @@ Present the user with a sign in / create account page.
 sub general : Path : Args(0) {
     my ( $self, $c ) = @_;
     my $req = $c->req;
-
     $c->detach( 'redirect_on_signin', [ $req->param('r') ] )
         if $c->user && $req->param('r');
 
@@ -94,7 +93,7 @@ contains the email addresss).
 
 sub email_sign_in : Private {
     my ( $self, $c ) = @_;
-
+    $c->log->debug('EMAIL SIGN IN: '.$c->req->param('r') );
     # check that the email is valid - otherwise flag an error
     my $raw_email = lc( $c->req->param('login_email') || $c->req->param('form_email') || '' );
 
@@ -113,9 +112,8 @@ sub email_sign_in : Private {
     my $user;
     #Allow send email to login
     if ($c->req->param('login_email')){
-		$c->log->debug('Envia mail para login o cambiar mail');
+		$c->log->debug('Envia mail para login o cambiar mail: '.$good_email);
     	$user = $c->model('DB::User')->find({ email => $good_email });
-    	$c->log->debug(Dumper($user));
     	if (!defined $user){
     		$c->stash->{field_errors}{login_email} = _('Email is not registered');
     		return;
@@ -127,29 +125,29 @@ sub email_sign_in : Private {
 	    $user_params->{email} = $good_email if $good_email;
 	    $user_params->{name} = $c->req->param('name') if $c->req->param('name');
 	    $user_params->{password} = $c->req->param('password_register') if $c->req->param('password_register');
-		$user_params->{identity_document} = $c->req->param('identity_document') if $c->req->param('identity_document');
+      $user_params->{identity_document} = $c->req->param('identity_document') if $c->req->param('identity_document');
 	    $user_params->{phone} = $c->req->param('phone') if $c->req->param('phone');
 	    $user = $c->model('DB::User')->new( $user_params );
 	}
 
-    $c->stash->{field_errors} ||= {};
-    $c->stash->{user} = $user;
+  $c->stash->{field_errors} ||= {};
+  $c->stash->{user} = $user;
 	my %field_errors = $c->cobrand->user_check_for_errors( $c );
 
 	#Added identity document, to be validated only if $c->cobrand->validate_document is set
-    my $identity_document = '';
-   	if ( $c->cobrand->validate_document ){
+  my $identity_document = '';
+ 	if ( $c->cobrand->validate_document ){
 		if ($user->identity_document){
 			$identity_document = $c->cobrand->validate_identity_document( $user->identity_document );
 			if (!$identity_document){
-		        $c->stash->{field_errors}{identity_document} = _('Please enter a valid ID');
-		        return;
+        $c->stash->{field_errors}{identity_document} = _('Please enter a valid ID');
+        return;
 			}
 		}
 		else {
-        	$c->stash->{field_errors}{identity_document} = _('Please enter your ID');
-        	return;
-    	}
+    	$c->stash->{field_errors}{identity_document} = _('Please enter your ID');
+    	return;
+  	}
 	}
 
 	if ( scalar keys %field_errors ){
@@ -157,29 +155,32 @@ sub email_sign_in : Private {
 		return;
 	}
 
-    my $token_obj = $c->model('DB::Token')    #
-      ->create(
-        {
-            scope => 'email_sign_in',
-            data  => {
-                email => $good_email,
-                r => scalar $c->req->param('r'),
-                name => scalar $user->name,
-                password => $user->password,
-                phone =>  $user->phone,
-                identity_document => $identity_document,
-            }
-        }
-      );
+  my $mail_tpl;
+  my $redir = scalar $c->req->param('redirect');
+  if ($c->req->param('login_email')){
+    $mail_tpl = 'reset-email.txt';
+    $redir = $redir.'/pass';
+  }
+  else {
+    $mail_tpl = 'login.txt';
+  }
+  my $token_obj = $c->model('DB::Token')->create(
+    {
+      scope => 'email_sign_in',
+      data  => {
+        email => $good_email,
+        redirect => $redir,
+        name => scalar $user->name,
+        password => $user->password,
+        phone =>  $user->phone,
+        identity_document => $identity_document,
+      }
+    }
+  );
 
-    $c->stash->{token} = $token_obj->token;
-	if ($c->req->param('login_email')){
-		$c->send_email( 'reset-email.txt', { to => $good_email } );
-	}
-	else {
-    	$c->send_email( 'login.txt', { to => $good_email } );
-	}
-    $c->stash->{template} = 'auth/token.html';
+  $c->stash->{token} = $token_obj->token;
+	$c->send_email( $mail_tpl, { to => $good_email } );
+  $c->stash->{template} = 'auth/token.html';
 }
 
 =head2 social_signup
@@ -305,7 +306,7 @@ sub token : Path('/M') : Args(1) {
 		$token_obj->delete;
 
 		# send the user to their page
-		$c->detach( 'redirect_on_signin', [ $data->{r} ] );
+		$c->detach( 'redirect_on_signin', [ $data->{redirect} ] );
 
 	} else {
 		# retrieve the social token or return
