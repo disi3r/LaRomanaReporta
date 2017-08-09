@@ -431,11 +431,8 @@ function geolocate(timeout, zoom, is_list ){
 		if ( window.location.hostname == 'rivera.pormibarrio.uy'){
 			location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
 		}
-		else if ( window.location.hostname == 'maldonado.pormibarrio.uy'){
-			location.href = '/around?latitude=-34.9145297;longitude=-54.9574799&zoom=' + zoom + list;
-		}
-		else {
-			location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom+ list;
+		else if ( window.location.hostname == 'montevideo.pormibarrio.uy'){
+			location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
 		}
 	}, timeout);
 	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
@@ -456,7 +453,7 @@ function geolocate(timeout, zoom, is_list ){
 						location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
 					}
 					else if ( window.location.hostname == 'montevideo.pormibarrio.uy'){
-						ocation.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
+						location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
 					}
 	    },
 	    {
