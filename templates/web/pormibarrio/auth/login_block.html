@@ -5,10 +5,6 @@
             <p>[% summary || loc("Login or signup to help impoving our city") %]</p>
         </div>
         <div class="form-group">
-            <p class="no-account">
-                Si aún no tenés cuenta, creá una ahora!<br>
-                <a class="green registrate" href="#">Regístrate aquí con tu correo electrónico</a>
-            </p>
             [% IF c.config.FACEBOOK_APP_ID || c.config.TWITTER_KEY %]
             <div class="social-buttons">
                 [% IF c.config.FACEBOOK_APP_ID %]
@@ -17,18 +13,30 @@
                 [% IF c.config.TWITTER_KEY %]
                     <button name="twitter_sign_in" id="twitter_sign_in" value="twitter_sign_in" class="btn btn-block btn-social btn-twitter">Accede con Twitter</button>
                 [% END %]
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="not_update_photo" name="not_update_photo"></input>
-                <label class="inline">[% loc('Do not replace my image with social image') %]</label>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="not_update_photo" name="not_update_photo"></input>
+                  <label class="inline">[% loc('Do not replace my image with social image') %]</label>
+                </div>
             </div>
             [% END %]
+            <button class="btn btn-block btn-green btn-social registrate" type="submit">Accede por Email</button>
         </div>
+    </div> <!-- bloque-sesion -->
+    <div class="bloque-registro">
+      <div class='full-wide'>
+          <a class="btn btn-back registrate-back" href="#">Volver</a>
+      </div>
+      <button type="button" id="have-account" class="btn btn-account btn-filter btn-filtro btn-filtro-active">
+          [% loc('Have account') %]
+      </button>
+      <button type="button" id="no-account" class="btn btn-account btn-filter btn-filtro">
+      [% loc('Create account') %]
+      </button>
+      <div id="my-have-account" class="page-tabs">
         [% IF sign_in_error  %]
-            <p class="error-m">[% loc('Email or password incorrect. Maybe you want to <a class="green registrate" href="#">register</a>?') %]</p>
+            <p class="error-m">[% loc('Email or password incorrect. Maybe you want to <a class="green no-account" href="#">register</a>?') %]</p>
         [% END %]
         <div class="form-group">
-            <p>Ingresa tus datos si ya tienes cuenta:</p>
             <input type="email" class="[% IF field_errors.email %] error [% END %]" value="[% user.email | html %]" name="form_email" id="form_email" placeholder="Correo electrónico *">
             [% IF loc_email_error  %]
                 <p class="error-m">[% loc_email_error %]</p>
@@ -54,11 +62,8 @@
             </div>
             [% END %]
         </div>
-    </div> <!-- bloque-sesion -->
-    <div class="bloque-registro">
-        <div class='full-wide'>
-            <a class="btn btn-back registrate-back" href="#">Volver</a>
-        </div>
+      </div>
+      <div id="my-no-account" class="page-tabs">
         <div class="ir">
             <h2>Regístrate y se parte</h2>
             <p>Crea una cuenta en PorMiBarrio y comienza a colaborar.</p>
@@ -88,21 +93,57 @@
             	<button class="btn btn-block btn-green" type="submit" id="email_sign_in" name="email_sign_in">Regístrate y publica</button>
             [% END %]
         </div>
+      </div>
     </div>
 </div>
-[% IF field_errors.identity_document || field_errors.name || field_errors.phone %]
-    <script>
-        var regCont = $('.bloque-registro .form-group').first();
-        $('#form_email').prependTo(regCont);
-        $('div.bloque-registro').slideDown();
-        $('div.bloque-sesion').slideUp();
-    </script>
-[% END %]
 <script type="text/javascript">
-  $(document).keypress(function(e) {
+  /*$(document).keypress(function(e) {
     if(e.which == 13) {
         e.preventDefault();
         $("#submit_sign_in").click();
     }
+  });*/
+  $( document ).ready(function() {
+    //MOSTRAR EL FORM DE REGISTRO
+  	$('.registrate').click(function(e){
+  		e.preventDefault();
+  		$('div.bloque-registro').slideDown();
+  		$('div.bloque-sesion').slideUp();
+  	});
+  	$('#no-account').click(function(e){
+  		var regCont = $('.bloque-registro .form-group').eq(1);
+  		$('#form_email').prependTo(regCont);
+  	});
+  	$('#have-account').click(function(e){
+  		var regCont = $('.bloque-registro .form-group').eq(0);
+  		$('#form_email').prependTo(regCont);
+  	});
+  	$('.no-account').click(function(e){
+  		$('.registrate').click();
+  		$('#no-account').click();
+  	});
+  	$('.registrate-back').click(function(e){
+  		$('div.bloque-registro').slideUp();
+  		$('div.bloque-sesion').slideDown();
+  	});
+    [% IF field_errors.identity_document || field_errors.name || field_errors.phone %]
+      $('.btn.btn-block.btn-green.btn-social.registrate').click();
+      setTimeout(function () {
+        $('#no-account').click();
+      }, 100);
+    /*$.when( $('.registrate').click() ).then(function( x ) {
+      $('#no-account').click();
+    });;*/
+    [% END %]
+    [% IF sign_in_error %]
+      /*var regCont = $('.bloque-registro .form-group').first();
+      $('#form_email').prependTo(regCont);
+      $('div.bloque-registro').slideDown();
+      $('div.bloque-sesion').slideUp();*/
+      $('.btn.btn-block.btn-green.btn-social.registrate').click();
+      setTimeout(function () {
+        $('#have-account').click();
+      }, 100);
+    [% END %]
   });
 </script>
