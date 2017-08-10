@@ -135,20 +135,7 @@ $( document ).ready(function() {
 		console.log(ref[1]);
 		$('div.scrolled-100').slimScroll({ scrollTo: $('#' + ref[1]).offset().top });
 	});
-	//MOSTRAR EL FORM DE REGISTRO
-	$('.registrate').click(function(e){
-		e.preventDefault();
-		var regCont = $('.bloque-registro .form-group').first();
-		$('#form_email').prependTo(regCont);
-		$('div.bloque-registro').slideDown();
-		$('div.bloque-sesion').slideUp();
-	});
-	$('.registrate-back').click(function(e){
-		e.preventDefault();
-		$('#form_email').insertBefore('#password_sign_in');
-		$('div.bloque-registro').slideUp();
-		$('div.bloque-sesion').slideDown();
-	});
+
 	$('.report-back').click(function(e){
 		e.preventDefault();
 		$('#side-form').hide();
@@ -403,6 +390,7 @@ function report(timeout, zoom){
 }
 
 function report_list(timeout, zoom){
+	$(".navbar-collapse.collapse.in").removeClass("in");
 	if (typeof fixmystreet != 'undefined'){
 		switch (fixmystreet.page) {
 			case 'around':
@@ -427,7 +415,7 @@ function geolocate(timeout, zoom, is_list ){
 		list = '&list=0';
 	}
 	setTimeout(function(){
-		console.log('Entra a TIMEOUT: '+window.location.hostname);
+		console.log('TIMEOUT: '+window.location.hostname);
 		if ( window.location.hostname == 'rivera.pormibarrio.uy'){
 			location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
 		}
@@ -449,12 +437,24 @@ function geolocate(timeout, zoom, is_list ){
 	    function(err) {
 	        $('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.<br/>Por favor selecciona una municipalidad en el menú superior para comenzar.');
 					console.log('Entra a ERROR: '+window.location.hostname);
+
 					if ( window.location.hostname == 'rivera.pormibarrio.uy'){
 						location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
 					}
 					else if ( window.location.hostname == 'montevideo.pormibarrio.uy'){
 						location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
+					}else{
+						if(area){
+							if(area==300){
+								location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
+							}
+							if(area==258){
+								location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
+							}
+						}
 					}
+
+
 	    },
 	    {
 	        enableHighAccuracy: true,
