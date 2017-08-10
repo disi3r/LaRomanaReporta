@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fixmystreet\n"
 "Report-Msgid-Bugs-To: matthew@mysociety.org\n"
-"POT-Creation-Date: 2017-08-09 09:46-0300\n"
+"POT-Creation-Date: 2017-08-10 15:23-0300\n"
 "PO-Revision-Date: 2014-08-01 00:44-0300\n"
 "Last-Translator: Fernando Uval <fernando@datauy.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/fixmystreet/language/es/)\n"
@@ -369,7 +369,7 @@ msgstr "<strong>Sí</strong> tengo una contraseña"
 msgid "About us"
 msgstr "¿Quiénes somos?"
 
-#: templates/web/pormibarrio/auth/login_block.html:44
+#: templates/web/pormibarrio/auth/login_block.html:52
 #: templates/web/pormibarriocr/auth/login_block.html:44
 msgid "Access"
 msgstr "Acceder"
@@ -725,8 +725,8 @@ msgstr "Categoría: %s"
 msgid "Change Password"
 msgstr "Cambiar contraseña"
 
-#: perllib/FixMyStreet/App/Controller/My.pm:128
-#: perllib/FixMyStreet/App/Controller/My.pm:223
+#: perllib/FixMyStreet/App/Controller/My.pm:127
+#: perllib/FixMyStreet/App/Controller/My.pm:222
 msgid "Changes has been saved"
 msgstr "Los cambios han sido guardados"
 
@@ -1019,6 +1019,10 @@ msgstr "Total"
 msgid "Create a report"
 msgstr "Crear un reporte"
 
+#: templates/web/pormibarrio/auth/login_block.html:33
+msgid "Create account"
+msgstr "Crear cuenta"
+
 #: templates/web/default/admin/body.html:179
 #: templates/web/pormibarrio/admin/body.html:179
 #: templates/web/zurich/admin/body.html:53
@@ -1121,7 +1125,7 @@ msgstr "Delegado"
 msgid "Diligency prize league table"
 msgstr "Ranking de premios a la constancia"
 
-#: templates/web/pormibarrio/auth/login_block.html:23
+#: templates/web/pormibarrio/auth/login_block.html:18
 #: templates/web/pormibarrio/my/edit.html:100
 #: templates/web/pormibarriocr/auth/login_block.html:23
 #: templates/web/pormibarriocr/my/edit.html:86
@@ -1269,11 +1273,11 @@ msgstr "Dirección de correo:"
 msgid "Email already in abuse list"
 msgstr "Email ya incluido en lista de abusos"
 
-#: perllib/FixMyStreet/App/Controller/Auth.pm:768
+#: perllib/FixMyStreet/App/Controller/Auth.pm:766
 msgid "Email has been sent for confirmation"
 msgstr "Se ha enviado un correo electrónico para validar su dirección."
 
-#: perllib/FixMyStreet/App/Controller/My.pm:179
+#: perllib/FixMyStreet/App/Controller/My.pm:178
 msgid "Email is already in use."
 msgstr "Email en uso"
 
@@ -1289,7 +1293,11 @@ msgstr "Reciba por email nuevos problemas locales"
 msgid "Email me updates"
 msgstr "Recibir por correo actualizaciones"
 
-#: templates/web/pormibarrio/auth/login_block.html:28
+#: templates/web/pormibarrio/auth/login_block.html:37
+#, fuzzy
+msgid "Email or password incorrect. Maybe you want to <a class=\"green no-account\" href=\"#\">register</a>?"
+msgstr "Email o Password incorrectos. Quizás quieras <a class=\"green registrate\" href=\"#\">registrarte</a>?"
+
 #: templates/web/pormibarriocr/auth/login_block.html:28
 msgid "Email or password incorrect. Maybe you want to <a class=\"green registrate\" href=\"#\">register</a>?"
 msgstr "Email o Password incorrectos. Quizás quieras <a class=\"green registrate\" href=\"#\">registrarte</a>?"
@@ -1721,6 +1729,10 @@ msgstr "Grupo"
 msgid "Has this problem been fixed?"
 msgstr "¿Ha sido corregido este problema?"
 
+#: templates/web/pormibarrio/auth/login_block.html:30
+msgid "Have account"
+msgstr "Acceder"
+
 #: templates/web/default/questionnaire/index.html:74
 #: templates/web/fixmystreet/questionnaire/index.html:68
 #: templates/web/pormibarrio/questionnaire/index.html:68
@@ -1728,7 +1740,7 @@ msgstr "¿Ha sido corregido este problema?"
 msgid "Have you ever reported a problem to a council before, or is this your first time?"
 msgstr "¿Alguna vez informó de un problema a la Intendencia antes, o es tu primera vez?"
 
-#: templates/web/pormibarrio/auth/login_block.html:46
+#: templates/web/pormibarrio/auth/login_block.html:54
 #: templates/web/pormibarriocr/auth/login_block.html:46
 msgid "Have you forgotten your password?"
 msgstr "¿Olvidaste tu contraseña?"
@@ -2089,7 +2101,7 @@ msgstr "Cabe señalar sin embargo que el proceso puede ser lento, especialmente 
 #: templates/web/fixmystreet/auth/general.html:46
 #: templates/web/fixmystreet/report/new/fill_in_details_form.html:172
 #: templates/web/fixmystreet/report/update-form.html:100
-#: templates/web/pormibarrio/auth/login_block.html:42
+#: templates/web/pormibarrio/auth/login_block.html:50
 #: templates/web/pormibarriocr/auth/login_block.html:42
 #: templates/web/seesomething/auth/general.html:35
 #: templates/web/zurich/auth/general.html:40
@@ -2965,7 +2977,7 @@ msgid "Please enter a subject"
 msgstr "Por favor, introduzca un título"
 
 #: perllib/FixMyStreet/App/Controller/Auth.pm:143
-#: perllib/FixMyStreet/App/Controller/Auth.pm:226
+#: perllib/FixMyStreet/App/Controller/Auth.pm:225
 #: perllib/FixMyStreet/Cobrand/PorMiBarrio.pm:103
 msgid "Please enter a valid ID"
 msgstr "Por favor, introduce un documento válido"
@@ -3001,7 +3013,7 @@ msgid "Please enter some details"
 msgstr "Por favor, introduzca algunos detalles"
 
 #: perllib/FixMyStreet/App/Controller/Auth.pm:148
-#: perllib/FixMyStreet/App/Controller/Auth.pm:231
+#: perllib/FixMyStreet/App/Controller/Auth.pm:230
 #: perllib/FixMyStreet/Cobrand/PorMiBarrio.pm:106
 msgid "Please enter your ID"
 msgstr "Por favor, introduzca su documento"
@@ -4904,8 +4916,8 @@ msgstr "Eliminada marca de usuario"
 msgid "User flagged"
 msgstr "Usuario marcado"
 
-#: perllib/FixMyStreet/App/Controller/Auth.pm:712
-#: perllib/FixMyStreet/App/Controller/Auth.pm:811
+#: perllib/FixMyStreet/App/Controller/Auth.pm:710
+#: perllib/FixMyStreet/App/Controller/Auth.pm:809
 msgid "User or password incorrect"
 msgstr "Usuario o clave incorrectos"
 
@@ -5299,7 +5311,7 @@ msgstr "Se ha asociado su cuenta de Twitter. Ahora puedes loguearte usando dicha
 msgid "Your changes have been saved"
 msgstr "Sus cambios se han guardado."
 
-#: perllib/FixMyStreet/App/Controller/My.pm:200
+#: perllib/FixMyStreet/App/Controller/My.pm:199
 msgid "Your document is not valid"
 msgstr "Su documento no es válido"
 
@@ -5413,7 +5425,7 @@ msgstr "Su Nombre:"
 msgid "Your password"
 msgstr "Su contraseña"
 
-#: perllib/FixMyStreet/App/Controller/My.pm:155
+#: perllib/FixMyStreet/App/Controller/My.pm:154
 #: templates/web/default/auth/change_password.html:6
 #: templates/web/pormibarrio/my/edit.html:19
 #: templates/web/pormibarrio/my/my.html:38
@@ -5782,6 +5794,20 @@ msgstr "El usuario es el propietario del problema"
 msgid "ward"
 msgstr "barrio"
 
+#: templates/web/default/front/stats.html:17
+#, perl-format
+msgid "<big>%s</big> report recently"
+msgid_plural "<big>%s</big> reports recently"
+msgstr[0] "<big>%s</big> notificadas recientemente"
+msgstr[1] "<big>%s</big> notificadas recientemente"
+
+#: templates/web/default/report/new/councils_text_some.html:14
+#, perl-format
+msgid "We do <strong>not</strong> yet have details for the other council that covers this location."
+msgid_plural "We do <strong>not</strong> yet have details for the other councils that cover this location."
+msgstr[0] "Todavía <strong>no</strong> tenemos detalles para la Intendencia que cubre esta zona."
+msgstr[1] "Todavía <strong>no</strong> tenemos detalles para las Intendencias que cubre esta zona."
+
 #: templates/web/default/report/_support.html:6
 #, perl-format
 msgid "%d supporter"
@@ -5795,34 +5821,6 @@ msgid "<big>%s</big> report in past week"
 msgid_plural "<big>%s</big> reports in past week"
 msgstr[0] "<big>%s</big> notificadas la semana pasada"
 msgstr[1] "<big>%s</big> notificadas la semana pasada"
-
-#: perllib/Utils.pm:284
-#, perl-format
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d minuto"
-msgstr[1] "%d minutos"
-
-#: templates/web/default/front/stats.html:29
-#, perl-format
-msgid "<big>%s</big> update on reports"
-msgid_plural "<big>%s</big> updates on reports"
-msgstr[0] "<big>%s</big> reporte actualizado"
-msgstr[1] "<big>%s</big> reportes actualizados"
-
-#: templates/web/default/front/stats.html:17
-#, perl-format
-msgid "<big>%s</big> report recently"
-msgid_plural "<big>%s</big> reports recently"
-msgstr[0] "<big>%s</big> notificadas recientemente"
-msgstr[1] "<big>%s</big> notificadas recientemente"
-
-#: perllib/Utils.pm:280
-#, perl-format
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d día"
-msgstr[1] "%d días"
 
 #: perllib/Utils.pm:278
 #, perl-format
@@ -5838,6 +5836,20 @@ msgid_plural "We do not yet have details for the councils that cover this locati
 msgstr[0] "Todavía no tenemos detalles para la Intendencia que cubre esta zona."
 msgstr[1] "Todavía no tenemos detalles para las Intendencias que cubren esta zona."
 
+#: templates/web/default/front/stats.html:29
+#, perl-format
+msgid "<big>%s</big> update on reports"
+msgid_plural "<big>%s</big> updates on reports"
+msgstr[0] "<big>%s</big> reporte actualizado"
+msgstr[1] "<big>%s</big> reportes actualizados"
+
+#: perllib/Utils.pm:280
+#, perl-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d día"
+msgstr[1] "%d días"
+
 #: templates/web/default/front/stats.html:23
 #, perl-format
 msgid "<big>%s</big> fixed in past month"
@@ -5845,19 +5857,19 @@ msgid_plural "<big>%s</big> fixed in past month"
 msgstr[0] "<big>%s</big> arregladas la semana pasada"
 msgstr[1] "<big>%s</big> arregladas la semana pasada"
 
+#: perllib/Utils.pm:284
+#, perl-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuto"
+msgstr[1] "%d minutos"
+
 #: perllib/Utils.pm:282
 #, perl-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d hora"
 msgstr[1] "%d horas"
-
-#: templates/web/default/report/new/councils_text_some.html:14
-#, perl-format
-msgid "We do <strong>not</strong> yet have details for the other council that covers this location."
-msgid_plural "We do <strong>not</strong> yet have details for the other councils that cover this location."
-msgstr[0] "Todavía <strong>no</strong> tenemos detalles para la Intendencia que cubre esta zona."
-msgstr[1] "Todavía <strong>no</strong> tenemos detalles para las Intendencias que cubre esta zona."
 
 #~ msgid "e.g. ‘%s’ or ‘%s’"
 #~ msgstr "por ejemplo, '%s' o '%s'"
