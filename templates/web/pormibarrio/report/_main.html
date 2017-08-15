@@ -91,7 +91,7 @@
                 name : "[% task.name %]",
                 area : "[% task.area %]",
                 status : "[% task.status %]",
-                report : "[% task.report %]",
+                report : "[% task.report.replace('\n', '<br>') %]",
                 created : "[% task.created %]",
                 planned : "[% task.planned %]",
                 key : tkey,
