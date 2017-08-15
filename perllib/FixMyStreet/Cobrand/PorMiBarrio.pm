@@ -177,14 +177,14 @@ sub geocode_postcode {
 			$c->log->debug('GEOPOSTCODE AREA: '.$area);
 			my $base_url;
 			switch ($area) {
-				case (300) {
+				case (289) {
 					$base_url = 'http://www.montevideo.gub.uy/ubicacionesRestProd/';
 					$response = postcode_montevideo(\@term_arr);
 				}
 				case (258) {
 					$c->log->debug('GEOPOSTCODE 258 ');
 					$base_url = 'http://gis.rivera.gub.uy/gisrivera/incphp/xajax/x_suggest.php';
-					$response = postcode_rivera(\@term_arr);
+					$response = postcode_rivera(\@term_arr, $c);
 				}
 				else {
 					$response = postcode_montevideo(\@term_arr);
@@ -247,27 +247,43 @@ sub postcode_montevideo {
 }
 
 sub postcode_rivera {
-	#my ( $term_arr, $c ) = @_;
-	my $term_arr = shift;
+	my ( $term_arr, $c ) = @_;
+	#my $term_arr = shift;
 	my $response = {};
 	my @addresses;
 	my $req;
 	my $last = 0;
 	my @term_arr = @{$term_arr};
 
+
+	##GET PHPSESSID
 	my $base_url = 'http://gis.rivera.gub.uy/';
 	my $uri = URI->new( $base_url );
 	my $ua = LWP::UserAgent->new;
+	$uri->path( 'gisrivera/map.phtml' );
+	my $reqToGetId_first = POST $uri->as_string;
+	my $resToGetId_first = $ua->request( $reqToGetId_first );
+	my $cookie = $resToGetId_first->header('set-cookie');
+	my @cookies_values = split(';', $cookie);
+	my $phpsessid = $cookies_values[0];
+	##CREATE A HEADER WITH ID
 	my $headers = HTTP::Headers->new(
-		DNT => 1,
-		Cookie =>'PHPSESSID=g9ot1a5pdrdntds35vp5kscum6; fef903a4f39c04e02cfc562252c70ad5=ub7bsmmg8e40fbicfgj76cmd01' );
+		Cookie => $phpsessid,
+	);
 	$ua->default_headers($headers);
+	##INVOKE x_toc_update
+	$uri->path( 'gisrivera/incphp/xajax/x_toc_update.php');
+	my $reqUpdateToc = POST $uri->as_string.'?'. $phpsessid,[dummy => 'dummy' ];
+	my $resUpdateToc = $ua->request( $reqUpdateToc );
+	##Set Search TYPE PATH IN GIS SERVER
+	$uri->path('gisrivera/incphp/xajax/x_search.php');
+	my $reqSetType = POST $uri->as_string.'?'.$phpsessid.'&action=searchitem&searchitem=rivera_cruce_calles_rivera',[dummy => 'dummy' ];
+	my $resSetType = $ua->request( $reqSetType );
+	##NOW CAN PROCEED TO SEARCH
+	$uri->path( 'gisrivera/incphp/xajax/x_search.php' );
+	$uri->query_form( action => 'searchitem', searchitem => 'rivera_cruce_calles_rivera');
+	#$ua->default_headers($headers);
 	if ( scalar @term_arr < 2 ){
-		#$uri->path( 'gisrivera/incphp/xajax/x_search.php' );
-		#$uri->query_form( action => 'searchitem', searchitem => 'rivera_cruce_calles_rivera');
-		#my $req_first = POST $uri->as_string,[ dummy => 'dummy' ];
-		#my $res_first = $ua->request( $req_first );
-		#$c->log->debug('RES RIV FIRST: '.Dumper($res_first));
 		$uri->path( 'gisrivera/incphp/xajax/x_suggest.php' );
 		$uri->query_form( searchitem => 'rivera_cruce_calles_rivera', fldname => 'nom_calle_ini');
 		$req = POST $uri->as_string,[ q => $term_arr[0],	limit => 10 ];
@@ -283,7 +299,7 @@ sub postcode_rivera {
 			];
 		}
 		else{
-			$uri->path( $uri->path . 'gisrivera/incphp/xajax/x_info.php' );
+			$uri->path( 'gisrivera/incphp/xajax/x_info.php' );
 			if ($term_arr[2] eq 'door'){
 				$req = POST $uri->as_string,[
 					nombre => $term_arr[0],
@@ -306,14 +322,20 @@ sub postcode_rivera {
 		}
 	}
 	my $res = $ua->request( $req );
+	$c->log->info(Dumper($res));
 	if ( $res->is_success ) {
 		if ( $last ){
 			my $addr_content = JSON->new->utf8->allow_nonref->decode($res->decoded_content);
-			my $addr = $addr_content->{queryResult}[1];
-			my @coords = split(/\+/,$addr->{allextent});
-			$response->{latitude} = ($coords[0]+$coords[2])/2;
-			$response->{longitude} = ($coords[1]+$coords[3])/2;
-			return $response;
+			if ( $addr_content->{queryResult} ){
+				my $addr = $addr_content->{queryResult}[1];
+				my @coords = split(/\+/,$addr->{allextent});
+				$response->{latitude} = ($coords[0]+$coords[2])/2;
+				$response->{longitude} = ($coords[1]+$coords[3])/2;
+				return $response;
+			}
+			else {
+				$response->{error} = 0;
+			}
 		}
 		else {
 			foreach ( split(/\n/,$res->decoded_content) ) {
