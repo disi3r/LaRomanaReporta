@@ -196,7 +196,8 @@ sub get_category_groups: Private {
       $_->category => {
         group_id =>$_->group_id,
         group_name =>$_->contacts_group->group_name,
-        group_color =>$_->contacts_group->group_color
+        group_color =>$_->contacts_group->group_color,
+        group_icon =>$_->contacts_group->group_icon,
       }
     } @category_groups;
     Memcached::set('category_groups', \%api_groups, 3600);
@@ -390,6 +391,49 @@ sub reports : Path('reports') {
     }
     $c->stash->{api_result} = \@reports;
   }
+}
+
+sub geo_reports : Path('geo_reports') {
+  my ( $self, $c ) = @_;
+  #Deceive Memcached
+  $c->stash->{query_key} = '.';
+  $c->forward('reports');
+  my $reports = $c->stash->{api_result};
+  #Load cat groups
+  my $groups = $c->forward('get_category_groups');
+  my %groups = %{$groups};
+  my @fcollection;
+  foreach my $report (@$reports) {
+    #Create point
+    my $pt = Geo::JSON::Point->new({
+        coordinates => [ $report->{latitude}, $report->{longitude} ],
+    });
+    my $cat = $report->{category};
+    $c->log->debug('GROUPS GEO:'.Dumper($groups{$cat}->{group_icon}));
+    #Add properties
+    my %pt_prop = (
+      id => $report->{id},
+      title => $report->{title},
+      user => $report->{name},
+      category => $cat,
+      date => $report->{confirmed},
+      state => $report->{state},
+      pin_url => '/i/pins/'.$groups{$cat}->{group_icon}.'.png',
+      category_url => '/i/category/'.$groups{$cat}->{group_icon}.'.png',
+      color => $groups{$cat}->{group_color},
+    );
+    #Create feature
+    my $geo_pin = Geo::JSON::Feature->new({
+      geometry   => $pt,
+      properties => \%pt_prop,
+    });
+    #Append feature
+    push @fcollection, $geo_pin;
+  }
+  my $pt = Geo::JSON::FeatureCollection->new({
+      features => \@fcollection,
+  });
+  $c->stash->{api_result} = $pt->to_json;
 }
 
 =head2 getTotals
@@ -730,7 +774,6 @@ sub control_reports: Path('control_reports') {
   my ( $self, $c ) = @_;
   #Get array report duration
   my @all_reports = map { {id => $_->id =>, response => $_->duration} } $c->stash->{api_problems}->all;
-  $c->log->debug(Dumper(@all_reports));
   #Order array by response time
   my @order_reports = sort { $a->{response} <=> $b->{response} } @all_reports;
   my $medium_key = int(scalar @order_reports/2);

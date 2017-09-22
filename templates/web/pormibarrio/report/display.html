@@ -110,7 +110,7 @@
                 <div id="comments-on-report" class="comments">
                     <h3>Comentarios</h3>
                 [% IF problem.is_fixed %]
-                    <p class="status-report-im">La IM no recibirá comentarios ya que el problema se encuentra finalizado. Puedes hacer un nuevo reclamo haciendo click <a href="" id="new-report-link">aquí</a>.</p>
+                    <p class="status-report-im">La Intendencia no recibirá comentarios ya que el problema se encuentra finalizado. Puedes hacer un nuevo reclamo haciendo click <a href="" id="new-report-link">aquí</a>.</p>
                     <script>$('#new-report-link').click(function(){ window.location.href = "/around?latitude="+fixmystreet.latitude+";longitude="+fixmystreet.longitude+"&zoom="+fixmystreet.zoom; return false; });</script>
                 [% END %]
                     [% INCLUDE 'report/updates.html' %]

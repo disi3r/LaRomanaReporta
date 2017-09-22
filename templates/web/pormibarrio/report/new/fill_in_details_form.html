@@ -7,7 +7,7 @@
                 <div class="ir">
                 <!--<div id="report-a-problem-main"> -->
                     <div class='full-wide'>
-                        <a class="btn btn-back report-back" href="#">Volver</a>
+                        <a class="btn btn-back report-back" href="#">Ver Mapa</a>
                     </div>
                     <h2>[% loc('Reporting a problem') %]</h2>
 
@@ -70,7 +70,7 @@
                         [% PROCESS "report/new/category_extras.html" %]
                     [%- END %]
                 </div>
-                
+
                 <div class="form-group">
                     <label for="form_title">[% loc('Subject') %] *</label>
                     <input class="form-control [% IF field_errors.title %] error [% END %]" type="text" value="[% report.title | html %]" name="title" id="form_title" placeholder="[% loc('Provide a title') %]" required>
@@ -109,7 +109,7 @@
                         <input type="file" name="photo" id="form_photo">
                     </div>
                         <p class="help-block">El archivo no puede pesar más de 2MB (JPG, PNG, GIF) </p>
-                    
+
                     [% END %]
 
                 </div>
@@ -144,7 +144,7 @@
                 <div class="form-group">
                     <input class="btn btn-block btn-reportar" type="submit" id="submit_sign_in" name="submit_sign_in" value="Publicar">
                 </div>
-            
+
             [% ELSE %]
                 <div class="checkbox-group">
                     <div class="checkbox">
@@ -167,7 +167,7 @@
 	                 </script>
                 </div>
             </div>
-            [% INCLUDE auth/login_block.html 
+            [% INCLUDE auth/login_block.html
 		one_time_login = 1
                 summary = loc("Login to your account to be able to send the report to your local government")
                 sign_in_button = '<button class="btn btn-block btn-green" type="submit" id="submit_register" name="submit_register">Regístrate y publica</button>'
@@ -199,4 +199,3 @@ $('div.scrolled-reportar').slimScroll({
 
 
 </script>
-
