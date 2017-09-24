@@ -10,6 +10,7 @@ use LWP::UserAgent;
 use DateTime;
 use Switch;
 use URI;
+use Scalar::Util qw(looks_like_number);
 #use Params::Util qw<_HASH _HASH0 _HASHLIKE>;
 
 sub process_extras {
@@ -61,7 +62,7 @@ sub validate_identity_document {
 			push @parts, chop $parts[0];
 		}
 		#Validate only numbers
-		if ( $parts[0] !=~ /^[1-9][0-9]*$/) {
+		if ( !looks_like_number($parts[0]) ) {
 			return 0;
 		}
 		#1234567-X -> X = [(1x8) + (2x1) + (3x2) + (4x3) + (5x4) + (6x7) + (7x6)] mod 10 -> X = [ 8 +2 +6 +12 +20 +42 +42] mod 10 = 132 mod 10 = 2
