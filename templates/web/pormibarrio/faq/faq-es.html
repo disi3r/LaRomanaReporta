@@ -8,7 +8,8 @@
 	    </div>
 	</div>
 [% ELSE %]
-<a ng-click="openWebsite('http://project.pormibarrio.uy/projects/project/61')" href="#" class="add-ticket">Problemas y sugerencias</a>
+<a ng-click="openWebsite('http://project.pormibarrio.uy/projects/project/61')" href="#" class="add-ticket">Problemas y sugerencias en Montevideo</a>
+<a ng-click="openWebsite('http://project.pormibarrio.uy/projects/project/96')" href="#" class="add-ticket">Problemas y sugerencias en Rivera</a>
 	[% INCLUDE faq_header %]
 [% END %]
 
@@ -19,13 +20,17 @@
 	            <div class="respuesta" id="faq01">
 	                <h2>¿Qué es Por mi Barrio?</h2>
 					<p>
-						Por Mi Barrio es una plataforma que permite a las personas que viven en Montevideo enviar reportes sobre daños, desperfectos, vandalismo y otros problemas de nuestra ciudad desde su computadora o celular.
+						Por Mi Barrio es una plataforma que permite a las personas que viven en diversos departamentos de Uruguay enviar reportes sobre daños, desperfectos, vandalismo y otros problemas de nuestras ciudades desde su computadora o celular.
 						Es decir, cuando encuentres un problema en tu barrio (<a href="#faq06" class="pregunta">¿Qué tipo de cosas puedo reclamar?</a>) vas a poder entrar en pormibarrio.uy desde tu computadora (ceibalitas incluidas) o celular y reportarlo.
 					</p>
 	            </div>
 	            <div class="respuesta" id="faq02">
+						<h2>¿Qué rol cumple la Intendencia de Rivera en Por Mi Barrio?</h2>
+	        <p>
+						Se firmó un convenio entre la Intendencia de Rivera y DATA en el que se establece que, por un lado, DATA se encargará del desarrollo de la plataforma y por otro, la IDR se compromete a trabajar en la articulación entre Por Mi Barrio y las diferentes áreas que atenderán los reportes efectuados. La Intendencia de Rivera también brindará apoyo en la comunicación. La plataforma Por Mi Barrio genera un espacio en línea al cual tendrán acceso por un lado los ciudadanos generando los reportes y por otra parte funcionarios de la intendencia atendiendo a los reportes, la plataforma asegura que los reportes denunciados llegarán a la división correspondiente de la Intendencia y permitirá además recibir de forma automática notificaciones sobre la respuesta que la IDR da al problema. Esto significa que no sólo se reciben notificaciones cuando el problema está resuelto, sino que también de estados intermedios de avance como -por ejemplo- que la inspección pasó o que se marcó fecha para el arreglo.
+					</p>
 	   				<h2>¿Qué rol cumple la Intendencia de Montevideo en Por Mi Barrio?</h2>
-	                <p>
+	        <p>
 						Se firmó un convenio entre la Intendencia de Montevideo y DATA en el que se establece que, por un lado, DATA se encargará del desarrollo de la plataforma y por otro, la IM se compromete a trabajar en la conexión entre Por Mi Barrio y el Sistema Único de Reclamos de la IM (SUR). La Intendencia de Montevideo también brindará apoyo en la comunicación.
 						La plataforma Por Mi Barrio se conecta de forma directa con el SUR, la plataforma asegura que los reportes denunciados llegarán a la división correspondiente de la comuna y permitirá además recibir de forma automática notificaciones sobre la respuesta que la IM da al problema. Esto significa que no sólo se reciben notificaciones cuando el problema está resuelto, sino que también de estados intermedios de avance como -por ejemplo- que la inspección pasó o que se marcó fecha para el arreglo.
 						Este nivel de integración con los sistemas del Municipio no tiene precedentes en las instalaciones de este tipo de plataformas en el resto del mundo.
@@ -35,7 +40,7 @@
 	            	<h2>¿Cómo se financia Por Mi Barrio?</h2>
 	                <p>
 						Este proyecto fue seleccionado en el Fondo Acelerador de Innovaciones Cívicas App Cívico de <a href="http://www.avina.net/esp/">Avina</a> y <a href="http://www.omidyar.com/">Omidyar</a>, quienes nos entregaron U$S 100.000 para llevar a cabo el desarrollo, la implementación, la comunicación, la documentación y la replicación en un plazo de 1 año y medio.
-					No recibimos fondos de la Intendencia de Montevideo ni de ningún organismo gubernamental o partido político. Tampoco se le cobra por el servicio a usuarios, ni a la Intendencia de Montevideo.
+					No recibimos fondos de ningún organismo gubernamental o partido político. Tampoco se le cobra por el servicio a usuarios, ni a las Intendencias.
 					</p>
 				</div>
 				<div class="respuesta" id="faq04">
@@ -53,37 +58,51 @@
 						Los reportes se realizan en 3 simples pasos:
 						<ol>
 							<li>Reportá un problema en el mapa o sumate a uno ya creado.</li>
-							<li>Por Mi Barrio lo ingresa al Sistema Único de Reclamos de la IM.</li>
+							<li>Por Mi Barrio lo ingresa a la división correspondiente de la Intendencia en la que te encuentres.</li>
 							<li>Te enviamos información sobre el progreso, hasta su solución.</li>
 						</ol>
 					</p>
 					<p>
 						Para hacer esto, sólo tenés que localizar el problema en un mapa. También se pueden subir fotos y comentarios. A partir de que creaste o te sumaste a un reclamo, vas a recibir en tu correo electrónico las novedades sobre el mismo.
-						Cuando vuelvas a entrar a la página web vas a poder ver tu reporte marcado en un mapa, así como los de los/as demás usuarios/as. También podrás ver los reportes que la <a href="http://www.montevideo.gub.uy/">Intendencia de Montevideo</a> (IM) marcó como solucionados y los que todavía son problemas para el barrio.
+						Cuando vuelvas a entrar a la página web vas a poder ver tu reporte marcado en un mapa, así como los de los/as demás usuarios/as. También podrás ver los reportes que la Intendencia marcó como solucionados y los que todavía son problemas para el barrio.
 					</p>
 	            </div>
 	            <div class="respuesta" id="faq06">
 	                <h2>¿Qué tipo de cosas puedo reclamar?</h2>
 	                <p>
 						Por Mi Barrio incorpora múltiples categorías de reclamos y va a seguir sumando nuevas opciones con el tiempo. Sin embargo, es importante aclarar que un reclamo implica problemas como roturas o vandalismo, no pedidos o expresiones de deseo de los vecinos.
-						En la actualidad los reclamos que pueden hacerse son los que están bajo las categorías:
+						Los reclamos que pueden hacerse son acordados con la Intendencia, con quien se planifica la incorporación de las nuevas categorías. <br>
+						En la actualidad los reclamos que pueden hacerse a la Intendencia de Montevideo son los que están bajo las categorías:
 					</p>
 						<ul>
 							<li>Arbolado</li>
+							<li>Viales</li>
 							<li>Bocas de tormenta</li>
 							<li>Barrido</li>
 							<li>Basura, escombros y ferias</li>
 							<li>Plantación</li>
 							<li>Contenedores</li>
+							<li>Alumbrado</li>
+						</ul>
+					Mientras que con la Intendencia de Rivera las categorías en las que puede reportarse son:
+						<ul>
+							<li>Alumbrado</li>
+							<li>Problemas con Animales</li>
+							<li>Barrido</li>
+							<li>Contenedores</li>
+							<li>Recolección por Calendario</li>
+							<li>Parques y Jardines</li>
+							<li>Recolección</li>
+							<li>Tránsito</li>
 						</ul>
 						<p>
-							Para hacer otro tipo de reclamos, los ususarios deben comunicarse directamente con la Intendencia de Montevideo.
+							Para hacer otro tipo de reclamos, los ususarios deben comunicarse directamente con la Intendencia que corresponda.
 						</p>
 				</div>
 	            <div class="respuesta" id="faq07">
 					<h2>¿Porqué no puedo reclamar o pedir cualquier cosa?</h2>
 					<p>
-						Porque Una de las grandes ventajas del sistema es que nos brinda, tanto a las personas que vivimos en Montevideo como a la Intendencia, datos disponibles al público sobre el funcionamiento de los mecanismos de reclamos y la respuesta a los mismos. Cuando se ingresan al sistema pedidos que no pueden ser solucionados por esta vía o se salen del esquema, empeoramos la calidad de los datos con los que podemos conocer cómo, en qué tiempos y con qué nivel de satisfacción se responden a los reclamos de las personas.
+						Porque una de las grandes ventajas del sistema es que nos brinda, tanto a las personas que vivimos en la ciudad como a la Intendencia, datos disponibles al público sobre el funcionamiento de los mecanismos de reclamos y la respuesta a los mismos. Cuando se ingresan al sistema pedidos que no pueden ser solucionados por esta vía o se salen del esquema, empeoramos la calidad de los datos con los que podemos conocer cómo, en qué tiempos y con qué nivel de satisfacción se responden a los reclamos de las personas.
 					</p>
 				</div>
 				<div class="respuesta" id="faq08">
@@ -94,14 +113,7 @@
 				</div>
 	            <div class="respuesta" id="faq09">
 	                <h2>¿Necesito Facebook para registrarme?</h2>
-	                <p>Una plataforma que permitirá a las personas que viven en Montevideo enviar reportes sobre daños,
-	                desperfectos, vandalismo y otros problemas de nuestra ciudad desde su computadora o celular.</p>
-	                <p>Es decir, cuando encuentres un problema en tu barrio (un pozo en la calle, problemas de arbolado o de iluminación,
-	                contenedores de basura rotos, etc.) vas a poder entrar en pormibarrio.uy desde tu computadora (ceibalitas incluidas)
-	                o celular y reportarlo. Para hacer esto, sólo tenés que localizar el problema en un mapa. También se pueden subir fotos y comentarios.</p>
-	                <p>Cuando vuelvas a entrar a la página web vas a poder ver tu reporte marcado en un mapa, así como los de los/as demás
-	                usuarios/as. También podrás ver los reportes que la <a href="javascript:;">Intendencia de Montevideo (IM)</a> marcó como solucionados y
-	                los que todavía son problemas para el barrio. </p>
+	                <p>Los medios para registrarse en la plataforma con a través de Facebook, Twitter o email. No es requerido tener Facebook o Twitter, sin embargo el mail siempre será necesario, ya que la plataforma envía las notificaciones sobre las actualizaciones de los reportes a través de este medio.</p>
 	            </div>
 				<div class="respuesta" id="faq10">
 					<h2>¿Qué hago si el reclamo que quiero realizar ya existe?</h2>
@@ -133,20 +145,20 @@
 				<div class="respuesta" id="faq14">
 	            	<h2>¿Quiénes somos?</h2>
 	        		<p>
-						El equipo estable de DATA está formado por 6 personas y es interdisciplinario, pero muchas personas de Uruguay y del mundo nos apoyan en algunos proyectos y de muchas formas. Somos activistas, comunicadores/as, programadores/as, apasionados por la transparencia en el gobierno, mujeres, hombres y soñadores/as.
+						El equipo estable de DATA está formado por 5 personas y es interdisciplinario, pero muchas personas de Uruguay y del mundo nos apoyan en algunos proyectos y de muchas formas. Somos activistas, comunicadores/as, programadores/as, apasionados por la transparencia en el gobierno, mujeres, hombres y soñadores/as.
 					</p>
 				</div>
 				<div class="respuesta" id="faq15">
 	            	<h2>¿Por qué lo hacemos?</h2>
 	            	<p>
 						En nuestra visión decimos que “DATA promueve el desarrollo humano a través de la creación, uso e innovación de tecnologías basadas en datos abiertos, para aportar a mejorar nuestras sociedades y nuestros gobiernos”. Con esa consigna como bandera es que ideamos y elegimos los proyectos en los que trabajamos.
-						Por mi Barrio es  -y consideramos este punto sumamente importante- una iniciativa que no se termina en la web. Forma parte del programa Ciudades Abiertas de DATA, que pretende transformar las relaciones entre la ciudadanía y los gobiernos locales, empoderando a las personas para participar y colaborar en la resolución de problemas urbanos a través de plataformas web y móviles. Para lograrlo, la plataforma en línea es sólo el primer paso y el programa abarca 18 meses que van desde el desarrollo (etapa actual) hasta el dictado de talleres en los barrios de muy diversas zonas de Montevideo para capacitar a los/as vecinos/as en el uso de la herramienta, al tiempo que tenemos la oportunidad de conocer cómo se utiliza y mejorarla para su aplicación local.
+						Por mi Barrio es  -y consideramos este punto sumamente importante- una iniciativa que no se termina en la web. Forma parte del programa Ciudades Abiertas de DATA, que pretende transformar las relaciones entre la ciudadanía y los gobiernos locales, empoderando a las personas para participar y colaborar en la resolución de problemas urbanos a través de plataformas web y móviles.
 					</p>
 				</div>
 				<div class="respuesta" id="faq16">
-	            	<h2>¿Que significan los estados que envía la IM acerca de un reporte?</h2>
+	            	<h2>¿Que significan los estados que envía la plataforma acerca de un reporte?</h2>
 	            	<p>
-						En el SUR - Sistema Unico de Reclamo (sistema único donde se gestionan los reclamos de la IM), se manejan tres estados:
+						Dentro de la Intendencia de Montevideo, en el SUR - Sistema Unico de Reclamo (sistema único donde se gestionan los reclamos de la IM), se manejan tres estados:
 					</p>
 					<p>
 						1. Ingresado, significa que su reclamo a entrado en el sistema informático y está pronto para ser visualizado por los funcionarios municipales. En el reporte de Por Mi Barrio aparece "Se ha creado el reclamo".
@@ -157,10 +169,80 @@
 					<p>
 						3. Finalizado, significa que su reclamo ha finalizado para la IM, ya sea porque se terminaron todos los trabajos para solucionarlo, o su reclamo no correspondía. En la consulta de reclamos puede verse el informe donde se le indica lo realizado por la IM. En el reporte de Por Mi Barrio aparece "El problema asociado al reclamo ha quedado finalizado".
 					</p>
+					<p>
+						Dentro de la Intendencia de Rivera estos estados se amplían para hacer un seguimiento más profundo, por lo que los estados que podemos encontrar serán:
+					</p>
+					<p>
+						1. Ingresado, significa que su reclamo a entrado en el sistema informático y está pronto para ser visualizado por los funcionarios municipales. En el reporte de Por Mi Barrio aparece "Se ha creado el reclamo".
+					</p>
+					<p>
+						2. Acción agendada, Este estado puede encontrarse en diversas etapas del reporte, pero comunmente estará asociado a reportes para los cuales la Intendencia ya tenía planificada una acción. La resolución entonces quedará relegada al día definido por la Intendencia para la ejecución de dicha acción. En el reporte de Por Mi Barrio aparece "Acción agendada".
+					</p>
+					<p>
+						3. En Proceso, significa que su reclamo ha sido revisado por un funcionario municipal y se han comenzado las gestiones para resolverlo. En el reporte de Por Mi Barrio aparece "El problema asociado ha quedado en proceso".
+					</p>
+					<p>
+						4. Investigando, significa que su reclamo está siendo revisado en sitio por los funcionarios municipales, de manera de poder determinar las acciones necesarias para la resolución del mismo. En el reporte de Por Mi Barrio aparece "Investigando".
+					</p>
+					<p>
+						5. Finalizado, significa que su reclamo ha finalizado para la IM, ya sea porque se terminaron todos los trabajos para solucionarlo, o su reclamo no correspondía. En la consulta de reclamos puede verse el informe donde se le indica lo realizado por la IM. En el reporte de Por Mi Barrio aparece "El problema asociado al reclamo ha quedado finalizado".
+					</p>
 				</div>
 				<div class="respuesta" id="faq17">
-	            	<h2>¿Qué puedo reportar en cada categoría?</h2>
-	            	<p></p>
+					<h2>¿Qué puedo reportar en cada categoría en la intendencia de Rivera?</h2>
+						<p><h3>Alumbrado</h3>
+							<b>Alumbrado en mal estado</b>
+							<b>Cable enredado en ramas</b>
+							<b>Foco apagado</b>
+							<b>Foco encendido durante el día</b>
+							<b>Foco intermitente</b>
+						</p>
+						<p><h3>Barrido</h3>
+							<b>Papelera en mal estado</b>
+							<b>Basural</b>
+							<b>Papelera llena</b>
+							<b>Falta de barrido</b>
+						</p>
+						<p><h3>Contenedores</h3>
+							<b>Contenedor en mal estado</b>
+							<b>Contenedor sucio</b>
+							<b>Contenedor desbordado</b>
+						</p>
+						<p><h3>Emergencias de alumbrado</h3>
+							<b>Cable suelto</b>
+							<b>Columna electrificada</b>
+							<b>Columnas caídas</b>
+						</p>
+						<p><h3>Limpieza y desmalezado</h3>
+							<b>Limpieza de alcantarillado</b>
+							<b>Limpieza de canalones</b>
+						</p>
+						<p><h3>Parques y Jardines</h3>
+							<b>Denuncia por poda privada</b>
+							<b>Podas</b>
+							<b>Mantenimiento de áreas verdes</b>
+							<b>Poda de emergencia</b>
+							<b>Retiro de árboles</b>
+						</p>
+						<p><h3>Problemas con Animales</h3>
+							<b>Animales en vía pública</b>
+							<b>Animales muertos</b>
+						</p>
+						<p><h3>Recolección</h3>
+							<b>Pasó el recolector pero no levanto</b>
+							<b>No pasó el recolector</b>
+							<b>Recolección fuera de hora</b>
+						</p>
+						<p><h3>Recolección por Calendario</h3>
+							<b>Denuncia por sacar basuras extraordinaria fuera de fecha</b>
+							<b>Daños por levante</b>
+						</p>
+						<p><h3>Tránsito</h3>
+							<b>Señal en mal estado</b>
+							<b>Obstrucción de señal</b>
+							<b>Vandalismo en señal</b>
+						</p>
+	            	<h2>¿Qué puedo reportar en cada categoría en la intendencia de Montevideo?</h2>
 	            		<h3>Arbolado</h3>
 	            	<p>
 	            		<b>Árbol deteriorado/riesgoso/extracción</b><br>
@@ -394,7 +476,7 @@
         <dl>
         	<dt>PorMiBarrio</dt>
             <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq01');\"" : "href='#faq01'" %] class="pregunta">¿Qué es Por mi Barrio?</a></dd>
-            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq02');\"" : "href='#faq02'" %] class="pregunta">¿Qué rol cumple la Intendencia de Montevideo en Por Mi Barrio?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq02');\"" : "href='#faq02'" %] class="pregunta">¿Qué rol cumplen las Intendencias en Por Mi Barrio?</a></dd>
             <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq03');\"" : "href='#faq03'" %] class="pregunta">¿Cómo se financia?</a></dd>
             <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq04');\"" : "href='#faq04'" %] class="pregunta">¿Existen otros ejemplos parecidos en el mundo?</a></dd>
         </dl>
