@@ -638,10 +638,9 @@ sub answerTimeByCategoryGroup: Path('answerTimeByCategoryGroup') {
     while (my $report = $completed->next){
       if ( exists $api_contact_groups{$report->category} ){
         #Get report hours to get solved
-        my $report_duration = ($report->lastupdate->epoch() - $report->confirmed->epoch());
         my $gname = $api_contact_groups{$report->category}{group_name};
         if ( exists $groups_average{$gname} ){
-          $groups_average{$gname}{'total_seconds'} = $groups_average{$gname}{'total_seconds'} + $report_duration;
+          $groups_average{$gname}{'total_seconds'} = $groups_average{$gname}{'total_seconds'} + $report->duration;
           $groups_average{$gname}{'reports_count'} = $groups_average{$gname}{'reports_count'} + 1;
           $groups_average{$gname}{averageTime} = int($groups_average{$gname}{total_seconds}/$groups_average{$gname}{reports_count}/60/60/24);
         }
@@ -650,9 +649,9 @@ sub answerTimeByCategoryGroup: Path('answerTimeByCategoryGroup') {
           $groups_average{_($gname)} = {
             groupName => _($gname),
             color => $api_contact_groups{$report->category}{group_color},
-            total_seconds => $report_duration,
+            total_seconds => $report->duration,
             reports_count => 1,
-            averageTime => int($report_duration/60/60/24),
+            averageTime => int($report->duration/60/60/24),
           };
         }
       }
@@ -686,22 +685,12 @@ sub answerTimeByState: Path('answerTimeByState') {
     foreach ( $c->stash->{api_problems}->all ){
       $report = $_;
       my $state = $report->state;
-      my $report_duration;
       if ( !$report->confirmed ){
         $c->log->debug('NO HAY CONFIRMED??!!'.$report->id);
       }
       else {
-        if ( exists $completed_states->{$state} || exists $closed_states->{$state} ){
-          $report_duration = ($report->lastupdate_council->epoch() - $report->confirmed->epoch());
-        }
-        elsif ( $c->stash->{to} ) {
-          $report_duration = ( $c->stash->{to}->epoch() - $report->confirmed->epoch() );
-        }
-        else {
-          $report_duration = ( DateTime->now->epoch() - $report->confirmed->epoch() );
-        }
         if ( exists $states_average{$state} ){
-          $states_average{$state}{'total_seconds'} = $states_average{$state}{'total_seconds'} + $report_duration;
+          $states_average{$state}{'total_seconds'} = $states_average{$state}{'total_seconds'} + $report->duration;
           $states_average{$state}{'reports_count'} = $states_average{$state}{'reports_count'} + 1;
           $states_average{$state}{averageTime} = int($states_average{$state}{total_seconds}/$states_average{$state}{reports_count}/60/60/24);
         }
@@ -709,9 +698,9 @@ sub answerTimeByState: Path('answerTimeByState') {
           #Get number of reports and total hours
           $states_average{$report->state} = {
             state => $states->{$report->state},
-            total_seconds => $report_duration,
+            total_seconds => $report->duration,
             reports_count => 1,
-            averageTime => int($report_duration/60/60/24),
+            averageTime => int($report->duration/60/60/24),
           };
         }
       }

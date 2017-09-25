@@ -187,8 +187,8 @@ sub geocode_postcode {
 					$base_url = 'http://www.montevideo.gub.uy/ubicacionesRestProd/';
 					$response = postcode_montevideo(\@term_arr);
 				}
-				case (258) {
-					$c->log->debug('GEOPOSTCODE 258 ');
+				case (255) {
+					$c->log->debug('GEOPOSTCODE 255 ');
 					$base_url = 'http://gis.rivera.gub.uy/gisrivera/incphp/xajax/x_suggest.php';
 					$response = postcode_rivera(\@term_arr, $c);
 				}

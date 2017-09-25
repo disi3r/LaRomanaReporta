@@ -445,10 +445,10 @@ function geolocate(timeout, zoom, is_list ){
 						location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
 					}else{
 						if(area){
-							if(area==300){
+							if(area==289){
 								location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
 							}
-							if(area==258){
+							if(area==255){
 								location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
 							}
 						}

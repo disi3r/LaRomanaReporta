@@ -40,7 +40,7 @@ function getCategoriesFilter(body_id){
 		}else{
 			$("#category-select").empty();
 			$("#category-select").removeClass("hidden");
-			$("#category-select").append("<option value='-1'>"+"Todas las categorías"+"</option>");
+			$("#category-select").append("<option value='-1'>"+"Todas las sub-categorías"+"</option>");
 			$.each(categoriesArray[index], function(i, item) {
 				$("#category-select").append("<option value='"+item+"'>"+item+"</option>");
 			});
@@ -529,7 +529,7 @@ function getApiRequestURLParams(){
 	if(category){
 		url += "&category="+category;
 	}
-  if(area){
+  if(area && area!=-1){
     url += "&area="+area;
   }
 	if(load){
