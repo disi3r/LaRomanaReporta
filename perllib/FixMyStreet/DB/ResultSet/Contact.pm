@@ -21,7 +21,7 @@ sub get_groups {
   },{
     join => ['contacts_group'],
     columns => ['me.category', 'me.group_id'],
-    '+columns' => ['contacts_group.group_name', 'contacts_group.group_color'],
+    '+columns' => ['contacts_group.group_name', 'contacts_group.group_color', 'contacts_group.group_icon'],
   });
 }
 

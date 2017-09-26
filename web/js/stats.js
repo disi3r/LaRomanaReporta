@@ -24,6 +24,7 @@ function getCategoriesFilter(body_id){
   }
 	$.getJSON(api_call, function (data) {
 		catJson = data;
+    $("#category-group-select").append("<option value='-1'>Todas las categorías</option>");
 		$.each(data, function(i, item) {
 			if(i!=-2){
 				$("#category-group-select").append("<option value='gid_"+i+"'>"+item.group_name +"</option>");

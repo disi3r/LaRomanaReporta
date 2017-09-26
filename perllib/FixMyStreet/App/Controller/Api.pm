@@ -36,16 +36,18 @@ sub begin : Private {
 
   $c->stash->{format} = $c->req->param('format') ? $c->req->param('format') : 'json';
   if ( $c->forward( 'validate_key' ) ){
-    #If load is 1 then all results should be loaded (stats aplication)
-    my $mem_key = $c->forward('get_query_key');
-    $c->stash->{query_key} = $mem_key;
-    my $api_reports = Memcached::get($mem_key);
-    if ( !$api_reports ){
-      if ( $c->req->param('load') ){
-        $c->forward( 'load_reports' );
-      }
-      else{
-        $c->forward( 'load_problems' );
+    if (!$c->req->param('noload')) {
+      #If load is 1 then all results should be loaded (stats aplication)
+      my $mem_key = $c->forward('get_query_key');
+      $c->stash->{query_key} = $mem_key;
+      my $api_reports = Memcached::get($mem_key);
+      if ( !$api_reports ){
+        if ( $c->req->param('load') ){
+          $c->forward( 'load_reports' );
+        }
+        else{
+          $c->forward( 'load_problems' );
+        }
       }
     }
   }
@@ -174,9 +176,14 @@ sub load_problems : Private {
       $c->stash->{api_category} = $c->req->param('category');
     }
     elsif ( $c->req->param('gid') ){
+      my @groups = split(/,/, $c->req->param('gid'));
+      my @cats;
       my $api_groups = $c->forward('get_groups_categories');
       my %api_groups = %{$api_groups};
-      $where->{category} = { 'in', \@{$api_groups{$c->req->param('gid')}{categories}} };
+      foreach ( @groups ) {
+        push @cats, @{$api_groups{$_}{categories}} if defined($api_groups{$_});
+      }
+      $where->{category} = { 'in', \@cats };
       $c->stash->{api_group} = $c->req->param('gid');
     }
     $c->stash->{api_problems} = $c->cobrand->problems->search( \%{$where} );
@@ -295,7 +302,12 @@ sub format_output : Private {
       my $output = get_csv_structure($hashref);
       $c->res->content_type('application/csv; charset=utf-8');
       $c->res->body( $output );
-    } else {
+    }
+    elsif ('geo_json' eq $format){
+      $c->res->content_type('application/json; charset=utf-8');
+      $c->res->body( $hashref );
+    }
+    else {
       $c->stash->{message} = sprintf(_('Invalid format %s specified.'), $format);
       $c->stash->{template} = 'errors/generic.html';
     }
@@ -397,19 +409,21 @@ sub geo_reports : Path('geo_reports') {
   my ( $self, $c ) = @_;
   #Deceive Memcached
   $c->stash->{query_key} = '.';
+  $c->stash->{format} = 'geo_json';
   $c->forward('reports');
   my $reports = $c->stash->{api_result};
   #Load cat groups
   my $groups = $c->forward('get_category_groups');
   my %groups = %{$groups};
   my @fcollection;
+  $c->log->debug('GROUPS GEO:'.Dumper($groups));
   foreach my $report (@$reports) {
     #Create point
     my $pt = Geo::JSON::Point->new({
         coordinates => [ $report->{latitude}, $report->{longitude} ],
     });
     my $cat = $report->{category};
-    $c->log->debug('GROUPS GEO:'.Dumper($groups{$cat}->{group_icon}));
+    $c->log->debug('GROUPS GEO:'.Dumper($cat));
     #Add properties
     my %pt_prop = (
       id => $report->{id},

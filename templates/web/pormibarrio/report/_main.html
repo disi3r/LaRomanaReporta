@@ -161,7 +161,6 @@
         }
         function jump_to_date(selector, aday){
           var day_str = aday.toString();
-          alert(day_str);
           $( "#report-activity" ).datepicker("setDate", new Date( day_str.substring(0,4),day_str.substring(4,6),day_str.substring(6,7) )
           );
           $( "#report-activity" ).datepicker("option", "defaultDate", new Date( day_str.substring(0,4),day_str.substring(4,6),day_str.substring(6,7) )
