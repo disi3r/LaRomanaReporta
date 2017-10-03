@@ -107,8 +107,8 @@ sub load_dates : Private {
   my $parser = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
   my $one_day = DateTime::Duration->new( days => 1 );
   my $now = DateTime->now(formatter => $parser);
-  my $start_date = $c->req->param('from') ? $api_parser->parse_datetime( $c->req->param('from') ) : 0;
-  my $end_date = $c->req->param('to') ? $api_parser->parse_datetime( $c->req->param('to') ) : 0;
+  my $start_date = $c->stash->{from} ? $api_parser->parse_datetime( $c->stash->{from} ) : 0;
+  my $end_date = $c->stash->{to} ? $api_parser->parse_datetime( $c->stash->{to} ) : 0;
   #DATES
   if ( $start_date || $end_date ){
     #Check end_date
@@ -147,15 +147,23 @@ Return conacts by body
 sub get_query_key : Private {
   my ( $self, $c ) = @_;
 
+  #Llamada a cobrand
   $query_key = 'uy';
+  $c->stash->{body_id} = $c->req->param('body_id') if $c->req->param('body_id');
+  $c->stash->{from} = $c->req->param('from') if $c->req->param('from');
+  $c->stash->{to} = $c->req->param('to') if $c->req->param('to');
+  $c->stash->{area} = $c->req->param('area') if $c->req->param('area');
+
   $query_key .= 'bid'.$c->req->param('body_id') if $c->req->param('body_id');
   $query_key .= 'from'.$c->req->param('from') if $c->req->param('from');
   $query_key .= 'to'.$c->req->param('to') if $c->req->param('to');
   $query_key .= 'area'.$c->req->param('area') if $c->req->param('area');
   if ( $c->req->param('category') ){
+    $c->stash->{category} = $c->req->param('category');
     $query_key .= 'cat'.$c->req->param('category');
   }
   elsif ( $c->req->param('gid') ){
+    $c->stash->{gid} = $c->req->param('gid');
     $query_key .= 'gid'.$c->req->param('gid');
   }
   return $query_key;
@@ -169,14 +177,14 @@ sub load_problems : Private {
 
     my $where = $self->load_dates($c, 'confirmed');
     $where->{state} = [ FixMyStreet::DB::Result::Problem->visible_states() ];
-    $where->{bodies_str} = $c->req->param('body_id') if $c->req->param('body_id');
-    $where->{areas} = { 'like', '%,' . $c->req->param('area') . ',%' } if $c->req->param('area');
-    if ( $c->req->param('category') ){
-      $where->{category} = $c->req->param('category') if $c->req->param('category');
-      $c->stash->{api_category} = $c->req->param('category');
+    $where->{bodies_str} = $c->stash->{body_id} if $c->stash->{body_id};
+    $where->{areas} = { 'like', '%,' . $c->stash->{area} . ',%' } if $c->stash->{area};
+    if ( $c->stash->{category} ){
+      $where->{category} = $c->stash->{category};
+      $c->stash->{api_category} = $c->stash->{category};
     }
-    elsif ( $c->req->param('gid') ){
-      my @groups = split(/,/, $c->req->param('gid'));
+    elsif ( $c->stash->{gid} ){
+      my @groups = split(/,/, $c->stash->{gid});
       my @cats;
       my $api_groups = $c->forward('get_groups_categories');
       my %api_groups = %{$api_groups};
@@ -184,7 +192,7 @@ sub load_problems : Private {
         push @cats, @{$api_groups{$_}{categories}} if defined($api_groups{$_});
       }
       $where->{category} = { 'in', \@cats };
-      $c->stash->{api_group} = $c->req->param('gid');
+      $c->stash->{api_group} = $c->stash->{gid};
     }
     $c->stash->{api_problems} = $c->cobrand->problems->search( \%{$where} );
 }
@@ -217,9 +225,9 @@ sub get_groups_categories : Private {
 
   my %where;
   my $gkey = 'group_categories';
-  if ( $c->req->param('body_id') ) {
-    $where{body_id} = $c->req->param('body_id');
-    $gkey .= '_'.$c->req->param('body_id');
+  if ( $c->stash->{body_id} ) {
+    $where{body_id} = $c->stash->{body_id};
+    $gkey .= '_'.$c->stash->{body_id};
   }
   #Get Memcached
   my $mem_api_groups = Memcached::get($gkey);
