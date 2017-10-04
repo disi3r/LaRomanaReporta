@@ -1,0 +1,14 @@
+Subject: Breve encuesta: ¿Qué opinas de "Por Mi Barrio"?
+
+Hola <?=$values['name']?>,
+
+
+Ayúdanos a entender el uso y valor de la plataforma Por Mi Barrio en esta breve encuesta diseñada por un equipo de investigación independiente. Los datos que nos proporciones son totalmente anónimos. Tus respuestas serán de gran utilidad para organizaciones civiles y gobiernos en América Latina con interés en replicar la iniciativa y para mejorar  el servicio actual que brinda Por Mi Barrio.
+
+La encuesta sólo toma 5 minutos y esta disponible en este link: https://goo.gl/forms/eykGiL36vrZNoy3x2
+
+Si tienes preguntas o comentarios sobre esta encuesta, o quieres saber más sobre el estudio que estamos realizando sobre la iniciativa, por favor escríbenos a Carla@idatosabiertos.org.
+
+¡Muchas gracias!
+
+<?=$values['signature']?>

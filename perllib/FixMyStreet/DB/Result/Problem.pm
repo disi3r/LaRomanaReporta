@@ -122,6 +122,12 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 __PACKAGE__->belongs_to(
+  "users",
+  "FixMyStreet::DB::Result::User",
+  { id => "user_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
+__PACKAGE__->belongs_to(
   "user",
   "FixMyStreet::DB::Result::User",
   { id => "user_id" },
@@ -210,7 +216,6 @@ sub closed_states {
         'closed'                      => 1,
         'unable to fix'               => 1,
         'not responsible'             => 1,
-        'not applicable'              => 1,
         'duplicate'                   => 1,
         'internal referral'           => 1,
     };
@@ -240,7 +245,6 @@ my $visible_states = {
     'fixed - user'                => 1,
     'unable to fix'               => 1,
     'not responsible'             => 1,
-    'not applicable'              => 1,
     'duplicate'                   => 1,
     'closed'                      => 1,
     'internal referral'           => 1,
@@ -278,7 +282,6 @@ sub all_states {
         'fixed - user'                => _('fixed - user'),
         'unable to fix'               => _('unable to fix'),
         'not responsible'             => _('not responsible'),
-        'not applicable'              => _('not applicable'),
         'duplicate'                   => _('duplicate'),
         'closed'                      => _('closed'),
         'internal referral'           => _('internal referral'),
@@ -306,7 +309,6 @@ sub council_states {
         'fixed - council'             => 1,
         'unable to fix'               => 1,
         'not responsible'             => 1,
-        'not applicable'              => 1,
         'duplicate'                   => 1,
         'internal referral'           => 1,
         'clarify'                     => 1,

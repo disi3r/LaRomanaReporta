@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+
+# send-questionnaires:
+# Send out creator questionnaires
+#
+# Copyright (c) 2011 UK Citizens Online Democracy. All rights reserved.
+# Email: matthew@mysociety.org. WWW: http://www.mysociety.org
+
+use strict;
+use warnings;
+require 5.8.0;
+
+use CGI; # XXX Awkward kludge
+use Encode;
+use CronFns;
+
+use FixMyStreet::App;
+
+my %params;
+#( $params{verbose}, $params{nomail} ) = CronFns::options();
+$params{type} = 'users_reporting';
+FixMyStreet::App->model('DB::Questionnaire')->send_base_users( \%params );

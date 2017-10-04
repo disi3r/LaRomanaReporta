@@ -6,6 +6,7 @@ use warnings;
 use Encode;
 use Utils;
 use mySociety::EmailUtil;
+use Data::Dumper;
 
 sub send_questionnaires {
     my ( $rs, $params ) = @_;
@@ -52,8 +53,8 @@ sub send_questionnaires_period {
         next unless $cobrand->send_questionnaires;
         next if $row->is_from_abuser;
 
-        # Cobranded and non-cobranded messages can share a database. In this case, the conf file 
-        # should specify a vhost to send the reports for each cobrand, so that they don't get sent 
+        # Cobranded and non-cobranded messages can share a database. In this case, the conf file
+        # should specify a vhost to send the reports for each cobrand, so that they don't get sent
         # more than once if there are multiple vhosts running off the same database. The email_host
         # call checks if this is the host that sends mail for this cobrand.
         next unless $cobrand->email_host;
@@ -151,5 +152,55 @@ sub summary_count {
             join     => 'problem'
         }
     );
+}
+
+sub send_base_users {
+  my ( $rs, $params ) = @_;
+
+  print "\n ARRANCA \n";
+  my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker('pormibarrio')->new();
+  my $template = FixMyStreet->path_to( "templates", "email", 'pormibarrio', "external_questionnaire.txt" )->stringify;
+  $template = FixMyStreet->path_to( "templates", "email", "default", "external_questionnaire.txt" )->stringify
+    unless -e $template;
+  $template = Utils::read_file($template);
+  my $sender = FixMyStreet->config('DO_NOT_REPLY_EMAIL');
+  my $sender_name = $cobrand->contact_name;
+  print "\n VA A QUERY \n";
+  my $h;
+  if ( $params->{type} eq 'users_reporting' ) {
+    my $users = FixMyStreet::App->model('DB::Problem')->search( {}, {
+      select => ['users.id'],
+      group_by => ['users.id'],
+      order_by => { -desc => 'users.id' },
+      join => 'users',
+      '+select' => ['users.name', 'users.email'],
+    } );
+    #@users = map { { $_->get_columns } } @users;
+    while ( my $userref = $users->next ) {
+      $h = {
+        name => $userref->users->get_column('name'),
+        signature => 'Equipo de <a href="http://datauy.org">DATA</a>',
+      };#map { $_ => $row->$_ } qw/name title detail category/;
+      my $result = FixMyStreet::App->send_email_cron(
+          {
+              _template_ => $template,
+              _parameters_ => $h,
+              _line_indent => $cobrand->email_indent,
+              To => [ [ $userref->users->get_column('email'), $userref->users->get_column('name')] ],
+              From => [ $sender, $sender_name ],
+          },
+          $sender,
+          [ $userref->users->get_column('email') ],
+      );
+      if ($result == mySociety::EmailUtil::EMAIL_SUCCESS) {
+          print "  ...success sending mail to ".$userref->users->get_column('email')."\n"; #if $params->{verbose};
+      } else {
+          print " ...failed sending mail to ".$userref->users->get_column('email')."\n"; #if $params->{verbose};
+      }
+    }
+  }
+  else {
+    return 0 if ( $params->{type} eq '' );
+  }
 }
 1;
