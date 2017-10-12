@@ -235,10 +235,9 @@ function fixmystreet_onload() {
         var selectedFeature;
         fixmystreet.markers.events.register( 'featureunselected', fixmystreet.markers, function(evt) {
             var feature = evt.feature, popup = feature.popup;
-
             fixmystreet.map.removePopup(popup);
             popup.destroy();
-            feature.popup = null;
+            //feature.popup = null;
         });
         fixmystreet.markers.events.register( 'featureselected', fixmystreet.markers, function(evt) {
             var feature = evt.feature;
@@ -247,9 +246,8 @@ function fixmystreet_onload() {
             var popup = new OpenLayers.Popup(
                 "popup",
                 feature.geometry.getBounds().getCenterLonLat(),
-                null,
+                new OpenLayers.Size(200,200),
                 popupHtml,
-                { size: new OpenLayers.Size(0,0), offset: new OpenLayers.Pixel(0,-40) },
                 true,
                 this.onPopupClose);
             //console.log('Crea el popup');
