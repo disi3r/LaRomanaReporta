@@ -32,7 +32,7 @@
             </div>
         </div>
         [% IF ( problem.is_fixed || !problem.deadline || problem.deadline.class != 'noDeadLine' ) && problem.bodies_str == '1' %]
-            <span class="report-defensoria status-report-im">Frente a la continuidad del problema puede consultar con la Defensoría del Vecino.<br><a href="http://defensoria.pormibarrio.uy/reclamos/?pmb=[% problem.id %]" target="_blank">Comunicarme con la Defensoría del Vecino</a></span>
+            <span class="report-defensoria status-report-im">Frente a la continuidad del problema puede consultar con la Defensoría del Vecino.<br><a href="http://www.defensordelvecino.com.uy/reclamos/?pmb=[% problem.id %]" target="_blank">Comunicarme con la Defensoría del Vecino</a></span>
         [% END %]
     </div>
 </div>
@@ -88,12 +88,12 @@
         }
         tasks[tkey].push(
             {
-                name : "[% task.name %]",
-                area : "[% task.area %]",
-                status : "[% task.status %]",
-                report : "[% task.report.replace('\n', '<br>') %]",
-                created : "[% task.created %]",
-                planned : "[% task.planned %]",
+                name : '[% task.name %]',
+                area : '[% task.area %]',
+                status : '[% task.status %]',
+                report : '[% task.report.replace("\n", "<br>") %]',
+                created : '[% task.created %]',
+                planned : '[% task.planned %]',
                 key : tkey,
             }
         );

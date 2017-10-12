@@ -63,7 +63,7 @@ sub get_service_custom_meta_info {
     my $self = shift;
     my $service_id = shift;
 
-    my $service_meta_xml = $self->_get( "requestsPortal/$service_id.xml" );
+    my $service_meta_xml = $self->_get( "requests/$service_id.xml" );
     return $self->_get_xml_object( $service_meta_xml );
 }
 
@@ -191,7 +191,7 @@ sub _populate_service_request_params {
     }
 
     if ( $extra->{image_url} ) {
-        #$params->{media_url} = $extra->{image_url};
+        $params->{media_url} = $extra->{image_url};
     }
 
     if ( $self->use_service_as_deviceid && $problem->service ) {
@@ -421,7 +421,6 @@ sub _get {
 
     $self->debug_details( $self->debug_details . "\nrequest:" . $uri->as_string );
     print "GET";
-    print $uri->as_string;
     my $content;
     if ( $self->test_mode ) {
         $self->success(1);
@@ -470,13 +469,12 @@ sub _post {
         #jurisdiction_id => $self->jurisdiction,
         #api_key => $self->api_key,
         %{ $params }
-    ];
+    ], Content_Type => "application/x-www-form-urlencoded;charset=utf-8";
 
     $self->debug_details( $self->debug_details . "\nrequest:" . $req->as_string );
 
     my $ua = LWP::UserAgent->new;
     $ua->ssl_opts(verify_hostname => 0);
-    #$ua->default_header('content-type' => "application/x-www-form-urlencoded;charset=utf-8");
     my $user = mySociety::Config::get('HTTPS_USER_AUTH', undef);
     my $password = mySociety::Config::get('HTTPS_PASS_AUTH', undef);
 
@@ -535,7 +533,7 @@ sub _process_error {
     if ( ref $obj && exists $obj->{error} ) {
         my $errors = $obj->{error};
         $errors = [ $errors ] if ref $errors ne 'ARRAY';
-        $msg .= sprintf( "%s: %s\n", $_->{code}, $_->{description} ) for @{ $errors };
+        $msg .= sprintf( "%s: %s\n", $_->{rc}, $_->{_msg} ) for @{ $errors };
     }
 
     return $msg || 'unknown error';

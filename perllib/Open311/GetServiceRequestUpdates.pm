@@ -188,8 +188,8 @@ sub fetch_details {
       my $tasks = [];
       my @completed_tasks;
       my @pending_tasks;
-      if (exists $prequest->{request}{request_completed_tasks} && $prequest->{request}{request_completed_tasks} ){
-        @completed_tasks = values $prequest->{request}{request_completed_tasks};
+      if (exists $prequest->{request}{extended_attributes}{request_completed_tasks} && $prequest->{request}{extended_attributes}{request_completed_tasks} ){
+        @completed_tasks = values $prequest->{request}{extended_attributes}{request_completed_tasks};
         if ( @completed_tasks ) {
           foreach my $ctask (@completed_tasks){
             $ctask = [ $ctask ] if ref $ctask ne 'ARRAY';
@@ -199,8 +199,8 @@ sub fetch_details {
           }
         }
       }
-      if (exists $prequest->{request}{request_pending_tasks} && $prequest->{request}{request_pending_tasks} ){
-        @pending_tasks = values $prequest->{request}{request_pending_tasks};
+      if (exists $prequest->{request}{extended_attributes}{request_pending_tasks} && $prequest->{request}{extended_attributes}{request_pending_tasks} ){
+        @pending_tasks = values $prequest->{request}{extended_attributes}{request_pending_tasks};
         if ( @pending_tasks ) {
           foreach my $ptask (@pending_tasks){
             $ptask = [ $ptask ] if ref $ptask ne 'ARRAY';
