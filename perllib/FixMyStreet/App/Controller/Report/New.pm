@@ -867,67 +867,78 @@ sub process_user : Private {
 	# Reset scroll to stash variable
 	$c->stash->{scroll_to} = '';
 
-    my $report = $c->stash->{report};
+  my $report = $c->stash->{report};
 
-    # Extract all the params to a hash to make them easier to work with
-    my %params = map { $_ => scalar $c->req->param($_) }
-      ( 'form_email', 'name', 'phone', 'password_register', 'fms_extra_title', 'identity_document' );
+  # Extract all the params to a hash to make them easier to work with
+  my %params = map { $_ => scalar $c->req->param($_) }
+    ( 'form_email', 'name', 'phone', 'password_register', 'fms_extra_title', 'identity_document' );
 
-    my $user_title = Utils::trim_text( $params{fms_extra_title} );
+  my $user_title = Utils::trim_text( $params{fms_extra_title} );
 
-    if ( $c->cobrand->allow_anonymous_reports ) {
-        my $anon_details = $c->cobrand->anonymous_account;
+  if ( $c->cobrand->allow_anonymous_reports ) {
+      my $anon_details = $c->cobrand->anonymous_account;
 
-        for my $key ( qw( email name ) ) {
-            $params{ $key } ||= $anon_details->{ $key };
+      for my $key ( qw( email name ) ) {
+          $params{ $key } ||= $anon_details->{ $key };
+      }
+  }
+
+  # The user is already signed in
+  if ( $c->user_exists ) {
+      my $user = $c->user->obj;
+      $user->name( Utils::trim_text( $params{name} ) ) if $params{name};
+      $user->phone( Utils::trim_text( $params{phone} ) ) if $params{phone};
+      if ($params{identity_document}){
+        my $document = $c->cobrand->validate_identity_document( $params{identity_document} );
+        if ( $document ){
+          $user->identity_document( $document );
         }
-    }
+      }
+      $user->title( $user_title ) if $user_title;
+      $report->user( $user );
+      $report->name( $user->name );
+      return 1;
+  }
 
-    # The user is already signed in
-    if ( $c->user_exists ) {
-        my $user = $c->user->obj;
-        $user->name( Utils::trim_text( $params{name} ) ) if $params{name};
-        $user->phone( Utils::trim_text( $params{phone} ) ) if $params{phone};
-        $user->identity_document( Utils::trim_text( $params{identity_document} ) ) if $params{identity_document};
-        $user->title( $user_title ) if $user_title;
-        $report->user( $user );
-        $report->name( $user->name );
-        return 1;
-    }
+  # cleanup the email address
+  my $email = $params{form_email} ? lc $params{form_email} : '';
+  $email =~ s{\s+}{}g;
 
-    # cleanup the email address
-    my $email = $params{form_email} ? lc $params{form_email} : '';
-    $email =~ s{\s+}{}g;
+  $report->user( $c->model('DB::User')->find_or_new( { email => $email } ) )
+      unless $report->user;
 
-    $report->user( $c->model('DB::User')->find_or_new( { email => $email } ) )
-        unless $report->user;
-
-    # The user is trying to sign in. We only care about email from the params.
+  # The user is trying to sign in. We only care about email from the params.
 	if ( $c->req->param('submit_sign_in') || $c->req->param('password_sign_in') ) {
-        unless ( $c->forward( '/auth/sign_in' ) ) {
-            $c->stash->{field_errors}->{password} = _('There was a problem with your email/password combination. If you cannot remember your password, or do not have one, please fill in the &lsquo;sign in by email&rsquo; section of the form.');
-            $c->stash->{scroll_to} = '#report-new-login';
-            return 1;
-        }
-        my $user = $c->user->obj;
-        $report->user( $user );
-        $report->name( $user->name );
-        $c->stash->{check_name} = 1;
-        #$c->stash->{field_errors}->{general} = _('You have successfully signed in; please check and confirm your details are accurate:');
-        $c->log->info($user->id . ' logged in during problem creation');
-        return 1;
+    unless ( $c->forward( '/auth/sign_in' ) ) {
+      $c->stash->{field_errors}->{password} = _('There was a problem with your email/password combination. If you cannot remember your password, or do not have one, please fill in the &lsquo;sign in by email&rsquo; section of the form.');
+      $c->stash->{scroll_to} = '#report-new-login';
+      return 1;
     }
-
-    # set the user's name, phone, and password
-    $report->user->name( Utils::trim_text( $params{name} ) ) if $params{name};
-    $report->user->phone( Utils::trim_text( $params{phone} ) );
-    $report->user->identity_document( Utils::trim_text( $params{identity_document} ) );
-    $report->user->password( Utils::trim_text( $params{password_register} ) )
-        if $params{password_register};
-    $report->user->title( $user_title ) if $user_title;
-    $report->name( Utils::trim_text( $params{name} ) );
-
+    my $user = $c->user->obj;
+    $report->user( $user );
+    $report->name( $user->name );
+    $c->stash->{check_name} = 1;
+    #$c->stash->{field_errors}->{general} = _('You have successfully signed in; please check and confirm your details are accurate:');
+    $c->log->info($user->id . ' logged in during problem creation');
     return 1;
+  }
+
+  # set the user's name, phone, and password
+  $report->user->name( Utils::trim_text( $params{name} ) ) if $params{name};
+  $report->user->phone( Utils::trim_text( $params{phone} ) );
+  if ($params{identity_document}){
+    $c->log->debug("\nDOCUMENTO: ".$params{identity_document});
+    my $document = $c->cobrand->validate_identity_document( $params{identity_document} );
+    if ( $document ){
+      $report->user->identity_document( $document );
+    }
+  }
+  $report->user->password( Utils::trim_text( $params{password_register} ) )
+      if $params{password_register};
+  $report->user->title( $user_title ) if $user_title;
+  $report->name( Utils::trim_text( $params{name} ) );
+
+  return 1;
 }
 
 =head2 process_report
