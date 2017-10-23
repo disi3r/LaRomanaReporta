@@ -240,7 +240,7 @@ div.user-avatar img{
     border-radius: 5px;
 }
 
-.tasks, #display_problem_print, #display_problem_close{
+#display_problem_print, #display_problem_close{
     display: none;
 }
 
@@ -264,4 +264,85 @@ div.user-avatar img{
 	display: inline;
 	margin-left: 25px;
 }
+
+div.tasks{
+	background-color: #FBFBFB;
+	padding: 20px 40px;
+	border-top: 1px solid #EBEBEB;
+	border-bottom: 1px solid #EBEBEB;
+}
+
+div.tasks button{
+	background: #CCC url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") repeat-x scroll 50% 50%;
+	vertical-align: bottom;
+	padding: 4px 2.25em;
+	width: 100%;
+	margin-bottom: 2px;
+}
+
+#report-activity{
+	font-size: 12px;
+	float: left;
+	margin-top:	10px;
+	max-width: 50%;
+}
+
+.content-vertical #report-activity{
+	padding: 10px;
+	width: 100%;
+}
+.activity-report{
+	padding: 2px 4px 0px;
+	text-decoration: none;
+}
+.activity-report.selected{
+	background-color: #ccc;
+}
+
+#report-activity-detail{
+	padding: 5px 12px;
+	max-width: 50%;
+	font-size: 0.9em;
+	max-height: 240px;
+	overflow: auto;
+}
+
+#report-activity-detail h4{
+	font-size: 1.2em;
+	color: #464646;
+	font-weight: normal;
+	margin: 5px 0px 0px;
+}
+
+#report-activity-detail span{
+	font-size: 0.85em;
+	font-style: italic;
+	color: #7D7D7D;
+}
+
+#report-activity-detail a{
+	text-decoration: none;
+}
+
+.activity-detail-report{
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+	overflow: auto;
+	border-bottom: 1px solid #EBEBEB;
+	color: #7D7D7D;
+	font-size: 1em;
+	line-height: 1.4375em;
+}
+#report-activity-detail,
+.tasks {
+	width: 100%;
+	float: left;
+}
+div.actions {
+    padding: 20px 40px;
+}
+#comment_container {
+	padding: 25px 40px;
+}
+
 </style>

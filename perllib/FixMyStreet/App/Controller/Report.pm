@@ -191,7 +191,7 @@ sub format_problem_for_display : Private {
     $c->forward('generate_map_tags');
 
     $c->log->debug("\n\nARRANCA UPDATE\n");
-    $c->log->debug(Dumper($c->stash->{updates}));
+    #$c->log->debug(Dumper($c->stash->{updates}));
     $c->log->debug("\n\nTERMINA UPDATE\n");
 
     if ( $c->stash->{ajax} ) {

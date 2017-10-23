@@ -150,7 +150,6 @@
                 };
             }
             var tasksHtml = '';
-            console.log(recur_tasks);
             for (var i = recur_tasks.length - 1; i >= 0; i--) {
                 tasksHtml += '<div class="activity-report"><a onclick="jump_to_date(this,'+recur_tasks[i].key+')"><h4>'+recur_tasks[i].name+'</h4>';
                 tasksHtml +='<span>'+recur_tasks[i].status+' '+( recur_tasks[i].planned ? recur_tasks[i].planned : recur_tasks[i].created )+'</span>';
@@ -171,4 +170,21 @@
           $(selector).parent('.activity-report').addClass('selected');
         }
     </script>
+[% END %]
+[% IF tasks AND mobile %]
+  <div class="tasks">
+    <h3>Actividad</h3>
+    <span id="report-activity-detail">
+    [% FOREACH task IN tasks %]
+      <div class="activity-report">
+        <h4>[% task.name %]</h4>
+        <span>[% task.status %]  [% task.planned ? task.planned : task.created; %]</span>
+        <div class="activity-detail-report">
+          <p>[% task.report ? task.report : ''; %]</p>
+          <p>[% task.area ? task.area : ''; %]</p>
+        </div>
+      </div>
+    [% END %]
+    </span>
+  </div>
 [% END %]

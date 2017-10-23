@@ -698,7 +698,9 @@ sub ajax_sign_in : Path('ajax/sign_in') {
         $return->{name} = $c->user->name;
         $return->{phone} = $c->user->phone;
         $return->{identity_document} = $c->user->identity_document;
-        $return->{from_body} = $c->user->from_body->body_areas->first->area_id;
+        if ( $c->user->from_body ){
+          $return->{from_body} = $c->user->from_body->body_areas->first->area_id;
+        }
         if ( $c->user->picture_url ){
         	$return->{picture_url} = $c->cobrand->base_url.$c->user->picture_url;
         }
