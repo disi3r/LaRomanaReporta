@@ -653,7 +653,21 @@ sub category_group {
 			}
 		}
 	}
+	return 0;
+}
+sub category_group_obj {
+	my $problem = shift;
 
+	if ( $problem->category ) {
+		my $contact_group = FixMyStreet::App->model('DB::Contact')->search({ category => $problem->category, deleted => 0 })->get_groups()->first;
+		if ( $contact_group ) {
+      return {
+        group_name => $contact_group->contacts_group->group_name,
+        group_color => $contact_group->contacts_group->group_color,
+        group_icon => $contact_group->contacts_group->group_icon,
+      };
+		}
+	}
 	return 0;
 }
 
@@ -861,34 +875,32 @@ sub deadline {
   my $parser = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
   my $now = DateTime->now(formatter => $parser);
   #Get deadlines
-  my $problem_group = $problem->category_group;
   my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($problem->cobrand)->new();
   if ($cobrand->use_deadlines){
-    my %deadlines = $cobrand->problem_rules();
-    my $deadline = { 'class' => 'noDeadLine' };
-    if ( !$problem->is_fixed and $problem->is_open ){
-      if ( exists $deadlines{$problem_group} ){
-        foreach my $deadline_actions (@{ $deadlines{$problem_group} }){
-          #Deadline is now - maxtime - nonwork
-          my $deadline_date = $cobrand->to_working_days_date($now->clone(), $deadline_actions->{max_time});
-          if ($problem->lastupdate_council) {
-            if ( $deadline_date->epoch >= $problem->lastupdate_council->epoch ){
+    my $deadline = { 'class' => 'problem_alert' };
+    if ( $problem->is_open ){
+      #@problem_deadlines = $problem_deadlines->all;
+      my $problem_deadlines = FixMyStreet::App->model('DB::BodyDeadlines')->search({ group_id => $problem->category_group , body_id => shift $problem->bodies_str_ids });
+      while ( my $deadline_actions = $problem_deadlines->next ){
+        #Deadline is now - maxtime - nonwork
+        my $deadline_date = $cobrand->to_working_days_date($now->clone(), $deadline_actions->max_hours/24);
+        if ($problem->lastupdate_council) {
+          if ( $deadline_date->epoch >= $problem->lastupdate_council->epoch ){
+            $deadline = $deadline_actions;
+            last;
+          }
+        }
+        else{
+          if ($problem->confirmed){
+            if ( $deadline_date->epoch >= $problem->confirmed->epoch ){
               $deadline = $deadline_actions;
               last;
             }
-          }
-          else{
-            if ($problem->confirmed){
-              if ( $deadline_date->epoch >= $problem->confirmed->epoch ){
-                $deadline = $deadline_actions;
-                last;
-              }
+            else {
+              $deadline = { 'deadline' => 'noDeadLine' };
             }
           }
         }
-      }
-      else {
-        $deadline = { 'class' => 'alert' };
       }
     }
     return $deadline;

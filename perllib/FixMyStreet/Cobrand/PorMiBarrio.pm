@@ -417,57 +417,14 @@ sub begining_date {
 
 sub deadlines { 1 }
 
-sub problem_rules {
-	return (
-		'1' => [
-			{
-				'max_time' => 30,
-				'class' => 'problem-alert'
-			},
-		],
-		'6' => [
-			{
-				'max_time' => 30,
-				'class' => 'problem-alert',
-			},
-		],
-		'18' => [
-			{
-				'max_time' => 30,
-				'class' => 'problem-alert'
-			}
-		],
-		'37' => [
-			{
-				'max_time' => 30,
-				'class' => 'problem-alert'
-			},
-		],
-		'38' => [
-			{
-				'max_time' => 30,
-				'class' => 'problem-alert'
-			},
-		],
-		'39' => [
-			{
-				'max_time' => 30,
-				'class' => 'problem-alert'
-			},
-		],
-		'40' => [
-			{
-				'max_time' => 30,
-				'class' => 'problem-alert'
-			},
-		],
-		'41' => [
-			{
-				'max_time' => 30,
-				'class' => 'problem-alert'
-			},
-		],
-	);
+sub comptroller_user_ids(){
+	my ( $self, $body_id ) = @_;
+
+	my $bodies_comprtollers = {
+		4 => (1,1),
+		1 => (1,1)
+	};
+	return $bodies_comprtollers->{$body_id};
 }
 
 1;

@@ -200,13 +200,23 @@ sub load_problems : Private {
 sub get_category_groups: Private {
   my ( $self, $c ) = @_;
   #Get Memcached
-  my $mem_api_groups = Memcached::get('category_groups');
+  my %where;
+  my $gkey = 'category_groups';
+  if ( $c->stash->{area} ) {
+    my $body_area = $c->model('DB::BodyArea')->search( {area_id => $c->stash->{area} } )->first;
+    $c->stash->{body_id} = $body_area->body_id;
+  }
+  if ( $c->stash->{body_id} ) {
+    $where{body_id} = $c->stash->{body_id};
+    $gkey .= '_'.$c->stash->{body_id};
+  }
+  #Get Memcached
+  my $mem_api_groups = Memcached::get($gkey);
   if ( $mem_api_groups ){
     return \%{$mem_api_groups};
   }
   else {
-    my @category_groups = $c->model('DB::Contact')->get_groups();
-    #my %categories = map { $_->{category} => { total => $_->{c}, fixed => $_->{fixed} } } $categories->all;
+    my @category_groups = $c->model('DB::Contact')->search(\%where)->get_groups();
     my %api_groups = map {
       $_->category => {
         group_id =>$_->group_id,
@@ -402,11 +412,12 @@ sub reports : Path('reports') {
       $c->forward('load_problems');
     }
     while ( my $report = $c->stash->{api_problems}->next ){
-      my %repo = map { $_ => $report->$_ } qw/id postcode title detail name category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent /;
+      my %repo = map { $_ => $report->$_ } qw/id postcode title detail name category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent deadline category_group_obj/;
       $repo{confirmed} = $repo{confirmed}->ymd if defined($repo{confirmed});
       $repo{lastupdate} = $repo{lastupdate}->ymd if defined($repo{lastupdate});
       $repo{lastupdate_council} = $repo{lastupdate_council}->ymd if defined($repo{lastupdate_council});
       $repo{whensent} = $repo{whensent}->ymd if defined($repo{whensent});
+      $c->log->debug(Dumper($repo{category_group_obj}));
       push @reports, \%repo;
     }
     $c->stash->{api_result} = \@reports;

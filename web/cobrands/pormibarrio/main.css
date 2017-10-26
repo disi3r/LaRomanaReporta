@@ -3082,17 +3082,17 @@ input#getcounts{
 }
 
 /*DASHBOARD*/
-tr.overdue{
-	background-color: red;
+tr.comptroller_overdue{
+	background-color: #d7634a;
 }
-tr.alert{
-	background-color: orange;
+tr.council_overdue{
+	background-color: #ffc600;
 }
-tr.warning{
-	background-color: yellow;
+tr.problem_alert{
+	background-color: #ffc600;
 }
 tr.noDeadLine{
-	background-color: violet;
+	background-color: #bf8de7;
 }
 .dash-filter{
 	width: 30%;
@@ -3101,8 +3101,16 @@ tr.noDeadLine{
 .deadlines-filter{
 	width: 100%;
 	float: left;
+	text-align: center;
+	margin-bottom: 20px;
 }
-
+.deadlines-filter input{
+	margin: 4px 5px 0px 30px;
+}
+a.btn-close-report.deadlines{
+	position: relative;
+	float: right;
+}
 /*PRINT*/
 #print-header{
 	visibility: hidden;
@@ -3191,7 +3199,7 @@ tr.noDeadLine{
 }
 
 .category_filter h4{
-	font-size: 12px;
+	font-size: 16px;
 	color: #FFFFFF;
 	text-transform: uppercase;
 	margin-left: 10px;

@@ -45,7 +45,6 @@
 	            [% FOREACH deadlineElem IN [ ['problem-overdue', loc('Overdue')], ['problem-alert', loc('Alert')], ['problem-warning', loc('Warning')], ['noDeadLine', loc('No Dead Line')] ] %]
 	            <input type="checkbox" name="deadline" class="deadline" checked value="[% deadlineElem.0 %]">[% deadlineElem.1 %]</input>
 	            [% END %]
-	            <!-- if( $element ~~ @list ){ ... } -->
 	    </div>
 
 	</div>
@@ -103,13 +102,13 @@
 [% BLOCK problemsb %]
 	<tbody>
 	[% FOR p IN problems %]
-		<tr class="dash-problem [% p.deadline %]">
-			<td><a href="/report/[% p.id %]">[% p.title | html %]</a></td>
-			<td>[% p.group | html %]</td>
+		<tr class="dash-problem [% p.deadline.deadline %]">
+			<td><a href="/report/[% p.id %]" target="_blank">[% p.title | html %]</a></td>
+			<td style="color:[% p.category_group_obj.group_color %];">[% p.category_group_obj.group_name | html %]</td>
 			<td>[% p.category | html %]</td>
-			<td class="time">[% p.created IF p.created %]</td>
+			<td class="time">[% p.confirmed IF p.confirmed %]</td>
 			<td class="time">[% p.lastupdate_council IF p.lastupdate_council %]</td>
-			<td>[% p.state_name | html %]</td>
+			<td>[% loc(p.state) | html %]</td>
 		</tr>
 	[% END %]
 	</tbody>
