@@ -474,8 +474,8 @@ sub alert_deadlines {
     while (my $problem = $problems->next) {
       if ( $problem->deadline->action and $problem->deadline->action eq 'email' ){
         my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($problem->cobrand)->new();
-        my @body_comptrollers = $cobrand->comptroller_user_ids($_);
-        for my $uid (@body_comptrollers) {
+        my $body_comptrollers = $cobrand->comptroller_user_ids($_);
+        foreach my $uid (@{$body_comptrollers}) {
           #Check alert haven't been added, LOGICA (check how to do for multiple or single email)
           my $alert_options = {
             user_id    => $uid,

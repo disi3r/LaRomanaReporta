@@ -421,8 +421,8 @@ sub comptroller_user_ids(){
 	my ( $self, $body_id ) = @_;
 
 	my $bodies_comprtollers = {
-		4 => (1,1),
-		1 => (1,1)
+		4 => [1731,1682,1],
+		1 => [1,1]
 	};
 	return $bodies_comprtollers->{$body_id};
 }
