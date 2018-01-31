@@ -679,6 +679,56 @@ sub change_password : Local {
 
 }
 
+sub ajax_change_password : Path('ajax/change_password') {
+  my ( $self, $c ) = @_;
+
+  my $return = {};
+	if ( $c->req->params->{email} && $c->req->params->{password_sign_in} && $c->authenticate( { email => $c->req->params->{email}, password => $c->req->params->{password_sign_in} } ) ) {
+    $c->forward('change_password');
+    if ( $c->stash->{'password_changed'} ){
+      $return->{result} = 1;
+      $return->{message} = 'Password successfuly changed';
+    }
+    else {
+      $return->{message} = $c->stash->{password_error} ? $c->stash->{password_error} : _('Error in password change');
+      $return->{result} = 0;
+      $return->{error} = 1;
+    }
+  }
+  my $body = JSON->new->utf8(1)->encode( $return );
+  $c->res->content_type('application/json; charset=utf-8');
+  $c->res->body($body);
+
+  return 1;
+}
+
+sub ajax_forgot_password : Path('ajax/forgot_password') {
+  my ( $self, $c ) = @_;
+
+  my $return = {};
+	if ( $c->req->params->{login_email} ) {
+    $c->forward('email_sign_in');
+  }
+  else {
+    $c->stash->{field_errors} = _('Parameters not match');
+  }
+  if (scalar keys %{$c->stash->{field_errors}}){
+    $return->{message} = $c->stash->{field_errors} ? $c->stash->{field_errors} : _('Error in one time login request');
+    $return->{result} = 0;
+    $return->{error} = 1;
+  }
+  else {
+    $return->{result} = 1;
+    $return->{message} = _('Email successfuly sended');
+  }
+
+  my $body = JSON->new->utf8(1)->encode( $return );
+  $c->res->content_type('application/json; charset=utf-8');
+  $c->res->body($body);
+
+  return 1;
+}
+
 =head2 sign_out
 
 Log the user out. Tell them we've done so.
