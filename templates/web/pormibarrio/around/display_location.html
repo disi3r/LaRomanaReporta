@@ -44,8 +44,7 @@
   var ismobile = check;
   if(ismobile){
     var mobile_url = "https://mobile.pormibarrio.uy";
-    var last_url_obj = new URL(window.location.href);
-    var latlon = last_url_obj.searchParams.get("latitude");
+    var latlon = decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent("latitude").replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
     if ( latlon !== null ) {
       var lon_pos = latlon.search(';longitude=');
       var lat = latlon.substring(0,lon_pos);
