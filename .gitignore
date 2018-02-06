@@ -22,7 +22,9 @@ FixMyStreet-EmptyHomes.po
 FixMyBarangay.po
 
 /web/css/core.css
+/web/css/core.css.map
 /web/css/main.css
+/web/css/main.css.map
 /web/cobrands/*/*.css
 !/web/cobrands/pormibarrio/*
 !/web/cobrands/pormibarriocr/*
@@ -41,3 +43,7 @@ phonegap/www/js/config.js
 phonegap/Android/bin/
 phonegap/iPhone/FixMyStreet.xcodeproj/project.xcworkspace/xcuserdata
 phonegap/Android/gen/
+
+web/cobrands/fiksgatami/css.css.map
+web/cobrands/reading/css.css.map
+web/cobrands/southampton/css.css.map
