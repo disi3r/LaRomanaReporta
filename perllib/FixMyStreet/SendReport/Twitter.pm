@@ -17,7 +17,6 @@ sub build_recipient_list {
         body_id => $body->id,
         category => $row->category
     } );
-    print "\nTWITTER CoNTACT\n";
     my ($body_twitter, $confirmed, $note) = ( $contact->twitter, $contact->confirmed, $contact->note );
     unless ($confirmed && $body_twitter) {
         $all_confirmed = 0;
@@ -27,11 +26,8 @@ sub build_recipient_list {
         $self->unconfirmed_counts->{$body_twitter}{$row->category}++;
         $self->unconfirmed_notes->{$body_twitter}{$row->category} = $note;
     }
-    print $body_twitter;
     $recips{'contact'} = $body_twitter;
     $recips{'others'} = $contact->twitter_others;
-    print "\nTWITTER RECIPS\n";
-    print Dumper(\%recips);
     return () unless $all_confirmed;
     return \%recips;
 }
@@ -59,10 +55,10 @@ sub send {
 
     my $nt = Net::Twitter::Lite::WithAPIv1_1->new(
       ssl => 1,
-      consumer_key    => 'PDILTaWLsTO4zzDm9L4hofljw',
-      consumer_secret => '32NNksUER5EbIyLHG8fkJqZE3iDSJkxsiy8Ow8WkqTVB0ddkBM',
-      access_token    => '992782501667115008-IkAe8BL0AhHhDQZIL6Kfj4o5mgTolmr',
-      access_token_secret => 'ukJ3HvNKmKidUCFd6oG5YwdRAYsR9b231CGQPJUwBZKFb'
+      consumer_key    => mySociety::Config::get('TWITTER_KEY'),
+      consumer_secret => mySociety::Config::get('TWITTER_SECRET'),
+      access_token    => mySociety::Config::get('TWITTER_TOKEN'),
+      access_token_secret => mySociety::Config::get('TWITTER_TOKEN_SECRET')
     );
     my $result = $nt->update_with_media({
       status => "$recips->{contact} hay un nuevo reporte en PMB en la categoria $h->{category}: ".$row->title.". Sigue este repote: $h->{problem_url}. $recips->{others}",
@@ -70,7 +66,7 @@ sub send {
       lat => $h->{latitude},
       long => $h->{longitude},
       display_coordinates => 1,
-      media => ['web/photo/c/' . $row->id . '.full.jpeg'],
+      media => ['web/photo/' . $row->id . '.full.jpeg'],
     });
     print Dumper($result);
 
