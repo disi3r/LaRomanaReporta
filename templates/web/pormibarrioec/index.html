@@ -1,0 +1,150 @@
+[%# Assumes fixmystreet cobrand is using FMS map template - for bonus points preload all the right map elements. %]
+[% map_js = BLOCK %]
+<script>
+function locate(){
+    //Redirigimos en timeout
+    setTimeout(function(){location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=4'}, 2500);
+    //Comenzamos goeposition
+    if (geo_position_js.init()) {
+        console.log('Va a init');
+        geo_position_js.getCurrentPosition(function(pos) {
+            console.log('Get current');
+            var latitude = pos.coords.latitude;
+            var longitude = pos.coords.longitude;
+            //Redirigimos si esta fuera de montevideo
+            if ( latitude < -35 || latitude > -34.6695163){
+                location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=4';
+            }
+            else if (longitude > -56.168270 || longitude < -56.4350581){
+                location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=4';
+            }
+            else {
+                location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=4';
+            }
+        },
+        function(err) {
+            location.href = '/around?latitude=-34.906557;longitude=-56.199769';
+            /*console.log('Entra a err');
+            if (err.code == 1) { // User said no
+                location.href = '/around?latitude=-34.906557;longitude=-56.199769';
+            }
+            else {
+
+                if (err.code == 1) { // User said no
+                    $link.html(translation_strings.geolocation_declined);
+                } else if (err.code == 2) { // No position
+                    $link.html(translation_strings.geolocation_no_position);
+                } else if (err.code == 3) { // Too long
+                    $link.html(translation_strings.geolocation_no_result);
+                } else { // Unknown
+                    $link.html(translation_strings.geolocation_unknown);
+                }
+            }*/
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 2500
+        });
+    }
+}
+/*
+setTimeout(
+    function(){
+        var geoOverlay=document.createElement("DIV");
+        geoOverlay.id = 'geoOverlay';
+        geoOverlay.className = 'overlay';
+        document.body.appendChild(geoOverlay);
+
+        var overlayDiv=document.createElement("DIV");
+        overlayDiv.id = 'geoOverDiv';
+        overlayDiv.className = 'overlay-content';
+        overlayDiv.innerHTML = '<h3>Necesitas más tiempo para leer las instrucciones?</h3><p>En caso de ya estar seguro has click en la barra superior del navegador para localizarte. Si no estás en Montevideo pero quieres ver la plataforma has click en AL MAPA el cual te dirigirá a la Plaza independencia, de lo contrario has click en CERRAR, para segiur leyendo la página actual.</p>';
+        geoOverlay.appendChild(overlayDiv);
+
+        var overlayClose=document.createElement("BUTTON");
+        overlayClose.id = 'overlay-close';
+        overlayClose.onclick = function(){location.reload();};
+        overlayClose.innerHTML = 'Cerrar';
+        overlayDiv.appendChild(overlayClose);
+        var gotoMap=document.createElement("BUTTON");
+        gotoMap.id = 'goToMap';
+        gotoMap.onclick = function(){location.href = '/around?latitude=-34.906557;longitude=-56.199769';};
+        gotoMap.innerHTML = 'Al mapa';
+        overlayDiv.appendChild(gotoMap);
+    }
+    , 15000);*/
+function video(){
+    $('.overlay').html('<iframe width="800" height="450" src="//www.youtube.com/embed/9jsmU3093WA" frameborder="0" allowfullscreen></iframe>');
+    $('.overlay').show();
+    $('.overlay').click(function(){
+        $('.overlay').hide();
+    })
+}
+</script>
+[% END %]
+
+[% INCLUDE 'header.html', title = '', bodyclass = 'intro' mainclass = 'intro' %]
+    <div class="overlay-blue"></div>
+        <!--MAIN CONTAINER-->
+        <div class="c-intro">
+            <h1><img src="/cobrands/pormibarrio/images/logo-intro.png" alt="Por mi Barrio"></h1>
+            <h2 class="responsive" data-compression="10" data-min="14" data-max="40">Mejorando la ciudad, contigo.</h2>
+            <p>Esta es una plataforma para hacer reclamos por roturas y problemas que veas en la ciudad junto a
+            vecinos y vecinas, manteniéndote al tanto del proceso de reparación. Lo llevamos adelante desde DATA
+            (una organización de la sociedad civil) en conjunto con gobernos locales, defensorías y vecinos de Uruguay</p>
+            <div class="c-buttons-intro">
+                <a href="#" onclick="video()" class="btn btn-reportar btn-intro">Como funciona</a>
+                <a href="#" onclick="report(2500, 4)" class="btn btn-green btn-intro">Comenzar ahora</a>
+            </div>
+            <div class="steps">
+                <div class="step step-one">
+                    <img src="/cobrands/pormibarrio/images/intro-step-01.png" alt=""/>
+                    <h3>1.Reportá un problema en el mapa o
+                    sumate a uno ya creado.</h3>
+                </div>
+                <div class="step step-two">
+                    <img src="/cobrands/pormibarrio/images/intro-step-02.png" alt=""/>
+                    <h3>2. Por Mi Barrio lo envía al organismo que corresponda.</h3>
+                </div>
+                <div class="step step-three">
+                    <img src="/cobrands/pormibarrio/images/intro-step-03.png" alt=""/>
+                    <h3>3. Te enviamos información
+                    sobre el progreso, hasta su solución.</h3>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!--/main container-->
+
+        <!--FOOTER-->
+
+        <div class="footer-intro">
+          <table class="footer-intro-table">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="footer-intro-shared">
+                    <label>Un proyecto de</label>
+                    <img class="data-logo" src="/cobrands/pormibarrio/images/data.png" alt="DATA"/>
+                </div>
+              </td>
+                <td>
+                  <div class="footer-intro-shared">
+                      <label>Con el apoyo de</label>
+                      <img src="/cobrands/pormibarrio/images/Avina.png" alt="Avina"/>
+                      <img class="caf-logo" src="/cobrands/pormibarrio/images/Caf.png" alt="CAF"/>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+            <a href="/faq" class="know-more">Conocé más sobre PorMiBarrio</a>
+            <p class="photo-credit">Fotografía: Gonzalo Díaz Fornaro</p>
+        </div>
+
+        <!--end footer-->
+
+    [% IF error %]
+        <p class="form-error">[% error %]</p>
+    [% END %]
+[% INCLUDE 'footer.html' %]
