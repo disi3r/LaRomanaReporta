@@ -7,7 +7,7 @@ Por Mi Barrio permite a los ciudadanos hacer reportes de problemas en la vía p�
 
 ## Instalación
 
-Próximamente esstaremos lanzando manuales particulares para la instalación, una suerte de cheatsheet para una óptima instalación, además de manuales de administración. Por el momento (y luego también) pueden remitir a la documentación generada por mySociety que es muy buena: <http://code.fixmystreet.com/>.
+Pueden remitir a la documentación generada por mySociety que es muy buena: <http://code.fixmystreet.com/>, se creó un complemento al manual que sugiere vaias adiciones al original: <https://docs.google.com/document/d/1UmZreEx5Ey1wXARUkrAMi2Q5sR-ypGdnQiDjJQsWWmE/>. 
 
 ## Releases
 * v1.0 Por Mi Barrio (1 de Agosto 2014)
@@ -16,8 +16,15 @@ Próximamente esstaremos lanzando manuales particulares para la instalación, un
     - Interacción Open 311 actualizada, validación.
     - Nuevo theme Por Mi Barrio
     - Localización de calles Montevideo
+* v2.0 Por Mi Barrio CR, Rivera & APPs (2017)
+    - Localización de calles de Rivera
+    - Nuevo perfil de usuario de control para reportes
+    - Nuevo panel de control y notificaciones a funcionarios.
+    - API para estadísticas y conexión con nuevo desarrollo de Apps móviles.
+    - Extensión de protocolo Open311 e implementación en Montevideo.
 
 ## Ejemplos
 
-* <http://www.pormibarrio.uy/>
+* <http://pormibarrio.uy/>
+* <http://pormibarrio.cr/>
 
