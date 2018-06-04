@@ -212,37 +212,15 @@
      	}, timeout);
      	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
        $('.overlay').show();
-     	console.log('HOST'+window.location.hostname);
      	if (geo_position_js.init()) {
-     	    console.log('Va a init');
      	    geo_position_js.getCurrentPosition(function(pos) {
-     	        console.log('Get current');
      	        var latitude = pos.coords.latitude;
      	        var longitude = pos.coords.longitude;
-     	        location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
+     	        location.href = '/around?latitude=' + latitude + '&longitude=' + longitude + '&zoom=' + zoom + list;
      	    },
      	    function(err) {
-     	        $('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.<br/>Por favor selecciona una municipalidad en el menú superior para comenzar.');
-     					console.log('Entra a ERROR: '+window.location.hostname);
-
-     					if ( window.location.hostname == 'rivera.pormibarrio.uy'){
-     						location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
-     					}
-     					else if ( window.location.hostname == 'montevideo.pormibarrio.uy'){
-     						location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
-     					}else{
-     						if(area){
-     							if(area==289){
-     								location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
-     							}
-     							if(area==255){
-     								location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
-     							}
-     						}
-     					}
-
-
-     	    },
+     				location.href = '/around?latitude=-0.197945&longitude=-78.495523&zoom=' + zoom + list;
+           },
      	    {
      	        enableHighAccuracy: true,
      	        timeout: 4000
