@@ -24,6 +24,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "group_icon",
   { data_type => "text", is_nullable => 1 },
+  "external_id",
+  { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("group_id");
 
