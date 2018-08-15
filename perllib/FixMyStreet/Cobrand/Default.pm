@@ -902,4 +902,6 @@ sub use_tasks { 0 }
 
 sub update_on_view { 0 }
 
+sub send_twit {1}
+
 1;

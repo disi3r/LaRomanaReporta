@@ -1,0 +1,95 @@
+[%# Assumes fixmystreet cobrand is using FMS map template - for bonus points preload all the right map elements. %]
+[% map_js = BLOCK %]
+<script>
+function locate(){
+    //Redirigimos en timeout
+    setTimeout(function(){location.href = '/around?latitude=-0.197945&longitude=-78.495523&zoom=4'}, 2500);
+    //Comenzamos goeposition
+    if (geo_position_js.init()) {
+        geo_position_js.getCurrentPosition(function(pos) {
+            var latitude = pos.coords.latitude;
+            var longitude = pos.coords.longitude;
+            location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=4';
+        },
+        function(err) {
+            location.href = '/around?latitude=-0.197945&longitude=-78.495523&zoom=4';
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 2500
+        });
+    }
+}
+function video(){
+    $('.overlay').html('<iframe width="800" height="450" src="//www.youtube.com/embed/9jsmU3093WA" frameborder="0" allowfullscreen></iframe>');
+    $('.overlay').show();
+    $('.overlay').click(function(){
+        $('.overlay').hide();
+    })
+}
+</script>
+[% END %]
+
+[% INCLUDE 'header.html', title = '', bodyclass = 'intro' mainclass = 'intro' %]
+    <div class="overlay-blue"></div>
+        <!--MAIN CONTAINER-->
+        <div class="c-intro">
+            <h1><img src="/cobrands/pormibarrio/images/logo-intro.png" alt="Por mi Barrio"></h1>
+            <h2 class="responsive" data-compression="10" data-min="14" data-max="40">Tu voz cuenta.</h2>
+            <p>Rimay es una plataforma ciudadana para reportar problemas que veas en tu comunidad. Reporta baches, desagües tapados, tapas de alcantarillas robadas, grafiti, basura sin recoger y más. Rimay compartirá tu reporte con la autoridad encargada y lo hará público, para que todos conozcamos el avance de la reparación.</p>
+            <div class="c-buttons-intro">
+                <a href="#" onclick="video()" class="btn btn-reportar btn-intro">Como funciona</a>
+                <a href="#" onclick="report(2500, 4)" class="btn btn-green btn-intro">Comenzar ahora</a>
+            </div>
+            <div class="steps">
+                <div class="step step-one">
+                    <img src="/cobrands/pormibarrio/images/intro-step-01.png" alt=""/>
+                    <h3>1.Reportá un problema en el mapa o
+                    sumate a uno ya creado.</h3>
+                </div>
+                <div class="step step-two">
+                    <img src="/cobrands/pormibarrio/images/intro-step-02.png" alt=""/>
+                    <h3>2. Rimay lo envía al organismo que corresponda.</h3>
+                </div>
+                <div class="step step-three">
+                    <img src="/cobrands/pormibarrio/images/intro-step-03.png" alt=""/>
+                    <h3>3. Te enviamos información
+                    sobre el progreso, hasta su solución.</h3>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!--/main container-->
+
+        <!--FOOTER-->
+
+        <div class="footer-intro">
+          <table class="footer-intro-table">
+            <tbody>
+              <tr>
+                <td>
+                  <div class="footer-intro-shared">
+                    <label>Un proyecto de</label>
+                    <img class="data-logo" src="/cobrands/pormibarrio/images/data.png" alt="DATA"/>
+                </div>
+              </td>
+                <td>
+                  <div class="footer-intro-shared">
+                      <label>Con el apoyo de</label>
+                      <img src="/cobrands/pormibarrio/images/Avina.png" alt="Avina"/>
+                      <img class="caf-logo" src="/cobrands/pormibarrio/images/Caf.png" alt="CAF"/>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+            <a href="/faq" class="know-more">Conocé más sobre PorMiBarrio</a>
+            <p class="photo-credit">Fotografía: Gonzalo Díaz Fornaro</p>
+        </div>
+
+        <!--end footer-->
+
+    [% IF error %]
+        <p class="form-error">[% error %]</p>
+    [% END %]
+[% INCLUDE 'footer.html' %]

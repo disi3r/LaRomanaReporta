@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use FixMyStreet::App;
+use ServiceDesk::PopulateServiceList;
+use Getopt::Long::Descriptive;
+
+my ($opt, $usage) = describe_options(
+    '%c %o',
+    ['verbose|v',  "print out all services as they are found"],
+    ['warn|w',     "output warnings about any issues"],
+    ['help',       "print usage message and exit" ],
+);
+print($usage->text), exit if $opt->help;
+
+my $bodies = FixMyStreet::App->model('DB::Body')->search( {
+    send_method => 'ServiceDesk'
+} );
+my $verbose = 0;
+$verbose = 1 if $opt->warn;
+$verbose = 2 if $opt->verbose;
+my $p = ServiceDesk::PopulateServiceList->new( bodies => $bodies, verbose => $verbose );
+print "\n A PROCESS BODies\n";
+$p->process_bodies;

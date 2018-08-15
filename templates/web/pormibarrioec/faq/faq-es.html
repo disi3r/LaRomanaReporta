@@ -1,0 +1,213 @@
+[% IF !mobile %]
+	[% INCLUDE 'header.html', title = 'Ayuda', bodyclass = 'static' %]
+	<div class="reportes sub report-list" id="faq-list">
+	    <div class="c-scroll">
+	        <div class="rl scrolled-95">
+	        	[% INCLUDE faq_header %]
+	        </div>
+	    </div>
+	</div>
+[% ELSE %]
+	[% INCLUDE faq_header %]
+[% END %]
+
+	<div class="faq c-respuestas">
+    <div class="c-scroll">
+      <div id="answers" class="rl scrolled-95">
+        <span>VOLVER</span>
+        <div class="respuesta" id="faq01">
+          <h2>¿Qué es Rimay?</h2>
+					<p>
+						Rimay es una plataforma ciudadana para reportar problemas que veas en tu comunidad. A través de Rimay puedes reportar diversos problemas e inconvenientes que veas en tu barrio, como baches, desagües tapados, tapas de alcantarillas robadas, grafiti, basura sin recoger, etc. Rimay compartirá tu reporte con la autoridad encargada y lo hará público, para que todos conozcamos el avance de la reparación.
+					</p>
+        </div>
+        <div class="respuesta" id="faq02">
+					<h2>¿Qué significa Rimay?</h2>
+	        <p>
+						imay viene del kichwa y significa “voz”. Nuestro objetivo es tu voz y la de tus vecinos sea escuchada por las autoridades encargadas de trabajar para la ciudadanía. Creemos que tu voz cuenta y queremos brindar un canal para que sea escuchada por todos.
+					</p>
+				</div>
+        <div class="respuesta" id="faq03">
+        	<h2>¿Quién maneja Rimay?</h2>
+          <p>
+						Rimay es manejado por un grupo de ciudadanos comprometidos con la mejora en los servicios públicos. Somos estudiantes, emprendedores, activistas y usuarios de estos servicios públicos como tú.
+					</p>
+				</div>
+        <div class="respuesta" id="faq04">
+        	<p>
+            <h2>¿Cómo funciona?</h2>
+						3 simples pasos:
+						<ol>
+							<li>Reportá un problema en el mapa o sumate a uno ya creado. Puedes adjuntar fotos o videos. </li>
+							<li>Rimay lo comparte con la autoridad encargada y lo hace público.</li>
+							<li>Recibirás información sobre el progreso hasta su solución.</li>
+						</ol>
+					</p>
+					<p>
+						Para hacer esto, sólo tenés que localizar el problema en un mapa. También se pueden subir fotos y comentarios. A partir de que creaste o te sumaste a un reclamo, vas a recibir en tu correo electrónico las novedades sobre el mismo.
+						Cuando vuelvas a entrar a la página web vas a poder ver tu reporte marcado en un mapa, así como los de los/as demás usuarios/as. También podrás ver los reportes que la Intendencia marcó como solucionados y los que todavía son problemas para el barrio.
+					</p>
+	      </div>
+				<div class="respuesta" id="faq05">
+					<h2>¿Qué hago si el reclamo que quiero realizar ya existe?</h2>
+					<p>
+						Puedes sumarte al reclamo incluyendo información adicional, fotos, videos o comentarios.
+					</p>
+				</div>
+        <div class="respuesta" id="faq6">
+        	<h2>Tengo otras preguntas, ¿cómo puedo contactar a Rimay?</h2>
+        	<p>
+						Puedes seguirnos en nuestras cuentas sociales (@RimayEC) o escribirnos a info@RimayEC.com
+					</p>
+	      </div>
+				<div class="respuesta" id="faq7">
+        	<h2>¿De dónde viene Rimay?</h2>
+        	<p>
+						Rimay está implementado en base a Por Mi Barrio (link a portfolio), el cual es una adaptación de DATA Uruguay (link) de código abierto, al proyecto Fix My Street (link) desarrollado por My Socety (link) en el Reino Unido.
+					</p>
+	      </div>
+      </div>
+    </div>
+	</div>
+
+[% IF !mobile %]
+	[% INCLUDE 'footer.html' %]
+[% ELSE %]
+
+	<style type="text/css">
+		/*COMO FUNCIONA------------------------------------------------------------------*/
+		div.como-funciona{
+			padding: 0 10px;
+			background-color:rgba(248, 248, 248, 0.80)
+		}
+
+		div.como-funciona h2{
+			font-weight:300;
+			font-size:2.375em;
+			color:#2c3e50
+		}
+
+		div.como-funciona dl{
+			margin-top:28px;
+			margin-bottom:0
+		}
+
+		div.como-funciona dt{
+			font-size:0.875em;
+			color:#58bef7;
+			font-weight:300;
+			text-transform:uppercase;
+			margin-bottom:10px;
+		}
+
+		div.como-funciona dd, div.como-funciona dd a{
+			font-size:1em;
+			color:#7d7d7d;
+			transition: all 0.3s ease 0s;
+			text-decoration: none;
+			background: transparent none repeat scroll 0% 0%;
+			box-sizing: border-box;
+			line-height: 1.5em;
+			font-family: "Source Sans Pro",sans-serif;
+		}
+
+		div.como-funciona dd{
+			margin-bottom:5px;
+		}
+
+		/*RESPUESTAS DE COMO FUNCIONA-----------------------------------------------*/
+		div.c-respuestas{
+			top:55px;
+			padding:0;
+			/*background:rgba(255, 255, 255, 0.9);*/
+			z-index:400;
+		}
+
+		.content-vertical div.c-respuestas{
+			left:0;
+		}
+
+		div.c-respuestas span{
+			display: none;
+		}
+
+		div.respuesta{
+			padding: 60px 0 0;
+		}
+
+		.content-vertical div.respuesta{
+			padding: 60px 60px 0;
+		}
+
+		div.respuesta h2{
+			font-size:2.1em;
+			font-weight:normal;
+			color:#252525;
+			line-height: 1.1;
+			margin: 0;
+		}
+
+		.content-vertical div.respuesta h2{
+			font-size: 1.5em;
+		}
+
+		div.respuesta p{
+			font-size:1.125em;
+			color:#7d7d7d;
+			line-height:28px;
+			margin-top:30px;
+			text-align: justify;
+		}
+
+		div.respuesta p a{
+			color:#58bef7
+		}
+		ul {
+			list-style-type: none;
+		}
+		div {
+			font-family: 'Source Sans Pro', sans-serif;
+			font-size: 16px;
+			line-height: 1.42857143;
+			color: #383f3a;
+		}
+		h3 {
+			font-weight: 500;
+			line-height: 1.1;
+			color: inherit;
+			font-size: 28px;
+		}
+		.add-ticket {
+			background-color: #58bef7;
+			color: #fff;
+			padding: 9px 10px 0px;
+			margin-top: 5px;
+			text-decoration: none;
+			height: 30px;
+			vertical-align: middle;
+			border: #d3d3d3 solid 1px;
+			border-radius: 5px;
+			padding: 6px 10px 6px;
+			display: block;
+		}
+	</style>
+[% END %]
+
+[% BLOCK faq_header %]
+	<div class="como-funciona" id="q-links">
+    	<h2>Información</h2>
+        <dl>
+        	<dt>Sobre Rimay</dt>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq01');\"" : "href='#faq01'" %] class="pregunta">¿Qué es Rimay?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq02');\"" : "href='#faq02'" %] class="pregunta">¿Qué significa Rimay?</a></dd>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq03');\"" : "href='#faq03'" %] class="pregunta">Quién maneja Rimay?</a></dd>
+						<dd>· <a [% mobile ? "ng-click=\"scrollMe('faq04');\"" : "href='#faq04'" %] class="pregunta">¿Cómo funciona?</a></dd>
+						<dd>· <a [% mobile ? "ng-click=\"scrollMe('faq05');\"" : "href='#faq05'" %] class="pregunta">¿Qué hago si el reclamo que quiero realizar ya existe?</a></dd>
+						<dd>· <a [% mobile ? "ng-click=\"scrollMe('faq06');\"" : "href='#faq06'" %] class="pregunta">Tengo otras preguntas, ¿cómo puedo contactar a Rimay?</a></dd>
+        </dl>
+        <dl>
+        	<dt>Predecesores</dt>
+            <dd>· <a [% mobile ? "ng-click=\"scrollMe('faq07');\"" : "href='#faq07'" %] class="pregunta">¿De dónde viene Rimay?</a></dd>
+        </dl>
+    </div>
+[% END %]

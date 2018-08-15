@@ -1,0 +1,70 @@
+<div id="s-calles" class="s-calles">
+  <form role="form" class="form-inline">
+    <div class="form-group pull-left">
+      <input class="" placeholder="Calle" id="calle" onkeyup="searchLocationAjax(event, this)"/>
+    </div>
+  </form>
+</div>
+
+<!--lista CALLES-->
+<ul class="list-unstyled l-calles">
+</ul>
+<!--/lista CALLES-->
+<script>
+function searchLocationAjax(event, obj){
+    //Letters, Caps and nums
+    if ( (event.which > 64 && event.which < 91) || (event.which > 96 && event.which < 123) || (event.which > 47 && event.which < 58)) {
+      $('ul.l-calles').empty();
+        if ( obj.value.length > 4 ){
+            var items = "";
+            $('#calle').css("background", "url(/cobrands/pormibarrio/images/Loading.gif) 25px 18px no-repeat");
+            $.getJSON( "/ajax/geocode?term="+obj.value, function( data ) {
+                listaCalles[0] = [];
+                $.each( data.locations, function( key, obj ) {
+                  var docLi = document.createElement("li");
+                  docLi.classList.add('pick-street');
+                  docLi.innerHTML = obj.address;
+                  docLi.addEventListener("click", function () {
+                    locateStreetPin(obj);
+                  }, false);
+                  console.log(docLi);
+                  $("ul.l-calles").append(docLi);
+                    //items += "<li class='pick-street' onclick='locateStreetPin("+obj+")' >" + obj.address + "</li>";
+                  listaCalles[0].push(obj);
+                });
+                //$(items).appendTo("ul.l-calles");
+                $('#calle').css("background", "url(/cobrands/pormibarrio/images/icon-search.png) 25px 18px no-repeat");
+            });
+        }
+    }
+}
+
+function locateStreetPin(data){
+  console.log(data);
+  //var latlon = utm2LatLong(data.lat, data.long, '21H');
+  if (typeof fixmystreet != "undefined"){
+    var lonlat = new OpenLayers.LonLat(data.long, data.lat);
+    lonlat.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+    fixmystreet.map.panTo(lonlat);
+    fixmystreet_update_pin(lonlat,0);
+    if (fixmystreet.page == 'new') {
+        /* Already have a pin */
+        fixmystreet.markers.features[0].move(lonlat);
+    } else {
+        var markers = fms_markers_list( [ [ lonlat.lat, lonlat.lon, 'green' ] ], false );
+        fixmystreet.bbox_strategy.deactivate();
+        fixmystreet.markers.removeAllFeatures();
+        fixmystreet.markers.addFeatures( markers );
+        fixmystreet_activate_drag();
+    }
+    $('ul.l-calles').empty();
+    $('input#calle').val(data.address);
+    setTimeout(function(){
+      fixmystreet.map.zoomTo(3);
+    },500);
+  }else{
+    window.location.href = "/around?latitude="+latlon[0]+";longitude="+latlon[1]+"&zoom=3";
+  }
+}
+
+</script>

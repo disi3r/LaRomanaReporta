@@ -48,6 +48,10 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "group_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "twitter",
+  { data_type => "text", is_nullable => 1 },
+  "twitter_others",
+  { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("contacts_body_id_category_idx", ["body_id", "category"]);

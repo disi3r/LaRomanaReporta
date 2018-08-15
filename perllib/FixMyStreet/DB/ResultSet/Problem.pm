@@ -270,9 +270,7 @@ sub send_reports {
     my $debug_unsent_count = 0;
     debug_print("starting to loop through unsent problem reports...") if $debug_mode;
     while (my $row = $unsent->next) {
-
         my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($row->cobrand)->new();
-
         if ($debug_mode) {
             $debug_unsent_count++;
             print "\n";
@@ -421,7 +419,10 @@ sub send_reports {
 
             $sender_count = scalar @dear;
         }
-
+        if ( $cobrand->send_twit ) {
+          print "\nSending Tweet\n";
+          FixMyStreet::SendReport::Twitter->new()->send($row, \%h);
+        }
         unless ( keys %reporters ) {
             die 'Report not going anywhere for ID ' . $row->id . '!';
         }
