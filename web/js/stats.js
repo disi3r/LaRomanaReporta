@@ -21,6 +21,7 @@ function getCategoriesFilter(body_id){
   if (body_id){
     $("#category-group-select").empty();
     api_call += "&body_id="+body_id;
+    //Get body areas
   }
 	$.getJSON(api_call, function (data) {
 		catJson = data;
@@ -544,12 +545,18 @@ function getApiRequestURLParams(){
 
 function getCharts(){
 	var urlParams = getApiRequestURLParams();
-	getTotalsChart(urlParams);
-	getReportsByStateChart(urlParams);
-	getReportsPerCategoriesChart("graph-reports-categories",urlParams);
-	getReportsEvolution("graph-reports-evolution-chart-visualisation",urlParams);
-	getAnswerTimeByStateChart(urlParams);
-	getAnswerTimeByCategoryChart("graph-average-answertime-by-category-chart",urlParams);
+  var url = "/api/getStats?api_key=1234";
+	url = url + urlParams;
+
+  console.log('Get charts:'+url);
+	$.getJSON(url, function (data) {
+    getTotalsChart(data.getTotals);
+    getReportsByStateChart(data.getTotals.reportsByState);
+    getReportsPerCategoriesChart("graph-reports-categories",data.reportsByCategoryGroup);
+    getReportsEvolution("graph-reports-evolution-chart-visualisation",data.reportsEvolution);
+    getAnswerTimeByStateChart(data.answerTimeByState);
+    getAnswerTimeByCategoryChart("graph-average-answertime-by-category-chart",data.answerTimeByCategoryGroup);
+	});
 }
 
 function getRandomColor(originalColor,groupName){

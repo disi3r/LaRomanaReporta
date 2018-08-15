@@ -313,6 +313,31 @@ $( document ).ready(function() {
 			$('tr.'+$(this).val()).hide();
 		}
 	});
+	//MINI MAP
+	if ( jQuery('.mini-map').length ) {
+		jQuery('#map_box').appendTo(jQuery('.mini-map'));
+		proj_def = new OpenLayers.Projection("EPSG:4326");
+		proj_mapit = new OpenLayers.Projection("EPSG:21781");
+		var area = new OpenLayers.Layer.Vector("KML", {
+			strategies: [ new OpenLayers.Strategy.Fixed() ],
+			protocol: new OpenLayers.Protocol.HTTP({
+				url: "/api/area_polygon?area_id=472&api_key=1234&noload=1",
+				format: new OpenLayers.Format.KML(),
+				//projection: 'EPSG:21781'
+			})
+		});
+		console.log(area);
+		console.log('AREA RENDERED');
+		//area.getFeatures()[0].getGeometry().transform('EPSG:4326', 'EPSG:21781');
+		//var area = new OpenLayers.Projection.transform(area_proj, new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+		fixmystreet.map.addLayer(area);
+		area.events.register('loadend', null, function(a,b,c) {
+			if ( fixmystreet.area_format ) {
+				area.styleMap.styles['default'].defaultStyle = fixmystreet.area_format;
+			}
+			fixmystreet_zoomToBounds( area.getDataExtent() );
+		});
+	}
 });
 
 function readURL(input,img_container_id) {
@@ -372,96 +397,6 @@ function smallPIN(obj){
 		$('div.c-report').show();
 	});
 */
-function report(timeout, zoom){
-	if (typeof fixmystreet != 'undefined'){
-		switch (fixmystreet.page) {
-			case 'around':
-				$('#side-form').show();
-				$('#side').hide();
-				break;
-			default:
-				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=4&list=0';
-		}
-	}
-	else {
-
-		geolocate(timeout, zoom, 0);
-	}
-}
-
-function report_list(timeout, zoom){
-	$(".navbar-collapse.collapse.in").removeClass("in");
-	if (typeof fixmystreet != 'undefined'){
-		switch (fixmystreet.page) {
-			case 'around':
-				$('#side-form').hide();
-				$('#side').show();
-				break;
-			case 'new':
-				window.history.back();
-				break;
-			default:
-				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=2&list=1';
-		}
-	}
-	else {
-		geolocate(timeout, zoom);
-	}
-}
-
-function geolocate(timeout, zoom, is_list ){
-	var list = '&list=1';
-	if (!is_list){
-		list = '&list=0';
-	}
-	setTimeout(function(){
-		console.log('TIMEOUT: '+window.location.hostname);
-		if ( window.location.hostname == 'rivera.pormibarrio.uy'){
-			location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
-		}
-		else if ( window.location.hostname == 'montevideo.pormibarrio.uy'){
-			location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
-		}
-	}, timeout);
-	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
-  $('.overlay').show();
-	console.log('HOST'+window.location.hostname);
-	if (geo_position_js.init()) {
-	    console.log('Va a init');
-	    geo_position_js.getCurrentPosition(function(pos) {
-	        console.log('Get current');
-	        var latitude = pos.coords.latitude;
-	        var longitude = pos.coords.longitude;
-	        location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
-	    },
-	    function(err) {
-	        $('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.<br/>Por favor selecciona una municipalidad en el menú superior para comenzar.');
-					console.log('Entra a ERROR: '+window.location.hostname);
-
-					if ( window.location.hostname == 'rivera.pormibarrio.uy'){
-						location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
-					}
-					else if ( window.location.hostname == 'montevideo.pormibarrio.uy'){
-						location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
-					}else{
-						if(area){
-							if(area==289){
-								location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
-							}
-							if(area==255){
-								location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
-							}
-						}
-					}
-
-
-	    },
-	    {
-	        enableHighAccuracy: true,
-	        timeout: 4000
-	    });
-	}
-}
 
 //RESPONSIVE TEXT
 $('.responsive').responsiveText();

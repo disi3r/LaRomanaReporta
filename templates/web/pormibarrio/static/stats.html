@@ -1,7 +1,7 @@
 [% USE date %]
-[% INCLUDE header.html
-    title = loc('Stats')
-%]
+[% INCLUDE header.html, bodyclass = 'mappage', title = loc('Stats') %]
+[% PROCESS "maps/osm.html" %]
+<iframe id="ifmcontentstoprint" style="height: 0px; width: 0px; position: absolute"></iframe>
 <div id="chart-options">
   <h3>Estadísticas</h3>
   <h4>Datos generales de la plataforma</h4>
@@ -31,10 +31,14 @@
     <!--<a onclick="download_totals()" class="download-links">Descargar datos en pantalla (csv)</a>-->
     <a onclick="download_totals()" class="download-links">Descargar totales (csv)</a>
     <a onclick="download_reports()" class="download-links">Descargar reportes (csv)</a>
+    <a id="display_chart_print" class="btn hidden-print download-links" href="#" onClick="printStats();">Imprimir</a>
     <!--<a class="download-links">Datos en catálogo nacional</a>-->
   </div>
 </div>
 <h3 id="select-period-title" style="margin-top: 4%; text-align: center;">[% loc('Select the period you want') %]</h3>
+<div class="mini-map">
+  [% map_html %]
+</div>
 <div id="chart-container" class="hidden">
   <script type="text/javascript" src="[% start %][% version('/js/d3.v3.min.js') %]" ></script>
 	<script src="[% start %][% version('/js/jquery-ui/js/jquery-ui-1.10.3.custom.min.js') %]" charset="utf-8"></script>
@@ -67,12 +71,6 @@
       </div>
     </div>
 
-    <div class="graph-reports-by-state" class="chart-group">
-      <h4 id="graph-reports-by-state-title" class="graph-title">REPORTES POR ESTADO</h4>
-      <table id="graph-reports-by-state-table" class="graph-reports-by-state-table">
-      </table>
-    </div>
-
     <div class="graph-reports-evolution" class="chart-group">
       <h4 class="graph-title">EVOLUCIÓN DE RECLAMOS</h4>
       <div id="graph-reports-evolution-chart">
@@ -81,27 +79,13 @@
       <ul id="categories-list-evolution">
       </ul>
     </div>
-
-    <div style="display: none;">
-  		<div id="graph-totals" style="height: 300px; width: 60%;" class="chart-group"></div>
-  		<div id="graph-total-cat" style="height: 400px; width: 100%;" class="chart-group"></div>
-  		<div id="graph-evolution" style="height: 400px; width: 100%;" class="chart-group"></div>
-  		<div id="chart-subcat">
-  			<select id="subcat-select"></select>
-  		</div>
-  		<div id="graph-subcat" style="height: 400px;"></div>
-    </div>
-
     <div class="graph-reports-by-state" class="chart-group">
-      <h4 id="graph-average-answertime-title" class="graph-title">Tiempo de respuesta promedio</h4>
-      <div id="averageDays">
-      </div>
-      <table id="graph-average-answertime-table" class="graph-reports-by-state-table">
+      <h4 id="graph-reports-by-state-title" class="graph-title">REPORTES POR ESTADO</h4>
+      <table id="graph-reports-by-state-table" class="graph-reports-by-state-table">
       </table>
     </div>
-
     <div class="graph-average-answertime-by-category" class="chart-group">
-      <h4 class="graph-title">Tiempo de respuesta por categoría</h4>
+      <h4 class="graph-title">Tiempo de respuesta promedio por categoría (días)</h4>
       <div id="graph-average-answertime-by-category-chart">
       </div>
       <div id="graph-average-answertime-by-category-chart-legend">
@@ -109,7 +93,13 @@
         </ul>
       </div>
     </div>
-
+    <div class="graph-average-answertime" class="chart-group">
+      <h4 id="graph-average-answertime-title" class="graph-title">Tiempo de respuesta promedio por estado (días)</h4>
+      <div id="averageDays">
+      </div>
+      <table id="graph-average-answertime-table" class="graph-reports-by-state-table">
+      </table>
+    </div>
 	</div>
 	<script>
     $( document ).ready(function() {
@@ -118,5 +108,37 @@
     });
 	</script>
 </div>
+<script>
+  function printStats(){
+    var fullDate = new Date();
+    var twoDigitMonth = fullDate.getMonth()+ 1;
+    twoDigitMonth = twoDigitMonth + "";
+    if(twoDigitMonth.length==1)	twoDigitMonth="0" +twoDigitMonth;
+    var twoDigitDate = fullDate.getDate()+"";
+    if(twoDigitDate.length==1)	twoDigitDate="0" +twoDigitDate;
+    var hour = fullDate.getHours();
+    if (hour < 10){
+      hour = "0" + hour;
+    }
+    var minute = fullDate.getMinutes();
+    if (minute < 10){
+      minute = "0" + minute;
+    }
+    var currentDate = twoDigitDate + "/" + twoDigitMonth + "/" + fullDate.getFullYear() + " " + hour + ":" + minute;
+    $("#today").empty();
+    $("#today").append(currentDate);
+    var content = document.getElementById("graphs");
+    var content2 = '<link rel="stylesheet" href="/cobrands/pormibarrio/main.css">';
+    var pri = document.getElementById("ifmcontentstoprint").contentWindow;
+    pri.document.open();
+    pri.document.write(content.innerHTML);
+    pri.document.write(content2.innerHTML);
+    pri.document.close();
+    pri.focus();
 
+    $('#ifmcontentstoprint').ready(function() {
+        setTimeout(function(){pri.print();}, 650);
+    });
+}
+</script>
 [% INCLUDE footer.html %]

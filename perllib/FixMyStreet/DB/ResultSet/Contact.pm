@@ -20,7 +20,7 @@ sub get_groups {
     'me.group_id' => {'>=' => 0}
   },{
     join => ['contacts_group'],
-    columns => ['me.category', 'me.group_id'],
+    columns => ['me.category', 'me.group_id', 'me.body_id',],
     '+columns' => ['contacts_group.group_name', 'contacts_group.group_color', 'contacts_group.group_icon'],
   });
 }
