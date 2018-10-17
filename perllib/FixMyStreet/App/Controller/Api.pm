@@ -185,7 +185,6 @@ sub load_problems : Private {
   my ( $self, $c ) = @_;
 
     my $where = $self->load_dates($c, 'confirmed');
-    print Dumper($where);
     $where->{state} = [ FixMyStreet::DB::Result::Problem->visible_states() ];
     $where->{bodies_str} = $c->stash->{body_id} if $c->stash->{body_id};
     $where->{areas} = { 'like', '%,' . $c->stash->{area} . ',%' } if $c->stash->{area};
@@ -413,46 +412,52 @@ Return reports for query
 sub reports : Path('reports') {
   my ( $self, $c ) = @_;
 
-  my $mem_reports = Memcached::get( $c->stash->{query_key}.'reports' );
-  if ($mem_reports){
-    $c->stash->{api_result} = \@{$mem_reports};
-  }
-  else {
+  #ToDo Fix Memcached and disposal of the data for stats
+  #my $mem_reports = Memcached::get( $c->stash->{query_key}.'reports' );
+  #if ($mem_reports){
+  #  $c->stash->{api_result} = \@{$mem_reports};
+  #}
+  #else {
     my @reports;
     if ( !$c->stash->{api_problems} ) {
       $c->forward('load_problems');
     }
     while ( my $report = $c->stash->{api_problems}->next ){
-      my %repo = map { $_ => $report->$_ } qw/id postcode title detail name category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent deadline category_group_obj/;
+      my %repo = map { $_ => $report->$_ } qw/id postcode title detail name category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent/;
       $repo{confirmed} = $repo{confirmed}->ymd if defined($repo{confirmed});
       $repo{lastupdate} = $repo{lastupdate}->ymd if defined($repo{lastupdate});
       $repo{lastupdate_council} = $repo{lastupdate_council}->ymd if defined($repo{lastupdate_council});
       $repo{whensent} = $repo{whensent}->ymd if defined($repo{whensent});
+      #$repo{deadline} = $report->deadline->{deadline};
       push @reports, \%repo;
     }
     $c->stash->{api_result} = \@reports;
-  }
+    #Memcached::set('group_categories', \@reports, 3600);
+  #}
 }
 
 sub geo_reports : Path('geo_reports') {
   my ( $self, $c ) = @_;
   #Deceive Memcached
-  $c->stash->{query_key} = '.';
+  $c->log->debug("\nSTART GEO reports\n");
+  $c->stash->{query_key} = 'all';
   $c->stash->{format} = 'geo_json';
   $c->forward('reports');
+  return;
   my $reports = $c->stash->{api_result};
+  $c->log->debug("\nGRABBED reports\n");
   #Load cat groups
   my $groups = $c->forward('get_category_groups');
   my %groups = %{$groups};
   my @fcollection;
-  $c->log->debug('GROUPS GEO:'.Dumper($groups));
+  #$c->log->debug('GROUPS GEO:'.Dumper($groups));
   foreach my $report (@$reports) {
     #Create point
     my $pt = Geo::JSON::Point->new({
         coordinates => [ $report->{latitude}, $report->{longitude} ],
     });
     my $cat = $report->{category};
-    $c->log->debug('GROUPS GEO:'.Dumper($cat));
+    #$c->log->debug('GROUPS GEO:'.Dumper($cat));
     #Add properties
     my %pt_prop = (
       id => $report->{id},
@@ -816,8 +821,8 @@ sub answerTimeByState: Path('answerTimeByState') {
     my %states_average;
     my $now = DateTime->now;
     my $report;
-    my $completed_states = FixMyStreet::DB::Result::Problem->fixed_states();
-    my $closed_states = FixMyStreet::DB::Result::Problem->fixed_states();
+    #my $completed_states = FixMyStreet::DB::Result::Problem->fixed_states();
+    #my $closed_states = FixMyStreet::DB::Result::Problem->fixed_states();
     my $states = FixMyStreet::DB::Result::Problem->all_states();
     if ( !$c->stash->{api_problems} ) {
       $c->forward('load_problems');

@@ -877,7 +877,7 @@ sub deadline {
   #Get deadlines
   my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($problem->cobrand)->new();
   if ($cobrand->use_deadlines){
-    my $deadline = { 'class' => 'problem_alert' };
+    my $deadline = { 'deadline' => 'noDeadLine' };
     if ( $problem->is_open ){
       #@problem_deadlines = $problem_deadlines->all;
       my $problem_deadlines = FixMyStreet::App->model('DB::BodyDeadlines')->search({ group_id => $problem->category_group , body_id => shift $problem->bodies_str_ids });
@@ -895,9 +895,6 @@ sub deadline {
             if ( $deadline_date->epoch >= $problem->confirmed->epoch ){
               $deadline = $deadline_actions;
               last;
-            }
-            else {
-              $deadline = { 'deadline' => 'noDeadLine' };
             }
           }
         }

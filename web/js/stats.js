@@ -98,11 +98,10 @@ function getBodiesFilter(){
   });
 }
 
-function getReportsEvolution(container_id, urlParams){
-	$("#"+container_id).html('<div class="loader_throbber"><div class="three-quarters-loader"></div></div>');
-	var url = "/api/reportsEvolution?api_key=1234";
-	url = url + urlParams;
-	$.getJSON(url, function (data) {
+function getReportsEvolution(container_id, data){
+	//var url = "/api/reportsEvolution?api_key=1234";
+	//url = url + urlParams;
+	//$.getJSON(url, function (data) {
 		$("#"+container_id).html("");
 		var finalDataArray = [];
 		//var parseDate = d3.time.format("%Y%m%d").parse;
@@ -125,7 +124,7 @@ function getReportsEvolution(container_id, urlParams){
 				//console.log(value);
 				finalDataArray.push(value);
 			});
-		});
+		//});
 		data = finalDataArray;
 		var cheight = $("#"+container_id).innerHeight();
 		var dataGroup = d3.nest()
@@ -243,11 +242,10 @@ function getReportsEvolution(container_id, urlParams){
 	});
 }
 
-function getReportsPerCategoriesChart(container_id,urlParams){
-	$("#"+container_id).html('<div class="loader_throbber"><div class="three-quarters-loader"></div></div>');
-	var url = "/api/reportsByCategoryGroup?api_key=1234";
-	url = url + urlParams;
-	d3.json(url, function(data) {
+function getReportsPerCategoriesChart(container_id,data){
+	//var url = "/api/reportsByCategoryGroup?api_key=1234";
+	//url = url + urlParams;
+	//d3.json(url, function(data) {
 		$("#categories-list").html("");
 		$("#"+container_id).html('');
 
@@ -296,14 +294,6 @@ function getReportsPerCategoriesChart(container_id,urlParams){
 				.attr("dy", ".35em")
 				.style("display","none")
 				.text(function(d) { return d.data.groupName; })
-
-
-	});
-
-	function type(d) {
-		d.reports = +d.reports;
-		return d;
-	}
 }
 
 function setCategoryGroupFilter(groupName){
@@ -352,11 +342,10 @@ function getIdFromCategoryGroup(groupName){
 	return false;
 }
 
-function getReportsByStateChart(urlParams){
-	$("#graph-reports-by-state-table").html('<tbody><tr><td><div class="loader_throbber"><div class="three-quarters-loader"></div></div></td></tr></tbody>');
-	var url = "/api/reportsByState?api_key=1234";
-	url = url + urlParams;
-	$.getJSON(url, function (data) {
+function getReportsByStateChart(data){
+	//var url = "/api/reportsByState?api_key=1234";
+	//url = url + urlParams;
+	//$.getJSON(url, function (data) {
 
 		statesTable = "<tbody>";
 		nextRowColor = null;
@@ -365,13 +354,13 @@ function getReportsByStateChart(urlParams){
 		});
 		statesTable = statesTable + "</tbody>";
 		$("#graph-reports-by-state-table").html(statesTable);
-	});
+	//});
 }
 
-function getAnswerTimeByStateChart(urlParams){
-	var url = "/api/answerTimeByState?api_key=1234";
-	url = url + urlParams;
-	$.getJSON(url, function (data) {
+function getAnswerTimeByStateChart(data){
+	//var url = "/api/answerTimeByState?api_key=1234";
+	//url = url + urlParams;
+	//$.getJSON(url, function (data) {
 		statesTable = "<tbody>";
 		nextRowColor = null;
 		totalDays = 0;
@@ -386,33 +375,33 @@ function getAnswerTimeByStateChart(urlParams){
 		//$("#averageDays").html("<span class='average-days'>"+average+"</span><span class='states-time-chart'>Días promedio</span>");
 		statesTable = statesTable + "</tbody>";
 		$("#graph-average-answertime-table").html(statesTable);
-	});
+	//});
 }
 
-function getTotalsChart(urlParams){
-	var url = "/api/getTotals?api_key=1234";
-	url = url + urlParams;
+function getTotalsChart(data){
+	//var url = "/api/getTotals?api_key=1234";
+	//url = url + urlParams;
 
-	$.getJSON(url, function (data) {
+	//$.getJSON(url, function (data) {
 		$("#graph-total-users-value").html(data.users);
 		$("#graph-total-reports-value").html(data.reports);
-	});
+	//});
 }
 
-function getAnswerTimeByCategoryChart(container_id,urlParams){
+function getAnswerTimeByCategoryChart(container_id,data){
 			$("#"+container_id).html("");
 			var w = $("#"+container_id).innerWidth()*0.79,
-					h = 200;
+					h = '400';
 			var svg = d3.select("#"+container_id).append("svg")
 				.attr("width", w)
 				.attr("height", h);
 
-			var url = "/api/answerTimeByCategoryGroup?api_key=1234";
-			url = url + urlParams;
+			//var url = "/api/answerTimeByCategoryGroup?api_key=1234";
+			//url = url + urlParams;
 
-			d3.json(url, function(json) {
+			//d3.json(url, function(json) {
 
-				var data = json;
+				//var data = json;
 
 				var max_n = 0;
 				for (var d in data) {
@@ -477,7 +466,7 @@ function getAnswerTimeByCategoryChart(container_id,urlParams){
 							tooltip.style("visibility", "hidden");
 							setCategoryGroupFilter(d.groupName);
 					 });
-			});
+			//});
 }
 
 function getApiRequestURLParams(){
@@ -548,10 +537,13 @@ function getCharts(){
   var url = "/api/getStats?api_key=1234";
 	url = url + urlParams;
 
-  console.log('Get charts:'+url);
+  $("#graph-reports-categories").html('<div class="loader_throbber"><div class="three-quarters-loader"></div></div>');
+  $("#graph-reports-by-state-table").html('<tbody><tr><td><div class="loader_throbber"><div class="three-quarters-loader"></div></div></td></tr></tbody>');
+  $("#graph-reports-evolution-chart-visualisation").html('<div class="loader_throbber"><div class="three-quarters-loader"></div></div>');
 	$.getJSON(url, function (data) {
+    console.log(data);
     getTotalsChart(data.getTotals);
-    getReportsByStateChart(data.getTotals.reportsByState);
+    getReportsByStateChart(data.reportsByState);
     getReportsPerCategoriesChart("graph-reports-categories",data.reportsByCategoryGroup);
     getReportsEvolution("graph-reports-evolution-chart-visualisation",data.reportsEvolution);
     getAnswerTimeByStateChart(data.answerTimeByState);
