@@ -12,7 +12,7 @@ use Data::Dumper;
 use Digest::MD5;
 use Net::CKAN;
 
-use constant API_DEFINITIONS => qw(reports getTotals reportsByCategoryGroup reportsByState reportsEvolution reportsByCategoryState answerTimeByCategoryGroup answerTimeByState);
+use constant API_DEFINITIONS => qw(getTotals reportsByCategoryGroup reportsByState reportsEvolution reportsByCategoryState answerTimeByCategoryGroup answerTimeByState);
 
 =head1 NAME
 
@@ -36,18 +36,15 @@ sub begin : Private {
 
   $c->stash->{format} = $c->req->param('format') ? $c->req->param('format') : 'json';
   if ( $c->forward( 'validate_key' ) ){
-    if (!$c->req->param('noload')) {
+    if ($c->req->param('load')) {
       #If load is 1 then all results should be loaded (stats aplication)
       my $mem_key = $c->forward('get_query_key');
+      $c->log->debug("\nKEY: ".$mem_key);
       $c->stash->{query_key} = $mem_key;
+      $c->stash->{async} = $c->req->param('async') if $c->req->param('async');
       my $api_reports = Memcached::get($mem_key);
       if ( !$api_reports ){
-        if ( $c->req->param('load') ){
-          $c->forward( 'load_reports' );
-        }
-        else{
           $c->forward( 'load_problems' );
-        }
       }
     }
   }
@@ -64,16 +61,27 @@ sub end : Private {
   $c->detach( 'format_output', [$c->stash->{api_result}] );
 }
 
-sub load_reports : Private {
+sub getStats: Path('getStats') {
   my ( $self, $c ) = @_;
 
-  $c->forward( 'load_problems' );
+  my %result;
   for my $callback ( API_DEFINITIONS ) {
     $c->stash->{api_result} = 0;
     $c->forward( $callback );
-    Memcached::set($c->stash->{query_key}.$callback, $c->stash->{api_result}, 3600);
+    if ( $c->stash->{async} ) {
+      Memcached::set($c->stash->{query_key}.$callback, $c->stash->{api_result}, 3600);
+    }
+    else {
+      $result{$callback} = $c->stash->{api_result};
+    }
   }
-  Memcached::set($c->stash->{query_key}, 1, 3600);
+  if ($c->stash->{async}) {
+    Memcached::set($c->stash->{query_key}, 1, 3600) ;
+  }
+  else {
+    $c->log->debug(Dumper(\%result));
+    $c->stash->{api_result} = \%result;
+  }
 }
 
 sub validate_key : Private {
@@ -149,12 +157,13 @@ sub get_query_key : Private {
 
   #Llamada a cobrand
   $query_key = 'uy';
-  $c->stash->{body_id} = $c->req->param('body_id') if $c->req->param('body_id');
   $c->stash->{from} = $c->req->param('from') if $c->req->param('from');
   $c->stash->{to} = $c->req->param('to') if $c->req->param('to');
   $c->stash->{area} = $c->req->param('area') if $c->req->param('area');
-
-  $query_key .= 'bid'.$c->req->param('body_id') if $c->req->param('body_id');
+  if ( $c->req->param('body_id') ) {
+    $query_key .= 'bid'.$c->req->param('body_id');
+    $c->stash->{body_id} = $c->req->param('body_id');
+  }
   $query_key .= 'from'.$c->req->param('from') if $c->req->param('from');
   $query_key .= 'to'.$c->req->param('to') if $c->req->param('to');
   $query_key .= 'area'.$c->req->param('area') if $c->req->param('area');
@@ -223,6 +232,7 @@ sub get_category_groups: Private {
         group_name =>$_->contacts_group->group_name,
         group_color =>$_->contacts_group->group_color,
         group_icon =>$_->contacts_group->group_icon,
+        group_body =>$_->body_id,
       }
     } @category_groups;
     Memcached::set('category_groups', \%api_groups, 3600);
@@ -321,8 +331,11 @@ sub format_output : Private {
       $c->res->content_type('application/csv; charset=utf-8');
       $c->res->body( $output );
     }
-    elsif ('geo_json' eq $format){
+    elsif ('geo_json' eq $format) {
       $c->res->content_type('application/json; charset=utf-8');
+      $c->res->body( $hashref );
+    }
+    elsif ('raw' eq $format) {
       $c->res->body( $hashref );
     }
     else {
@@ -359,7 +372,8 @@ sub get_csv_structure : Private {
         }
         else {
           if ( $first_row) {
-            push @headers, $row{$rkey};
+            $first_row = 0;
+            $output = join(", ", map { "\"$_\"" } sort keys %row)."\n";
           }
           if ($multiple){
             push @last, $row{$rkey};
@@ -368,10 +382,6 @@ sub get_csv_structure : Private {
             push @first, $row{$rkey};
           }
         }
-      }
-      if ($first_row){
-        $first_row = 0;
-        $output = join(", ", map { "\"$_\"" } @headers)."\n";
       }
       if ($multiple) {
         foreach my $obj_val (@middle){
@@ -402,47 +412,52 @@ Return reports for query
 sub reports : Path('reports') {
   my ( $self, $c ) = @_;
 
-  my $mem_reports = Memcached::get( $c->stash->{query_key}.'reports' );
-  if ($mem_reports){
-    $c->stash->{api_result} = \@{$mem_reports};
-  }
-  else {
+  #ToDo Fix Memcached and disposal of the data for stats
+  #my $mem_reports = Memcached::get( $c->stash->{query_key}.'reports' );
+  #if ($mem_reports){
+  #  $c->stash->{api_result} = \@{$mem_reports};
+  #}
+  #else {
     my @reports;
     if ( !$c->stash->{api_problems} ) {
       $c->forward('load_problems');
     }
     while ( my $report = $c->stash->{api_problems}->next ){
-      my %repo = map { $_ => $report->$_ } qw/id postcode title detail name category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent deadline category_group_obj/;
+      my %repo = map { $_ => $report->$_ } qw/id postcode title detail name category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent/;
       $repo{confirmed} = $repo{confirmed}->ymd if defined($repo{confirmed});
       $repo{lastupdate} = $repo{lastupdate}->ymd if defined($repo{lastupdate});
       $repo{lastupdate_council} = $repo{lastupdate_council}->ymd if defined($repo{lastupdate_council});
       $repo{whensent} = $repo{whensent}->ymd if defined($repo{whensent});
-      $c->log->debug(Dumper($repo{category_group_obj}));
+      #$repo{deadline} = $report->deadline->{deadline};
       push @reports, \%repo;
     }
     $c->stash->{api_result} = \@reports;
-  }
+    #Memcached::set('group_categories', \@reports, 3600);
+  #}
 }
 
 sub geo_reports : Path('geo_reports') {
   my ( $self, $c ) = @_;
   #Deceive Memcached
-  $c->stash->{query_key} = '.';
+  $c->log->debug("\nSTART GEO reports\n");
+  $c->stash->{query_key} = 'all';
   $c->stash->{format} = 'geo_json';
   $c->forward('reports');
+  return;
   my $reports = $c->stash->{api_result};
+  $c->log->debug("\nGRABBED reports\n");
   #Load cat groups
   my $groups = $c->forward('get_category_groups');
   my %groups = %{$groups};
   my @fcollection;
-  $c->log->debug('GROUPS GEO:'.Dumper($groups));
+  #$c->log->debug('GROUPS GEO:'.Dumper($groups));
   foreach my $report (@$reports) {
     #Create point
     my $pt = Geo::JSON::Point->new({
         coordinates => [ $report->{latitude}, $report->{longitude} ],
     });
     my $cat = $report->{category};
-    $c->log->debug('GROUPS GEO:'.Dumper($cat));
+    #$c->log->debug('GROUPS GEO:'.Dumper($cat));
     #Add properties
     my %pt_prop = (
       id => $report->{id},
@@ -477,11 +492,15 @@ sub getTotals : Path('getTotals') {
 
   my $totals = Memcached::get( $c->stash->{query_key}.'getTotals' );
   if ( !$totals ){
-    my $where = $self->load_dates($c, 'created_date');
-    my $users4period = $c->model('DB::User')->count(\%{$where});
+    #my $where = $self->load_dates($c, 'created_date');
+    #my $users4period = $c->model('DB::User')->count(\%{$where});
     if ( !$c->stash->{api_problems} ) {
       $c->forward('load_problems');
     }
+    my $users4period = $c->stash->{api_problems}->search( undef, {
+        columns => [ 'user_id' ],
+        distinct => 1,
+    } )->count();
     $totals = {
      'users' => $users4period,
      'reports' => $c->stash->{api_problems}->count()
@@ -556,7 +575,6 @@ sub reportsEvolution: Path('reportsEvolution'){
     $c->stash->{api_result} = \@{$mem_evo_total};
   }
   else {
-    my $parser = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
     #Get groups and count them
     $c->stash->{cate} = 1 if $c->stash->{api_group} || $c->stash->{api_category};
     my $api_groups  = $c->forward('get_api_categories');
@@ -571,41 +589,7 @@ sub reportsEvolution: Path('reportsEvolution'){
         category => {-in => \@{$api_groups{$gid}{categories}} }
       });
       if ( $group_problems->count() ) {
-        #Get months-year for period
-        my $from = $c->stash->{from} ? $c->stash->{from} : $c->cobrand->begining_date();
-        my $end_date = $c->stash->{to} ? $c->stash->{to} : DateTime->now;
-        my $first_month_day = DateTime->new(
-          year  =>  $from->year(),
-          month => $from->month(),
-          day   => 1,
-        );
-        my $to = $first_month_day->clone;
-        $to->add( months => 1 )->subtract( days => 1 );
-        my $date_value = $from->ymd('/');
-        my @month_results;
-        $evo_count{$api_groups{$gid}{group_name}}{months} = \@month_results;
-        while ( $to <= $end_date ){
-          my $month_count;
-          $month_count = $group_problems->search({
-            -AND => [
-              created => { '>=', $parser->format_datetime($from) },
-              created => { '<=', $parser->format_datetime($to) }
-            ],
-          });
-          push @month_results, { month => $date_value, reports => $month_count->count() };
-          $from = $to->clone()->add( days => 1 );
-          my $from_last = $from->clone();
-          $to = $from_last->add( months => 1 )->subtract( days => 1 );
-          $date_value = $from->ymd('/');
-        }
-        #search for last pice
-        my $month_count = $group_problems->search({
-          -AND => [
-            created => { '>=', $parser->format_datetime($from) },
-            created => { '<=', $parser->format_datetime($end_date) }
-          ],
-        });
-        push @month_results, { month => $date_value, reports => $month_count->count() };
+        $evo_count{$api_groups{$gid}{group_name}}{months} = reports_per_month($self, $c, $group_problems);
         $evo_count{$api_groups{$gid}{group_name}}{groupName} = $api_groups{$gid}{group_name};
         $evo_count{$api_groups{$gid}{group_name}}{color} = $api_groups{$gid}{group_color};
       }
@@ -613,6 +597,134 @@ sub reportsEvolution: Path('reportsEvolution'){
     my @evo_total = map { $evo_count{$_} } keys %evo_count;
     $c->stash->{api_result} = \@evo_total;
   }
+}
+# Split report counts in months
+sub reports_per_month: Private {
+  my ( $self, $c, $reports ) = @_;
+  #Get months-year for period
+  my $parser = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
+  my $from = $c->stash->{from} ? $c->stash->{from} : $c->cobrand->begining_date();
+  my $end_date = $c->stash->{to} ? $c->stash->{to} : DateTime->now;
+  my $first_month_day = DateTime->new(
+    year  =>  $from->year(),
+    month => $from->month(),
+    day   => 1,
+  );
+  my $to = $first_month_day->clone;
+  $to->add( months => 1 )->subtract( days => 1 );
+  my $date_value = $from->ymd('/');
+  my @month_results;
+  while ( $to <= $end_date ){
+    my $month_count;
+    $month_count = $reports->search({
+      -AND => [
+        created => { '>=', $parser->format_datetime($from) },
+        created => { '<=', $parser->format_datetime($to) }
+      ],
+    });
+
+    push @month_results, { month => $date_value, reports => $month_count->count() };
+    $from = $to->clone()->add( days => 1 );
+    my $from_last = $from->clone();
+    $to = $from_last->add( months => 1 )->subtract( days => 1 );
+    $date_value = $from->ymd('/');
+  }
+  #search for last pice
+  my $month_count = $reports->search({
+    -AND => [
+      created => { '>=', $parser->format_datetime($from) },
+      created => { '<=', $parser->format_datetime($end_date) }
+    ],
+  });
+  push @month_results, { month => $date_value, reports => $month_count->count() };
+
+  return \@month_results;
+}
+#Get totals by area
+sub reports_totals_per_area: Path('totals_per_area') {
+  my ( $self, $c, $reports ) = @_;
+  my $working_reports = $c->stash->{api_problems};
+  #Get reports by area
+  my $area_query = $working_reports->search({},{
+    group_by => ['areas'],
+    select   => [ 'areas', { count => 'me.id' } ],
+    as       => [ qw/areas area_count/ ],
+  });
+  $c->stash->{api_call} = 1;
+  my $areas = $c->forward( 'api_areas' );
+  my %area_count = map { ($_->areas||'-') => $_->get_column('area_count') } $area_query->all;
+  my %total_count;
+  #Agregate each area
+  foreach my $pAreas ( keys %area_count ) {
+    my @apAreas = split( /,/, substr($pAreas,1,-1) );
+    foreach (@apAreas) {
+      $total_count{$_} += $area_count{$pAreas};
+    }
+  }
+  #Get areas descriptions
+  my @areas_totals;
+  foreach my $total_area ( keys %total_count) {
+    push @areas_totals, {
+      name => $areas->{$total_area}->{name},
+      type => $areas->{$total_area}->{type},
+      parent => $areas->{$total_area}->{parent},
+      total => $total_count{$total_area},
+      area_id => $total_area
+    };
+  }
+  $c->stash->{api_result} = \@areas_totals;
+}
+#Call Mapit to map area name
+
+#Get month reports by area
+sub reports_area_per_month: Path('area_per_month') {
+  my ( $self, $c, $reports ) = @_;
+
+  my $working_reports = $c->stash->{api_problems};
+  #Get reports by area
+  my $areas = $c->forward( 'api_areas' );
+  my @areas_per_month;
+  my %areas = %{$areas};
+  foreach my $area (keys \%areas) {
+    my $area_query = $working_reports->search( {areas => { 'like', '%,' . $area . ',%' }} );
+    my $month_reports_array = reports_per_month($self, $c, $area_query);
+    my $area_evo = {
+      name => $areas->{$area}->{name},
+      type => $areas->{$area}->{type},
+      parent => $areas->{$area}->{parent},
+    };
+    foreach my $month_totals ( @$month_reports_array) {
+      #$month_totals = shift @{$month_totals};
+      $area_evo->{$month_totals->{month}} = $month_totals->{reports};
+    }
+    push @areas_per_month, $area_evo;
+  }
+  $c->stash->{api_result} = \@areas_per_month;
+}
+
+#Get month reports by category
+sub reports_category_per_month: Path('category_per_month') {
+  my ( $self, $c, $reports ) = @_;
+
+  my $working_reports = $c->stash->{api_problems};
+  #Get reports by category
+  my @category_per_month;
+  my $categories = $c->forward( 'get_category_groups' );
+  foreach my $category (keys %$categories) {
+    my $category_query = $working_reports->search( {category => $category} );
+    my $month_reports_array = reports_per_month($self, $c, $category_query);
+    my $cat_evo = {
+      name => $category,
+      type => $categories->{$category}->{group_name},
+      parent => $categories->{$category}->{group_body},
+    };
+    foreach my $month_totals ( @$month_reports_array) {
+      #$month_totals = shift @{$month_totals};
+      $cat_evo->{$month_totals->{month}} = $month_totals->{reports};
+    }
+    push @category_per_month, $cat_evo;
+  }
+  $c->stash->{api_result} = \@category_per_month;
 }
 
 sub reportsByCategoryState: Path('reportsByCategoryState'){
@@ -709,8 +821,8 @@ sub answerTimeByState: Path('answerTimeByState') {
     my %states_average;
     my $now = DateTime->now;
     my $report;
-    my $completed_states = FixMyStreet::DB::Result::Problem->fixed_states();
-    my $closed_states = FixMyStreet::DB::Result::Problem->fixed_states();
+    #my $completed_states = FixMyStreet::DB::Result::Problem->fixed_states();
+    #my $closed_states = FixMyStreet::DB::Result::Problem->fixed_states();
     my $states = FixMyStreet::DB::Result::Problem->all_states();
     if ( !$c->stash->{api_problems} ) {
       $c->forward('load_problems');
@@ -777,7 +889,6 @@ sub areas: Path('all_areas') {
     my @bodies = $c->model('DB::Body')->all;
     foreach my $body (@bodies) {
       #Get area information
-      $c->log->debug("\nGetting data for body: ".$body->id.":\n".Dumper($body->body_areas) );
       my $area_id = $body->body_areas->first->area_id;
       $c->log->debug("\nGetting data for body: ".$body->id.' in '.$area_id."\n" );
       my $area_childs = mySociety::MaPit::call( 'area', "$area_id/children" );
@@ -792,6 +903,66 @@ sub areas: Path('all_areas') {
   $c->stash->{api_result} = \%areas;
 }
 
+sub api_areas: Private {
+  my ( $self, $c ) = @_;
+
+  my %areas;
+  my $all_areas = Memcached::get( 'all_body_api_areas' );
+  if ( $all_areas ){
+    %areas = $all_areas;
+  }
+  else {
+    my @bodies = $c->model('DB::Body')->all;
+    foreach my $body (@bodies) {
+      #Get area information
+      my $area_id = $body->body_areas->first->area_id;
+      #ToDo Get parent area details, consider more than one area per body
+      my $current_area = mySociety::MaPit::call( 'area', "$area_id" );
+      $areas{$area_id} = {
+        name => $current_area->{name},
+        type => $current_area->{type_name},
+      };
+      $c->log->debug("\nGetting data for body: ".$body->id.' in '.$area_id."\n" );
+      my $area_childs = mySociety::MaPit::call( 'area', "$area_id/children" );
+      my %area_childs = %{$area_childs};
+      unless ($area_childs->{error}) {
+        foreach ( keys %area_childs ) {
+          $areas{$_} = {
+            name => $area_childs{$_}->{name},
+            type => $area_childs{$_}->{type_name},
+            parent => $area_childs{$_}->{parent_area},
+          };
+        }
+      }
+    }
+    Memcached::set('all_api_areas', \%areas, 36000);
+  }
+  return \%areas;
+}
+
+sub api_area_polygon: Path('area_polygon') {
+  my ( $self, $c ) = @_;
+  #Check if file exists
+  my $area_id = $c->req->param('area_id');
+  my $filename = '/areas/'.$area_id.'.kml';
+  $c->stash->{api_result} = {'error' => 'Rendering KML'};
+  $c->log->debug("\nAREA POLYGON starT $filename\n");
+  if ( -f $c->config->{UPLOAD_DIR}.'..'.$filename ){
+    $c->res->redirect( $c->uri_for($filename) );
+    $c->detach();
+  }
+  else {
+    $c->log->debug("\nAREA POLYGON:\n");
+    open(my $fh, '>', $c->config->{UPLOAD_DIR}.'..'.$filename) or die "Could not open file '$filename' $!";
+    my $ua = new LWP::UserAgent();
+    my $area = $ua->get($c->config->{MAPIT_URL}.'area/'."$area_id.kml");
+    print $fh $area->content;
+    close $fh;
+    $c->res->redirect( $c->uri_for($filename) );
+    $c->detach();
+  }
+  $c->stash->{api_result} = {'error' => 'No se ha podido localizar el área'};
+}
 sub control_reports: Path('control_reports') {
   my ( $self, $c ) = @_;
   #Get array report duration
@@ -807,9 +978,12 @@ sub control_reports: Path('control_reports') {
 sub api_test: Path('apiTest') {
   my ( $self, $c ) = @_;
 
-  my $contact = FixMyStreet::App->model('DB::Contact')->find({ category => 'Residuos fuera del contenedor por capacidad insuficiente', deleted => 0 });
-  $c->stash->{api_result} = $contact;
-  $c-log->debug(Dumper($contact));
+  #my $contact = FixMyStreet::App->model('DB::Contact')->find({ category => 'Residuos fuera del contenedor por capacidad insuficiente', deleted => 0 });
+  #$c->stash->{api_result} = $contact;
+  #$c-log->debug(Dumper($contact));
+  #$c->forward( 'load_problems' );
+  my $test = reports_category_per_month($self, $c, $c->stash->{api_problems});
+
 }
 
 __PACKAGE__->meta->make_immutable;

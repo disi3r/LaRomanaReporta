@@ -1,6 +1,5 @@
 [% USE date %]
-[% INCLUDE header.html, bodyclass = 'mappage', title = loc('Stats') %]
-[% PROCESS "maps/osm.html" %]
+[% INCLUDE header.html, title = loc('Stats') %]
 <iframe id="ifmcontentstoprint" style="height: 0px; width: 0px; position: absolute"></iframe>
 <div id="chart-options">
   <h3>Estadísticas</h3>
@@ -36,9 +35,6 @@
   </div>
 </div>
 <h3 id="select-period-title" style="margin-top: 4%; text-align: center;">[% loc('Select the period you want') %]</h3>
-<div class="mini-map">
-  [% map_html %]
-</div>
 <div id="chart-container" class="hidden">
   <script type="text/javascript" src="[% start %][% version('/js/d3.v3.min.js') %]" ></script>
 	<script src="[% start %][% version('/js/jquery-ui/js/jquery-ui-1.10.3.custom.min.js') %]" charset="utf-8"></script>
@@ -93,13 +89,13 @@
         </ul>
       </div>
     </div>
-    <div class="graph-average-answertime" class="chart-group">
+    <!--<div class="graph-average-answertime" class="chart-group">
       <h4 id="graph-average-answertime-title" class="graph-title">Tiempo de respuesta promedio por estado (días)</h4>
       <div id="averageDays">
       </div>
       <table id="graph-average-answertime-table" class="graph-reports-by-state-table">
       </table>
-    </div>
+    </div>-->
 	</div>
 	<script>
     $( document ).ready(function() {

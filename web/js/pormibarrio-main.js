@@ -313,6 +313,31 @@ $( document ).ready(function() {
 			$('tr.'+$(this).val()).hide();
 		}
 	});
+	//MINI MAP
+	if ( jQuery('.mini-map').length ) {
+		jQuery('#map_box').appendTo(jQuery('.mini-map'));
+		proj_def = new OpenLayers.Projection("EPSG:4326");
+		proj_mapit = new OpenLayers.Projection("EPSG:21781");
+		var area = new OpenLayers.Layer.Vector("KML", {
+			strategies: [ new OpenLayers.Strategy.Fixed() ],
+			protocol: new OpenLayers.Protocol.HTTP({
+				url: "/api/area_polygon?area_id=472&api_key=1234&noload=1",
+				format: new OpenLayers.Format.KML(),
+				//projection: 'EPSG:21781'
+			})
+		});
+		console.log(area);
+		console.log('AREA RENDERED');
+		//area.getFeatures()[0].getGeometry().transform('EPSG:4326', 'EPSG:21781');
+		//var area = new OpenLayers.Projection.transform(area_proj, new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));
+		fixmystreet.map.addLayer(area);
+		area.events.register('loadend', null, function(a,b,c) {
+			if ( fixmystreet.area_format ) {
+				area.styleMap.styles['default'].defaultStyle = fixmystreet.area_format;
+			}
+			fixmystreet_zoomToBounds( area.getDataExtent() );
+		});
+	}
 });
 
 function readURL(input,img_container_id) {

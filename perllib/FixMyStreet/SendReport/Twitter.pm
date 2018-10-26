@@ -2,6 +2,7 @@ package FixMyStreet::SendReport::Twitter;
 
 use Moose;
 use Data::Dumper;
+use mySociety::Config;
 
 BEGIN { extends 'FixMyStreet::SendReport'; }
 
@@ -66,7 +67,7 @@ sub send {
       lat => $h->{latitude},
       long => $h->{longitude},
       display_coordinates => 1,
-      media => ['web/photo/' . $row->id . '.full.jpeg'],
+      media => [mySociety::Config::get('UPLOAD_DIR').'../photo/' . $row->id . '.full.jpeg'],
     });
     print Dumper($result);
 

@@ -1,0 +1,7 @@
+[% USE date %]
+[% INCLUDE header.html, title = loc('Stats') %]
+[% PROCESS "maps/${map.type}.html" %]
+<h2> En construcción </h2>
+<div class="mini-map" style="width: 100%; height: 300px">
+  [% map_html %]
+</div>
