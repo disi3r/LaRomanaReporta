@@ -10,4 +10,4 @@ que pediste para suscribirte en [% INCLUDE 'site-name.txt' | trim %]:
 Si no podés ahcer click, por favor copiá y pegá el enlace en la barra de
 direcciones de tu navegador.
 
-[% INCLUDE 'signature.txt' %]
+[% INCLUDE 'signature.txt' | trim  %]

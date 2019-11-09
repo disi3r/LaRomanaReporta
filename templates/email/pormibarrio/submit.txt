@@ -32,4 +32,4 @@ Longitud: <?=$values['longitude']?>
 
 Si responde este correo electrónico se le responderá al usuario que hizo el reporte.
 
-[% INCLUDE 'signature.txt' %]
+[% INCLUDE 'signature.txt' | trim  %]

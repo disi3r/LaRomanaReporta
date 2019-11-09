@@ -5,5 +5,5 @@ Con eso podés ver y gestionar tus reportes más fácilmente.
 
 [% c.uri_for_action( 'auth/token', token ) %]
 
-[% INCLUDE 'signature.txt' %]
+[% INCLUDE 'signature.txt' | trim  %]
 

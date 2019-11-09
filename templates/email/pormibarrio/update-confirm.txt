@@ -14,4 +14,4 @@ Tu comentario es:
 
 [% update.text %]
 
-[% INCLUDE 'signature.txt' %]
+[% INCLUDE 'signature.txt' | trim  %]

@@ -14,4 +14,4 @@ Título del problema reportado:
 Detalles:
 [% report.detail %]
 
-[% INCLUDE 'signature.txt' %]
+[% INCLUDE 'signature.txt' | trim  %]

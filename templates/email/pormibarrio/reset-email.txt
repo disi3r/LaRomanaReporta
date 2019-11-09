@@ -9,4 +9,4 @@ Para reestablecer la contraseña debés seguir los siguientes pasos:
 3. Seleccioná la opción cambiar contraseña.
 
 
-[% INCLUDE 'signature.txt' %]
+[% INCLUDE 'signature.txt' | trim  %]

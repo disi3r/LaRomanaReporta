@@ -10,4 +10,4 @@ por favor ingresá en:
 
 ¡Muchas gracias!
 
-[% INCLUDE 'signature.txt' %]
+[% INCLUDE 'signature.txt' | trim  %]
