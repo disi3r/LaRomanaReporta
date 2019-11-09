@@ -21,23 +21,15 @@ tags
 FixMyStreet-EmptyHomes.po
 FixMyBarangay.po
 
-/web/css/core.css
-/web/css/main.css
-/web/cobrands/*/*.css
+web/css/core.css
+web/css/main.css
+web/cobrands/*/*.css
 !/web/cobrands/pormibarrio/*
 !/web/cobrands/pormibarriocr/*
-/web/cobrands/seesomething
-/web/photo/*
-/web/cache/*
-/local
-/web/upload/*
+web/cobrands/seesomething
+web/photo/*
+web/cache/*
+local
+web/upload/*
 
-/web/cobrands/fixmystreet/compass_app_log.txt
-blog/web/wp
-blog/conf/general
-blog/conf/general.deployed
-
-phonegap/www/js/config.js
-phonegap/Android/bin/
-phonegap/iPhone/FixMyStreet.xcodeproj/project.xcworkspace/xcuserdata
-phonegap/Android/gen/
+web/cobrands/fixmystreet/compass_app_log.txt

@@ -1,0 +1,12 @@
+Subject: Nueva Solicitud ID :##<?=$values['external_id']?>##
+
+Se agregaron las siguientes actualizaciones:
+
+<?=$values['comment']?>
+
+Por: <?=$values['user_name']?>
+
+Para ver o responder, seguí el siguiente enlace:
+    <?=$values['problem_url']?>
+
+[% INCLUDE 'signature.txt' | trim %]

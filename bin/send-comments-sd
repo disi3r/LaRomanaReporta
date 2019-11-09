@@ -1,0 +1,122 @@
+#!/usr/bin/env perl
+
+# send-comments:
+# Send comments/updates on reports to bodies
+#   In Open311 parlance these are 'service request updates' and are sent using
+#   mySociety's proposed extension to the Open311 Georeport v2 spec:
+#   https://github.com/mysociety/fixmystreet/wiki/Open311-FMS---Proposed-differences-to-Open311
+#
+# Copyright (c) 2011 UK Citizens Online Democracy. All rights reserved.
+# Email: matthew@mysociety.org. WWW: http://www.mysociety.org
+
+use strict;
+use warnings;
+require 5.8.0;
+
+use Digest::MD5;
+use Encode;
+use Error qw(:try);
+use CronFns;
+use Data::Dumper;
+use FixMyStreet::App;
+
+use Utils;
+use mySociety::Config;
+use mySociety::EmailUtil;
+
+use ServiceDesk;
+
+# send_method config values found in by-area config data, for selecting to appropriate method
+use constant SEND_METHOD_EMAIL      => 'email';
+
+
+# Set up site, language etc.
+my ($verbose, $nomail) = CronFns::options();
+
+my %data;
+my $result;
+my $url = mySociety::Config::get('BASE_URL')."/report/";
+my $sender = FixMyStreet->config('DO_NOT_REPLY_EMAIL');
+
+my $bodies = FixMyStreet::App->model('DB::Body')->search( {
+  send_method => 'ServiceDesk',
+  send_comments => 1,
+});
+
+while ( my $body = $bodies->next ) {
+
+print "\n ARRANCA CON BODY: ".$body->id;
+
+  my $comments = FixMyStreet::App->model('DB::Comment')->search( {
+    'me.whensent'    => undef,
+    'me.external_id' => undef,
+    'me.state'          => 'confirmed',
+    'me.confirmed'      => { '!=' => undef },
+    'problem.whensent'    => { '!=' => undef },
+    'problem.external_id'  => { '!=' => undef },
+    'problem.bodies_str' => { -like => '%' . $body->id . '%' },
+    'problem.send_method_used' => 'ServiceDesk',
+    },
+    { join => 'problem' }
+  );
+
+  while ( my $comment = $comments->next ) {
+    my $cobrand = FixMyStreet::Cobrand->get_class_for_moniker($comment->cobrand)->new();
+    my $template = FixMyStreet->path_to( "templates", "email", $cobrand->moniker, "alert-update-sd.txt" )->stringify;
+    $template = FixMyStreet->path_to( "templates", "email", "default", "alert-update-sd.txt" )->stringify
+    unless -e $template;
+    $template = Utils::read_file($template);
+    %data = (
+      #lang => 'es_UY',
+      #cobrand => $cobrand,
+      comment => $comment->text,
+      external_id => $comment->problem->external_id,
+      problem_url => $url . $comment->problem->id,
+      user_name => $comment->user->name,
+    );
+    if ( $comment->send_fail_count ) {
+        next if sd_retry_timeout( $comment );
+    }
+    print Dumper(\%data);
+    #exit;
+    $result = FixMyStreet::App->send_email_cron(
+      {
+        _template_ => $template,
+        _parameters_ => \%data,
+        _line_indent => $cobrand->email_indent,
+        From => [ $sender, "Por Mi Barrio"],#_($cobrand->contact_name) ],
+        To => 'pormibarrio@rionegro.gub.uy',
+      },
+      $sender,
+      [ 'pormibarrio@rionegro.gub.uy', 'fernando@datauy.org' ],
+      0,
+    );
+
+    if ( $result == mySociety::EmailUtil::EMAIL_SUCCESS ) {
+      print "Email sent";
+      $comment->update( {
+        whensent    => \'ms_current_timestamp()',
+      } );
+    } else {
+      print "Email NOT sent";
+      $comment->update( {
+        send_fail_count => $comment->send_fail_count + 1,
+        send_fail_timestamp => \'ms_current_timestamp()',
+        send_fail_reason => 'Failed to post email to Service Desk',
+      } );
+    }
+  }
+}
+
+sub sd_retry_timeout {
+    my $row = shift;
+
+    my $tz = DateTime::TimeZone->new( name => 'local' );
+    my $now = DateTime->now( time_zone => $tz );
+    my $diff = $now - $row->send_fail_timestamp;
+    if ( $diff->in_units( 'minutes' ) < 30 ) {
+        return 1;
+    }
+
+    return 0;
+}
