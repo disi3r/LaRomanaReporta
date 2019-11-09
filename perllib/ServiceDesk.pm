@@ -18,7 +18,7 @@ has test_mode => ( is => 'ro', isa => 'Bool' );
 has test_uri_used => ( is => 'rw', 'isa' => 'Str' );
 has test_req_used => ( is => 'rw' );
 has test_get_returns => ( is => 'rw' );
-has endpoints => ( is => 'rw', default => sub { { services => 'admin/item/subcategory/', requests => 'request', service_request_updates => 'servicerequestupdates.xml', update => 'servicerequestupdates.xml', service_request_new => 'newServiceRequestLogs.xml', groups => 'admin/subcategory/category/' } } );
+has endpoints => ( is => 'rw', default => sub { { services => 'admin/subcategory/category/', requests => 'request', service_request_updates => 'servicerequestupdates.xml', update => 'servicerequestupdates.xml', service_request_new => 'newServiceRequestLogs.xml', groups => 'admin/category/' } } );
 has debug => ( is => 'ro', isa => 'Bool', default => 0 );
 has debug_details => ( is => 'rw', 'isa' => 'Str', default => '' );
 has success => ( is => 'rw', 'isa' => 'Bool', default => 0 );
@@ -29,7 +29,6 @@ has extended_description => ( is => 'ro', isa => 'Str', default => 1 );
 has use_service_as_deviceid => ( is => 'ro', isa => 'Bool', default => 0 );
 has use_extended_updates => ( is => 'ro', isa => 'Bool', default => 0 );
 has extended_statuses => ( is => 'ro', isa => 'Bool', default => 0 );
-has main_category => ( is => 'ro', isa => 'Str', default => '13' );
 
 before [
     qw/get_service_list get_service_meta_info get_service_requests get_service_request_updates
@@ -62,7 +61,7 @@ sub get_group_list {
     OPERATION_NAME => 'GET_ALL',
     TECHNICIAN_KEY => mySociety::Config::get('USER_KEY_SD', undef),
   };
-  my $service_list_xml = $self->_post( $self->endpoints->{groups}.$self->main_category, $params );
+  my $service_list_xml = $self->_post( $self->endpoints->{groups}, $params );
   if ( $service_list_xml ) {
     my $response = $self->_get_xml_object( $service_list_xml );
     return $response->{ response }->{ operation }->{Details}->{record};
@@ -83,8 +82,18 @@ sub get_service_custom_meta_info {
     my $self = shift;
     my $service_id = shift;
 
-    my $service_meta_xml = $self->_get( "requests/$service_id.xml" );
-    return $self->_get_xml_object( $service_meta_xml );
+    my $params = {
+      TECHNICIAN_KEY => mySociety::Config::get('USER_KEY_SD', undef),
+      OPERATION_NAME => 'GET_NOTES'
+    };
+    my $service_list_xml = $self->_post( $self->endpoints->{requests}.'/'.$service_id.'/notes', $params );
+    if ( $service_list_xml ) {
+      my $response = $self->_get_xml_object( $service_list_xml );
+      return $response->{ response }->{ operation }->{Details}->{Notes}->{Note};
+    }
+    else {
+      return undef;
+    }
 }
 
 #Servicio para obtener los Ids de problemas nuevos
@@ -225,15 +234,14 @@ sub _populate_service_request_params {
             $params->{ $name } = $attr->{value};
         }
     }
+    print Dumper($problem->category_group_obj);
     #TODO define structure acording to the SD structure
-    #print "\nGROUP OBJ: ".Dumper($problem->category_group_obj->{group_name})."\n";
-    $params->{ service } = 'Infraestructure fixes';
-    $params->{ request_type } = 'Infrastructure report';
+    $params->{ service } = 'Problema de infraestructura';
+    $params->{ request_type } = 'Incidente';
     $params->{ priority } = 'High';
-    $params->{ mode } = 'PMB';
-    $params->{ category } = 'PMB Test';
-    $params->{ subcategory } = $problem->category_group_obj->{group_name};
-    $params->{ item } = $problem->category;
+    $params->{ mode } = 'Por Mi Barrio';
+    $params->{ category } = $problem->category_group_obj->{group_name};
+    $params->{ subcategory } = $problem->category;
 
     my $xs = XML::Simple->new(ForceArray => 1, KeepRoot => 1, NoAttr => 1);
     my $xml_params = $xs->XMLout( { Operation => { Details => $params } } );
@@ -302,16 +310,38 @@ EOT
 
 sub get_service_requests {
     my $self = shift;
-    my $report_ids = shift;
-
-    my $params = {};
-
-    if ( $report_ids ) {
-        $params->{service_request_id} = join ',', @$report_ids;
+    my $report_id = shift;
+    #TODO: params to object
+    my $params = {
+      OPERATION_NAME => 'GET_REQUEST',
+      TECHNICIAN_KEY => mySociety::Config::get('USER_KEY_SD', undef),
+    };
+    my $service_list_xml = $self->_post( $self->endpoints->{requests}.'/'.$report_id, $params );
+    if ( $service_list_xml ) {
+      my $response = $self->_get_xml_object( $service_list_xml );
+      return $response->{ response }->{ operation }->{Details};
+    } else {
+      return undef;
+    };
+}
+#Get Resolutions
+sub get_service_resolution {
+    my $self = shift;
+    my $report_id = shift;
+    #TODO: params to object
+    my $params = {
+      OPERATION_NAME => 'GET_RESOLUTION',
+      TECHNICIAN_KEY => mySociety::Config::get('USER_KEY_SD', undef),
+    };
+    my $service_list_xml = $self->_post( $self->endpoints->{requests}.'/'.$report_id, $params );
+    #print Dumper($service_list_xml);
+    if ( $service_list_xml ) {
+      my $response = $self->_get_xml_object( $service_list_xml );
+      return $response->{Details};
     }
-
-    my $service_request_xml = $self->_get( $self->endpoints->{requests}, $params || undef );
-    return $self->_get_xml_object( $service_request_xml );
+    else {
+      return undef;
+    }
 }
 
 sub get_service_request_id_from_token {
@@ -545,8 +575,6 @@ sub _post {
     } else {
         $res = $ua->request( $req );
     }
-    print "\n\nRESULT\n";
-    print Dumper($res);
     if ( $res->is_success ) {
         print "SUCCESS";
         $self->success(1);

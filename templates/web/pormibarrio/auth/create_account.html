@@ -1,0 +1,37 @@
+<div class="ir">
+    <h2>Regístrate y se parte</h2>
+    <p>Crea una cuenta en PorMiBarrio y comienza a colaborar.</p>
+</div>
+<div class="form-group">
+    <input type="email" class="[% IF field_errors.email %] error [% END %]" value="[% report.user.email || user.email | html %]" name="form_email" id="form_email" placeholder="Correo electrónico *">
+    [% IF loc_email_error  %]
+        <p class="error-m">[% loc_email_error %]</p>
+    [% END %]
+    <input type="text" placeholder="Nombre y apellido" class="form-focus-trigger validName form-control [% IF field_errors.name %] error [% END %]" value="[% report.user.name | html %]" name="name" id="form_name" >
+    [% IF field_errors.name  %]
+        <p class="error-m">[% field_errors.name %]</p>
+    [% END %]
+    <input type="text" placeholder="Cédula de Identidad: 0.000.000-0" class="form-control form-focus-trigger [% IF field_errors.identity_document %] error [% END %]" value="[% report.user.identity_document | html %]" name="identity_document" id="identity_document" >
+    [% IF field_errors.identity_document  %]
+        <p class="error-m">[% field_errors.identity_document %]</p>
+    [% END %]
+    <input class="form-control" type="text" value="[% report.user.phone | html %]" name="phone" id="form_phone" placeholder="Teléfono (opcional)">
+    [% IF field_errors.phone  %]
+        <p class="error-m">[% field_errors.phone %]</p>
+    [% END %]
+    <input name="password_register" id="password_register" type="password" placeholder="Contraseña" class="form-control [% IF field_errors.password %] error [% END %]">
+    [% IF field_errors.password  %]
+        <p class="error-m">[% field_errors.password %]</p>
+    [% END %]
+</div>
+<div class="checkbox">
+    <input type="checkbox" id="terms-agree" value="">
+    <label class="inline">[% loc('Agreed ') %]<a href="/privacy"> [% loc('Terms & Conditions') %]</a></label>
+</div>
+<div class="form-group">
+  [% IF sign_in_button %]
+    [% sign_in_button %]
+  [% ELSE %]
+      <button class="btn btn-block btn-green" type="submit" id="email_sign_in" name="email_sign_in">Regístrate y publica</button>
+    [% END %]
+</div>

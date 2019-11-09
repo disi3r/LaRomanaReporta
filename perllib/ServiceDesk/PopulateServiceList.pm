@@ -60,7 +60,12 @@ sub process_body {
       if ($self->_group_id){
         print "\nVA A SERVICE LIST: ".$self->_group_external_id;
         my $services = $sd->get_service_list($self->_group_external_id);
-        $self->process_services( $services );
+        if ($services){
+          $self->process_services( $services );
+        }
+        else {
+          print "\nService si empty: ".$self->_group_external_id."\n";
+        }
       }
     }
     else {
@@ -140,8 +145,22 @@ sub _create_group {
 		if ( $group ) {
 			print ' [FOUND ID: '.$group->group_id.']';
 			$self->_group_id($group->group_id);
-      #$self->_group_external_id($group->external_id);
-		} else {
+      #TODO: review the code, since body_id seems to be necesary for groups
+      #since no development has been made, now we update and remove the external_id value, since there is no conflict in current implementation
+      if ( !$group->external_id || $group->external_id ne $self->_group_external_id ){
+        eval {
+            $group->update( { external_id => $self->_group_external_id } );
+        };
+        if ( $@ ) {
+            warn "Failed to update group for group id " . $group->group_id . " for body @{[$self->_current_body->id]}: $@\n"
+                if $self->verbose >= 1;
+            return;
+        }
+        $group->update();
+        print "Group updated";
+      }
+		}
+    else {
 			print ' [NOT FOUND]';
 
 			$group = FixMyStreet::App->model( 'DB::ContactsGroup')->create({
@@ -285,7 +304,6 @@ sub _normalize_service_name {
 sub _delete_contacts_not_in_service_list {
     my $self = shift;
 
-    print "\n NOT DELETE CONTACTS:\n".Dumper($self->found_contacts);
     my $found_contacts = FixMyStreet::App->model( 'DB::Contact')->search(
         {
             email => { -not_in => $self->found_contacts },
