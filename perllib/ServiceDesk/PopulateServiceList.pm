@@ -54,7 +54,7 @@ sub process_body {
     if ( $group->{parameter}->{name}->{value} && $group->{parameter}->{id}->{value} &&  $group->{parameter}->{isdeleted}->{value} ne 0) {
       print "\nGROUP LAST NAME: ".$group->{parameter}->{name}->{value};
       $self->_group_name($group->{parameter}->{name}->{value});
-      $self->_group_external_id(  $group->{parameter}->{id}->{value});
+      $self->_group_external_id($group->{parameter}->{id}->{value});
       $self->_create_group;
       print "\nVUELVE DE VCREATE GROUP: ".$self->_group_id;
       if ($self->_group_id){
@@ -140,7 +140,7 @@ sub _create_group {
 		if ( $group ) {
 			print ' [FOUND ID: '.$group->group_id.']';
 			$self->_group_id($group->group_id);
-      $self->_group_external_id($group->external_id);
+      #$self->_group_external_id($group->external_id);
 		} else {
 			print ' [NOT FOUND]';
 
@@ -155,7 +155,7 @@ sub _create_group {
 		print "\n";
 	} else {
 		$self->_group_id(undef);
-    $self->_group_external_id(undef);
+    #$self->_group_external_id(undef);
 	}
 }
 

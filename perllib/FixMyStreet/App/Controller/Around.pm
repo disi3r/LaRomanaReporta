@@ -408,6 +408,8 @@ sub _geocode : Private {
 
     my ($response, @addresses, @locations);
     if ( $lat && $long ) {
+        $lat =~ s/\,/./g;
+        $long =~ s/\,/./g;
         $response = { latitude => $lat, longitude => $long };
     } else {
         if ( ref($suggestions) eq 'ARRAY' ) {

@@ -29,7 +29,7 @@ has extended_description => ( is => 'ro', isa => 'Str', default => 1 );
 has use_service_as_deviceid => ( is => 'ro', isa => 'Bool', default => 0 );
 has use_extended_updates => ( is => 'ro', isa => 'Bool', default => 0 );
 has extended_statuses => ( is => 'ro', isa => 'Bool', default => 0 );
-has main_category => ( is => 'ro', isa => 'Str', default => '301' );
+has main_category => ( is => 'ro', isa => 'Str', default => '13' );
 
 before [
     qw/get_service_list get_service_meta_info get_service_requests get_service_request_updates
@@ -226,13 +226,14 @@ sub _populate_service_request_params {
         }
     }
     #TODO define structure acording to the SD structure
+    #print "\nGROUP OBJ: ".Dumper($problem->category_group_obj->{group_name})."\n";
     $params->{ service } = 'Infraestructure fixes';
     $params->{ request_type } = 'Infrastructure report';
     $params->{ priority } = 'High';
     $params->{ mode } = 'PMB';
     $params->{ category } = 'PMB Test';
-    $params->{ subcategory } = 'Problemas en arroyos';
-    $params->{ item } = 'Item del problema';
+    $params->{ subcategory } = $problem->category_group_obj->{group_name};
+    $params->{ item } = $problem->category;
 
     my $xs = XML::Simple->new(ForceArray => 1, KeepRoot => 1, NoAttr => 1);
     my $xml_params = $xs->XMLout( { Operation => { Details => $params } } );

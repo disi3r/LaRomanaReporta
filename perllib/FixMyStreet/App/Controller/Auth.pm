@@ -852,15 +852,17 @@ sub ajax_edit_user : Path('ajax/edit_user') {
 				identity_document => $c->user->identity_document,
 			);
 			if ( $c->user->picture_url ){
-	        	${%result}->{picture_url} = $c->cobrand->base_url.$c->user->picture_url;
-	        }
-	        else {
-	        	${%result}->{picture_url} = '';
-	        }
+	       #%result->{picture_url} = $c->cobrand->base_url.$c->user->picture_url;
+			   %result->picture_url = $c->cobrand->base_url.$c->user->picture_url;
+	    }
+	    else {
+  	    %result->picture_url = '';
+	    }
 		}
-    } else {
-		%result = ( result => 0, password => _('User or password incorrect') );
-    }
+  }
+  else {
+	   %result = ( result => 0, password => _('User or password incorrect') );
+  }
 
 	my $body = JSON->new->utf8(1)->encode( \%result );
     $c->res->content_type('application/json; charset=utf-8');
