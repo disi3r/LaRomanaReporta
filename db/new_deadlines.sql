@@ -1,0 +1,18 @@
+INSERT INTO bodies_deadlines VALUES (1, 1, 'problem_alert', 720);
+INSERT INTO bodies_deadlines VALUES (1, 6, 'problem_alert', 720);
+INSERT INTO bodies_deadlines VALUES (1, 18, 'problem_alert', 720);
+INSERT INTO bodies_deadlines VALUES (1, 37, 'problem_alert', 720);
+INSERT INTO bodies_deadlines VALUES (1, 38, 'problem_alert', 720);
+INSERT INTO bodies_deadlines VALUES (1, 39, 'problem_alert', 720);
+INSERT INTO bodies_deadlines VALUES (1, 40, 'problem_alert', 720);
+INSERT INTO bodies_deadlines VALUES (1, 41, 'problem_alert', 720);
+INSERT INTO bodies_deadlines VALUES (1, 55, 'problem_alert', 720);
+INSERT INTO bodies_deadlines VALUES (4, 18, 'comptroller_overdue', 24, 'email');
+INSERT INTO bodies_deadlines VALUES (4, 40, 'comptroller_overdue', 24, 'email');
+INSERT INTO bodies_deadlines VALUES (4, 53, 'comptroller_overdue', 72, 'email');
+INSERT INTO bodies_deadlines VALUES (4, 54, 'comptroller_overdue', 24, 'email');
+INSERT INTO bodies_deadlines VALUES (4, 57, 'comptroller_overdue', 24, 'email');
+INSERT INTO bodies_deadlines VALUES (4, 41, 'comptroller_overdue', 48, 'email');
+INSERT INTO bodies_deadlines VALUES (4, 55, 'comptroller_overdue', 24, 'email');
+INSERT INTO bodies_deadlines VALUES (4, 56, 'comptroller_overdue', 320, 'email');
+INSERT INTO bodies_deadlines VALUES (4, 50, 'comptroller_overdue', 24, 'email');

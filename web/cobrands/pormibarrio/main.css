@@ -3143,6 +3143,10 @@ a.btn-close-report.deadlines{
   	display:none;
   	visibility: hidden;
   }
+	#comment-login #login {
+		background-color: white;
+		padding: 0;
+	}
   #comments-on-report{
   	visibility: visible;
   }

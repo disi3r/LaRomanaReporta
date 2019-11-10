@@ -325,7 +325,6 @@ sub postcode_rivera {
 		}
 	}
 	my $res = $ua->request( $req );
-	$c->log->info(Dumper($res));
 	if ( $res->is_success ) {
 		if ( $last ){
 			my $addr_content = JSON->new->utf8->allow_nonref->decode($res->decoded_content);
@@ -426,5 +425,7 @@ sub comptroller_user_ids(){
 	};
 	return $bodies_comprtollers->{$body_id};
 }
+
+sub default_map_zoom { return 3; }
 
 1;

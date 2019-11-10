@@ -10,77 +10,96 @@ use FixMyStreet::App;
 use FixMyStreet::App::Controller::Api;
 use File::Path ();
 use File::Slurp;
+ use FileHandle;
 use JSON;
 use Data::Dumper;
 
 print "ARRANCA\n";
-#AREAS
-my @bodies = FixMyStreet::App->model('DB::Body')->all;
-my %areas;
-foreach my $body (@bodies) {
-  $areas{$body->id}{name} = $body->name;
-  #Get area information
-  my $area_id = $body->body_areas->first->area_id;
-  print("\nGetting data for body: ".$body->id.' in '.$area_id."\n" );
-  my $area_childs = mySociety::MaPit::call( 'area', "$area_id/children" );
-  my %area_childs = %{$area_childs};
-  unless ($area_childs->{error}) {
-    foreach ( keys %area_childs ) {
-      $areas{$body->id}{$area_childs{$_}->{type_name}}{$_} = $area_childs{$_}->{name};
+#Get last problem to check if it should be updated
+my $last_problem = FixMyStreet::App->model("DB::Problem")->search(
+    { state => [ FixMyStreet::DB::Result::Problem->visible_states() ] },
+    { order_by => { -desc => 'id' }, limit => 1 }
+)->first;
+my $fh = FileHandle->new("data/all-geo-reports.json", "r");
+my $epoch_time = (stat($fh))[9];
+print "\n last rEpo $epoch_time\n";
+$fh->close;
+
+my $parser = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
+my $last_repo_created = $parser->parse_datetime($last_problem->confirmed);
+my $last_repo_epoch = $last_repo_created->epoch();
+print "\n last rEpo $last_repo_epoch \n";
+#New reports found
+if ( $last_repo_epoch >= $epoch_time ) {
+  #AREAS
+  my @bodies = FixMyStreet::App->model('DB::Body')->all;
+  my %areas;
+  foreach my $body (@bodies) {
+    $areas{$body->id}{name} = $body->name;
+    #Get area information
+    my $area_id = $body->body_areas->first->area_id;
+    print("\nGetting data for body: ".$body->id.' in '.$area_id."\n" );
+    my $area_childs = mySociety::MaPit::call( 'area', "$area_id/children" );
+    my %area_childs = %{$area_childs};
+    unless ($area_childs->{error}) {
+      foreach ( keys %area_childs ) {
+        $areas{$body->id}{$area_childs{$_}->{type_name}}{$_} = $area_childs{$_}->{name};
+      }
     }
   }
-}
-#GROUPS
-my @category_groups = FixMyStreet::App->model('DB::Contact')->search()->get_groups();
-my %groups = map {
-  $_->category => {
-    group_id =>$_->group_id,
-    group_name =>$_->contacts_group->group_name,
-    group_color =>$_->contacts_group->group_color,
-    group_icon =>$_->contacts_group->group_icon,
-    group_body =>$_->body_id,
-  }
-} @category_groups;
-#areas: Path('all_areas')
-#my $object = bless( JSON->new->decode( $json_string ), 'ClassIWant' );
+  #GROUPS
+  my @category_groups = FixMyStreet::App->model('DB::Contact')->search()->get_groups();
+  my %groups = map {
+    $_->category => {
+      group_id =>$_->group_id,
+      group_name =>$_->contacts_group->group_name,
+      group_color =>$_->contacts_group->group_color,
+      group_icon =>$_->contacts_group->group_icon,
+      group_body =>$_->body_id,
+    }
+  } @category_groups;
+  #areas: Path('all_areas')
+  #my $object = bless( JSON->new->decode( $json_string ), 'ClassIWant' );
 
 
 
-my $problems = FixMyStreet::App->model("DB::Problem")->search(
-    { state => [ FixMyStreet::DB::Result::Problem->visible_states() ] }
-);
-my @reports;
-my @fcollection;
-while ( my $report = $problems->next ) {
-  my %repo = map { $_ => $report->$_ } qw/id postcode title detail name areas category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent/;# deadline category_group_obj/;
-  my $cat = $report->category;
-  $repo{confirmed} = $repo{confirmed}->ymd if defined($repo{confirmed});
-  $repo{lastupdate} = $repo{lastupdate}->ymd if defined($repo{lastupdate});
-  $repo{lastupdate_council} = $repo{lastupdate_council}->ymd if defined($repo{lastupdate_council});
-  $repo{whensent} = $repo{whensent}->ymd if defined($repo{whensent});
-  if ( defined($groups{$cat}) ) {
-    $repo{pin_url} = '/i/pins/'.$groups{$cat}->{group_icon}.'.png';
-    $repo{category_url} = '/i/category/'.$groups{$cat}->{group_icon}.'.png';
-    $repo{color} = $groups{$cat}->{group_color};
+  my $problems = FixMyStreet::App->model("DB::Problem")->search(
+  { state => [ FixMyStreet::DB::Result::Problem->visible_states() ] }
+  );
+  my @reports;
+  my @fcollection;
+  while ( my $report = $problems->next ) {
+    my %repo = map { $_ => $report->$_ } qw/id postcode title detail name areas category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent/;# deadline category_group_obj/;
+    my $cat = $report->category;
+    $repo{confirmed} = $repo{confirmed}->ymd if defined($repo{confirmed});
+    $repo{lastupdate} = $repo{lastupdate}->ymd if defined($repo{lastupdate});
+    $repo{lastupdate_council} = $repo{lastupdate_council}->ymd if defined($repo{lastupdate_council});
+    $repo{whensent} = $repo{whensent}->ymd if defined($repo{whensent});
+    if ( defined($groups{$cat}) ) {
+      $repo{pin_url} = '/i/pins/'.$groups{$cat}->{group_icon}.'.png';
+      $repo{category_url} = '/i/category/'.$groups{$cat}->{group_icon}.'.png';
+      $repo{color} = $groups{$cat}->{group_color};
+    }
+    elsif ( !$report->closed_states->{ $report->state } ) {
+      print "\nNO ENCONTRADO (CAT DESACTUALIZADA) PARA CAT, PROBLEM ID: " . $cat . ', ' . $repo{id};
+    }
+    $repo{deadline} = $report->deadline->{deadline};
+    push @reports, \%repo;
+    #GEO
+    my $pt = Geo::JSON::Point->new({
+      coordinates => [ $report->latitude, $report->longitude ],
+    });
+    my $geo_pin = Geo::JSON::Feature->new({
+      geometry   => $pt,
+      properties => \%repo,
+    });
+    push @fcollection, $geo_pin;
   }
-  elsif ( !$report->closed_states->{ $report->state } ) {
-    print "\nNO ENCONTRADO (CAT DESACTUALIZADA) PARA CAT, PROBLEM ID: " . $cat . ', ' . $repo{id};
-  }
-  $repo{deadline} = $report->deadline->{deadline};
-  push @reports, \%repo;
-  #GEO
-  my $pt = Geo::JSON::Point->new({
-    coordinates => [ $report->latitude, $report->longitude ],
-  });
-  my $geo_pin = Geo::JSON::Feature->new({
-    geometry   => $pt,
-    properties => \%repo,
-  });
-  push @fcollection, $geo_pin;
-}
-my $all_reports = JSON->new->utf8(1)->encode( \@reports );
-my $geo_reports = Geo::JSON::FeatureCollection->new({
+  my $all_reports = JSON->new->utf8(1)->encode( \@reports );
+  my $geo_reports = Geo::JSON::FeatureCollection->new({
     features => \@fcollection,
-});
-File::Slurp::write_file( FixMyStreet->path_to( './data/all-reports.json' )->stringify, \$all_reports );
-File::Slurp::write_file( FixMyStreet->path_to( './data/all-geo-reports.json' )->stringify, $geo_reports->to_json );
+  });
+  File::Slurp::write_file( FixMyStreet->path_to( './data/all-reports.json' )->stringify, \$all_reports );
+  File::Slurp::write_file( FixMyStreet->path_to( './data/all-geo-reports.json' )->stringify, $geo_reports->to_json );
+}
+print "termina";

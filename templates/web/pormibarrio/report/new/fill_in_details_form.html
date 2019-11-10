@@ -174,24 +174,3 @@
     <!--</fieldset>-->
 </div>
 
-<script>
-$('div.scrolled-reportar').slimScroll({
-    position: 'right',
-    height: '100%',
-    railVisible: true,
-    alwaysVisible: true,
-    railOpacity:1,
-    distance:10,
-    railColor: '',
-    color: '#65788a',
-    size:'8px',
-    borderRadius:4,
-    opacity: 1
-});
-
-[% IF scroll_to %]
-	$().ready(function() { $('div.scrolled-reportar').slimScroll({ scrollTo: $('[% scroll_to %]').offset().top }); });
-[% END %]
-
-
-</script>

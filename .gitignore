@@ -30,6 +30,7 @@ web/cobrands/seesomething
 web/photo/*
 web/cache/*
 local
+locale
+!/locale/es_UY.UTF-8
 web/upload/*
 
-web/cobrands/fixmystreet/compass_app_log.txt
