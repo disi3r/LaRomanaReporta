@@ -2457,7 +2457,7 @@ msgstr "Sin plazo"
 
 #: templates/web/pormibarrio/report/_main.html:20
 msgid "No address specified"
-msgstr "No se ha especificado la dirección exacta"
+msgstr "Localización en mapa"
 
 #: templates/web/default/admin/user-form.html:76
 msgid "No body"

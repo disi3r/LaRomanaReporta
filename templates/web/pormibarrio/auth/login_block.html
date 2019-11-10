@@ -1,4 +1,4 @@
-<div class="login">
+<div id="login">
     <div class="bloque-sesion">
         <div class="ir" id="report-new-login">
             <h2>Accede a tu cuenta</h2>
@@ -26,97 +26,66 @@
       <div class='full-wide'>
           <a class="btn btn-back registrate-back" href="#">Volver</a>
       </div>
-      <button type="button" id="have-account" class="btn btn-account btn-filter btn-filtro btn-filtro-active">
+      <button type="button" id="no-account" class="btn btn-account btn-filter btn-filtro">
+        [% loc('Create account') %]
+      </button>
+      <button type="button" id="have-account" class="btn btn-account btn-filter btn-filtro">
           [% loc('Have account') %]
       </button>
-      <button type="button" id="no-account" class="btn btn-account btn-filter btn-filtro">
-      [% loc('Create account') %]
-      </button>
-      <div id="my-have-account" class="page-tabs">
+      <div id="my-no-account" class="page-tabs" style="display: none;">
+        [% INCLUDE 'auth/create_account.html' %]
+      </div>
+      <div id="my-have-account" class="page-tabs" style="display: none;">
         [% IF sign_in_error  %]
             <p class="error-m">[% loc('Email or password incorrect. Maybe you want to <a class="green no-account" href="#">register</a>?') %]</p>
         [% END %]
         <div class="form-group">
-            <input type="email" class="[% IF field_errors.email %] error [% END %]" value="[% report.user.email | html %]" name="form_email" id="form_email" placeholder="Correo electrónico *">
-            [% IF loc_email_error  %]
-                <p class="error-m">[% loc_email_error %]</p>
-            [% END %]
             <input type="password" class="form-control [% IF field_errors.password %] error [% END %]" name="password_sign_in" id="password_sign_in" placeholder="Contraseña" value="">
             [% IF field_errors.password  %]
                 <p class="error-m">[% field_errors.password %]</p>
+            [% END %]
+            [% IF one_time_login %]
+            <a id="email_pass" class="green send-password" href="#">[% loc('Have you forgotten your password?') %]</a>
+            <div id="send-password" style="display: none">
+                <input type="hidden" name="redirect" value='my/edit'>
+                <button class="btn btn-block btn-green" type="submit" id="new_password_mail" name="new_password_mail" value='1'>Envíame instrucciones</button>
+            </div>
             [% END %]
             <div class="checkbox-group">
                 <input type="checkbox" id="remember_me" name="remember_me" value='1'[% ' checked' IF remember_me %]>
                 <label class="n inline" for="remember_me">[% loc('Keep me signed in on this computer') %]</label>
             </div>
             <input class="btn btn-block btn-reportar" type="submit" id="submit_sign_in" name="submit_sign_in" value="[% loc('Access') %]">
-            [% IF one_time_login %]
-            <a class="green send-password" href="#">[% loc('Have you forgotten your password?') %]</a>
-            <div id="send-password" style="display: none">
-                <input type="email" class="[% IF field_errors.email %] error [% END %]" name="login_email" id="login_email" placeholder="Correo electrónico *">
-                [% IF field_errors.login_email  %]
-                    <p class="error-m">[% field_errors.login_email %]</p>
-                [% END %]
-                <input type="hidden" name="redirect" value='my/edit'>
-                <button class="btn btn-block btn-green" type="submit" id="new_password_mail" name="email_sign_in" value='1'>Envíame instrucciones</button>
-            </div>
-            [% END %]
-        </div>
-      </div>
-      <div id="my-no-account" class="page-tabs">
-        <div class="ir">
-            <h2>Regístrate y se parte</h2>
-            <p>Crea una cuenta en PorMiBarrio y comienza a colaborar.</p>
-        </div>
-        <div class="form-group">
-            <input type="text" placeholder="Nombre y apellido" class="form-focus-trigger validName form-control [% IF field_errors.name %] error [% END %]" value="[% report.user.name | html %]" name="name" id="form_name" >
-            [% IF field_errors.name  %]
-                <p class="error-m">[% field_errors.name %]</p>
-            [% END %]
-            <input type="text" placeholder="Cédula de Identidad: 0.000.000-0" class="form-control form-focus-trigger [% IF field_errors.identity_document %] error [% END %]" value="[% report.user.identity_document | html %]" name="identity_document" id="identity_document" >
-            [% IF field_errors.identity_document  %]
-                <p class="error-m">[% field_errors.identity_document %]</p>
-            [% END %]
-            <input class="form-control" type="text" value="[% report.user.phone | html %]" name="phone" id="form_phone" placeholder="Teléfono (opcional)">
-            [% IF field_errors.phone  %]
-                <p class="error-m">[% field_errors.phone %]</p>
-            [% END %]
-            <input name="password_register" id="password_register" type="password" placeholder="Contraseña" class="form-control [% IF field_errors.password %] error [% END %]">
-            [% IF field_errors.password  %]
-                <p class="error-m">[% field_errors.password %]</p>
-            [% END %]
-        </div>
-        <div class="form-group">
-        	[% IF sign_in_button %]
-        		[% sign_in_button %]
-        	[% ELSE %]
-            	<button class="btn btn-block btn-green" type="submit" id="email_sign_in" name="email_sign_in">Regístrate y publica</button>
-            [% END %]
         </div>
       </div>
     </div>
 </div>
 <script type="text/javascript">
-  /*$(document).keypress(function(e) {
+  $(document).keypress(function(e) {
     if(e.which == 13) {
         e.preventDefault();
-        $("#submit_sign_in").click();
+        $(":").each($("input.btn"), function(){
+        if($(this).is(":visible")) {
+          console.log(this);
+          $(this).click();
+        }
+
+      });
     }
-  });*/
+  });
   $( document ).ready(function() {
     //MOSTRAR EL FORM DE REGISTRO
   	$('.registrate').click(function(e){
   		e.preventDefault();
   		$('div.bloque-registro').slideDown();
   		$('div.bloque-sesion').slideUp();
-      $('#my-no-account').hide();
   	});
   	$('#no-account').click(function(e){
-  		var regCont = $('.bloque-registro .form-group').eq(1);
+  		var regCont = $('#my-no-account .form-group').eq(0);
   		$('#form_email').prependTo(regCont);
   	});
   	$('#have-account').click(function(e){
-  		var regCont = $('.bloque-registro .form-group').eq(0);
+  		var regCont = $('#my-have-account .form-group').eq(0);
   		$('#form_email').prependTo(regCont);
   	});
   	$('.no-account').click(function(e){

@@ -99,9 +99,6 @@ function getBodiesFilter(){
 }
 
 function getReportsEvolution(container_id, data){
-	//var url = "/api/reportsEvolution?api_key=1234";
-	//url = url + urlParams;
-	//$.getJSON(url, function (data) {
 		$("#"+container_id).html("");
 		var finalDataArray = [];
 		//var parseDate = d3.time.format("%Y%m%d").parse;
@@ -124,7 +121,6 @@ function getReportsEvolution(container_id, data){
 				//console.log(value);
 				finalDataArray.push(value);
 			});
-		//});
 		data = finalDataArray;
 		var cheight = $("#"+container_id).innerHeight();
 		var dataGroup = d3.nest()
@@ -243,57 +239,54 @@ function getReportsEvolution(container_id, data){
 }
 
 function getReportsPerCategoriesChart(container_id,data){
-	//var url = "/api/reportsByCategoryGroup?api_key=1234";
-	//url = url + urlParams;
-	//d3.json(url, function(data) {
-		$("#categories-list").html("");
-		$("#"+container_id).html('');
+	$("#categories-list").html("");
+	$("#"+container_id).html('');
 
-		var width = $("#"+container_id).innerWidth()*0.79,
-				height = $("#"+container_id).innerHeight(),
-				radius = Math.min(width, height) / 2;
+	var width = $("#"+container_id).innerWidth()*0.79,
+			height = $("#"+container_id).innerHeight(),
+			radius = Math.min(width, height) / 2;
 
-		var arc = d3.svg.arc()
-				.outerRadius(radius - 10)
-				.innerRadius(radius - 70);
+	var arc = d3.svg.arc()
+			.outerRadius(radius - 10)
+			.innerRadius(radius - 70);
 
-		var pie = d3.layout.pie()
-				.sort(null)
-				.value(function(d) { return d.reports; });
+	var pie = d3.layout.pie()
+			.sort(null)
+			.value(function(d) { return d.reports; });
 
-		var svg = d3.select("#"+container_id).append("svg")
-				.attr("width", width)
-				.attr("height", height)
-			.append("g")
-				.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+	var svg = d3.select("#"+container_id).append("svg")
+			.attr("width", width)
+			.attr("height", height)
+		.append("g")
+			.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-		$.each(data, function(i, item) {
-			$("#categories-list").append('<li style="cursor: pointer;" onclick="setCategoryGroupFilter(\''+item.groupName+'\');"><div class="circulo" style="background-color: '+getRandomColor(item.color,item.groupName)+';"></div><span style="color: '+getRandomColor(item.color,item.groupName)+';">'+item.groupName+'</span></li>');
-		});
+	$.each(data, function(i, item) {
+		$("#categories-list").append('<li style="cursor: pointer;" onclick="setCategoryGroupFilter(\''+item.groupName+'\');"><div class="circulo" style="background-color: '+getRandomColor(item.color,item.groupName)+';"></div><span style="color: '+getRandomColor(item.color,item.groupName)+';">'+item.groupName+'</span></li>');
+	});
 
-		var g = svg.selectAll(".arc")
-				.data(pie(data))
-			.enter().append("g")
-				.attr("class", "arc");
+	var g = svg.selectAll(".arc")
+			.data(pie(data))
+		.enter().append("g")
+			.attr("class", "arc");
 
-		g.append("path")
-				.attr("d", arc)
-				.style("fill", function(d) {
-					return getRandomColor(d.data.color,d.data.groupName); })
-				.style('cursor', 'pointer')
-				.on("mouseover", function(d){tooltip.html("<b>"+d.data.groupName + "</b><br/>" + d.data.reports); return tooltip.style("visibility", "visible");})
-				.on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
-				.on("mouseout", function(){return tooltip.style("visibility", "hidden");})
-				.on('click', function(d){
-						tooltip.style("visibility", "hidden");
-						setCategoryGroupFilter(d.data.groupName);
-				 });
+	g.append("path")
+			.attr("d", arc)
+			.style("fill", function(d) {
+				return getRandomColor(d.data.color,d.data.groupName); })
+			.style('cursor', 'pointer')
+			.on("mouseover", function(d){tooltip.html("<b>"+d.data.groupName + "</b><br/>" + d.data.reports); return tooltip.style("visibility", "visible");})
+			.on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+			.on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+			.on('click', function(d){
+					tooltip.style("visibility", "hidden");
+					setCategoryGroupFilter(d.data.groupName);
+			 });
 
-		g.append("text")
-				.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-				.attr("dy", ".35em")
-				.style("display","none")
-				.text(function(d) { return d.data.groupName; })
+	g.append("text")
+			.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+			.attr("dy", ".35em")
+			.style("display","none")
+			.text(function(d) { return d.data.groupName; })
 }
 
 function setCategoryGroupFilter(groupName){
@@ -343,130 +336,108 @@ function getIdFromCategoryGroup(groupName){
 }
 
 function getReportsByStateChart(data){
-	//var url = "/api/reportsByState?api_key=1234";
-	//url = url + urlParams;
-	//$.getJSON(url, function (data) {
-
-		statesTable = "<tbody>";
-		nextRowColor = null;
-		$.each(data, function(i, item) {
-			statesTable = statesTable + "<tr><td class='report-state-count'>"+item.reports+"</td><td class='report-state'>"+item.state+"</td></tr>";
-		});
-		statesTable = statesTable + "</tbody>";
-		$("#graph-reports-by-state-table").html(statesTable);
-	//});
+	statesTable = "<tbody>";
+	nextRowColor = null;
+	$.each(data, function(i, item) {
+		statesTable = statesTable + "<tr><td class='report-state-count'>"+item.reports+"</td><td class='report-state'>"+item.state+"</td></tr>";
+	});
+	statesTable = statesTable + "</tbody>";
+	$("#graph-reports-by-state-table").html(statesTable);
 }
 
 function getAnswerTimeByStateChart(data){
-	//var url = "/api/answerTimeByState?api_key=1234";
-	//url = url + urlParams;
-	//$.getJSON(url, function (data) {
-		statesTable = "<tbody>";
-		nextRowColor = null;
-		totalDays = 0;
-		count=0;
-		$.each(data, function(i, item) {
-			statesTable = statesTable + "<tr><td class='report-state-count'>"+item.averageTime+"</td><td class='report-state'>"+item.state+"</td></tr>";
-			totalDays += item.averageTime;
-			count += 1;
-		});
-		average = totalDays/count;
-		average = Math.round(average * 100) / 100; //Redondeo en 2 decimales
-		//$("#averageDays").html("<span class='average-days'>"+average+"</span><span class='states-time-chart'>Días promedio</span>");
-		statesTable = statesTable + "</tbody>";
-		$("#graph-average-answertime-table").html(statesTable);
-	//});
+	statesTable = "<tbody>";
+	nextRowColor = null;
+	totalDays = 0;
+	count=0;
+	$.each(data, function(i, item) {
+		statesTable = statesTable + "<tr><td class='report-state-count'>"+item.averageTime+"</td><td class='report-state'>"+item.state+"</td></tr>";
+		totalDays += item.averageTime;
+		count += 1;
+	});
+	average = totalDays/count;
+	average = Math.round(average * 100) / 100; //Redondeo en 2 decimales
+	//$("#averageDays").html("<span class='average-days'>"+average+"</span><span class='states-time-chart'>Días promedio</span>");
+	statesTable = statesTable + "</tbody>";
+	$("#graph-average-answertime-table").html(statesTable);
 }
 
 function getTotalsChart(data){
-	//var url = "/api/getTotals?api_key=1234";
-	//url = url + urlParams;
-
-	//$.getJSON(url, function (data) {
-		$("#graph-total-users-value").html(data.users);
-		$("#graph-total-reports-value").html(data.reports);
-	//});
+	$("#graph-total-users-value").html(data.users);
+	$("#graph-total-reports-value").html(data.reports);
 }
 
 function getAnswerTimeByCategoryChart(container_id,data){
-			$("#"+container_id).html("");
-			var w = $("#"+container_id).innerWidth()*0.79,
-					h = '400';
-			var svg = d3.select("#"+container_id).append("svg")
-				.attr("width", w)
-				.attr("height", h);
+	$("#"+container_id).html("");
+	var w = $("#"+container_id).innerWidth()*0.79,
+			h = '400';
+	var svg = d3.select("#"+container_id).append("svg")
+		.attr("width", w)
+		.attr("height", h);
 
-			//var url = "/api/answerTimeByCategoryGroup?api_key=1234";
-			//url = url + urlParams;
+	var max_n = 0;
+	for (var d in data) {
+		max_n = Math.max(data[d].averageTime, max_n);
+	}
 
-			//d3.json(url, function(json) {
+	var dx = w / max_n;
+	var dy = 25;
 
-				//var data = json;
+	// bars
+	var bars = svg.selectAll(".bar")
+		.data(data)
+		.enter()
+		.append("rect")
+		.attr("class", function(d, i) {return "bar " + d.groupName;})
+		.attr("x", function(d, i) {return 0;})
+		.attr("y", function(d, i) {return (dy*i)+(5*i);})
+		.attr("width", function(d, i) {return dx*d.averageTime})
+		.attr("height", dy)
+		.style("fill", function(d,i) {
+		return getRandomColor(d.color,d.groupName); })
+		.style("margin-bottom", "10px")
+		.style('cursor', 'pointer')
+		.on("mouseover", function(d){
+			tooltip.text(d.groupName);
+			return tooltip.style("visibility", "visible");
+		})
+		.on("mousemove", function(){
+			return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+		})
+		.on("mouseout", function(){
+			return tooltip.style("visibility", "hidden");
+		})
+		.on('click', function(d){
+				tooltip.style("visibility", "hidden");
+				setCategoryGroupFilter(d.groupName);
+		 });
 
-				var max_n = 0;
-				for (var d in data) {
-					max_n = Math.max(data[d].averageTime, max_n);
-				}
-
-				var dx = w / max_n;
-				var dy = 25;
-
-				// bars
-				var bars = svg.selectAll(".bar")
-					.data(data)
-					.enter()
-					.append("rect")
-					.attr("class", function(d, i) {return "bar " + d.groupName;})
-					.attr("x", function(d, i) {return 0;})
-					.attr("y", function(d, i) {return (dy*i)+(5*i);})
-					.attr("width", function(d, i) {return dx*d.averageTime})
-					.attr("height", dy)
-					.style("fill", function(d,i) {
-					return getRandomColor(d.color,d.groupName); })
-					.style("margin-bottom", "10px")
-					.style('cursor', 'pointer')
-					.on("mouseover", function(d){
-						tooltip.text(d.groupName);
-						return tooltip.style("visibility", "visible");
-					})
-					.on("mousemove", function(){
-						return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-					})
-					.on("mouseout", function(){
-						return tooltip.style("visibility", "hidden");
-					})
-					.on('click', function(d){
-							tooltip.style("visibility", "hidden");
-							setCategoryGroupFilter(d.groupName);
-					 });
-
-				// labels
-				var text = svg.selectAll("text")
-					.data(data)
-					.enter()
-					.append("text")
-					.attr("class", function(d, i) {return "label " + d.groupName;})
-					.attr("x", 5)
-					.attr("y", function(d, i) {return dy*i + 15 + (5*i);})
-					.text( function(d) {return d.groupName + " (" + d.averageTime  + " días)";})
-					.attr("font-size", "15px")
-					.style("font-weight", "bold")
-					.style('cursor', 'pointer')
-					.on("mouseover", function(d){
-						tooltip.text(d.groupName);
-						return tooltip.style("visibility", "visible");
-					})
-					.on("mousemove", function(){
-						return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-					})
-					.on("mouseout", function(){
-						return tooltip.style("visibility", "hidden");
-					})
-					.on('click', function(d){
-							tooltip.style("visibility", "hidden");
-							setCategoryGroupFilter(d.groupName);
-					 });
-			//});
+	// labels
+	var text = svg.selectAll("text")
+		.data(data)
+		.enter()
+		.append("text")
+		.attr("class", function(d, i) {return "label " + d.groupName;})
+		.attr("x", 5)
+		.attr("y", function(d, i) {return dy*i + 15 + (5*i);})
+		.text( function(d) {return d.groupName + " (" + d.averageTime  + " días)";})
+		.attr("font-size", "15px")
+		.style("font-weight", "bold")
+		.style('cursor', 'pointer')
+		.on("mouseover", function(d){
+			tooltip.text(d.groupName);
+			return tooltip.style("visibility", "visible");
+		})
+		.on("mousemove", function(){
+			return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+		})
+		.on("mouseout", function(){
+			return tooltip.style("visibility", "hidden");
+		})
+		.on('click', function(d){
+				tooltip.style("visibility", "hidden");
+				setCategoryGroupFilter(d.groupName);
+		 });
 }
 
 function getApiRequestURLParams(){

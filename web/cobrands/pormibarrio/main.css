@@ -754,7 +754,7 @@ div.side-active{
 
 div.reportes{
 	background: rgba(255,255,255,0.95);
-	height:100%;
+	height:calc(100% - 55px);
 	overflow:hidden;
 	z-index: 4000;
 }
@@ -766,7 +766,7 @@ div.ir{
 div.ir h2{
 	font-size:2.375em;
 	font-weight:300;
-	color:#2c3e50;
+	/*color:#2c3e50;*/
 }
 
 div.ir p{
@@ -880,16 +880,17 @@ div.container-report{
 	margin-left:135px;
 	height:100%;
 	position:relative;
+	top: -100%;
 }
 
 div.report{
 	border-radius: 5px;
-    height: 100%;
+    height: 80%;
     top:20%;
     position: absolute;
     width: 580px;
     opacity:1;
-	overflow:hidden;
+	overflow:auto;
 	-webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	transition:         all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -913,7 +914,8 @@ a.btn-back{
 	color:#fff;
 	font-size:0.875em;
 	background:rgba(0,0,0,0.3);
-	padding:2px 10px
+	padding:2px 10px;
+	margin: 12px 0;
 }
 
 a.registrate-back:hover{
@@ -1446,7 +1448,7 @@ div.new-report .ir p{
 	color:#758a9d;
 }
 
-div.c-form-report, div.login{
+div.c-form-report, #login{
 	padding:30px 40px;
 	/*background:rgba(19,30,41,0.9)*/
 }
@@ -1458,9 +1460,26 @@ div.c-scroll-reportar{
 
 div.c-form-report div.ir{
 	padding:0;
-	margin-bottom:20px
+	margin-bottom:20px;
+	height: 25%;
 }
-
+div.scrolled {
+	height: 75%;
+	overflow: auto;
+}
+div.scrolled-88 {
+	height: 88%;
+	overflow: auto;
+}
+div.scrolled-reportar,
+div.scrolled-95 {
+	height: 95%;
+	overflow: auto;
+}
+div.scrolled-100 {
+	height: 100%;
+	overflow: auto;
+}
 .form-group{
 	/*margin-bottom:30px;*/
 	/*border-bottom: #223241 solid 1px;*/
@@ -1702,13 +1721,13 @@ a.green:hover{
 
 
 /*LOGIN-------------------------------------------------------------------------*/
-div.login{
+#login{
 	background:rgba(19,30,41,0.96);
 	color: #7D7D7D;
 	float: left;
 }
 
-div.login div.ir{
+#login div.ir{
 	padding:0;
 	margin-bottom:20px
 }
@@ -1932,11 +1951,11 @@ div.profile ul li a:hover{
 }
 
 .btn-filtro, .btn-filtro:focus, .btn-filtro:active, .btn-filtro:active:focus{
-	padding:0;
+	padding:2px 16px;
 	background:#FFF;
 	font-size:0.875em;
 	margin: 0 10px;
-	opacity:0.3;
+	opacity:0.65;
 	outline:none;
 }
 

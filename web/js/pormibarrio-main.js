@@ -24,7 +24,7 @@ var types = ['DOMMouseScroll', 'mousewheel', 'MozMousePixelScroll', 'wheel'];
 
 var tr = $( "#top-reports").height();
 $('.c-scroll').css({'height':(($(window).height())-tr)});
-
+/*
 $('div.scrolled').slimScroll({
 	position: 'right',
 	height: '80%',
@@ -80,7 +80,7 @@ $('div.scrolled-100').slimScroll({
 	borderRadius:4,
 	opacity: 1,
 });
-
+*/
 function dashCheck(){
 	var dead_filter = $('input.deadline');
 	dead_filter.each(function(){
@@ -95,6 +95,7 @@ function dashCheck(){
 
 
 //SCROLL AL INGRESAR UN REPORTE
+/*
 	$('div.scrolled-reportar').slimScroll({
 		position: 'right',
 		height: '95%',
@@ -108,10 +109,10 @@ function dashCheck(){
 		borderRadius:4,
 		opacity: 1,
 	});
-
+*/
 $( document ).ready(function() {
 	//SCROLL EN EL REPORTE
-	height_val = '95%';
+	/*height_val = '95%';
 	if ($('.content').hasClass('content-vertical')){
 		var height_val = '80%';
 
@@ -129,7 +130,7 @@ $( document ).ready(function() {
 		borderRadius:4,
 		opacity: 1,
 	});
-
+*/
 	$('a.pregunta').click(function(){
 		var ref = this.href.split('#');
 		console.log(ref[1]);
@@ -397,6 +398,106 @@ function smallPIN(obj){
 		$('div.c-report').show();
 	});
 */
+function report(timeout, zoom){
+	if (typeof fixmystreet != 'undefined'){
+		switch (fixmystreet.page) {
+			case 'around':
+				$('#side-form').show();
+				$('#side').hide();
+				break;
+			default:
+				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=4&list=0';
+		}
+	}
+	else {
+
+		geolocate(timeout, zoom, 0);
+	}
+}
+
+function report_list(timeout, zoom){
+	$(".navbar-collapse.collapse.in").removeClass("in");
+	if (typeof fixmystreet != 'undefined'){
+		switch (fixmystreet.page) {
+			case 'around':
+				$('#side-form').hide();
+				$('#side').show();
+				break;
+			case 'new':
+				window.history.back();
+				break;
+			default:
+				location.href = '/around?latitude='+fixmystreet.latitude+';longitude='+fixmystreet.longitude+'&zoom=2&list=1';
+		}
+	}
+	else {
+		geolocate(timeout, zoom);
+	}
+}
+
+function geolocate(timeout, zoom, is_list ){
+	var list = '&list=1';
+	if (!is_list){
+		list = '&list=0';
+	}
+	setTimeout(function(){
+		console.log('TIMEOUT: '+window.location.hostname);
+		if ( window.location.hostname == 'rivera.pormibarrio.uy'){
+			location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
+		}
+		else if ( window.location.hostname == 'montevideo.pormibarrio.uy'){
+			location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
+		}
+		else if ( window.location.hostname == 'rionegro.pormibarrio.uy' || window.location.hostname == 'rionegro.pmbuy.development.datauy.org'){
+			location.href = '/around?latitude=-33.122559;longitude=-58.306804&zoom=' + zoom + list;
+		}
+	}, timeout);
+	$('.overlay').html('<div id="loader_throbber">Intentando geolocalizarlo...<br/><div class="three-quarters-loader"></div></div>');
+  $('.overlay').show();
+	console.log('HOST'+window.location.hostname);
+	if (geo_position_js.init()) {
+	    console.log('Va a init');
+	    geo_position_js.getCurrentPosition(function(pos) {
+	        console.log('Get current');
+	        var latitude = pos.coords.latitude;
+	        var longitude = pos.coords.longitude;
+	        location.href = '/around?latitude=' + latitude + ';longitude=' + longitude + '&zoom=' + zoom + list;
+	    },
+	    function(err) {
+	        $('#loader_throbber').append('<br/>No hemos podido geolocalizarlo.<br/>Por favor selecciona una municipalidad en el menú superior para comenzar.');
+					console.log('Entra a ERROR: '+window.location.hostname);
+
+					if ( window.location.hostname == 'rivera.pormibarrio.uy'){
+						location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
+					}
+					else if ( window.location.hostname == 'montevideo.pormibarrio.uy'){
+						location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
+					}
+					else if ( window.location.hostname == 'rionegro.pormibarrio.uy' || window.location.hostname == 'rionegro.pmbuy.development.datauy.org'){
+						location.href = '/around?latitude=-33.122559;longitude=-58.306804&zoom=' + zoom + list;
+					}
+					else{
+						if(area){
+							if(area==289){
+								location.href = '/around?latitude=-34.906557;longitude=-56.199769&zoom=' + zoom + list;
+							}
+							if(area==255){
+								location.href = '/around?latitude=-30.8997469;longitude=-55.5434686&zoom=' + zoom + list;
+							}
+							if (area==360){
+								location.href = '/around?latitude=-33.122559;longitude=-58.306804&zoom=' + zoom + list;
+							}
+						}
+					}
+
+
+	    },
+	    {
+	        enableHighAccuracy: true,
+	        timeout: 4000
+	    });
+	}
+}
 
 //RESPONSIVE TEXT
 $('.responsive').responsiveText();

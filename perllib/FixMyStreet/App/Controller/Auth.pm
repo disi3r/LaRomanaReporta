@@ -42,7 +42,7 @@ sub general : Path : Args(0) {
     $c->detach('facebook_sign_in') if $req->param('facebook_sign_in');
     $c->detach('twitter_sign_in') if $req->param('twitter_sign_in') || $req->param('twitter_link');
 
-    $c->detach('email_sign_in') if $req->param('email_sign_in') || $c->req->param('name') || $c->req->param('password_register');
+    $c->detach('email_sign_in') if $req->param('email_sign_in') || $c->req->param('new_password_mail');
 
     $c->forward( 'sign_in' ) && $c->detach( 'redirect_on_signin', [ $req->param('r') ] );
 
@@ -95,7 +95,7 @@ sub email_sign_in : Private {
     my ( $self, $c ) = @_;
     $c->log->debug('EMAIL SIGN IN: '.$c->req->param('r') );
     # check that the email is valid - otherwise flag an error
-    my $raw_email = lc( $c->req->param('login_email') || $c->req->param('form_email') || '' );
+    my $raw_email = lc( $c->req->param('form_email') || '' );
 
     my $email_checker = Email::Valid->new(
         #-mxcheck  => 1,
@@ -111,11 +111,11 @@ sub email_sign_in : Private {
     }
     my $user;
     #Allow send email to login
-    if ($c->req->param('login_email')){
+    if ($c->req->param('new_password_mail')){
 		$c->log->debug('Envia mail para login o cambiar mail: '.$good_email);
     	$user = $c->model('DB::User')->find({ email => $good_email });
     	if (!defined $user){
-    		$c->stash->{field_errors}{login_email} = _('Email is not registered');
+    		$c->stash->{field_errors}{form_email} = _('Email is not registered');
     		return;
     	}
     }
@@ -157,7 +157,7 @@ sub email_sign_in : Private {
 
   my $mail_tpl;
   my $redir = scalar $c->req->param('redirect');
-  if ($c->req->param('login_email')){
+  if ($c->req->param('new_password_mail')){
     $mail_tpl = 'reset-email.txt';
     $redir = $redir.'/pass';
   }
@@ -706,7 +706,7 @@ sub ajax_forgot_password : Path('ajax/forgot_password') {
   my ( $self, $c ) = @_;
 
   my $return = {};
-	if ( $c->req->params->{login_email} ) {
+	if ( $c->req->params->{new_password_mail} ) {
     $c->forward('email_sign_in');
   }
   else {
@@ -852,17 +852,15 @@ sub ajax_edit_user : Path('ajax/edit_user') {
 				identity_document => $c->user->identity_document,
 			);
 			if ( $c->user->picture_url ){
-	       #%result->{picture_url} = $c->cobrand->base_url.$c->user->picture_url;
-			   %result->picture_url = $c->cobrand->base_url.$c->user->picture_url;
-	    }
-	    else {
-  	    %result->picture_url = '';
-	    }
+      	%result->picture_url = $c->cobrand->base_url.$c->user->picture_url;
+      }
+      else {
+      	%result->picture_url = '';
+      }
 		}
-  }
-  else {
-	   %result = ( result => 0, password => _('User or password incorrect') );
-  }
+  } else {
+		%result = ( result => 0, password => _('User or password incorrect') );
+    }
 
 	my $body = JSON->new->utf8(1)->encode( \%result );
     $c->res->content_type('application/json; charset=utf-8');

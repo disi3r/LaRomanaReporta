@@ -136,10 +136,6 @@
                         <input type="checkbox" name="may_show_name" id="form_may_show_name" value="1"[% ' checked' IF report.anonymous==0 OR (c.cobrand.default_show_name AND report.anonymous=='') %]>
                         <label class="inline" for="form_may_show_name">[% loc('Show my name publicly') %] </label>
                     </div>
-                    <div class="checkbox">
-                        <input type="checkbox" id="terms-agree" value="">
-                        <label class="inline">[% loc('Agreed') %]<a href="/privacy"> [% loc('Terms & Conditions') %]</a></label>
-                    </div>
                 </div>
                 <div class="form-group">
                     <input class="btn btn-block btn-reportar" type="submit" id="submit_sign_in" name="submit_sign_in" value="Publicar">
