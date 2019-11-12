@@ -1291,7 +1291,7 @@ msgstr "Email o Password incorrectos. Quizás quieras <a class=\"green registrat
 
 #: perllib/FixMyStreet/App/Controller/Auth.pm:722
 msgid "Email successfuly sended"
-msgstr ""
+msgstr "Envío de email satisfactorio"
 
 #: templates/web/default/admin/body_edit.html:26
 #: templates/web/default/admin/report_edit.html:67
@@ -1419,12 +1419,12 @@ msgstr "Error"
 
 #: perllib/FixMyStreet/App/Controller/Auth.pm:716
 msgid "Error in one time login request"
-msgstr ""
+msgstr "Error en el envío del acceso"
 
 #: perllib/FixMyStreet/App/Controller/Auth.pm:693
 #, fuzzy
 msgid "Error in password change"
-msgstr "Su contraseña ha cambiado."
+msgstr "Error en el cambio de contraseña."
 
 #: perllib/FixMyStreet/App/Controller/Report.pm:302
 #: perllib/FixMyStreet/App/Controller/Report.pm:303
@@ -2204,14 +2204,14 @@ msgstr "Regístrate o ingresa para ayudar a mejorar tu ciudad"
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:170
 #: templates/web/pormibarriocr/report/new/fill_in_details_form.html:172
 msgid "Login to your account to be able to send the report to your local government"
-msgstr "Logueate a tu cuenta para poder enviar reportes a la IM"
+msgstr "Logueate a tu cuenta para poder enviar reportes"
 
 #: templates/web/pormibarrio/report/update-form.html:97
 #: templates/web/pormibarrio/report/update-form.html:99
 #: templates/web/pormibarriocr/report/update-form.html:97
 #: templates/web/pormibarriocr/report/update-form.html:99
 msgid "Login to your account to be able to send your update to your local government"
-msgstr "Logueate a tu cuenta para poder enviar tu comentario a la IM"
+msgstr "Logueate a tu cuenta para poder enviar tu comentario"
 
 #: templates/web/default/js/translation_strings.html:43
 #: templates/web/oxfordshire/js/translation_strings.html:37
@@ -2749,7 +2749,7 @@ msgstr "Página no encontrada"
 
 #: perllib/FixMyStreet/App/Controller/Auth.pm:713
 msgid "Parameters not match"
-msgstr ""
+msgstr "Los datos no coinciden"
 
 #: templates/web/default/admin/body-form.html:31
 #: templates/web/zurich/admin/body-form.html:14
@@ -4598,7 +4598,7 @@ msgstr "Esta implementación de la API es un trabajo aún progreso y no es estab
 
 #: perllib/FixMyStreet/App/Controller/Report/New.pm:251
 msgid "This area is not covered by any council"
-msgstr "Esta zona se encuentra fuera del área de cobertura de la IMM."
+msgstr "Esta zona se encuentra fuera del área de cobertura."
 
 #: templates/web/default/admin/body.html:33
 #: templates/web/pormibarrio/admin/body.html:33
@@ -4627,7 +4627,7 @@ msgstr ""
 
 #: perllib/FixMyStreet/DB/ResultSet/Problem.pm:407
 msgid "This email has been sent to both councils covering the location of the problem, as the user did not categorise it; please ignore it if you're not the correct council to deal with the issue, or let us know what category of problem this is so we can add it to our system."
-msgstr "Este correo electrónico ha sido enviado a las dos Imntendencias que cubren la ubicación del problema, ya que el usuario no lo categorizar, por favor, hacer caso omiso de él si usted no es el consejo correcto para hacer frente al problema, o háganos saber qué clase de problema es por lo que podemos añadir a nuestro sistema."
+msgstr "Este correo electrónico ha sido enviado a las dos Intendencias que cubren la ubicación del problema, ya que el usuario no lo categorizar, por favor, hacer caso omiso de él si usted no es el consejo correcto para hacer frente al problema, o háganos saber qué clase de problema es por lo que podemos añadir a nuestro sistema."
 
 #: perllib/FixMyStreet/DB/ResultSet/Problem.pm:410
 msgid "This email has been sent to several councils covering the location of the problem, as the category selected is provided for all of them; please ignore it if you're not the correct council to deal with the issue."

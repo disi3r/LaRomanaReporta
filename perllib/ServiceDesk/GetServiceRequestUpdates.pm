@@ -117,7 +117,6 @@ sub fetch_details {
   #Get problems
   my @problems = FixMyStreet::App->model('DB::Problem')->search( \%where );
   foreach my $problem (@problems){
-    print "\n A DETAILS PROBLEM: ".$problem->id;
     #Check problem state is not  '%fixed%', 'hidden', 'closed', 'unable to fix'
     my $body = ( values %{$problem->bodies} )[0];
     $self->system_user( $body->comment_user );
@@ -157,7 +156,7 @@ sub fetch_details {
     my $trequest = $o->get_service_custom_meta_info( $problem->external_id );
     $trequest = [ $trequest ] if ref $trequest ne 'ARRAY';
     foreach my $note (@{$trequest}) {
-      if ( $note->{parameter}->{isPublic}->{value} eq 'true' ) {
+      if ( exists $note->{parameter} && $note->{parameter}->{isPublic}->{value} eq 'true' ) {
         my @note_url = split /\//, $note->{URI};
         my $note_id = @note_url[-1];
         my $c = $problem->comments->search( { external_id => $note_id } );
@@ -170,6 +169,8 @@ sub fetch_details {
         }
       }
     }
+    $problem->lastcheck(\'ms_current_timestamp()');
+    $problem->update;
   }
   return 1;
 }

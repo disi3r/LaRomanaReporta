@@ -107,6 +107,8 @@ __PACKAGE__->add_columns(
   { data_type => "timestamp", is_nullable => 1 },
   "has_updates",
   { data_type => "boolean", default_value => \"false", is_nullable => 1 },
+  "lastcheck",
+  { data_type => "timestamp", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->has_many(
@@ -871,6 +873,7 @@ sub as_hashref {
 
 sub deadline {
   my $problem = shift;
+  my $problem_deadlines = shift;
 
   my $parser = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
   my $now = DateTime->now(formatter => $parser);
@@ -880,7 +883,9 @@ sub deadline {
     my $deadline = { 'deadline' => 'noDeadLine' };
     if ( $problem->is_open ){
       #@problem_deadlines = $problem_deadlines->all;
-      my $problem_deadlines = FixMyStreet::App->model('DB::BodyDeadlines')->search({ group_id => $problem->category_group , body_id => shift $problem->bodies_str_ids });
+      if ( !defined($problem_deadlines) ){
+        $problem_deadlines = FixMyStreet::App->model('DB::BodyDeadlines')->search({ group_id => $problem->category_group , body_id => shift $problem->bodies_str_ids });
+      }
       while ( my $deadline_actions = $problem_deadlines->next ){
         #Deadline is now - maxtime - nonwork
         my $deadline_date = $cobrand->to_working_days_date($now->clone(), $deadline_actions->max_hours/24);

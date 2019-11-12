@@ -31,6 +31,6 @@ web/photo/*
 web/cache/*
 local
 locale
-!/locale/es_UY.UTF-8
+!locale/es_UY.UTF-8
 web/upload/*
 

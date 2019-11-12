@@ -22,29 +22,25 @@ my $bodies = FixMyStreet::App->model('DB::Body')->search(
       endpoint        => { '!=', '' },
   }
 );
-print "BODIES?";
 while ( my $body = $bodies->next ) {
-  print 'ARRANCA DETAILS CON BODY '.$body->id;
   my %where;
-  Memcached::set_namespace( FixMyStreet->config('FMS_DB_NAME') . ":" );
-
+  #Memcached::set_namespace( FixMyStreet->config('FMS_DB_NAME') . ":" );
   #Get external_ids for looping
   my @report_list;
   #my $mem_current_list = Memcached::get('sd_update_details_current_'.$body->id);
   #my $mem_update_list = Memcached::get('sd_update_details_tail_'.$body->id);
   #if ( !@{$mem_update_list} || !@{$mem_current_list} ){
-    print 'CREATE LIST MEM';
     $where{external_id} = \'is not null';
     $where{bodies_str} = { '=', $body->id };
     $where{state} = { -in => [ FixMyStreet::DB::Result::Problem->open_states() ] };
     @report_list = map { $_->id } FixMyStreet::App->model('DB::Problem')->search( \%where, {
-      order_by => { -asc => 'lastupdate' },
+      order_by => { -asc => 'lastcheck' },
       columns => [ 'id' ],
+      limit => 20
     } );
-    print "\nSETEO MEM\n";
-    Memcached::set('sd_update_details_tail_'.$body->id, \@report_list);
+    #Memcached::set('sd_update_details_tail_'.$body->id, \@report_list);
     #Every 2 days list is refreshed
-    Memcached::set('sd_update_details_current_'.$body->id, 1, 7200);
+    #Memcached::set('sd_update_details_current_'.$body->id, 1, 7200);
  # }
  # else {
  #   print 'VA POR LIST MEM';
@@ -55,7 +51,5 @@ while ( my $body = $bodies->next ) {
   #print Dumper(@actual_list);
   #Memcached::set('sd_update_details_tail_'.$body->id, \@report_list);
   my $service = ServiceDesk::GetServiceRequestUpdates->new( verbose => 1 );
-  print 'VA A FETCH DETAILS';
-  my @actual_list = (3348);
-  $service->fetch_details(\@actual_list);
+  $service->fetch_details(\@report_list);
 }
