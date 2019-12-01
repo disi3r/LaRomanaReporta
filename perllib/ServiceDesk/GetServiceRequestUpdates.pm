@@ -132,23 +132,35 @@ sub fetch_details {
       my $comment = '';
       if ( $prequest->{parameter}->{status}->{value} eq "Closed" ) {
         #Canceled, Failed, Posponed, Success, Unable to reproduce
-        $state = $self->map_state( $prequest->{parameter}->{closurecode}->{value} );
-        $comment = $prequest->{parameter}->{closurecomments}->{value}.'. ';
+        #TODO Ver que opción va por defecto
+        if ( $prequest->{parameter}->{closurecode}->{value} eq '' ) {
+          $state = 'unable to fix';
+        }
+        else {
+          $state = $self->map_state( $prequest->{parameter}->{closurecode}->{value} );
+        }
+        if ( $prequest->{parameter}->{closurecomments}->{value} ne '' ) {
+          $comment = $prequest->{parameter}->{closurecomments}->{value}.'. ';
+        }
       }
       else {
         $state = $self->map_state( $prequest->{parameter}->{status}->{value} );
       }
       if ( $state && $problem->state ne $state ) { #&& !( $problem->is_fixed && FixMyStreet::DB::Result::Problem->fixed_states()->{$state} ) ) {
         #change state with resolution
+        print "\n\nGOING FOR RESOLUTION\n";
         my $resrequest = $o->get_service_resolution( $problem->external_id );
+        print Dumper($resrequest);
         #TODO: No spec for lastupdatedtime... this is what happens;
-        my $time_str = substr $resrequest->{lastupdatedtime}, 0, -3;
-        my $res_time = DateTime->from_epoch(epoch => $time_str); #Asumed UTC;
-        $res_time->set_time_zone( FixMyStreet->config('TIME_ZONE') );
-        if ( !$problem->lastupdate_council || $res_time > $problem->lastupdate_council ){
-          #Create comment
-          $comment = $comment.$resrequest->{resolution};
-          $self->_sd_create_comment($problem, $state, $comment, $res_time );
+        if ($resrequest) {
+          my $time_str = substr $resrequest->{lastupdatedtime}, 0, -3;
+          my $res_time = DateTime->from_epoch(epoch => $time_str); #Asumed UTC;
+          $res_time->set_time_zone( FixMyStreet->config('TIME_ZONE') );
+          if ( !$problem->lastupdate_council || $res_time > $problem->lastupdate_council ){
+            #Create comment
+            $comment = $comment.$resrequest->{resolution};
+            $self->_sd_create_comment($problem, $state, $comment, $res_time );
+          }
         }
       }
     }
@@ -158,14 +170,16 @@ sub fetch_details {
     foreach my $note (@{$trequest}) {
       if ( exists $note->{parameter} && $note->{parameter}->{isPublic}->{value} eq 'true' ) {
         my @note_url = split /\//, $note->{URI};
-        my $note_id = @note_url[-1];
+        my $note_id = $note_url[-1];
+        print "\n\nNOTE ID:".$note_id."\n";
         my $c = $problem->comments->search( { external_id => $note_id } );
         if ( !$c->first ) {
           #TODO: No spec for lastupdatedtime... this is what happens;
           my $note_time_str = substr $note->{parameter}->{notesDate}->{value}, 0, -3;
           my $note_time = DateTime->from_epoch(epoch => $note_time_str);#, time_zone => FixMyStreet->config('TIME_ZONE') );
           $note_time->set_time_zone( FixMyStreet->config('TIME_ZONE') );
-          $self->_sd_create_comment($problem, undef, $note->{parameter}->{notesText}->{value}, $note_time );
+          my $note_comment = ref($note->{parameter}->{notesText}->{value}) eq 'HASH' ? $note->{parameter}->{notesText}->{value}->{content} : $note->{parameter}->{notesText}->{value};
+          $self->_sd_create_comment($problem, undef, $note_comment, $note_time, $note_id );
         }
       }
     }
@@ -176,7 +190,7 @@ sub fetch_details {
 }
 
 sub _sd_create_comment {
-  my ( $self, $p, $state, $details, $changed ) = @_;
+  my ( $self, $p, $state, $details, $changed, $id ) = @_;
   my $w3c = DateTime::Format::W3CDTF->new;
   my $req_time = $w3c->format_datetime( $changed );
   my $comment = FixMyStreet::App->model('DB::Comment')->new({
@@ -190,6 +204,7 @@ sub _sd_create_comment {
     confirmed => $req_time,
     created => \'ms_current_timestamp()',
     state => 'confirmed',
+    external_id => $id
   });
   if ( $state ) {
     $p->state($state);
@@ -227,19 +242,19 @@ sub map_state {
     $incoming_state =~ s/_/ /g;
     print "\n INCOMING: ".$incoming_state;
     my %state_map = (
-        'success'                       => 'fixed - council',
+        'success'                     => 'fixed - council',
         'not councils responsibility' => 'not responsible',
-        'canceled'           => 'unable to fix',
+        'canceled'                    => 'unable to fix',
         'open'                        => 'confirmed',
         'onhold'                      => 'planned',
-        'posponed'                      => 'planned',
+        'posponed'                    => 'planned',
         'ingresado'                   => 'in progress',
         'closed'                      => 'unable to fix',
-        'unable to reproduce'                     => 'unable to fix',
+        'unable to reproduce'         => 'unable to fix',
         'en proceso'                  => 'in progress',
-        'resolved'                  => 'fixed - council',
+        'resolved'                    => 'fixed - council',
         'failed'                      => 'unable to fix',
-        'iniciado'                   => 'in progress',
+        'iniciado'                    => 'in progress',
     );
     print "\n OUTGOING: ".$state_map{$incoming_state};
     return $state_map{$incoming_state} || $incoming_state;
