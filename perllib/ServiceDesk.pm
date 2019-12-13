@@ -18,7 +18,7 @@ has test_mode => ( is => 'ro', isa => 'Bool' );
 has test_uri_used => ( is => 'rw', 'isa' => 'Str' );
 has test_req_used => ( is => 'rw' );
 has test_get_returns => ( is => 'rw' );
-has endpoints => ( is => 'rw', default => sub { { services => 'admin/subcategory/category/', requests => 'request', service_request_updates => 'servicerequestupdates.xml', update => 'servicerequestupdates.xml', service_request_new => 'newServiceRequestLogs.xml', groups => 'admin/category/' } } );
+has endpoints => ( is => 'rw', default => sub { { services => 'admin/item/subcategory/', requests => 'request', service_request_updates => 'servicerequestupdates.xml', update => 'servicerequestupdates.xml', service_request_new => 'newServiceRequestLogs.xml', groups => 'admin/subcategory/category/' } } );
 has debug => ( is => 'ro', isa => 'Bool', default => 0 );
 has debug_details => ( is => 'rw', 'isa' => 'Str', default => '' );
 has success => ( is => 'rw', 'isa' => 'Bool', default => 0 );
@@ -29,6 +29,7 @@ has extended_description => ( is => 'ro', isa => 'Str', default => 1 );
 has use_service_as_deviceid => ( is => 'ro', isa => 'Bool', default => 0 );
 has use_extended_updates => ( is => 'ro', isa => 'Bool', default => 0 );
 has extended_statuses => ( is => 'ro', isa => 'Bool', default => 0 );
+has main_category => ( is => 'ro', isa => 'Str', default => '906' );
 
 before [
     qw/get_service_list get_service_meta_info get_service_requests get_service_request_updates
@@ -61,7 +62,7 @@ sub get_group_list {
     OPERATION_NAME => 'GET_ALL',
     TECHNICIAN_KEY => mySociety::Config::get('USER_KEY_SD', undef),
   };
-  my $service_list_xml = $self->_post( $self->endpoints->{groups}, $params );
+  my $service_list_xml = $self->_post( $self->endpoints->{groups}.$self->main_category, $params );
   if ( $service_list_xml ) {
     my $response = $self->_get_xml_object( $service_list_xml );
     return $response->{ response }->{ operation }->{Details}->{record};
@@ -242,6 +243,7 @@ sub _populate_service_request_params {
     $params->{ mode } = 'Por Mi Barrio';
     $params->{ category } = $problem->category_group_obj->{group_name};
     $params->{ subcategory } = $problem->category;
+    $params->{ group } = $problem->category_group_obj->{group_name};
 
     my $xs = XML::Simple->new(ForceArray => 1, KeepRoot => 1, NoAttr => 1);
     my $xml_params = $xs->XMLout( { Operation => { Details => $params } } );
