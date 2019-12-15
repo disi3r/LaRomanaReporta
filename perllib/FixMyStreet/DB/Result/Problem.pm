@@ -648,7 +648,7 @@ sub category_group {
 	my $problem = shift;
 
 	if ( $problem->category ) {
-		my $contact = FixMyStreet::App->model('DB::Contact')->find({ category => $problem->category, deleted => 0 });
+		my $contact = FixMyStreet::App->model('DB::Contact')->find({ category => $problem->category, deleted => 0, body_id => shift $problem->bodies_str_ids });
 		if ( $contact ) {
 			if ( $contact->group_id ) {
 				return $contact->group_id;
