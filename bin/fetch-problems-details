@@ -31,8 +31,7 @@ while ( my $body = $bodies->next ) {
   my @report_list;
   my $mem_current_list = Memcached::get('update_details_current_'.$body->id);
   my $mem_update_list = Memcached::get('update_details_tail_'.$body->id);
-  if ( !$mem_update_list || !$mem_current_list ){
-    print 'CREATE LIST MEM';
+  if ( !@{$mem_update_list} || !@{$mem_current_list} ){
     $where{external_id} = \'is not null';
     $where{bodies_str} = { '=', $body->id };
     $where{state} = { -in => [ FixMyStreet::DB::Result::Problem->open_states() ] };
@@ -40,18 +39,15 @@ while ( my $body = $bodies->next ) {
       order_by => { -asc => 'lastupdate' },
       columns => [ 'id' ],
     } );
-    print "\nSETEO MEM\n";
     Memcached::set('update_details_tail_'.$body->id, \@report_list);
     #Every 2 days list is refreshed
     Memcached::set('update_details_current_'.$body->id, 1, 7200);
   }
   else {
-    print 'VA POR LIST MEM';
     @report_list = @{$mem_update_list};
   }
   my @actual_list = splice @report_list, 0, 20;
   Memcached::set('update_details_tail_'.$body->id, \@report_list);
   my $service = Open311::GetServiceRequestUpdates->new( verbose => 1 );
-  print 'VA A FETCH';
   $service->fetch_details(\@actual_list);
 }

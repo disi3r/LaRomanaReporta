@@ -190,23 +190,23 @@ sub format_problem_for_display : Private {
 
     $c->forward('generate_map_tags');
 
-    $c->log->debug("\n\nARRANCA UPDATE\n");
-    #$c->log->debug(Dumper($c->stash->{updates}));
-    $c->log->debug("\n\nTERMINA UPDATE\n");
-
-    if ( $c->stash->{ajax} ) {
-        $c->stash->{template} = 'report/mobile_display.html';
-        return 1;
-    }
     #stash contacts so they can be changed
     my @contacts = $c->model('DB::Contact')->not_deleted->search( { body_id => [ $problem->bodies_str ] } )->all;
 
     my @categories;
     foreach my $contact (@contacts) {
-        push @categories, $contact->category;
+      push @categories, $contact->category;
     }
     $c->stash->{categories} = \@categories;
+
+    #$c->log->debug(Dumper($c->stash->{updates}));
+    $c->log->debug("\n\nARRANCA STATE\n");
     $c->stash->{state_t} = $problem->as_hashref($c)->{state_t};
+    $c->log->debug($c->stash->{state_t});
+
+    if ( $c->stash->{ajax} ) {
+        $c->stash->{template} = 'report/mobile_display.html';
+    }
     return 1;
 }
 
@@ -334,15 +334,11 @@ sub load_problem_tasks : Private {
     my ( $self, $c ) = @_;
 
     my $p = $c->stash->{problem};
-
     my @tasks = $c->model('DB::Task')->search({ problem_id => $p->id })->all;
-
     #@tasks = map { { $_->get_columns } } @tasks;
-
-    $c->stash->{tasks} = \@tasks;
-    $c->log->debug("\n\nARRANCA TASK\n");
-    #$c->log->debug(Dumper(@tasks));
-    $c->log->debug("\nTERMINA TASK\n\n");
+    if ( @tasks ) {
+      $c->stash->{tasks} = \@tasks;
+    }
     return 1;
 }
 
