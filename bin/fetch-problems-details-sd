@@ -51,5 +51,6 @@ while ( my $body = $bodies->next ) {
   #print Dumper(@actual_list);
   #Memcached::set('sd_update_details_tail_'.$body->id, \@report_list);
   my $service = ServiceDesk::GetServiceRequestUpdates->new( verbose => 1 );
+  #@report_list = (3349);
   $service->fetch_details(\@report_list);
 }
