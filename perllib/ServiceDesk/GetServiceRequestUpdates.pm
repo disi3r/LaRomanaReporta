@@ -227,19 +227,20 @@ sub map_state {
     $incoming_state =~ s/_/ /g;
     print "\n INCOMING: ".$incoming_state;
     my %state_map = (
-        'success'                       => 'fixed - council',
-        'not councils responsibility' => 'not responsible',
-        'canceled'           => 'unable to fix',
-        'open'                        => 'confirmed',
-        'onhold'                      => 'planned',
-        'posponed'                      => 'planned',
-        'ingresado'                   => 'in progress',
-        'closed'                      => 'unable to fix',
-        'unable to reproduce'                     => 'unable to fix',
-        'en proceso'                  => 'in progress',
-        'resolved'                  => 'fixed - council',
-        'failed'                      => 'unable to fix',
-        'iniciado'                   => 'in progress',
+        'resuelto'            => 'fixed - council',
+        #'not councils responsibility' => 'not responsible',
+        'cerrado'             => 'unable to fix',
+        'abierto'             => 'confirmed',
+        'en espera'           => 'planned',
+        'posponed'            => 'planned',
+        'ingresado'           => 'in progress',
+        'asignado'            => 'in progress',
+        'closed'              => 'unable to fix',
+        'en proceso'          => 'in progress',
+        'resolved'            => 'fixed - council',
+        'failed'              => 'unable to fix',
+        'iniciado'            => 'in progress',
+        'unable to reproduce' => 'unable to fix',
     );
     print "\n OUTGOING: ".$state_map{$incoming_state};
     return $state_map{$incoming_state} || $incoming_state;
