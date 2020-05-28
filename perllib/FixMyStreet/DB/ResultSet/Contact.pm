@@ -14,11 +14,13 @@ Filter down to not deleted contacts - which have <deleted> set to false;
 
 sub get_groups {
   my $rs = shift;
-
-  return $rs->search({
-    'me.deleted' => 0,
-    'me.group_id' => {'>=' => 0}
-  },{
+  my ( $deleted ) = @_;
+  my $options = {'me.group_id' => {'>=' => 0}};
+  if (!$deleted) {
+    $options->{'me.deleted'} = 0;
+  }
+  return $rs->search( $options,
+  {
     join => ['contacts_group'],
     columns => ['me.category', 'me.group_id', 'me.body_id',],
     '+columns' => ['contacts_group.group_name', 'contacts_group.group_color', 'contacts_group.group_icon'],
