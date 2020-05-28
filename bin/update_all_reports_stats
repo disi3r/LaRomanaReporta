@@ -20,7 +20,7 @@ my $last_problem = FixMyStreet::App->model("DB::Problem")->search(
     { state => [ FixMyStreet::DB::Result::Problem->visible_states() ] },
     { order_by => { -desc => 'id' }, limit => 1 }
 )->first;
-my $fh = FileHandle->new("data/all-geo-reports.json", "r");
+my $fh = FileHandle->new("web/data/all-geo-reports.json", "r");
 my $epoch_time = (stat($fh))[9];
 print "\n last rEpo $epoch_time\n";
 $fh->close;
@@ -48,7 +48,8 @@ if ( $last_repo_epoch >= $epoch_time ) {
     }
   }
   #GROUPS
-  my @category_groups = FixMyStreet::App->model('DB::Contact')->search()->get_groups();
+  my @category_groups = FixMyStreet::App->model('DB::Contact')->search()->get_groups(1);
+
   my %groups = map {
     $_->category => {
       group_id =>$_->group_id,
@@ -61,8 +62,6 @@ if ( $last_repo_epoch >= $epoch_time ) {
   #areas: Path('all_areas')
   #my $object = bless( JSON->new->decode( $json_string ), 'ClassIWant' );
 
-
-
   my $problems = FixMyStreet::App->model("DB::Problem")->search(
   { state => [ FixMyStreet::DB::Result::Problem->visible_states() ] }
   );
@@ -71,6 +70,7 @@ if ( $last_repo_epoch >= $epoch_time ) {
   while ( my $report = $problems->next ) {
     my %repo = map { $_ => $report->$_ } qw/id postcode title detail name areas category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent/;# deadline category_group_obj/;
     my $cat = $report->category;
+
     $repo{confirmed} = $repo{confirmed}->ymd if defined($repo{confirmed});
     $repo{lastupdate} = $repo{lastupdate}->ymd if defined($repo{lastupdate});
     $repo{lastupdate_council} = $repo{lastupdate_council}->ymd if defined($repo{lastupdate_council});
@@ -99,7 +99,7 @@ if ( $last_repo_epoch >= $epoch_time ) {
   my $geo_reports = Geo::JSON::FeatureCollection->new({
     features => \@fcollection,
   });
-  File::Slurp::write_file( FixMyStreet->path_to( './data/all-reports.json' )->stringify, \$all_reports );
-  File::Slurp::write_file( FixMyStreet->path_to( './data/all-geo-reports.json' )->stringify, $geo_reports->to_json );
+  File::Slurp::write_file( FixMyStreet->path_to( './web/data/all-reports.json' )->stringify, \$all_reports );
+  File::Slurp::write_file( FixMyStreet->path_to( './web/data/all-geo-reports.json' )->stringify, $geo_reports->to_json );
 }
 print "termina";
