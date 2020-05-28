@@ -26,9 +26,9 @@ print "\n last file $epoch_time\n";
 $fh->close;
 
 my $last_repo_epoch = $last_problem->confirmed->epoch();
-print "\n last rEpo $last_repo_epoch \n";
+print "\n last repo $last_repo_epoch \n";
 #New reports found
-if ( $last_repo_epoch >= $epoch_time ) {
+#if ( $last_repo_epoch >= $epoch_time ) {
   #AREAS
   my @bodies = FixMyStreet::App->model('DB::Body')->all;
   my %areas;
@@ -61,14 +61,17 @@ if ( $last_repo_epoch >= $epoch_time ) {
   #my $object = bless( JSON->new->decode( $json_string ), 'ClassIWant' );
 
   my $problems = FixMyStreet::App->model("DB::Problem")->search(
-  { state => [ FixMyStreet::DB::Result::Problem->visible_states() ] }
+  { state => [ FixMyStreet::DB::Result::Problem->visible_states() ] },
+  { order_by => { -asc => 'id' }}
   );
   my @reports;
   my @fcollection;
+  my @fcollection_app;
+  my $last_valid = DateTime->now->subtract(months => 3);
+  print $last_valid->ymd."\n";
   while ( my $report = $problems->next ) {
     my %repo = map { $_ => $report->$_ } qw/id postcode title detail name areas category latitude longitude external_id confirmed state lastupdate lastupdate_council whensent/;# deadline category_group_obj/;
     my $cat = $report->category;
-
     $repo{confirmed} = $repo{confirmed}->ymd if defined($repo{confirmed});
     $repo{lastupdate} = $repo{lastupdate}->ymd if defined($repo{lastupdate});
     $repo{lastupdate_council} = $repo{lastupdate_council}->ymd if defined($repo{lastupdate_council});
@@ -92,12 +95,16 @@ if ( $last_repo_epoch >= $epoch_time ) {
       properties => \%repo,
     });
     push @fcollection, $geo_pin;
+    #Si no esta fixed y el tiempo de acgtualización es mayor a 3 meses lo agrego
+    if ( !( index($report->state, 'fix') != -1 && $report->lastupdate < $last_valid ) ) {
+      push @fcollection_app, $geo_pin;
+    }
   }
   my $all_reports = JSON->new->utf8(1)->encode( \@reports );
-  my $geo_reports = Geo::JSON::FeatureCollection->new({
-    features => \@fcollection,
-  });
+  my $geo_reports = Geo::JSON::FeatureCollection->new({ features => \@fcollection });
+  my $geo_reports_app = Geo::JSON::FeatureCollection->new({ features => \@fcollection_app });
   File::Slurp::write_file( FixMyStreet->path_to( './web/data/all-reports.json' )->stringify, \$all_reports );
   File::Slurp::write_file( FixMyStreet->path_to( './web/data/all-geo-reports.json' )->stringify, $geo_reports->to_json );
-}
-print "termina";
+  File::Slurp::write_file( FixMyStreet->path_to( './web/data/geo-reports.json' )->stringify, $geo_reports_app->to_json );
+#}
+print "\ntermina";
