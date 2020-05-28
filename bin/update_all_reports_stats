@@ -22,12 +22,10 @@ my $last_problem = FixMyStreet::App->model("DB::Problem")->search(
 )->first;
 my $fh = FileHandle->new("web/data/all-geo-reports.json", "r");
 my $epoch_time = (stat($fh))[9];
-print "\n last rEpo $epoch_time\n";
+print "\n last file $epoch_time\n";
 $fh->close;
 
-my $parser = DateTime::Format::Strptime->new( pattern => '%Y-%m-%d' );
-my $last_repo_created = $parser->parse_datetime($last_problem->confirmed);
-my $last_repo_epoch = $last_repo_created->epoch();
+my $last_repo_epoch = $last_problem->confirmed->epoch();
 print "\n last rEpo $last_repo_epoch \n";
 #New reports found
 if ( $last_repo_epoch >= $epoch_time ) {
